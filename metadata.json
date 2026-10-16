@@ -1,0 +1,6 @@
+{
+  "name": "Our Universe ❤️ - Cinematic Streaming Platform",
+  "description": "A personal cinematic streaming experience celebrating our relationship story, memories, favorite moments, and secret letters.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

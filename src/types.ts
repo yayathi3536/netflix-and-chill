@@ -1,0 +1,73 @@
+export type MemoryCategory = 
+  | 'our-story' 
+  | 'memories' 
+  | 'little-things' 
+  | 'places-list' 
+  | 'secret-vault';
+
+export interface Episode {
+  id: string;
+  episodeNumber: number;
+  title: string;
+  duration: string;
+  description: string;
+  thumbnailUrl?: string;
+  gradient: string;
+  date?: string;
+}
+
+export interface CouponItem {
+  id: string;
+  title: string;
+  perk: string;
+  terms: string;
+  redeemed: boolean;
+}
+
+export interface MemoryItem {
+  id: string;
+  title: string;
+  subtitle?: string;
+  category: MemoryCategory;
+  date: string;
+  year: string;
+  duration: string;
+  matchScore: number; // e.g. 99, 100
+  rating: string; // e.g. 'TV-MA (Mostly Adorable)', 'PG-Love'
+  synopsis: string;
+  fullStory: string;
+  location?: string;
+  tags: string[];
+  backdropUrl?: string;
+  posterUrl?: string;
+  fallbackGradient: string;
+  progress?: number; // 0 to 100 (for Continue Watching)
+  isTop10?: number; // 1 to 10 (for Original Series rank)
+  isFavorite?: boolean;
+  isInWatchlist?: boolean;
+  isSecret?: boolean;
+  secretPasscode?: string;
+  letterContent?: string;
+  coupons?: CouponItem[];
+  episodes?: Episode[];
+  photos?: string[];
+  listStatus?: 'visited' | 'bucket-list';
+}
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  role: 'partner1' | 'partner2' | 'together';
+  avatarEmoji: string;
+  avatarBg: string;
+  favoriteSeason?: string;
+}
+
+export interface NotificationItem {
+  id: string;
+  title: string;
+  message: string;
+  time: string;
+  read: boolean;
+  memoryId?: string;
+}
