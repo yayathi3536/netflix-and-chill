@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Plus, Check, Heart, ChevronDown, Lock, Unlock, MapPin } from 'lucide-react';
+import { Play, Plus, Check, Heart, ChevronDown, Lock, Unlock, MapPin, Edit3 } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
 
@@ -12,6 +12,7 @@ interface MovieCardProps {
   onToggleWatchlist: (id: string) => void;
   onToggleFavorite?: (id: string) => void;
   onUnlockVault?: (memory: MemoryItem) => void;
+  onEditMemory?: (memory: MemoryItem) => void;
 }
 
 export const MovieCard: React.FC<MovieCardProps> = ({
@@ -23,6 +24,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   onToggleWatchlist,
   onToggleFavorite,
   onUnlockVault,
+  onEditMemory,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -173,6 +175,19 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                       memory.isFavorite ? 'text-[#E50914] fill-[#E50914]' : 'text-white'
                     }`}
                   />
+                </button>
+              )}
+
+              {onEditMemory && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEditMemory(memory);
+                  }}
+                  className="w-7 h-7 rounded-full bg-amber-500/25 hover:bg-amber-500/40 border border-amber-500/40 text-amber-300 flex items-center justify-center transition-colors active:scale-90"
+                  title="Edit memory & photo"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>

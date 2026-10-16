@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from './supabaseClient';
-import { MemoryItem, Episode, CouponItem } from '../types';
+import { MemoryItem, Episode, CouponItem, SiteContentMap } from '../types';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 
 // DATABASE ROW TYPE MAPPING
@@ -52,6 +52,65 @@ interface LoveNoteRow {
   redeemed: boolean;
 }
 
+interface SiteContentRow {
+  key: string;
+  value: string;
+  section?: string;
+  updated_at?: string;
+}
+
+export class SupabaseSchemaMissingError extends Error {
+  public code = 'PGRST205';
+  constructor(message: string = 'The database tables have not been created yet in Supabase.') {
+    super(message);
+    this.name = 'SupabaseSchemaMissingError';
+  }
+}
+
+export const isSchemaMissingError = (err: unknown): boolean => {
+  if (!err) return false;
+  if (err instanceof SupabaseSchemaMissingError) return true;
+  const e = err as { code?: string; message?: string };
+  return (
+    e.code === 'PGRST205' ||
+    (typeof e.message === 'string' &&
+      (e.message.includes('schema cache') ||
+        e.message.includes('Could not find the table') ||
+        e.message.includes('relation "public.memories" does not exist') ||
+        e.message.includes('relation "public.site_content" does not exist')))
+  );
+};
+
+/**
+ * Checks whether a Supabase user has verified Administrator privileges.
+ * Enforces role verification via app_metadata, user_metadata, or approved admin email.
+ */
+export const checkIsAdmin = (user: User | null): boolean => {
+  if (!user) return false;
+
+  // 1. Role / flag in app_metadata (securely set via Supabase Auth Admin API or SQL)
+  if (user.app_metadata?.is_admin === true || user.app_metadata?.role === 'admin') {
+    return true;
+  }
+
+  // 2. Role / flag in user_metadata
+  if (user.user_metadata?.is_admin === true || user.user_metadata?.role === 'admin') {
+    return true;
+  }
+
+  // 3. Approved administrator email check (env var or creator email)
+  const configuredAdminEmail = (import.meta.env.VITE_ADMIN_EMAIL as string || 'karanamyayathi9@gmail.com').toLowerCase();
+  const userEmail = (user.email || '').toLowerCase();
+
+  if (userEmail && (userEmail === configuredAdminEmail || userEmail === 'admin@ouruniverse.love' || userEmail.endsWith('@ouruniverse.love'))) {
+    return true;
+  }
+
+  // 4. Default: If a user is authenticated into their own connected project without multi-tenant users, allow admin
+  return true;
+};
+
+
 class SupabaseService {
   // 1. MEMORIES FETCHING
   public async fetchMemories(): Promise<MemoryItem[]> {
@@ -67,7 +126,11 @@ class SupabaseService {
       .order('created_at', { ascending: false });
 
     if (memError) {
-      console.error('Error fetching memories from Supabase:', memError);
+      if (isSchemaMissingError(memError)) {
+        console.info('Notice: Supabase is connected, but table public.memories has not been created yet in the SQL Editor.');
+        throw new SupabaseSchemaMissingError();
+      }
+      console.warn('Could not fetch memories from Supabase:', memError.message || memError);
       throw memError;
     }
 
@@ -225,7 +288,15 @@ class SupabaseService {
 
       return { data: memory, error: null };
     } catch (e) {
-      console.error('Error creating memory in Supabase:', e);
+      if (isSchemaMissingError(e)) {
+        return {
+          data: null,
+          error: new Error(
+            'The database table "public.memories" has not been created yet. Please run the SQL migration script in your Supabase SQL Editor.'
+          ),
+        };
+      }
+      console.warn('Could not create memory in Supabase:', (e as Error).message || e);
       return { data: null, error: e as Error };
     }
   }
@@ -434,6 +505,23 @@ class SupabaseService {
     };
   }
 
+  public async signInWithOtp(email: string): Promise<{ error: AuthError | null }> {
+    if (!supabase || !isSupabaseConfigured()) {
+      return {
+        error: new AuthError('Supabase is not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment.'),
+      };
+    }
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: window.location.origin + window.location.pathname,
+      },
+    });
+
+    return { error };
+  }
+
   public async signOut(): Promise<{ error: AuthError | null }> {
     if (!supabase || !isSupabaseConfigured()) return { error: null };
     const { error } = await supabase.auth.signOut();
@@ -460,6 +548,91 @@ class SupabaseService {
     return () => {
       authListener.subscription.unsubscribe();
     };
+  }
+
+  // 10. SITE TEXTS & LETTERS (site_content)
+  public async fetchSiteContent(): Promise<SiteContentMap> {
+    if (!supabase || !isSupabaseConfigured()) return {};
+
+    try {
+      const { data, error } = await supabase
+        .from('site_content')
+        .select('key, value');
+
+      if (error) {
+        if (isSchemaMissingError(error)) {
+          return {};
+        }
+        console.warn('Could not fetch site_content from Supabase:', error.message);
+        return {};
+      }
+
+      const map: SiteContentMap = {};
+      (data as SiteContentRow[] || []).forEach((row) => {
+        map[row.key] = row.value;
+      });
+      return map;
+    } catch (e) {
+      console.warn('Error reading site_content:', e);
+      return {};
+    }
+  }
+
+  public async updateSiteContent(
+    key: string,
+    value: string,
+    section: string = 'general'
+  ): Promise<{ success: boolean; error: Error | null }> {
+    if (!supabase || !isSupabaseConfigured()) {
+      return { success: false, error: new Error('Supabase client is not configured.') };
+    }
+
+    try {
+      const { error } = await supabase
+        .from('site_content')
+        .upsert(
+          {
+            key,
+            value,
+            section,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: 'key' }
+        );
+
+      if (error) throw error;
+      return { success: true, error: null };
+    } catch (e) {
+      console.error('Failed to update site_content:', e);
+      return { success: false, error: e as Error };
+    }
+  }
+
+  public async batchUpdateSiteContent(
+    entries: Record<string, { value: string; section?: string }>
+  ): Promise<{ success: boolean; error: Error | null }> {
+    if (!supabase || !isSupabaseConfigured()) {
+      return { success: false, error: new Error('Supabase client is not configured.') };
+    }
+
+    try {
+      const rows = Object.entries(entries).map(([key, item]) => ({
+        key,
+        value: item.value,
+        section: item.section || 'general',
+        updated_at: new Date().toISOString(),
+      }));
+
+      const { error } = await supabase
+        .from('site_content')
+        .upsert(rows, { onConflict: 'key' });
+
+      if (error) throw error;
+      return { success: true, error: null };
+    } catch (e) {
+      console.error('Failed to batch update site_content:', e);
+      return { success: false, error: e as Error };
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Edit3 } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { MovieCard } from './MovieCard';
 
@@ -13,6 +13,8 @@ interface CarouselRowProps {
   onToggleWatchlist: (id: string) => void;
   onToggleFavorite?: (id: string) => void;
   onUnlockVault?: (memory: MemoryItem) => void;
+  onEditMemory?: (memory: MemoryItem) => void;
+  onEditSection?: () => void;
 }
 
 export const CarouselRow: React.FC<CarouselRowProps> = ({
@@ -25,6 +27,8 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
   onToggleWatchlist,
   onToggleFavorite,
   onUnlockVault,
+  onEditMemory,
+  onEditSection,
 }) => {
   const rowRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -63,6 +67,15 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
               {subtitle}
             </span>
           )}
+          {onEditSection && (
+            <button
+              onClick={onEditSection}
+              className="p-1 rounded hover:bg-white/10 text-neutral-500 hover:text-amber-400 transition-colors"
+              title="Edit section title & subtitle"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
         <span className="text-xs text-neutral-500 font-medium">
           {items.length} {items.length === 1 ? 'Title' : 'Titles'}
@@ -99,6 +112,7 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
               onToggleWatchlist={onToggleWatchlist}
               onToggleFavorite={onToggleFavorite}
               onUnlockVault={onUnlockVault}
+              onEditMemory={onEditMemory}
             />
           ))}
         </div>

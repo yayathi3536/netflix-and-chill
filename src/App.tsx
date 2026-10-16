@@ -16,9 +16,9 @@ import {
   Loader2,
   Info,
 } from 'lucide-react';
-import { MemoryItem, Episode, UserProfile, NotificationItem } from './types';
+import { MemoryItem, Episode, UserProfile, NotificationItem, SiteContentMap, SiteContentSection } from './types';
 import { storageService } from './services/storage';
-import { supabaseService } from './services/supabaseService';
+import { supabaseService, checkIsAdmin } from './services/supabaseService';
 import { isSupabaseConfigured } from './services/supabaseClient';
 import { Navbar } from './components/Navbar';
 import { HeroBanner } from './components/HeroBanner';
@@ -29,12 +29,16 @@ import { SecretVaultModal } from './components/SecretVaultModal';
 import { AddMemoryModal } from './components/AddMemoryModal';
 import { AdminAuthModal } from './components/AdminAuthModal';
 import { SupabaseSetupModal } from './components/SupabaseSetupModal';
+import { EditSiteContentModal } from './components/EditSiteContentModal';
+import { AdminModeBar } from './components/AdminModeBar';
 import { MovieCard } from './components/MovieCard';
+import { MusicPlayer } from './components/MusicPlayer';
 import { romanticAudio } from './utils/romanticAudio';
 import { User } from '@supabase/supabase-js';
 
 export default function App() {
   const [memories, setMemories] = useState<MemoryItem[]>(storageService.getInitialMemories());
+  const [siteContent, setSiteContent] = useState<SiteContentMap>(storageService.getInitialSiteContent());
   const [activeTab, setActiveTab] = useState('home');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeProfile, setActiveProfile] = useState<UserProfile>(storageService.getActiveProfile());
@@ -44,6 +48,7 @@ export default function App() {
   // Supabase & Auth State
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [storageSource, setStorageSource] = useState<'supabase' | 'local'>('local');
+  const [isSchemaMissing, setIsSchemaMissing] = useState(false);
   const [statusNotification, setStatusNotification] = useState<string | null>(null);
   const [isLoadingData, setIsLoadingData] = useState(false);
 
@@ -55,7 +60,13 @@ export default function App() {
   const [memoryToEdit, setMemoryToEdit] = useState<MemoryItem | null>(null);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [isSetupModalOpen, setIsSetupModalOpen] = useState(false);
+  const [isEditSiteContentOpen, setIsEditSiteContentOpen] = useState(false);
+  const [editSiteContentInitialTab, setEditSiteContentInitialTab] = useState<SiteContentSection>('hero');
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+
+  // Computed verified administrator status
+  const isAdmin = useMemo(() => checkIsAdmin(currentUser), [currentUser]);
+
 
   // Places filter tab state
   const [placesFilter, setPlacesFilter] = useState<'all' | 'visited' | 'bucket-list'>('all');
@@ -66,7 +77,12 @@ export default function App() {
     setActiveProfile(storageService.getActiveProfile());
     setNotifications(storageService.getNotifications());
 
-    // 2. Fetch authenticated Supabase session
+    // 2. Load site texts & letters
+    storageService.loadSiteContent().then((content) => {
+      setSiteContent(content);
+    });
+
+    // 3. Fetch authenticated Supabase session
     if (isSupabaseConfigured()) {
       supabaseService.getCurrentUser().then((user) => {
         setCurrentUser(user);
@@ -76,7 +92,7 @@ export default function App() {
         setCurrentUser(user);
       });
 
-      // 3. Load remote memories asynchronously
+      // 4. Load remote memories asynchronously
       fetchRemoteMemories();
 
       return () => {
@@ -87,10 +103,14 @@ export default function App() {
     }
   }, []);
 
-  // Synchronize client-side routing with URL hash for GitHub Pages deep linking
+  // Synchronize client-side routing with URL hash for GitHub Pages deep linking and discreet admin route (#admin, #login)
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').trim();
+      if (hash === 'admin' || hash === 'login') {
+        setIsAdminModalOpen(true);
+        return;
+      }
       const validTabs = ['home', 'our-story', 'memories', 'little-things', 'places-list', 'secret-vault'];
       if (validTabs.includes(hash)) {
         setActiveTab(hash);
@@ -117,11 +137,19 @@ export default function App() {
       const result = await storageService.loadMemories();
       setMemories(result.memories);
       setStorageSource(result.source);
-      if (result.error) {
-        setStatusNotification(result.error);
+      if (result.isSchemaMissing) {
+        setIsSchemaMissing(true);
+        setStatusNotification(null);
+      } else {
+        setIsSchemaMissing(false);
+        if (result.error) {
+          setStatusNotification(result.error);
+        } else {
+          setStatusNotification(null);
+        }
       }
     } catch (err) {
-      console.warn('Failed to load memories:', err);
+      console.warn('Notice: Using local memories cache while database tables are initialized.');
     } finally {
       setIsLoadingData(false);
     }
@@ -169,6 +197,11 @@ export default function App() {
         }
       }
     }
+  };
+
+  const handleOpenEditMemoryModal = (memory: MemoryItem) => {
+    setMemoryToEdit(memory);
+    setIsAddModalOpen(true);
   };
 
   const handleAddOrUpdateMemory = async (memoryItem: MemoryItem) => {
@@ -297,7 +330,7 @@ export default function App() {
         }}
         notifications={notifications}
         onNotificationClick={handleNotificationClick}
-        currentUser={currentUser}
+        currentUser={isAdmin ? currentUser : null}
         onOpenAdminModal={() => setIsAdminModalOpen(true)}
         onOpenSetupModal={() => setIsSetupModalOpen(true)}
       />
@@ -317,6 +350,26 @@ export default function App() {
               className="text-white bg-amber-500/30 hover:bg-amber-500/50 px-2.5 py-1 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer"
             >
               Setup Supabase &rarr;
+            </button>
+          </div>
+        </div>
+      ) : isSchemaMissing ? (
+        <div className="pt-20 px-4 sm:px-8 max-w-7xl mx-auto w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-lg bg-amber-950/40 border border-amber-500/40 text-xs text-amber-200 shadow-xl">
+            <div className="flex items-start sm:items-center gap-2.5">
+              <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5 sm:mt-0" />
+              <div>
+                <span className="font-semibold text-white">Database Tables Need Setup:</span>{' '}
+                <span className="text-amber-300/90">
+                  Supabase is connected, but the <code>public.memories</code> table has not been created yet. Copy and run the SQL migration script in your Supabase SQL Editor.
+                </span>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsSetupModalOpen(true)}
+              className="text-white bg-[#E50914] hover:bg-[#b80710] px-3.5 py-1.5 rounded-md text-xs font-bold whitespace-nowrap transition-colors cursor-pointer shadow active:scale-95 shrink-0"
+            >
+              Copy SQL Migration &rarr;
             </button>
           </div>
         </div>
@@ -399,6 +452,17 @@ export default function App() {
                     onToggleWatchlist={handleToggleWatchlist}
                     isAudioPlaying={isAudioPlaying}
                     onToggleAudio={toggleAudio}
+                    isAdmin={isAdmin}
+                    onEditHero={() => {
+                      setEditSiteContentInitialTab('hero');
+                      setIsEditSiteContentOpen(true);
+                    }}
+                    customTitle={siteContent.hero_title}
+                    customSubtitle={siteContent.hero_subtitle}
+                    customSynopsis={siteContent.hero_synopsis}
+                    customBackdropUrl={siteContent.hero_backdrop_url}
+                    customBadge={siteContent.hero_badge}
+                    customSeriesTag={siteContent.hero_series_tag}
                   />
                 )}
 
@@ -407,67 +471,92 @@ export default function App() {
                   {/* ROW 1: CONTINUE WATCHING: OUR MEMORIES */}
                   {continueWatchingItems.length > 0 && (
                     <CarouselRow
-                      title="Continue Watching: Our Memories"
-                      subtitle="Pick up right where we left off"
+                      title={siteContent.section_continue_title || "Continue Watching: Our Memories"}
+                      subtitle={siteContent.section_continue_sub || "Pick up right where we left off"}
                       items={continueWatchingItems}
                       onPlay={(m) => setPlayingMemory({ memory: m })}
                       onOpenInfo={(m) => setSelectedMemory(m)}
                       onToggleWatchlist={handleToggleWatchlist}
                       onToggleFavorite={handleToggleFavorite}
+                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
+                      onEditSection={isAdmin ? () => {
+                        setEditSiteContentInitialTab('sections');
+                        setIsEditSiteContentOpen(true);
+                      } : undefined}
                     />
                   )}
 
                   {/* ROW 2: ORIGINAL SERIES: OUR STORY (TOP 10 PORTRAITS) */}
                   {ourStorySeries.length > 0 && (
                     <CarouselRow
-                      title="Original Series: Our Story"
-                      subtitle="Top 10 Relationship Chapters of All Time"
+                      title={siteContent.section_our_story_title || "Original Series: Our Story"}
+                      subtitle={siteContent.section_our_story_sub || "Top 10 Relationship Chapters of All Time"}
                       items={ourStorySeries}
                       isPortrait={true}
                       onPlay={(m) => setPlayingMemory({ memory: m })}
                       onOpenInfo={(m) => setSelectedMemory(m)}
                       onToggleWatchlist={handleToggleWatchlist}
                       onToggleFavorite={handleToggleFavorite}
+                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
+                      onEditSection={isAdmin ? () => {
+                        setEditSiteContentInitialTab('sections');
+                        setIsEditSiteContentOpen(true);
+                      } : undefined}
                     />
                   )}
 
                   {/* ROW 3: COLLECTION: LITTLE THINGS I LOVE ABOUT YOU */}
                   {littleThingsCollection.length > 0 && (
                     <CarouselRow
-                      title="Collection: Little Things I Love About You"
-                      subtitle="Micro-moments that steal my heart every single day"
+                      title={siteContent.section_little_things_title || "Collection: Little Things I Love About You"}
+                      subtitle={siteContent.section_little_things_sub || "Micro-moments that steal my heart every single day"}
                       items={littleThingsCollection}
                       onPlay={(m) => setPlayingMemory({ memory: m })}
                       onOpenInfo={(m) => setSelectedMemory(m)}
                       onToggleWatchlist={handleToggleWatchlist}
                       onToggleFavorite={handleToggleFavorite}
+                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
+                      onEditSection={isAdmin ? () => {
+                        setEditSiteContentInitialTab('sections');
+                        setIsEditSiteContentOpen(true);
+                      } : undefined}
                     />
                   )}
 
                   {/* ROW 4: MY LIST: PLACES & EXPERIENCES TOGETHER */}
                   {placesListItems.length > 0 && (
                     <CarouselRow
-                      title="My List: Places and Experiences Together"
-                      subtitle="Our travel passport & dream bucket list"
+                      title={siteContent.section_places_title || "My List: Places and Experiences Together"}
+                      subtitle={siteContent.section_places_sub || "Our travel passport & dream bucket list"}
                       items={placesListItems}
                       onPlay={(m) => setPlayingMemory({ memory: m })}
                       onOpenInfo={(m) => setSelectedMemory(m)}
                       onToggleWatchlist={handleToggleWatchlist}
                       onToggleFavorite={handleToggleFavorite}
+                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
+                      onEditSection={isAdmin ? () => {
+                        setEditSiteContentInitialTab('sections');
+                        setIsEditSiteContentOpen(true);
+                      } : undefined}
                     />
                   )}
 
                   {/* ROW 5: HIDDEN EPISODES: PERSONAL SURPRISES & LETTERS */}
                   {secretVaultItems.length > 0 && (
                     <CarouselRow
-                      title="Hidden Episodes: Personal Surprises and Letters"
-                      subtitle="Locked confidential notes for your eyes only"
+                      title={siteContent.section_vault_title || "Hidden Episodes: Personal Surprises and Letters"}
+                      subtitle={siteContent.section_vault_sub || "Locked confidential notes for your eyes only"}
                       items={secretVaultItems}
                       onPlay={(m) => setPlayingMemory({ memory: m })}
                       onOpenInfo={(m) => setSelectedMemory(m)}
                       onToggleWatchlist={handleToggleWatchlist}
                       onToggleFavorite={handleToggleFavorite}
                       onUnlockVault={(m) => setSecretVaultMemory(m)}
+                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
+                      onEditSection={isAdmin ? () => {
+                        setEditSiteContentInitialTab('sections');
+                        setIsEditSiteContentOpen(true);
+                      } : undefined}
                     />
                   )}
                 </div>
@@ -802,7 +891,7 @@ export default function App() {
       {selectedMemory && (
         <DetailModal
           memory={selectedMemory}
-          currentUser={currentUser}
+          currentUser={isAdmin ? currentUser : null}
           onClose={() => setSelectedMemory(null)}
           onPlay={(m, ep) => {
             setSelectedMemory(null);
@@ -814,11 +903,11 @@ export default function App() {
             setSelectedMemory(null);
             setSecretVaultMemory(m);
           }}
-          onEditMemory={(m) => {
+          onEditMemory={isAdmin ? (m) => {
             setSelectedMemory(null);
             setMemoryToEdit(m);
             setIsAddModalOpen(true);
-          }}
+          } : undefined}
           relatedMemories={memories.filter(
             (m) => m.id !== selectedMemory.id && m.category === selectedMemory.category
           )}
@@ -848,13 +937,24 @@ export default function App() {
           onRedeemCoupon={() => {
             setMemories([...storageService.getLocalMemories()]);
           }}
+          isAdmin={isAdmin}
+          onEditLetter={() => {
+            setEditSiteContentInitialTab('letter');
+            setIsEditSiteContentOpen(true);
+          }}
+          customLetterTitle={siteContent.letter_title}
+          customLetterSubtitle={siteContent.letter_subtitle}
+          customLetterDate={siteContent.letter_date}
+          customLetterContent={siteContent.letter_content}
+          customLetterSignoff={siteContent.letter_signoff}
+          customPasscode={siteContent.secret_passcode}
         />
       )}
 
       {/* ADD / EDIT MEMORY MODAL WITH SUPABASE STORAGE PHOTO UPLOAD */}
       <AddMemoryModal
         isOpen={isAddModalOpen}
-        currentUser={currentUser}
+        currentUser={isAdmin ? currentUser : null}
         memoryToEdit={memoryToEdit}
         onClose={() => {
           setIsAddModalOpen(false);
@@ -862,6 +962,7 @@ export default function App() {
         }}
         onAddMemory={handleAddOrUpdateMemory}
         onDeleteMemory={handleDeleteMemory}
+        onOpenAdminModal={() => setIsAdminModalOpen(true)}
       />
 
       {/* ADMIN AUTH MODAL (LOGIN & SYNC) */}
@@ -871,10 +972,14 @@ export default function App() {
         currentUser={currentUser}
         onAuthSuccess={(user) => {
           setCurrentUser(user);
-          if (user) fetchRemoteMemories();
+          if (user) {
+            fetchRemoteMemories();
+            storageService.loadSiteContent().then((content) => setSiteContent(content));
+          }
         }}
         onMigrationComplete={() => {
           fetchRemoteMemories();
+          storageService.loadSiteContent().then((content) => setSiteContent(content));
         }}
       />
 
@@ -882,7 +987,43 @@ export default function App() {
       <SupabaseSetupModal
         isOpen={isSetupModalOpen}
         onClose={() => setIsSetupModalOpen(false)}
+        isSchemaMissing={isSchemaMissing}
       />
+
+      {/* EDIT SITE CONTENT & LETTERS MODAL */}
+      <EditSiteContentModal
+        isOpen={isEditSiteContentOpen}
+        onClose={() => setIsEditSiteContentOpen(false)}
+        siteContent={siteContent}
+        onUpdateSiteContent={(newContent) => {
+          setSiteContent(newContent);
+        }}
+        initialSection={editSiteContentInitialTab}
+      />
+
+      {/* FLOATING ADMIN MODE BAR */}
+      {isAdmin && (
+        <AdminModeBar
+          currentUser={currentUser}
+          onOpenEditSiteContent={(sec) => {
+            if (sec) setEditSiteContentInitialTab(sec);
+            setIsEditSiteContentOpen(true);
+          }}
+          onOpenAddMemory={() => {
+            setMemoryToEdit(null);
+            setIsAddModalOpen(true);
+          }}
+          onOpenAdminPortal={() => setIsAdminModalOpen(true)}
+          onLogout={async () => {
+            await supabaseService.signOut();
+            setCurrentUser(null);
+          }}
+        />
+      )}
+
+      {/* PERSISTENT FLOATING MUSIC PLAYER */}
+      <MusicPlayer />
     </div>
   );
 }
+

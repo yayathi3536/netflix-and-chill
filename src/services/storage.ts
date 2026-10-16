@@ -1,7 +1,8 @@
-import { MemoryItem, UserProfile, NotificationItem } from '../types';
+import { MemoryItem, UserProfile, NotificationItem, SiteContentMap } from '../types';
 import { DEFAULT_MEMORIES, DEFAULT_PROFILES, DEFAULT_NOTIFICATIONS } from '../data/defaultData';
+import { DEFAULT_SITE_CONTENT_MAP } from '../data/defaultSiteContent';
 import { isSupabaseConfigured, getSupabaseConfigStatus } from './supabaseClient';
-import { supabaseService } from './supabaseService';
+import { supabaseService, isSchemaMissingError } from './supabaseService';
 
 const STORAGE_KEYS = {
   MEMORIES: 'our_universe_memories_v2',
@@ -10,7 +11,9 @@ const STORAGE_KEYS = {
   NOTIFICATIONS: 'our_universe_notifications_v1',
   CLIENT_ID: 'our_universe_client_id_v1',
   MUTED: 'our_universe_audio_muted_v1',
+  SITE_CONTENT: 'our_universe_site_content_v1',
 };
+
 
 class UnifiedStorageService {
   // CLIENT ID FOR DEVICE / GUEST WATCHLIST TRACKING
@@ -32,7 +35,12 @@ class UnifiedStorageService {
   }
 
   // 1. MEMORIES: ASYNCHRONOUS DATA LOADER
-  public async loadMemories(): Promise<{ memories: MemoryItem[]; source: 'supabase' | 'local'; error?: string }> {
+  public async loadMemories(): Promise<{
+    memories: MemoryItem[];
+    source: 'supabase' | 'local';
+    error?: string;
+    isSchemaMissing?: boolean;
+  }> {
     if (isSupabaseConfigured()) {
       try {
         const remoteList = await supabaseService.fetchMemories();
@@ -49,12 +57,15 @@ class UnifiedStorageService {
           error: 'Connected to Supabase, but the memories table is empty. Click "Migrate / Seed to Supabase" to push your memories!',
         };
       } catch (err) {
-        console.warn('Supabase fetch failed, falling back to local storage cache:', err);
+        const isSchemaIssue = isSchemaMissingError(err);
         const fallback = this.getLocalMemories();
         return {
           memories: fallback.length > 0 ? fallback : DEFAULT_MEMORIES,
           source: 'local',
-          error: (err as Error).message || 'Database connection error. Using local offline cache.',
+          isSchemaMissing: isSchemaIssue,
+          error: isSchemaIssue
+            ? 'SCHEMA_NOT_INITIALIZED'
+            : (err as Error).message || 'Database connection error. Using local offline cache.',
         };
       }
     }
@@ -324,7 +335,93 @@ class UnifiedStorageService {
   public resetToDefaults(): void {
     this.saveLocalMemories(DEFAULT_MEMORIES);
     this.saveProfilesList(DEFAULT_PROFILES);
+    this.saveLocalSiteContent(DEFAULT_SITE_CONTENT_MAP);
     localStorage.removeItem(STORAGE_KEYS.ACTIVE_PROFILE);
+  }
+
+  // 11. SITE CONTENT (TEXTS, HEADINGS, LETTERS)
+  public async loadSiteContent(): Promise<SiteContentMap> {
+    if (isSupabaseConfigured()) {
+      try {
+        const remoteContent = await supabaseService.fetchSiteContent();
+        if (remoteContent && Object.keys(remoteContent).length > 0) {
+          const merged = { ...DEFAULT_SITE_CONTENT_MAP, ...this.getLocalSiteContent(), ...remoteContent };
+          this.saveLocalSiteContent(merged);
+          return merged;
+        }
+      } catch (e) {
+        console.warn('Could not load remote site_content, using local fallback:', e);
+      }
+    }
+    return this.getInitialSiteContent();
+  }
+
+  public getInitialSiteContent(): SiteContentMap {
+    const local = this.getLocalSiteContent();
+    return { ...DEFAULT_SITE_CONTENT_MAP, ...local };
+  }
+
+  public getLocalSiteContent(): SiteContentMap {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEYS.SITE_CONTENT);
+      if (stored) {
+        return JSON.parse(stored) as SiteContentMap;
+      }
+    } catch (e) {
+      console.warn('Could not read site content from localStorage:', e);
+    }
+    return {};
+  }
+
+  private saveLocalSiteContent(content: SiteContentMap): void {
+    try {
+      localStorage.setItem(STORAGE_KEYS.SITE_CONTENT, JSON.stringify(content));
+    } catch (e) {
+      console.error('Failed to save site content to localStorage:', e);
+    }
+  }
+
+  public async saveSiteContentItem(
+    key: string,
+    value: string,
+    section: string = 'general'
+  ): Promise<{ success: boolean; error?: string }> {
+    // 1. Update local cache immediately
+    const current = this.getLocalSiteContent();
+    const updated = { ...current, [key]: value };
+    this.saveLocalSiteContent(updated);
+
+    // 2. If Supabase configured, push to database
+    if (isSupabaseConfigured()) {
+      const { success, error } = await supabaseService.updateSiteContent(key, value, section);
+      if (!success) {
+        return { success: false, error: error?.message || 'Failed to save to Supabase' };
+      }
+    }
+
+    return { success: true };
+  }
+
+  public async saveSiteContentBatch(
+    entries: Record<string, { value: string; section?: string }>
+  ): Promise<{ success: boolean; error?: string }> {
+    // 1. Update local cache immediately
+    const current = this.getLocalSiteContent();
+    const updated = { ...current };
+    Object.entries(entries).forEach(([k, item]) => {
+      updated[k] = item.value;
+    });
+    this.saveLocalSiteContent(updated);
+
+    // 2. If Supabase configured, push to database
+    if (isSupabaseConfigured()) {
+      const { success, error } = await supabaseService.batchUpdateSiteContent(entries);
+      if (!success) {
+        return { success: false, error: error?.message || 'Failed to batch save to Supabase' };
+      }
+    }
+
+    return { success: true };
   }
 }
 

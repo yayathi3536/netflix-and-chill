@@ -12,6 +12,7 @@ import {
   AlertCircle,
   Loader2,
   Trash2,
+  Shield,
 } from 'lucide-react';
 import { MemoryItem, MemoryCategory } from '../types';
 import { supabaseService } from '../services/supabaseService';
@@ -25,6 +26,7 @@ interface AddMemoryModalProps {
   memoryToEdit?: MemoryItem | null;
   onDeleteMemory?: (id: string, photoUrl?: string) => void;
   currentUser?: User | null;
+  onOpenAdminModal?: () => void;
 }
 
 export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
@@ -34,6 +36,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
   memoryToEdit,
   onDeleteMemory,
   currentUser,
+  onOpenAdminModal,
 }) => {
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
@@ -461,13 +464,27 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              disabled={isUploading}
-              className="px-6 py-2 bg-[#E50914] hover:bg-[#b80710] disabled:opacity-50 text-white font-bold rounded-md shadow-lg transition-transform active:scale-95"
-            >
-              {memoryToEdit ? 'Save Changes' : 'Save Memory'}
-            </button>
+            {isSupabaseReady && !currentUser ? (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  if (onOpenAdminModal) onOpenAdminModal();
+                }}
+                className="px-6 py-2 bg-[#E50914] hover:bg-[#b80710] text-white font-bold rounded-md shadow-lg transition-transform active:scale-95 flex items-center gap-2 cursor-pointer"
+              >
+                <Shield className="w-4 h-4" />
+                <span>Admin Sign-In to Save</span>
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled={isUploading}
+                className="px-6 py-2 bg-[#E50914] hover:bg-[#b80710] disabled:opacity-50 text-white font-bold rounded-md shadow-lg transition-transform active:scale-95 cursor-pointer"
+              >
+                {memoryToEdit ? 'Save Changes' : 'Save Memory'}
+              </button>
+            )}
           </div>
         </form>
       </div>

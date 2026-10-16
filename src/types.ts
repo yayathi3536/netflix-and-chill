@@ -71,3 +71,17 @@ export interface NotificationItem {
   read: boolean;
   memoryId?: string;
 }
+
+export type SiteContentSection = 'hero' | 'letter' | 'sections' | 'couple' | 'general';
+
+export interface SiteContentItem {
+  key: string;
+  section: SiteContentSection;
+  label: string;
+  value: string;
+  type?: 'text' | 'textarea' | 'image' | 'date';
+  updated_at?: string;
+}
+
+export type SiteContentMap = Record<string, string>;
+

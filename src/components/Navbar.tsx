@@ -5,6 +5,7 @@ import {
   Plus,
   Volume2,
   VolumeX,
+  Music,
   X,
   Heart,
   Sparkles,
@@ -207,22 +208,29 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
-          {/* Romantic Ambient Sound Generator Toggle */}
+          {/* Music Soundtrack Toggle Button */}
           <button
             onClick={toggleAudio}
-            className={`p-2 rounded-full transition-all relative ${
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full transition-all relative text-xs font-medium cursor-pointer ${
               isAudioPlaying
-                ? 'bg-[#E50914]/20 text-[#ff4d5a] ring-1 ring-[#E50914]'
-                : 'text-neutral-400 hover:text-white hover:bg-white/10'
+                ? 'bg-[#E50914] text-white ring-2 ring-[#E50914]/50 shadow-md shadow-[#E50914]/40'
+                : 'bg-white/10 text-neutral-300 hover:text-white hover:bg-white/20 border border-white/10'
             }`}
-            title={isAudioPlaying ? 'Mute ambient melody' : 'Play romantic ambient soundtrack'}
-            aria-label="Toggle ambient music"
+            title={isAudioPlaying ? 'Mute background soundtrack' : 'Play romantic soundtrack'}
+            aria-label="Toggle music soundtrack"
           >
-            {isAudioPlaying ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            {isAudioPlaying ? (
+              <Music className="w-3.5 h-3.5 animate-spin [animation-duration:3s]" />
+            ) : (
+              <Music className="w-3.5 h-3.5" />
+            )}
+            <span className="hidden sm:inline">
+              {isAudioPlaying ? 'Playing' : 'Music'}
+            </span>
             {isAudioPlaying && (
-              <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E50914] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E50914]"></span>
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
               </span>
             )}
           </button>
@@ -260,14 +268,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </button>
 
-          {/* Add Memory Button */}
-          <button
-            onClick={onOpenAddModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E50914] hover:bg-[#b80710] text-white text-xs font-semibold rounded-md shadow-md transition-colors cursor-pointer whitespace-nowrap active:scale-95"
-          >
-            <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span className="hidden sm:inline">Add Memory</span>
-          </button>
+          {/* Add Memory Button (Admin only) */}
+          {currentUser && (
+            <button
+              onClick={onOpenAddModal}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E50914] hover:bg-[#b80710] text-white text-xs font-semibold rounded-md shadow-md transition-colors cursor-pointer whitespace-nowrap active:scale-95 animate-in fade-in"
+              title="Add a new relationship memory"
+            >
+              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span className="hidden sm:inline">Add Memory</span>
+            </button>
+          )}
 
           {/* Notifications Bell */}
           <div className="relative">

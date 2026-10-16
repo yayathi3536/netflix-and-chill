@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Info, Plus, Check, Volume2, VolumeX, Sparkles } from 'lucide-react';
+import { Play, Info, Plus, Check, Volume2, VolumeX, Sparkles, Edit3 } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
 
@@ -10,6 +10,14 @@ interface HeroBannerProps {
   onToggleWatchlist: (memoryId: string) => void;
   isAudioPlaying: boolean;
   onToggleAudio: () => void;
+  isAdmin?: boolean;
+  onEditHero?: () => void;
+  customTitle?: string;
+  customSubtitle?: string;
+  customSynopsis?: string;
+  customBackdropUrl?: string;
+  customBadge?: string;
+  customSeriesTag?: string;
 }
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({
@@ -19,7 +27,21 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   onToggleWatchlist,
   isAudioPlaying,
   onToggleAudio,
+  isAdmin = false,
+  onEditHero,
+  customTitle,
+  customSubtitle,
+  customSynopsis,
+  customBackdropUrl,
+  customBadge,
+  customSeriesTag,
 }) => {
+  const displayTitle = customTitle || memory.title;
+  const displaySynopsis = customSynopsis || memory.synopsis;
+  const displayBackdrop = customBackdropUrl || memory.backdropUrl;
+  const displayBadge = customBadge || '#1 in Our Hearts Today';
+  const displaySeriesTag = customSeriesTag || 'Original Series';
+
   return (
     <div className="relative w-full h-[78vh] min-h-[520px] max-h-[820px] overflow-hidden select-none">
       {/* Background Media with Ken Burns cinematic zoom */}
@@ -27,8 +49,8 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         <VisualArt
           id={memory.id}
           category={memory.category}
-          title={memory.title}
-          imageUrl={memory.backdropUrl}
+          title={displayTitle}
+          imageUrl={displayBackdrop}
           fallbackGradient={memory.fallbackGradient}
           className="w-full h-full object-cover scale-105"
         />
@@ -47,18 +69,18 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               TOP
             </span>
             <span className="uppercase tracking-widest text-[11px] text-neutral-300">
-              #1 in Our Hearts Today
+              {displayBadge}
             </span>
             <span className="text-neutral-500">·</span>
             <span className="flex items-center gap-1 text-[#ff4d5a] text-[11px]">
               <Sparkles className="w-3 h-3" />
-              <span>Original Series</span>
+              <span>{displaySeriesTag}</span>
             </span>
           </div>
 
           {/* Cinematic Title */}
           <h1 className="font-bebas text-5xl sm:text-7xl lg:text-8xl tracking-wider text-white font-black leading-none drop-shadow-2xl">
-            {memory.title}
+            {displayTitle}
           </h1>
 
           {/* Metadata String: Clean unboxed metadata with separators */}
@@ -76,11 +98,11 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 
           {/* Synopsis */}
           <p className="text-sm sm:text-base text-neutral-200/90 leading-relaxed font-normal line-clamp-3 max-w-xl text-balance drop-shadow">
-            {memory.synopsis}
+            {displaySynopsis}
           </p>
 
           {/* Interactive Action Buttons */}
-          <div className="flex items-center gap-3 pt-2">
+          <div className="flex flex-wrap items-center gap-3 pt-2">
             {/* Play Button */}
             <button
               onClick={() => onPlay(memory)}
@@ -112,6 +134,18 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                 <Plus className="w-5 h-5 stroke-[2.5]" />
               )}
             </button>
+
+            {/* Admin Edit Trigger (Only for verified admin) */}
+            {isAdmin && onEditHero && (
+              <button
+                onClick={onEditHero}
+                className="flex items-center gap-1.5 px-3.5 py-2.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-semibold text-xs rounded-md border border-amber-500/40 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-lg animate-in fade-in"
+                title="Edit hero billboard, title, and media"
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+                <span>Edit Hero</span>
+              </button>
+            )}
           </div>
         </div>
 

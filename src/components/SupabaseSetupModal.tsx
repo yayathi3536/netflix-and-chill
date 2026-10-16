@@ -16,15 +16,25 @@ import { getSupabaseConfigStatus } from '../services/supabaseClient';
 interface SupabaseSetupModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialTab?: 'guide' | 'sql' | 'github';
+  isSchemaMissing?: boolean;
 }
 
 export const SupabaseSetupModal: React.FC<SupabaseSetupModalProps> = ({
   isOpen,
   onClose,
+  initialTab = 'guide',
+  isSchemaMissing = false,
 }) => {
-  const [activeTab, setActiveTab] = useState<'guide' | 'sql' | 'github'>('guide');
+  const [activeTab, setActiveTab] = useState<'guide' | 'sql' | 'github'>(initialTab);
   const [copied, setCopied] = useState(false);
   const status = getSupabaseConfigStatus();
+
+  React.useEffect(() => {
+    if (isOpen) {
+      setActiveTab(isSchemaMissing ? 'sql' : initialTab);
+    }
+  }, [isOpen, initialTab, isSchemaMissing]);
 
   if (!isOpen) return null;
 
@@ -253,12 +263,24 @@ VITE_SUPABASE_ANON_KEY=eyJhbGci...`}
 
         {/* TAB 2: SQL */}
         {activeTab === 'sql' && (
-          <div className="space-y-2">
+          <div className="space-y-3">
+            {isSchemaMissing && (
+              <div className="p-3 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-200 text-xs flex items-start gap-2.5">
+                <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-white">Missing Table: 'public.memories' (PGRST205)</p>
+                  <p className="text-[11px] text-amber-300/90 leading-relaxed mt-0.5">
+                    Your Supabase URL and key are connected, but the database tables have not been created yet. Click <strong>Copy SQL</strong> below, open your Supabase project's <strong>SQL Editor</strong>, paste this script, and click <strong>Run</strong>.
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center justify-between text-xs text-neutral-400">
               <span>Schema & Storage Setup (Copy & paste into Supabase SQL Editor)</span>
               <button
                 onClick={copyToClipboard}
-                className="flex items-center gap-1 text-white bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded transition-colors"
+                className="flex items-center gap-1 text-white bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded transition-colors cursor-pointer"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{copied ? 'Copied!' : 'Copy SQL'}</span>

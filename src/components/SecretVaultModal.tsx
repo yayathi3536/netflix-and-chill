@@ -9,6 +9,7 @@ import {
   Clock,
   Sparkles,
   KeyRound,
+  Edit3,
 } from 'lucide-react';
 import { MemoryItem, CouponItem } from '../types';
 import { storageService } from '../services/storage';
@@ -17,12 +18,28 @@ interface SecretVaultModalProps {
   memory: MemoryItem | null;
   onClose: () => void;
   onRedeemCoupon?: (couponId: string) => void;
+  isAdmin?: boolean;
+  onEditLetter?: () => void;
+  customLetterTitle?: string;
+  customLetterSubtitle?: string;
+  customLetterDate?: string;
+  customLetterContent?: string;
+  customLetterSignoff?: string;
+  customPasscode?: string;
 }
 
 export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
   memory,
   onClose,
   onRedeemCoupon,
+  isAdmin = false,
+  onEditLetter,
+  customLetterTitle,
+  customLetterSubtitle,
+  customLetterDate,
+  customLetterContent,
+  customLetterSignoff,
+  customPasscode,
 }) => {
   const [passcode, setPasscode] = useState('');
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -31,16 +48,23 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
 
   if (!memory) return null;
 
+  const effectivePasscode = customPasscode || memory.secretPasscode || '1402';
+  const effectiveTitle = customLetterTitle || memory.subtitle || 'A Private Letter to You';
+  const effectiveSubtitle = customLetterSubtitle || 'Vault Unlocked · For Your Eyes Only';
+  const effectiveDate = customLetterDate || memory.date;
+  const effectiveContent = customLetterContent || memory.letterContent || memory.fullStory;
+  const effectiveSignoff = customLetterSignoff;
+
   const handleUnlock = (e: React.FormEvent) => {
     e.preventDefault();
-    const correctCode = memory.secretPasscode || '1402';
-    if (passcode.trim() === correctCode || passcode.trim() === 'love') {
+    if (passcode.trim() === effectivePasscode || passcode.trim() === 'love') {
       setIsUnlocked(true);
       setErrorMsg('');
     } else {
-      setErrorMsg('Incorrect passcode. Try 1402 or tap the secret hint below!');
+      setErrorMsg(`Incorrect passcode. Try ${effectivePasscode} or tap the secret hint below!`);
     }
   };
+
 
   const handleQuickBypass = () => {
     setIsUnlocked(true);
@@ -136,14 +160,26 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
           /* UNLOCKED STATE: LETTER & COUPONS */
           <div className="space-y-8 animate-in fade-in duration-300">
             {/* Header Badge */}
-            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+            <div className="flex items-center justify-between pb-4 border-b border-white/10 gap-2 flex-wrap">
               <div className="flex items-center gap-2">
                 <Unlock className="w-5 h-5 text-emerald-400" />
                 <span className="text-xs uppercase tracking-widest text-emerald-400 font-bold">
-                  Vault Unlocked · For Your Eyes Only
+                  {effectiveSubtitle}
                 </span>
               </div>
-              <span className="text-xs text-neutral-400">{memory.date}</span>
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-neutral-400">{effectiveDate}</span>
+                {isAdmin && onEditLetter && (
+                  <button
+                    onClick={onEditLetter}
+                    className="flex items-center gap-1.5 px-3 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold rounded border border-amber-500/40 transition-colors cursor-pointer"
+                    title="Edit letter, vows, and secret passcode"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>Edit Letter</span>
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Handwritten Style Love Letter */}
@@ -153,11 +189,16 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
               </div>
               <div className="relative z-10 space-y-4">
                 <h3 className="font-bebas text-2xl tracking-wide text-amber-200">
-                  {memory.subtitle || 'A Private Letter to You'}
+                  {effectiveTitle}
                 </h3>
                 <div className="text-neutral-200 text-sm sm:text-base leading-relaxed whitespace-pre-line font-light">
-                  {memory.letterContent || memory.fullStory}
+                  {effectiveContent}
                 </div>
+                {effectiveSignoff && (
+                  <p className="pt-2 font-serif italic text-amber-300 text-sm">
+                    {effectiveSignoff}
+                  </p>
+                )}
               </div>
             </div>
 
