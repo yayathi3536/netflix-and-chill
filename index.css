@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --netflix-red: #E50914;
+    --netflix-black: #000000;
+    --netflix-dark-charcoal: #141414;
+    --netflix-dark-gray: #181818;
+    --netflix-mid-gray: #808080;
+    --netflix-light-gray: #B3B3B3;
+    --netflix-white: #FFFFFF;
+  }
+
+  body {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+.font-bebas {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.font-serif-romantic {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Custom Scrollbar - Strict Netflix Dark Style */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.dark-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.dark-scrollbar::-webkit-scrollbar-track {
+  background: #000000;
+}
+.dark-scrollbar::-webkit-scrollbar-thumb {
+  background: #808080;
+  border-radius: 9999px;
+}
+.dark-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #B3B3B3;
+}
+
+/* Pure Netflix Cinematic Overlays */
+.hero-netflix-overlay {
+  background: linear-gradient(
+    77deg,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.75) 40%,
+    rgba(0, 0, 0, 0.3) 70%,
+    transparent 100%
+  );
+}
+
+.hero-netflix-scrim {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.3) 30%,
+    rgba(0, 0, 0, 0.75) 70%,
+    #000000 100%
+  );
+}
+
+/* Netflix Card Elevation & Hover */
+.netflix-card-shadow {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.netflix-modal-shadow {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95);
+}
+
+/* Ken Burns subtle cinematic zoom */
+@keyframes kenburns {
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.05) translate(-0.5%, -0.5%); }
+  100% { transform: scale(1) translate(0, 0); }
+}
+
+.animate-ken-burns {
+  animation: kenburns 26s ease-in-out infinite alternate;
+}
+
+/* =====================================================================
+   Landing page (opening screen)
+   Palette: #E50914, #000000, #141414, #181818, #FFFFFF, #B3B3B3, #808080
+   ===================================================================== */
+.font-landing {
+  font-family: 'Montserrat', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Dark overlay: heavy at the top for the brand/headline, lighter low so the glow shows through */
+.landing-overlay {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.82) 0%,
+      rgba(0, 0, 0, 0.55) 30%,
+      rgba(0, 0, 0, 0.28) 60%,
+      rgba(0, 0, 0, 0.16) 84%,
+      rgba(20, 20, 20, 0.45) 100%
+    );
+}
+
+.landing-vignette {
+  background: radial-gradient(ellipse at 50% 45%, transparent 35%, rgba(0, 0, 0, 0.65) 100%);
+}
+
+/* Curved horizon with a red rim that fades toward the sides (Netflix-style) */
+.landing-curve {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 0;
+  width: 150%;
+  height: clamp(64px, 13vh, 140px);
+  transform: translateX(-50%);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: linear-gradient(
+    90deg,
+    rgba(229, 9, 20, 0) 0%,
+    rgba(229, 9, 20, 0.2) 14%,
+    #E50914 50%,
+    rgba(229, 9, 20, 0.2) 86%,
+    rgba(229, 9, 20, 0) 100%
+  );
+  filter: drop-shadow(0 -8px 26px rgba(229, 9, 20, 0.45));
+  pointer-events: none;
+}
+.landing-curve::after {
+  content: '';
+  position: absolute;
+  inset: 3px 0 0 0;
+  background: #141414;
+  border-radius: inherit;
+}
+
+/* Smooth entrance animations, staggered with --d */
+@keyframes landing-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes landing-fade-up {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes landing-drift {
+  from { transform: scale(1.03) translate3d(0, 0, 0); }
+  to   { transform: scale(1.09) translate3d(-0.8%, -0.6%, 0); }
+}
+
+.landing-fade,
+.landing-fade-up {
+  opacity: 0;
+  animation-duration: 0.95s;
+  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation-fill-mode: forwards;
+  animation-delay: var(--d, 0ms);
+}
+.landing-fade    { animation-name: landing-fade; }
+.landing-fade-up { animation-name: landing-fade-up; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .landing-bg { animation: landing-drift 36s ease-in-out infinite alternate; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-fade,
+  .landing-fade-up {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+}
