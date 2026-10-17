@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Music — Play Files in This Folder</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:24px;background:#0f1115;color:#e6eef8}
+    h1{margin:0 0 12px}
+    .meta{color:#9fb3d1;margin-bottom:18px}
+    #list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+    li{background:#0e1620;border:1px solid rgba(255,255,255,0.03);padding:12px;border-radius:8px}
+    .title{font-weight:600;margin:0 0 8px;font-size:14px}
+    audio{width:100%;outline:none}
+    .controls{display:flex;gap:8px;align-items:center;margin-top:10px}
+    button{background:#132033;color:#e6eef8;border:1px solid rgba(255,255,255,0.04);padding:6px 8px;border-radius:6px;cursor:pointer}
+    button:active{transform:translateY(1px)}
+    .small{font-size:13px;color:#9fb3d1}
+    footer{margin-top:20px;color:#9fb3d1;font-size:13px}
+  </style>
+</head>
+<body>
+  <h1>Music Player</h1>
+  <div class="meta">Drop your audio files (mp3, wav, ogg, m4a) into this folder and reload this page — players will be created automatically.</div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
+    <button id="playAll">Play All</button>
+    <button id="pauseAll">Pause All</button>
+    <button id="shuffle">Shuffle</button>
+    <div class="small">Auto-detect: songs.json &rarr; directory listing fallback</div>
+  </div>
+
+  <ul id="list" aria-live="polite"></ul>
+
+  <footer>Tip: If your hosting doesn't expose a directory listing, optionally add a songs.json file listing filenames (see README below).</footer>
+
+  <script>
+    // Utility: friendly file name
+    function niceName(path){
+      try{const parts=path.split('/'); return decodeURIComponent(parts[parts.length-1]).replace(/[-_]/g,' ').replace(/\.[^/.]+$/, '');}catch(e){return path}
+    }
+
+    async function fetchSongs(){
+      // 1) Try songs.json (recommended for static hosts without directory listing)
+      try{
+        const r = await fetch('./songs.json', {cache: 'no-store'});
+        if(r.ok){
+          const j = await r.json();
+          // accept either { songs: [...] } or an array
+          if(Array.isArray(j)) return j;
+          if(Array.isArray(j.songs)) return j.songs;
+        }
+      }catch(e){}
+
+      // 2) Fallback: try to fetch the directory index and parse <a> links
+      try{
+        const r = await fetch('./', {cache:'no-store'});
+        if(r.ok){
+          const text = await r.text();
+          const doc = new DOMParser().parseFromString(text, 'text/html');
+          const anchors = Array.from(doc.querySelectorAll('a'));
+          const exts = /\.(mp3|wav|ogg|m4a)$/i;
+          const files = anchors.map(a=>a.getAttribute('href')).filter(Boolean).filter(h=>exts.test(h));
+          // remove parent folder link like ../ and duplicates
+          return Array.from(new Set(files.filter(f=>!f.includes('..') && f !== './')));
+        }
+      }catch(e){}
+
+      return [];
+    }
+
+    function createItem(src){
+      const li = document.createElement('li');
+      const title = document.createElement('div'); title.className='title'; title.textContent = niceName(src);
+      const audio = document.createElement('audio'); audio.controls = true; audio.src = src; audio.preload = 'none';
+      li.appendChild(title);
+      li.appendChild(audio);
+      return {li, audio};
+    }
+
+    (async function(){
+      const listEl = document.getElementById('list');
+      let songs = await fetchSongs();
+
+      // If paths are not absolute and start without ./, normalize
+      songs = songs.map(s => s.startsWith('/') || s.startsWith('http') ? s : ('./' + s.replace(/^\/.*/,'').replace(/^\.#/,'').replace(/^\?/,'')));
+
+      if(songs.length === 0){
+        listEl.innerHTML = '<li style="grid-column:1/-1;color:#9fb3d1">No audio files detected in this folder. Add files and reload, or add a <code>songs.json</code> listing filenames (see below).</li>';
+        // show example songs.json in console
+        console.info('Example songs.json (place in this same folder):\n', JSON.stringify({songs:['song1.mp3','another.mp3']},null,2));
+        return;
+      }
+
+      const players = [];
+      for(const s of songs){
+        const {li,audio} = createItem(s);
+        listEl.appendChild(li);
+        players.push(audio);
+      }
+
+      // play/pause all
+      document.getElementById('playAll').addEventListener('click', ()=>{ players.forEach(p=>{ p.play().catch(()=>{}); }); });
+      document.getElementById('pauseAll').addEventListener('click', ()=>{ players.forEach(p=>p.pause()); });
+
+      // shuffle: shuffle the DOM order
+      document.getElementById('shuffle').addEventListener('click', ()=>{
+        for (let i = players.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          // swap elements in DOM
+          const a = listEl.children[i]; const b = listEl.children[j];
+          listEl.insertBefore(a, b);
+        }
+      });
+
+      // optional: play next when finished
+      for(let i=0;i<players.length;i++){
+        const p = players[i];
+        p.addEventListener('ended', ()=>{
+          // try to play next visible audio
+          const nextIndex = players.indexOf(p) + 1;
+          for(let k=nextIndex;k<players.length;k++){
+            const cand = players[k];
+            if(cand && !cand.paused){ /* skip playing if already playing */ }
+            if(cand){ cand.play().catch(()=>{}); break; }
+          }
+        });
+      }
+
+    })();
+  </script>
+
+  <!--
+    README / usage notes:
+    - Drop audio files into this same folder (public/music/). Then open this index.html (served by your static server) and it will detect audio files and create players.
+
+    - If your hosting does NOT return a directory listing when fetching the folder URL (many hosts disable directory listings), create a simple songs.json in this folder with one of the formats below to make detection reliable:
+
+      { "songs": ["song1.mp3", "song2.mp3"] }
+    OR
+      ["song1.mp3","song2.mp3"]
+
+    - Filenames in songs.json are relative to this folder.
+
+    - For large binary files, consider Git LFS or external hosting to avoid blowing up your git repo size.
+  -->
+</body>
+</html>
