@@ -19,7 +19,7 @@ import {
   AlertCircle,
   Upload,
 } from 'lucide-react';
-import { TRACKS, Track } from '../data/tracks';
+import { TRACKS, Track, getAssetUrl } from '../data/tracks';
 import { romanticAudio } from '../utils/romanticAudio';
 
 function formatTime(seconds: number): string {
@@ -97,7 +97,7 @@ export function MusicPlayer() {
     setCurrentTime(0);
 
     const audio = audioRef.current;
-    audio.src = currentTrack.src;
+    audio.src = getAssetUrl(currentTrack.src);
     audio.load();
 
     if (isPlaying) {
