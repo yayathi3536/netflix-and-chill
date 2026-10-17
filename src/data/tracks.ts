@@ -10,8 +10,8 @@
  * 1. Place your audio files (.mp3, .wav, .m4a, .ogg) in the `public/music/` folder:
  *    - `public/music/we_fell_in_love_in_october.mp3`
  *    - `public/music/baby.mp3`
- *    - `public/music/until_i_found_her.mp3`
- *    - `public/music/until_i_make_you_mine.mp3`
+ *    - `public/music/until_i_found_her.m4a
+ *    - `public/music/make_you_mine.mp3`
  *    - `public/music/you_are_an_idiot.mp3`
  *    - `public/music/perfect.mp3`
  *    - `public/music/heat_waves.mp3`
