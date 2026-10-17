@@ -1,7 +1,8 @@
 import React from 'react';
-import { Play, Info, Plus, Check, Volume2, VolumeX, Edit3 } from 'lucide-react';
+import { Play, Info, Plus, Check, Volume2, VolumeX, Edit3, BookOpen, Camera } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
+import { hasValidVideo, isVideoUrl } from '../utils/mediaHelpers';
 
 interface HeroBannerProps {
   memory: MemoryItem;
@@ -47,6 +48,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   const displayBackdrop = customBackdropUrl || memory.backdropUrl;
   const displayBadge = customBadge || '#1 in Our Hearts Today';
   const displaySeriesTag = customSeriesTag || 'SERIES';
+  const hasHeroVideo = hasValidVideo(memory) || isVideoUrl(customBackdropUrl);
 
   return (
     <div className="relative w-full h-[85vh] min-h-[580px] max-h-[880px] overflow-hidden select-none bg-[#000000]">
@@ -113,24 +115,27 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 
           {/* Strict Netflix Buttons */}
           <div className="flex flex-wrap items-center gap-3 pt-3">
-            {/* Red Primary Play Button with White Text */}
-            <button
-              onClick={() => onPlay(memory)}
-              className="flex items-center gap-2 px-7 py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-sm sm:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap"
-            >
-              <Play className="w-5 h-5 fill-white text-white" />
-              <span>Play</span>
-            </button>
+            {hasHeroVideo ? (
+              <button
+                onClick={() => onPlay(memory)}
+                className="flex items-center gap-2 px-7 py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-sm sm:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap"
+              >
+                <Play className="w-5 h-5 fill-white text-white" />
+                <span>Play Video</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => onOpenInfo(memory)}
+                className="flex items-center gap-2 px-7 py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-sm sm:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap"
+              >
+                <BookOpen className="w-5 h-5 text-white" />
+                <span>Read Our Story</span>
+              </button>
+            )}
 
-            {/* Dark Grey Secondary More Info Button with White Text */}
+            {/* Dark Grey Secondary Button with White Text */}
             <button
-              onClick={() => {
-                if (onExploreMemories) {
-                  onExploreMemories();
-                } else {
-                  onOpenInfo(memory);
-                }
-              }}
+              onClick={() => onOpenInfo(memory)}
               className="flex items-center gap-2 px-6 py-3 bg-[#181818]/90 hover:bg-white/10 text-[#FFFFFF] font-semibold text-sm sm:text-base rounded border border-[#808080]/40 transition-all active:scale-95 cursor-pointer whitespace-nowrap"
             >
               <Info className="w-5 h-5 text-[#FFFFFF]" />
@@ -151,15 +156,15 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               )}
             </button>
 
-            {/* Admin Edit Trigger */}
+            {/* Admin-Only Edit & Image Upload Trigger */}
             {isAdmin && onEditHero && (
               <button
                 onClick={onEditHero}
                 className="flex items-center gap-1.5 px-3.5 py-2.5 bg-[#181818] hover:bg-white/10 text-[#FFFFFF] font-medium text-xs rounded border border-[#808080]/40 transition-all active:scale-95 cursor-pointer"
-                title="Edit featured title & synopsis"
+                title="Admin only: Change hero image & text"
               >
                 <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
-                <span>Edit Featured</span>
+                <span>Change Hero Image & Text</span>
               </button>
             )}
           </div>

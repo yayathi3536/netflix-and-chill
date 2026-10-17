@@ -39,17 +39,35 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
   customPasscode,
 }) => {
   const [passcode, setPasscode] = useState('');
-  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(!memory?.isSecret);
   const [errorMsg, setErrorMsg] = useState('');
   const [coupons, setCoupons] = useState<CouponItem[]>(memory?.coupons || []);
 
+  React.useEffect(() => {
+    if (memory) {
+      setIsUnlocked(!memory.isSecret);
+      setCoupons(memory.coupons || []);
+      setPasscode('');
+      setErrorMsg('');
+    }
+  }, [memory?.id, memory?.isSecret]);
+
   if (!memory) return null;
 
+  const isPrimaryVaultLetter = memory.id === 'vault-1';
   const effectivePasscode = customPasscode || memory.secretPasscode || '1402';
-  const effectiveTitle = customLetterTitle || memory.subtitle || 'Confidential Memo';
-  const effectiveSubtitle = customLetterSubtitle || 'Vault Unlocked · For Your Eyes Only';
-  const effectiveDate = customLetterDate || memory.date;
-  const effectiveContent = customLetterContent || memory.letterContent || memory.fullStory;
+  const effectiveTitle = isPrimaryVaultLetter
+    ? customLetterTitle || memory.title || memory.subtitle || 'Confidential Memo'
+    : memory.title || memory.subtitle || customLetterTitle || 'Confidential Memo';
+  const effectiveSubtitle = isPrimaryVaultLetter
+    ? customLetterSubtitle || memory.subtitle || 'Vault Unlocked · For Your Eyes Only'
+    : memory.subtitle || customLetterSubtitle || 'Personal Love Note · For Your Eyes Only';
+  const effectiveDate = isPrimaryVaultLetter
+    ? customLetterDate || memory.date
+    : memory.date || customLetterDate;
+  const effectiveContent = isPrimaryVaultLetter
+    ? customLetterContent || memory.letterContent || memory.fullStory
+    : memory.letterContent || memory.fullStory || customLetterContent;
   const effectiveSignoff = customLetterSignoff;
 
   const handleUnlock = (e: React.FormEvent) => {

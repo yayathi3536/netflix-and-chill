@@ -39,6 +39,7 @@ import { SurpriseModal } from './components/SurpriseModal';
 import { ConstellationSection } from './components/ConstellationSection';
 import { TRACKS } from './data/tracks';
 import { romanticAudio } from './utils/romanticAudio';
+import { hasValidVideo, isLetterItem } from './utils/mediaHelpers';
 import { User } from '@supabase/supabase-js';
 
 export default function App() {
@@ -191,17 +192,29 @@ export default function App() {
     setActiveProfile(profile);
   };
 
+  const handleOpenItem = (memory: MemoryItem) => {
+    if (isLetterItem(memory)) {
+      setSecretVaultMemory(memory);
+    } else {
+      setSelectedMemory(memory);
+    }
+  };
+
+  const handlePlayMemory = (memory: MemoryItem, episode?: Episode) => {
+    if (hasValidVideo(memory, episode)) {
+      setPlayingMemory({ memory, episode });
+    } else {
+      handleOpenItem(memory);
+    }
+  };
+
   const handleNotificationClick = (id: string, memoryId?: string) => {
     storageService.markNotificationAsRead(id);
     setNotifications(storageService.getNotifications());
     if (memoryId) {
       const target = memories.find((m) => m.id === memoryId);
       if (target) {
-        if (target.isSecret) {
-          setSecretVaultMemory(target);
-        } else {
-          setSelectedMemory(target);
-        }
+        handleOpenItem(target);
       }
     }
   };
@@ -357,8 +370,8 @@ export default function App() {
         onOpenSetupModal={() => setIsSetupModalOpen(true)}
       />
 
-      {/* TOP SYSTEM STATUS NOTIFICATION (Non-intrusive) */}
-      {!isSupabaseReady ? (
+      {/* TOP SYSTEM STATUS NOTIFICATION (Admin Only) */}
+      {isAdmin && (!isSupabaseReady ? (
         <div className="pt-20 px-4 sm:px-8 max-w-7xl mx-auto w-full">
           <div className="flex items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-[#808080]/30 text-xs text-[#B3B3B3]">
             <div className="flex items-center gap-2">
@@ -410,7 +423,7 @@ export default function App() {
             </button>
           </div>
         </div>
-      ) : null}
+      ) : null)}
 
       {/* MAIN CONTENT AREA */}
       <main className="flex-1 pb-16">
@@ -450,11 +463,12 @@ export default function App() {
                   <MovieCard
                     key={m.id}
                     memory={m}
-                    onPlay={(mem) => setPlayingMemory({ memory: mem })}
-                    onOpenInfo={(mem) => setSelectedMemory(mem)}
+                    onPlay={(mem) => handlePlayMemory(mem)}
+                    onOpenInfo={(mem) => handleOpenItem(mem)}
                     onToggleWatchlist={handleToggleWatchlist}
                     onToggleFavorite={handleToggleFavorite}
                     onUnlockVault={(mem) => setSecretVaultMemory(mem)}
+                    onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
                   />
                 ))}
               </div>
@@ -469,8 +483,8 @@ export default function App() {
                 {featuredItem && (
                   <HeroBanner
                     memory={featuredItem}
-                    onPlay={(m) => setPlayingMemory({ memory: m })}
-                    onOpenInfo={(m) => setSelectedMemory(m)}
+                    onPlay={(m) => handlePlayMemory(m)}
+                    onOpenInfo={(m) => handleOpenItem(m)}
                     onToggleWatchlist={handleToggleWatchlist}
                     onExploreMemories={() => handleTabChange('scrapbook')}
                     isAudioPlaying={isAudioPlaying}
@@ -528,10 +542,11 @@ export default function App() {
                       title={siteContent.section_continue_title || "Our Favorite Moments"}
                       subtitle={siteContent.section_continue_sub || "Pick up right where we left off"}
                       items={continueWatchingItems}
-                      onPlay={(m) => setPlayingMemory({ memory: m })}
-                      onOpenInfo={(m) => setSelectedMemory(m)}
+                      onPlay={(m) => handlePlayMemory(m)}
+                      onOpenInfo={(m) => handleOpenItem(m)}
                       onToggleWatchlist={handleToggleWatchlist}
                       onToggleFavorite={handleToggleFavorite}
+                      onUnlockVault={(m) => setSecretVaultMemory(m)}
                       onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
                       onEditSection={isAdmin ? () => {
                         setEditSiteContentInitialTab('sections');
@@ -547,10 +562,11 @@ export default function App() {
                       subtitle={siteContent.section_our_story_sub || "Top 10 Relationship Chapters of All Time"}
                       items={ourStorySeries}
                       isPortrait={true}
-                      onPlay={(m) => setPlayingMemory({ memory: m })}
-                      onOpenInfo={(m) => setSelectedMemory(m)}
+                      onPlay={(m) => handlePlayMemory(m)}
+                      onOpenInfo={(m) => handleOpenItem(m)}
                       onToggleWatchlist={handleToggleWatchlist}
                       onToggleFavorite={handleToggleFavorite}
+                      onUnlockVault={(m) => setSecretVaultMemory(m)}
                       onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
                       onEditSection={isAdmin ? () => {
                         setEditSiteContentInitialTab('sections');
@@ -586,10 +602,11 @@ export default function App() {
                       title={siteContent.section_little_things_title || "Little Things I Love About You"}
                       subtitle={siteContent.section_little_things_sub || "Micro-moments that steal my heart every single day"}
                       items={littleThingsCollection}
-                      onPlay={(m) => setPlayingMemory({ memory: m })}
-                      onOpenInfo={(m) => setSelectedMemory(m)}
+                      onPlay={(m) => handlePlayMemory(m)}
+                      onOpenInfo={(m) => handleOpenItem(m)}
                       onToggleWatchlist={handleToggleWatchlist}
                       onToggleFavorite={handleToggleFavorite}
+                      onUnlockVault={(m) => setSecretVaultMemory(m)}
                       onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
                       onEditSection={isAdmin ? () => {
                         setEditSiteContentInitialTab('sections');
@@ -604,10 +621,11 @@ export default function App() {
                       title={siteContent.section_places_title || "Memories Worth Rewatching: Places & Adventures"}
                       subtitle={siteContent.section_places_sub || "Our travel passport & dream bucket list"}
                       items={placesListItems}
-                      onPlay={(m) => setPlayingMemory({ memory: m })}
-                      onOpenInfo={(m) => setSelectedMemory(m)}
+                      onPlay={(m) => handlePlayMemory(m)}
+                      onOpenInfo={(m) => handleOpenItem(m)}
                       onToggleWatchlist={handleToggleWatchlist}
                       onToggleFavorite={handleToggleFavorite}
+                      onUnlockVault={(m) => setSecretVaultMemory(m)}
                       onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
                       onEditSection={isAdmin ? () => {
                         setEditSiteContentInitialTab('sections');
@@ -622,8 +640,8 @@ export default function App() {
                       title={siteContent.section_vault_title || "Hidden Episodes: Secret Vault & Letters"}
                       subtitle={siteContent.section_vault_sub || "Locked confidential notes for your eyes only"}
                       items={secretVaultItems}
-                      onPlay={(m) => setPlayingMemory({ memory: m })}
-                      onOpenInfo={(m) => setSelectedMemory(m)}
+                      onPlay={(m) => handlePlayMemory(m)}
+                      onOpenInfo={(m) => handleOpenItem(m)}
                       onToggleWatchlist={handleToggleWatchlist}
                       onToggleFavorite={handleToggleFavorite}
                       onUnlockVault={(m) => setSecretVaultMemory(m)}
@@ -638,7 +656,7 @@ export default function App() {
                   {/* CELESTIAL CONSTELLATION MAP SECTION */}
                   <ConstellationSection
                     milestones={ourStorySeries}
-                    onSelectMilestone={(m) => setSelectedMemory(m)}
+                    onSelectMilestone={(m) => handleOpenItem(m)}
                   />
                 </div>
               </div>
@@ -676,9 +694,11 @@ export default function App() {
                         <div className="w-full h-full group-hover:scale-105 transition-transform duration-500">
                           <MovieCard
                             memory={ch}
-                            onPlay={(m) => setPlayingMemory({ memory: m })}
-                            onOpenInfo={(m) => setSelectedMemory(m)}
+                            onPlay={(m) => handlePlayMemory(m)}
+                            onOpenInfo={(m) => handleOpenItem(m)}
                             onToggleWatchlist={handleToggleWatchlist}
+                            onUnlockVault={(m) => setSecretVaultMemory(m)}
+                            onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
                           />
                         </div>
                       </div>
@@ -723,10 +743,12 @@ export default function App() {
                       <MovieCard
                         key={m.id}
                         memory={m}
-                        onPlay={(mem) => setPlayingMemory({ memory: mem })}
-                        onOpenInfo={(mem) => setSelectedMemory(mem)}
+                        onPlay={(mem) => handlePlayMemory(mem)}
+                        onOpenInfo={(mem) => handleOpenItem(mem)}
                         onToggleWatchlist={handleToggleWatchlist}
                         onToggleFavorite={handleToggleFavorite}
+                        onUnlockVault={(mem) => setSecretVaultMemory(mem)}
+                        onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
                       />
                     ))}
                 </div>
@@ -737,11 +759,13 @@ export default function App() {
             {activeTab === 'scrapbook' && (
               <ScrapbookView
                 memories={memories}
-                onPlayMemory={(m) => setPlayingMemory({ memory: m })}
-                onOpenInfo={(m) => setSelectedMemory(m)}
+                onPlayMemory={(m) => handlePlayMemory(m)}
+                onOpenInfo={(m) => handleOpenItem(m)}
                 onToggleWatchlist={handleToggleWatchlist}
                 onToggleFavorite={handleToggleFavorite}
-                onOpenAddModal={() => setIsAddModalOpen(true)}
+                onOpenAddModal={isAdmin ? () => setIsAddModalOpen(true) : undefined}
+                isAdmin={isAdmin}
+                onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
               />
             )}
 
@@ -855,10 +879,12 @@ export default function App() {
                     <MovieCard
                       key={p.id}
                       memory={p}
-                      onPlay={(mem) => setPlayingMemory({ memory: mem })}
-                      onOpenInfo={(mem) => setSelectedMemory(mem)}
+                      onPlay={(mem) => handlePlayMemory(mem)}
+                      onOpenInfo={(mem) => handleOpenItem(mem)}
                       onToggleWatchlist={handleToggleWatchlist}
                       onToggleFavorite={handleToggleFavorite}
+                      onUnlockVault={(mem) => setSecretVaultMemory(mem)}
+                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
                     />
                   ))}
                 </div>
@@ -937,49 +963,53 @@ export default function App() {
           {/* Supabase Status & Admin Utilities */}
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button
-              onClick={() => setIsSetupModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#141414] hover:bg-[#181818] border border-[#808080]/30 text-[11px] transition-colors cursor-pointer text-[#B3B3B3] hover:text-[#FFFFFF]"
-            >
-              <Database
-                className={`w-3.5 h-3.5 ${
-                  storageSource === 'supabase' ? 'text-[#E50914]' : 'text-[#808080]'
-                }`}
-              />
-              <span>
-                {storageSource === 'supabase'
-                  ? 'Cloud Synced (Supabase)'
-                  : 'Local Mode (Supabase Setup)'}
-              </span>
-            </button>
-
-            <button
               onClick={() => setIsAdminModalOpen(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#141414] hover:bg-[#181818] border border-[#808080]/30 text-[11px] transition-colors cursor-pointer text-[#B3B3B3] hover:text-[#FFFFFF]"
             >
               <Shield
                 className={`w-3.5 h-3.5 ${
-                  currentUser ? 'text-[#E50914]' : 'text-[#808080]'
+                  isAdmin ? 'text-[#E50914]' : 'text-[#808080]'
                 }`}
               />
-              <span>{currentUser ? 'Admin Verified' : 'Admin Sign In'}</span>
+              <span>{isAdmin ? 'Admin Verified' : 'Admin Sign In'}</span>
             </button>
 
-            <button
-              onClick={handleExportData}
-              className="flex items-center gap-1 px-3 py-1.5 rounded bg-[#181818] hover:bg-white/10 border border-[#808080]/30 text-[#FFFFFF] transition-colors cursor-pointer text-[11px]"
-              title="Download memory backup JSON"
-            >
-              <Download className="w-3 h-3" />
-              <span>Export</span>
-            </button>
+            {isAdmin && (
+              <>
+                <button
+                  onClick={() => setIsSetupModalOpen(true)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#141414] hover:bg-[#181818] border border-[#808080]/30 text-[11px] transition-colors cursor-pointer text-[#B3B3B3] hover:text-[#FFFFFF]"
+                >
+                  <Database
+                    className={`w-3.5 h-3.5 ${
+                      storageSource === 'supabase' ? 'text-[#E50914]' : 'text-[#808080]'
+                    }`}
+                  />
+                  <span>
+                    {storageSource === 'supabase'
+                      ? 'Cloud Synced (Supabase)'
+                      : 'Local Mode (Supabase Setup)'}
+                  </span>
+                </button>
 
-            <button
-              onClick={handleResetDefaults}
-              className="p-1.5 rounded hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer"
-              title="Reset default relationship story"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
+                <button
+                  onClick={handleExportData}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded bg-[#181818] hover:bg-white/10 border border-[#808080]/30 text-[#FFFFFF] transition-colors cursor-pointer text-[11px]"
+                  title="Download memory backup JSON"
+                >
+                  <Download className="w-3 h-3" />
+                  <span>Export</span>
+                </button>
+
+                <button
+                  onClick={handleResetDefaults}
+                  className="p-1.5 rounded hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer"
+                  title="Reset default relationship story"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                </button>
+              </>
+            )}
           </div>
         </div>
       </footer>
@@ -992,7 +1022,7 @@ export default function App() {
           onClose={() => setSelectedMemory(null)}
           onPlay={(m, ep) => {
             setSelectedMemory(null);
-            setPlayingMemory({ memory: m, episode: ep });
+            handlePlayMemory(m, ep);
           }}
           onToggleWatchlist={handleToggleWatchlist}
           onToggleFavorite={handleToggleFavorite}
@@ -1008,7 +1038,7 @@ export default function App() {
           relatedMemories={memories.filter(
             (m) => m.id !== selectedMemory.id && m.category === selectedMemory.category
           )}
-          onSelectRelated={(item) => setSelectedMemory(item)}
+          onSelectRelated={(item) => handleOpenItem(item)}
         />
       )}
 
@@ -1018,11 +1048,15 @@ export default function App() {
           memory={playingMemory.memory}
           episode={playingMemory.episode}
           onClose={() => setPlayingMemory(null)}
-          onNextMemory={() => {
-            const currentIndex = memories.findIndex((m) => m.id === playingMemory.memory.id);
-            const nextMemory = memories[(currentIndex + 1) % memories.length];
-            setPlayingMemory({ memory: nextMemory });
-          }}
+          onNextMemory={(() => {
+            const videoMemories = memories.filter((m) => hasValidVideo(m));
+            if (videoMemories.length <= 1) return undefined;
+            return () => {
+              const currentIndex = videoMemories.findIndex((m) => m.id === playingMemory.memory.id);
+              const nextMemory = videoMemories[(currentIndex + 1) % videoMemories.length];
+              setPlayingMemory({ memory: nextMemory });
+            };
+          })()}
         />
       )}
 
@@ -1128,7 +1162,7 @@ export default function App() {
       />
 
       {/* PERSISTENT FLOATING MUSIC PLAYER */}
-      <MusicPlayer />
+      <MusicPlayer isAdmin={isAdmin} />
     </div>
   );
 }

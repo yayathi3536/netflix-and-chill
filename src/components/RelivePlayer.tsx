@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Play,
   Pause,
@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { MemoryItem, Episode } from '../types';
 import { VisualArt } from './VisualArt';
+import { getVideoUrl } from '../utils/mediaHelpers';
 
 interface RelivePlayerProps {
   memory: MemoryItem;
@@ -28,16 +29,37 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
   onClose,
   onNextMemory,
 }) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoUrl = getVideoUrl(memory, episode);
+  const [videoError, setVideoError] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(120);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showCaptions, setShowCaptions] = useState(true);
   const [showControls, setShowControls] = useState(true);
 
-  const duration = 120; // 2 minutes simulated cinematic relive loop
+  const hasPlayableVideoElement = Boolean(videoUrl && !videoError);
 
   useEffect(() => {
+    setVideoError(false);
+    setCurrentTime(0);
+    setIsPlaying(true);
+  }, [memory.id, episode?.id, videoUrl]);
+
+  useEffect(() => {
+    if (hasPlayableVideoElement && videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.play().catch(() => setIsPlaying(false));
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isPlaying, hasPlayableVideoElement]);
+
+  useEffect(() => {
+    if (hasPlayableVideoElement) return;
     let interval: number;
     if (isPlaying) {
       interval = window.setInterval(() => {
@@ -50,7 +72,7 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [isPlaying, duration]);
+  }, [isPlaying, duration, hasPlayableVideoElement]);
 
   // Autohide controls on idle
   useEffect(() => {
@@ -88,9 +110,9 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
 
   const getSubtitle = () => {
     if (!showCaptions) return null;
-    const percent = (currentTime / duration) * 100;
+    const percent = duration > 0 ? (currentTime / duration) * 100 : 0;
     if (percent < 25) {
-      return memory.synopsis;
+      return episode?.description || memory.synopsis;
     } else if (percent < 60) {
       return memory.fullStory.slice(0, 160) + '...';
     } else if (percent < 90) {
@@ -100,21 +122,54 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
     }
   };
 
+  const seekTo = (newTime: number) => {
+    const clamped = Math.max(0, Math.min(duration, newTime));
+    setCurrentTime(clamped);
+    if (hasPlayableVideoElement && videoRef.current) {
+      videoRef.current.currentTime = clamped;
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 bg-[#000000] flex flex-col items-center justify-center select-none overflow-hidden">
       {/* Cinematic Main Viewport */}
       <div className="relative w-full h-full flex items-center justify-center">
-        {/* Memory Visual with Ken Burns movement */}
-        <div className="absolute inset-0 w-full h-full animate-ken-burns">
-          <VisualArt
-            id={memory.id}
-            category={memory.category}
-            title={memory.title}
-            imageUrl={memory.backdropUrl}
-            fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-            className="w-full h-full object-cover"
+        {hasPlayableVideoElement ? (
+          <video
+            ref={videoRef}
+            src={videoUrl!}
+            autoPlay
+            playsInline
+            muted={isMuted}
+            onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+            onLoadedMetadata={(e) => {
+              if (e.currentTarget.duration && Number.isFinite(e.currentTarget.duration)) {
+                setDuration(e.currentTarget.duration);
+              }
+            }}
+            onEnded={() => {
+              if (onNextMemory) {
+                onNextMemory();
+              } else {
+                setIsPlaying(false);
+              }
+            }}
+            onError={() => setVideoError(true)}
+            className="w-full h-full object-contain bg-[#000000]"
           />
-        </div>
+        ) : (
+          /* Memory Visual with Ken Burns movement */
+          <div className="absolute inset-0 w-full h-full animate-ken-burns">
+            <VisualArt
+              id={memory.id}
+              category={memory.category}
+              title={memory.title}
+              imageUrl={memory.backdropUrl}
+              fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
 
         {/* Cinematic Vignette */}
         <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_40%,rgba(0,0,0,0.85)_100%]" />
@@ -182,12 +237,12 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
               onClick={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
                 const pos = (e.clientX - rect.left) / rect.width;
-                setCurrentTime(pos * duration);
+                seekTo(pos * duration);
               }}
             >
               <div
                 className="h-full bg-[#E50914] relative transition-all"
-                style={{ width: `${(currentTime / duration) * 100}%` }}
+                style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%` }}
               >
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-[#FFFFFF] rounded-full shadow opacity-0 group-hover/bar:opacity-100 transition-opacity" />
               </div>
@@ -215,7 +270,7 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
 
               {/* Rewind 10s */}
               <button
-                onClick={() => setCurrentTime((t) => Math.max(0, t - 10))}
+                onClick={() => seekTo(currentTime - 10)}
                 className="p-2 text-[#B3B3B3] hover:text-[#FFFFFF] transition-colors"
                 title="Rewind 10s"
               >
@@ -224,7 +279,7 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
 
               {/* Fast Forward 10s */}
               <button
-                onClick={() => setCurrentTime((t) => Math.min(duration, t + 10))}
+                onClick={() => seekTo(currentTime + 10)}
                 className="p-2 text-[#B3B3B3] hover:text-[#FFFFFF] transition-colors"
                 title="Forward 10s"
               >

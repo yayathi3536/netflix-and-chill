@@ -12,6 +12,7 @@ export interface Episode {
   duration: string;
   description: string;
   thumbnailUrl?: string;
+  videoUrl?: string;
   gradient: string;
   date?: string;
 }
@@ -40,6 +41,7 @@ export interface MemoryItem {
   tags: string[];
   backdropUrl?: string;
   posterUrl?: string;
+  videoUrl?: string;
   fallbackGradient: string;
   progress?: number; // 0 to 100 (for Continue Watching)
   isTop10?: number; // 1 to 10 (for Original Series rank)

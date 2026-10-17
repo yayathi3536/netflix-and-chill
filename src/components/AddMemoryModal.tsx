@@ -47,6 +47,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
   const [fullStory, setFullStory] = useState('');
   const [tagsString, setTagsString] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
   const [isSecret, setIsSecret] = useState(false);
   const [letterContent, setLetterContent] = useState('');
   const [isUploading, setIsUploading] = useState(false);
@@ -64,6 +65,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
       setFullStory(memoryToEdit.fullStory || '');
       setTagsString(memoryToEdit.tags?.join(', ') || '');
       setImageUrl(memoryToEdit.backdropUrl || memoryToEdit.posterUrl || '');
+      setVideoUrl(memoryToEdit.videoUrl || '');
       setIsSecret(Boolean(memoryToEdit.isSecret));
       setLetterContent(memoryToEdit.letterContent || '');
     } else {
@@ -81,6 +83,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
     setFullStory('');
     setTagsString('');
     setImageUrl('');
+    setVideoUrl('');
     setIsSecret(false);
     setLetterContent('');
     setUploadError('');
@@ -192,6 +195,8 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
       .map((t) => t.trim())
       .filter(Boolean);
 
+    const hasLetterField = isSecret || category === 'secret-vault';
+
     const memoryData: MemoryItem = {
       id: memoryToEdit ? memoryToEdit.id : `memory-${Date.now()}`,
       title: title.trim(),
@@ -208,15 +213,18 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
       tags: tags.length > 0 ? tags : ['Love', 'Special Moment'],
       backdropUrl: imageUrl || undefined,
       posterUrl: imageUrl || undefined,
+      videoUrl: videoUrl.trim() || undefined,
       fallbackGradient: memoryToEdit?.fallbackGradient || 'from-[#141414] via-[#181818] to-[#000000]',
       isInWatchlist: memoryToEdit ? memoryToEdit.isInWatchlist : true,
       isFavorite: memoryToEdit ? memoryToEdit.isFavorite : true,
       isSecret,
-      secretPasscode: isSecret ? '1402' : undefined,
-      letterContent: isSecret ? letterContent : undefined,
+      secretPasscode: isSecret ? (memoryToEdit?.secretPasscode || '1402') : undefined,
+      letterContent: hasLetterField && letterContent.trim() ? letterContent.trim() : memoryToEdit?.letterContent,
       progress: category === 'memories' ? (memoryToEdit?.progress ?? 10) : undefined,
       episodes: memoryToEdit?.episodes,
       coupons: memoryToEdit?.coupons,
+      photos: memoryToEdit?.photos,
+      listStatus: memoryToEdit?.listStatus,
     };
 
     onAddMemory(memoryData);
@@ -483,6 +491,20 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             )}
           </div>
 
+          {/* Optional Video Source URL */}
+          <div>
+            <label className="block text-neutral-300 font-semibold mb-1">
+              Video URL (optional — MP4 / WebM stream)
+            </label>
+            <input
+              type="text"
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
+              placeholder="Leave blank for photo/story memories, or paste a direct .mp4/.webm video URL"
+              className="w-full bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
+            />
+          </div>
+
           {/* Secret / Vault Toggle */}
           <div className="pt-2 border-t border-white/10">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -498,7 +520,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
               </span>
             </label>
 
-            {isSecret && (
+            {(isSecret || category === 'secret-vault') && (
               <div className="mt-3">
                 <label className="block text-neutral-300 font-semibold mb-1">
                   Private Love Letter Text

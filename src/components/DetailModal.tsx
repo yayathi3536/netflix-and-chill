@@ -5,16 +5,22 @@ import {
   Plus,
   Check,
   Heart,
-  Volume2,
-  VolumeX,
   Calendar,
   MapPin,
   ChevronRight,
   Edit3,
+  BookOpen,
+  Mail,
+  UploadCloud,
 } from 'lucide-react';
 import { MemoryItem, Episode } from '../types';
 import { VisualArt } from './VisualArt';
 import { User } from '@supabase/supabase-js';
+import {
+  hasValidVideo,
+  isLetterItem,
+  getPhotoEntries,
+} from '../utils/mediaHelpers';
 
 interface DetailModalProps {
   memory: MemoryItem | null;
@@ -41,9 +47,16 @@ export const DetailModal: React.FC<DetailModalProps> = ({
   currentUser,
   onEditMemory,
 }) => {
-  const [isMuted, setIsMuted] = useState(false);
+  const [expandedEpisodeId, setExpandedEpisodeId] = useState<string | null>(null);
 
   if (!memory) return null;
+
+  const isVideo = hasValidVideo(memory);
+  const isLetter = isLetterItem(memory);
+  const photoEntries = getPhotoEntries(memory);
+  // Additional photos beyond the main backdrop/poster image
+  const primaryImageUrl = memory.backdropUrl || memory.posterUrl;
+  const additionalPhotos = photoEntries.filter((p) => p.url && p.url !== primaryImageUrl);
 
   return (
     <div
@@ -64,47 +77,60 @@ export const DetailModal: React.FC<DetailModalProps> = ({
           <X className="w-5 h-5" />
         </button>
 
-        {/* Modal Hero Backdrop */}
-        <div className="relative aspect-video sm:aspect-21/9 w-full overflow-hidden bg-[#000000]">
+        {/* Direct, Full-Clarity Image Display at Top (No View Photo prompt needed) */}
+        <div className="relative aspect-video w-full overflow-hidden bg-[#000000]">
           <VisualArt
             id={memory.id}
             category={memory.category}
             title={memory.title}
-            imageUrl={memory.backdropUrl}
+            imageUrl={primaryImageUrl}
             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-            className="w-full h-full object-cover scale-105"
+            className="w-full h-full object-cover"
           />
 
-          {/* Pure Black Gradients */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#181818] via-[#181818]/60 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#181818]/90 via-transparent to-transparent" />
+          {/* Subtle bottom gradient only at the very bottom edge for title legibility */}
+          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#181818] via-[#181818]/50 to-transparent" />
 
-          {/* Floating Actions on Backdrop */}
-          <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
-            <div className="space-y-3 max-w-lg">
-              <h2 className="font-bebas text-3xl sm:text-5xl text-[#FFFFFF] font-black tracking-wider leading-none drop-shadow-md uppercase">
+          {/* Floating Title & Actions on Bottom Edge */}
+          <div className="absolute bottom-5 left-6 right-6 flex items-end justify-between gap-4">
+            <div className="space-y-2.5 max-w-2xl">
+              <h2 className="font-bebas text-3xl sm:text-5xl text-[#FFFFFF] font-black tracking-wider leading-none drop-shadow-lg uppercase">
                 {memory.title}
               </h2>
               {memory.subtitle && (
-                <p className="text-xs sm:text-sm text-[#B3B3B3] font-medium">
+                <p className="text-xs sm:text-sm text-[#B3B3B3] font-medium drop-shadow">
                   {memory.subtitle}
                 </p>
               )}
 
-              <div className="flex items-center gap-3 pt-1">
-                {/* Red Play Button */}
-                <button
-                  onClick={() => onPlay(memory)}
-                  className="flex items-center gap-2 px-6 py-2.5 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-sm rounded shadow transition-transform active:scale-95 cursor-pointer"
-                >
-                  <Play className="w-4 h-4 fill-white" />
-                  <span>Play</span>
-                </button>
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                {/* Show Play Video ONLY when a genuine video source exists */}
+                {isVideo && (
+                  <button
+                    onClick={() => onPlay(memory)}
+                    className="flex items-center gap-2 px-6 py-2.5 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-sm rounded shadow transition-transform active:scale-95 cursor-pointer"
+                  >
+                    <Play className="w-4 h-4 fill-white" />
+                    <span>Play Video</span>
+                  </button>
+                )}
+
+                {/* Read Letter Action for Letters & Secret Vault items */}
+                {isLetter && onUnlockVault && (
+                  <button
+                    onClick={() => onUnlockVault(memory)}
+                    className="flex items-center gap-2 px-6 py-2.5 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] text-sm font-bold rounded shadow transition-colors active:scale-95 cursor-pointer"
+                  >
+                    <Mail className="w-4 h-4" />
+                    <span>{memory.isSecret ? 'Read Confidential Letter' : 'Read Letter'}</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                )}
 
                 {/* My List Button */}
                 <button
                   onClick={() => onToggleWatchlist(memory.id)}
-                  className="p-2.5 rounded-full bg-[#141414] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-colors active:scale-90 cursor-pointer"
+                  className="p-2.5 rounded-full bg-[#141414]/90 hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-colors active:scale-90 cursor-pointer"
                   title={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
                 >
                   {memory.isInWatchlist ? (
@@ -117,7 +143,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                 {onToggleFavorite && (
                   <button
                     onClick={() => onToggleFavorite(memory.id)}
-                    className="p-2.5 rounded-full bg-[#141414] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-colors active:scale-90 cursor-pointer"
+                    className="p-2.5 rounded-full bg-[#141414]/90 hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-colors active:scale-90 cursor-pointer"
                     title="Favorite"
                   >
                     <Heart
@@ -128,39 +154,22 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                   </button>
                 )}
 
+                {/* STRICTLY ADMIN-ONLY: Change / Upload Image & Edit Details */}
                 {currentUser && onEditMemory && (
                   <button
                     onClick={() => {
                       onEditMemory(memory);
                       onClose();
                     }}
-                    className="flex items-center gap-1.5 px-3.5 py-2 bg-[#141414] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold rounded border border-[#808080]/40 transition-colors cursor-pointer active:scale-95"
-                    title="Edit title"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] text-xs font-bold rounded shadow transition-colors cursor-pointer active:scale-95"
+                    title="Admin only: Change or upload image & edit details"
                   >
-                    <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
-                    <span>Edit</span>
-                  </button>
-                )}
-
-                {memory.isSecret && onUnlockVault && (
-                  <button
-                    onClick={() => onUnlockVault(memory)}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] text-xs font-bold rounded shadow transition-colors active:scale-95 cursor-pointer"
-                  >
-                    <span>Read Confidential Note</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
+                    <UploadCloud className="w-3.5 h-3.5 text-[#FFFFFF]" />
+                    <span>Change / Upload Image</span>
                   </button>
                 )}
               </div>
             </div>
-
-            <button
-              onClick={() => setIsMuted(!isMuted)}
-              className="p-2.5 rounded-full bg-[#141414]/90 hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-colors hidden sm:block"
-              title="Toggle audio"
-            >
-              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            </button>
           </div>
         </div>
 
@@ -175,10 +184,10 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                 <span aria-hidden="true" className="text-[#808080]">·</span>
                 <span>{memory.year || '2024'}</span>
                 <span aria-hidden="true" className="text-[#808080]">·</span>
-                <span>{memory.duration || 'Feature'}</span>
+                <span>{memory.duration || 'Memory'}</span>
                 <span aria-hidden="true" className="text-[#808080]">·</span>
-                <span className="border border-[#808080]/50 px-1 py-0.2 rounded text-[10px] text-[#FFFFFF]">
-                  Ultra HD 4K
+                <span className="border border-[#808080]/50 px-1.5 py-0.5 rounded text-[10px] text-[#FFFFFF] uppercase">
+                  {isVideo ? 'Video' : isLetter ? 'Letter' : 'Memory'}
                 </span>
               </div>
 
@@ -187,19 +196,33 @@ export const DetailModal: React.FC<DetailModalProps> = ({
               </p>
 
               <div className="pt-2 border-t border-[#141414]">
-                <h4 className="text-xs uppercase tracking-wider font-semibold text-[#808080] mb-1">
-                  Full Story & Description
+                <h4 className="text-xs uppercase tracking-wider font-semibold text-[#808080] mb-1.5 flex items-center gap-1.5">
+                  <BookOpen className="w-3.5 h-3.5 text-[#E50914]" />
+                  <span>Full Story & Memory Details</span>
                 </h4>
-                <p className="text-xs text-[#B3B3B3] leading-relaxed whitespace-pre-line font-light">
+                <p className="text-xs sm:text-sm text-[#B3B3B3] leading-relaxed whitespace-pre-line font-light">
                   {memory.fullStory}
                 </p>
               </div>
+
+              {/* Readable Letter View if unlocked / non-secret letter content exists */}
+              {!memory.isSecret && memory.letterContent && (
+                <div className="mt-4 p-5 sm:p-6 rounded bg-[#141414] border border-[#808080]/30 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E50914]">
+                    <Mail className="w-4 h-4" />
+                    <span>Personal Love Note</span>
+                  </div>
+                  <div className="font-serif-italic text-sm sm:text-base text-[#FFFFFF] leading-relaxed whitespace-pre-line">
+                    {memory.letterContent}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Right 1 Col: Metadata & Cast */}
-            <div className="space-y-3 text-xs bg-[#141414] p-4 rounded border border-[#808080]/20">
+            {/* Right 1 Col: Metadata & Location */}
+            <div className="space-y-3 text-xs bg-[#141414] p-4 rounded border border-[#808080]/20 h-fit">
               <div>
-                <span className="text-[#808080]">Cast: </span>
+                <span className="text-[#808080]">Collection: </span>
                 <span className="text-[#FFFFFF] font-medium">Our Universe Originals</span>
               </div>
               <div>
@@ -207,13 +230,13 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                 <span className="text-[#FFFFFF] capitalize">{memory.category.replace('-', ' ')}</span>
               </div>
               {memory.location && (
-                <div className="flex items-center gap-1 text-[#B3B3B3]">
+                <div className="flex items-center gap-1.5 text-[#B3B3B3]">
                   <MapPin className="w-3.5 h-3.5 text-[#E50914] shrink-0" />
                   <span>{memory.location}</span>
                 </div>
               )}
               {memory.date && (
-                <div className="flex items-center gap-1 text-[#B3B3B3]">
+                <div className="flex items-center gap-1.5 text-[#B3B3B3]">
                   <Calendar className="w-3.5 h-3.5 text-[#808080] shrink-0" />
                   <span>{memory.date}</span>
                 </div>
@@ -231,53 +254,140 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                   ))}
                 </div>
               </div>
+
+              {currentUser && onEditMemory && (
+                <div className="pt-3 border-t border-[#181818]">
+                  <button
+                    onClick={() => {
+                      onEditMemory(memory);
+                      onClose();
+                    }}
+                    className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold rounded border border-[#808080]/40 transition-colors cursor-pointer"
+                  >
+                    <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
+                    <span>Edit Memory & Media</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Episodes List (if available) */}
+          {/* Additional Photos Shown Directly in Full Clarity (No click-to-open required) */}
+          {!isLetter && additionalPhotos.length > 0 && (
+            <div className="space-y-4 pt-4 border-t border-[#141414]">
+              <h3 className="font-bebas text-2xl tracking-wider text-[#FFFFFF] font-black uppercase">
+                Memory Photos
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {additionalPhotos.map((photo, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-[#141414] rounded overflow-hidden border border-[#808080]/20"
+                  >
+                    <div className="relative aspect-video bg-[#000000] overflow-hidden">
+                      <VisualArt
+                        id={`${memory.id}-photo-${idx}`}
+                        category={memory.category}
+                        title={photo.caption}
+                        imageUrl={photo.url}
+                        fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    {photo.caption && (
+                      <div className="p-3">
+                        <p className="text-xs text-[#B3B3B3]">{photo.caption}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Chapters / Episodes List (if available) */}
           {memory.episodes && memory.episodes.length > 0 && (
             <div className="space-y-4 pt-4 border-t border-[#141414]">
               <div className="flex items-center justify-between">
                 <h3 className="font-bebas text-2xl tracking-wider text-[#FFFFFF] font-black uppercase">
-                  Episodes
+                  Story Chapters & Episodes
                 </h3>
                 <span className="text-xs text-[#808080]">
-                  {memory.episodes.length} Episodes
+                  {memory.episodes.length} {memory.episodes.length === 1 ? 'Chapter' : 'Chapters'}
                 </span>
               </div>
 
               <div className="divide-y divide-[#141414]">
-                {memory.episodes.map((ep) => (
-                  <div
-                    key={ep.id}
-                    onClick={() => onPlay(memory, ep)}
-                    className="py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:bg-[#141414] p-2 rounded transition-colors cursor-pointer group"
-                  >
-                    <span className="font-bebas text-2xl text-[#808080] w-6 group-hover:text-[#FFFFFF] transition-colors">
-                      {ep.episodeNumber}
-                    </span>
+                {memory.episodes.map((ep) => {
+                  const epIsVideo = hasValidVideo(memory, ep);
+                  const isExpanded = expandedEpisodeId === ep.id;
 
-                    {/* Thumbnail */}
-                    <div className="relative w-full sm:w-36 aspect-video shrink-0 rounded bg-[#000000] overflow-hidden border border-[#808080]/20">
-                      <div className="w-full h-full bg-[#141414] flex items-center justify-center">
-                        <Play className="w-5 h-5 text-[#FFFFFF] group-hover:text-[#E50914] group-hover:scale-125 transition-all" />
+                  return (
+                    <div
+                      key={ep.id}
+                      onClick={() => {
+                        if (epIsVideo) {
+                          onPlay(memory, ep);
+                        } else {
+                          setExpandedEpisodeId(isExpanded ? null : ep.id);
+                        }
+                      }}
+                      className={`py-4 flex flex-col gap-3 hover:bg-[#141414] p-3 rounded transition-colors cursor-pointer group ${
+                        isExpanded ? 'bg-[#141414] border border-[#808080]/30' : ''
+                      }`}
+                    >
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <span className="font-bebas text-2xl text-[#808080] w-6 group-hover:text-[#FFFFFF] transition-colors">
+                          {ep.episodeNumber}
+                        </span>
+
+                        {/* Thumbnail */}
+                        <div className="relative w-full sm:w-36 aspect-video shrink-0 rounded bg-[#000000] overflow-hidden border border-[#808080]/20">
+                          {ep.thumbnailUrl ? (
+                            <VisualArt
+                              id={ep.id}
+                              category={memory.category}
+                              title={ep.title}
+                              imageUrl={ep.thumbnailUrl}
+                              fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-[#141414] flex items-center justify-center">
+                              {epIsVideo ? (
+                                <Play className="w-5 h-5 text-[#FFFFFF] group-hover:text-[#E50914] group-hover:scale-125 transition-all" />
+                              ) : (
+                                <BookOpen className="w-5 h-5 text-[#B3B3B3] group-hover:text-[#E50914] group-hover:scale-110 transition-all" />
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Details */}
+                        <div className="flex-1 space-y-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <h4 className="text-sm font-semibold text-[#FFFFFF] group-hover:text-[#E50914] transition-colors">
+                              {ep.title}
+                            </h4>
+                            <span className="text-xs text-[#808080] shrink-0">
+                              {ep.date ? `${ep.date} · ` : ''}{ep.duration}
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#B3B3B3] leading-relaxed">
+                            {ep.description}
+                          </p>
+                          {epIsVideo && (
+                            <div className="pt-1 flex items-center gap-1.5 text-[11px] text-[#E50914] font-semibold">
+                              <Play className="w-3 h-3 fill-[#E50914]" />
+                              <span>Play Episode Video</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-
-                    {/* Details */}
-                    <div className="flex-1 space-y-1">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-semibold text-[#FFFFFF] group-hover:text-[#E50914] transition-colors">
-                          {ep.title}
-                        </h4>
-                        <span className="text-xs text-[#808080]">{ep.duration}</span>
-                      </div>
-                      <p className="text-xs text-[#B3B3B3] leading-relaxed">
-                        {ep.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -300,6 +410,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                         id={item.id}
                         category={item.category}
                         title={item.title}
+                        imageUrl={item.backdropUrl || item.posterUrl}
                         fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
                         className="w-full h-full object-cover"
                       />
@@ -322,3 +433,4 @@ export const DetailModal: React.FC<DetailModalProps> = ({
     </div>
   );
 };
+

@@ -349,16 +349,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <span>{currentUser ? 'Admin Panel (Active)' : 'Admin Sign In'}</span>
                   </button>
 
-                  <button
-                    onClick={() => {
-                      onOpenSetupModal();
-                      setIsProfileMenuOpen(false);
-                    }}
-                    className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer"
-                  >
-                    <Database className="w-3.5 h-3.5 text-[#808080]" />
-                    <span>Cloud Storage Setup</span>
-                  </button>
+                  {currentUser && (
+                    <button
+                      onClick={() => {
+                        onOpenSetupModal();
+                        setIsProfileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer"
+                    >
+                      <Database className="w-3.5 h-3.5 text-[#808080]" />
+                      <span>Cloud Storage Setup</span>
+                    </button>
+                  )}
                 </div>
               </div>
             )}

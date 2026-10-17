@@ -25,7 +25,7 @@ function formatTime(seconds: number): string {
   return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
-export function MusicPlayer() {
+export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -580,17 +580,19 @@ export function MusicPlayer() {
             {/* TAB: PLAYLIST (All 7 Songs) */}
             {activeTab === 'playlist' && (
               <div className="space-y-3 max-h-[380px] overflow-y-auto dark-scrollbar pr-1 animate-in fade-in duration-150">
-                {/* Upload Local Audio Button */}
-                <label className="flex items-center justify-center gap-2 p-2.5 rounded border border-dashed border-[#808080]/40 hover:border-[#E50914] bg-[#181818] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold cursor-pointer transition-colors">
-                  <Upload className="w-4 h-4 text-[#E50914]" />
-                  <span>Upload & Play Your Own Audio File</span>
-                  <input
-                    type="file"
-                    accept="audio/*"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                  />
-                </label>
+                {/* Admin-Only Upload Local Audio Button */}
+                {isAdmin && (
+                  <label className="flex items-center justify-center gap-2 p-2.5 rounded border border-dashed border-[#808080]/40 hover:border-[#E50914] bg-[#181818] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold cursor-pointer transition-colors">
+                    <Upload className="w-4 h-4 text-[#E50914]" />
+                    <span>Upload &amp; Play Audio File (Admin)</span>
+                    <input
+                      type="file"
+                      accept="audio/*"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                  </label>
+                )}
 
                 {/* Song List */}
                 <div className="divide-y divide-[#181818]">
