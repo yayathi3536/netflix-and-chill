@@ -85,3 +85,20 @@ export interface SiteContentItem {
 
 export type SiteContentMap = Record<string, string>;
 
+export interface VisitorMessage {
+  id: string;
+  senderName: string;
+  senderEmail?: string;
+  message: string;
+  relationship?: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface StorageFileItem {
+  name: string;
+  id?: string;
+  size?: number;
+  createdAt?: string;
+  url: string;
+}

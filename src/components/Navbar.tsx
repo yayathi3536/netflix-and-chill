@@ -3,22 +3,16 @@ import {
   Search,
   Bell,
   Plus,
-  Volume2,
-  VolumeX,
   Music,
   X,
-  Heart,
-  Sparkles,
   ChevronDown,
   Lock,
   Shield,
   Database,
+  Film,
 } from 'lucide-react';
 import { UserProfile, NotificationItem } from '../types';
-import { romanticAudio } from '../utils/romanticAudio';
-
 import { User } from '@supabase/supabase-js';
-import { isSupabaseConfigured } from '../services/supabaseClient';
 
 interface NavbarProps {
   activeTab: string;
@@ -60,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      setIsScrolled(window.scrollY > 25);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -77,9 +71,19 @@ export const Navbar: React.FC<NavbarProps> = ({
     });
   };
 
+  useEffect(() => {
+    const handleAudioState = (e: Event) => {
+      const customEvent = e as CustomEvent<{ isPlaying: boolean; currentTrackIndex: number }>;
+      if (customEvent.detail && typeof customEvent.detail.isPlaying === 'boolean') {
+        setIsAudioPlaying(customEvent.detail.isPlaying);
+      }
+    };
+    window.addEventListener('ouruniverse:audiostate', handleAudioState);
+    return () => window.removeEventListener('ouruniverse:audiostate', handleAudioState);
+  }, []);
+
   const toggleAudio = () => {
-    const newState = romanticAudio.toggle();
-    setIsAudioPlaying(newState);
+    window.dispatchEvent(new CustomEvent('ouruniverse:toggleplay'));
   };
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -88,110 +92,117 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#141414]/95 backdrop-blur-md shadow-2xl py-3 border-b border-white/5'
-          : 'bg-gradient-to-b from-black/80 via-black/40 to-transparent py-4'
+          ? 'bg-[#000000]/95 backdrop-blur-md shadow-2xl py-3 border-b border-[#181818]'
+          : 'bg-gradient-to-b from-[#000000]/90 via-[#000000]/50 to-transparent py-4'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6">
-        {/* ZONE 1: BRAND WORDMARK */}
-        <div className="flex items-center gap-8 shrink-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        {/* ZONE 1: NETFLIX-STYLE BRAND LOGO */}
+        <div className="flex items-center gap-6 lg:gap-8 shrink-0">
           <button
             onClick={() => setActiveTab('home')}
             className="flex items-center gap-2 group text-left cursor-pointer transition-transform duration-200 active:scale-95"
             aria-label="Our Universe Home"
           >
-            <div className="w-8 h-8 rounded-md bg-[#E50914] flex items-center justify-center shadow-lg shadow-[#E50914]/30">
-              <span className="font-bebas text-xl text-white font-black tracking-tighter">U</span>
-            </div>
-            <span className="font-bebas text-2xl sm:text-3xl tracking-wider text-[#E50914] font-black group-hover:text-[#ff3b47] transition-colors whitespace-nowrap">
+            <span className="font-bebas text-2xl sm:text-3xl tracking-widest text-[#E50914] font-black uppercase drop-shadow-md select-none">
               OUR UNIVERSE
             </span>
           </button>
 
-          {/* ZONE 2: 4-5 CLEAN SINGLE-LINE NAV LINKS */}
-          <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-sm font-medium">
+          {/* ZONE 2: NETFLIX SINGLE-LINE NAV LINKS */}
+          <nav className="hidden md:flex items-center gap-4 lg:gap-6 text-sm font-medium">
             <button
               onClick={() => setActiveTab('home')}
-              className={`whitespace-nowrap transition-colors py-1 ${
+              className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'home'
-                  ? 'text-white font-bold border-b-2 border-[#E50914]'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
+                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
               }`}
             >
               Home
             </button>
             <button
               onClick={() => setActiveTab('our-story')}
-              className={`whitespace-nowrap transition-colors py-1 ${
+              className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'our-story'
-                  ? 'text-white font-bold border-b-2 border-[#E50914]'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
+                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
               }`}
             >
-              Our Story
+              Series
             </button>
             <button
               onClick={() => setActiveTab('memories')}
-              className={`whitespace-nowrap transition-colors py-1 ${
+              className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'memories'
-                  ? 'text-white font-bold border-b-2 border-[#E50914]'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
+                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
               }`}
             >
-              Memories
+              Movies
+            </button>
+            <button
+              onClick={() => setActiveTab('scrapbook')}
+              className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
+                activeTab === 'scrapbook'
+                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
+                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+              }`}
+            >
+              Scrapbook
             </button>
             <button
               onClick={() => setActiveTab('little-things')}
-              className={`whitespace-nowrap transition-colors py-1 ${
+              className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'little-things'
-                  ? 'text-white font-bold border-b-2 border-[#E50914]'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
+                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
               }`}
             >
-              Little Things
+              Quirks
             </button>
             <button
               onClick={() => setActiveTab('places-list')}
-              className={`whitespace-nowrap transition-colors py-1 ${
+              className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'places-list'
-                  ? 'text-white font-bold border-b-2 border-[#E50914]'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
+                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
               }`}
             >
-              Places & List
+              My List
             </button>
             <button
               onClick={() => setActiveTab('secret-vault')}
-              className={`whitespace-nowrap transition-colors py-1 flex items-center gap-1.5 ${
+              className={`whitespace-nowrap transition-colors py-1 flex items-center gap-1.5 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'secret-vault'
-                  ? 'text-[#ff4d5a] font-bold border-b-2 border-[#E50914]'
-                  : 'text-neutral-400 hover:text-[#ff4d5a]'
+                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
+                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
               }`}
             >
-              <Lock className="w-3.5 h-3.5" />
-              <span>Secret Vault</span>
+              <Lock className="w-3.5 h-3.5 text-[#E50914]" />
+              <span>Vault</span>
             </button>
           </nav>
         </div>
 
         {/* ZONE 3: ACTIONS & UTILITIES */}
-        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+        <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
           {/* Expanding Search Bar */}
           <div className="relative flex items-center">
             {isSearchOpen ? (
-              <div className="flex items-center bg-black/80 border border-white/20 rounded-full px-3 py-1.5 shadow-inner transition-all w-44 sm:w-64">
-                <Search className="w-4 h-4 text-neutral-400 shrink-0" />
+              <div className="flex items-center bg-[#141414] border border-[#808080] rounded px-3 py-1.5 shadow-inner transition-all w-44 sm:w-60">
+                <Search className="w-3.5 h-3.5 text-[#B3B3B3] shrink-0" />
                 <input
                   ref={searchInputRef}
                   type="text"
-                  placeholder="Search titles, dates, tags..."
+                  placeholder="Titles, episodes, memories..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-transparent border-none text-xs text-white placeholder-neutral-500 focus:outline-none px-2 w-full"
+                  className="bg-transparent border-none text-xs text-[#FFFFFF] placeholder-[#808080] focus:outline-none px-2 w-full"
                 />
                 <button
                   onClick={toggleSearch}
-                  className="text-neutral-400 hover:text-white p-0.5"
+                  className="text-[#808080] hover:text-[#FFFFFF] p-0.5 cursor-pointer"
                   aria-label="Close search"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -200,7 +211,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             ) : (
               <button
                 onClick={toggleSearch}
-                className="p-2 text-neutral-300 hover:text-white transition-colors rounded-full hover:bg-white/10"
+                className="p-2 text-[#FFFFFF] hover:text-[#B3B3B3] transition-colors rounded-full hover:bg-[#181818] cursor-pointer"
                 aria-label="Search memories"
               >
                 <Search className="w-4 h-4" />
@@ -208,102 +219,64 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
+          {/* Add Memory Button */}
+          <button
+            onClick={onOpenAddModal}
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#181818] hover:bg-white/10 border border-[#808080]/30 text-xs font-semibold text-[#FFFFFF] transition-all cursor-pointer"
+            title="Add a new chapter or memory"
+          >
+            <Plus className="w-3.5 h-3.5 text-[#E50914]" />
+            <span>Add Title</span>
+          </button>
+
           {/* Music Soundtrack Toggle Button */}
           <button
             onClick={toggleAudio}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full transition-all relative text-xs font-medium cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-all relative text-xs font-medium cursor-pointer ${
               isAudioPlaying
-                ? 'bg-[#E50914] text-white ring-2 ring-[#E50914]/50 shadow-md shadow-[#E50914]/40'
-                : 'bg-white/10 text-neutral-300 hover:text-white hover:bg-white/20 border border-white/10'
+                ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                : 'bg-[#181818] text-[#FFFFFF] hover:bg-white/10 border border-[#808080]/30'
             }`}
-            title={isAudioPlaying ? 'Mute background soundtrack' : 'Play romantic soundtrack'}
+            title={isAudioPlaying ? 'Mute soundtrack' : 'Play soundtrack'}
             aria-label="Toggle music soundtrack"
           >
-            {isAudioPlaying ? (
-              <Music className="w-3.5 h-3.5 animate-spin [animation-duration:3s]" />
-            ) : (
-              <Music className="w-3.5 h-3.5" />
-            )}
+            <Music className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">
               {isAudioPlaying ? 'Playing' : 'Music'}
             </span>
             {isAudioPlaying && (
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              <span className="flex items-center gap-0.5 ml-0.5">
+                <span className="w-1 h-2.5 bg-[#FFFFFF] rounded-full animate-pulse" />
+                <span className="w-1 h-3.5 bg-[#FFFFFF] rounded-full animate-pulse [animation-delay:0.2s]" />
+                <span className="w-1 h-2 bg-[#FFFFFF] rounded-full animate-pulse [animation-delay:0.4s]" />
               </span>
             )}
           </button>
 
-          {/* Supabase Diagnostics / Setup Button */}
-          <button
-            onClick={onOpenSetupModal}
-            className={`p-2 rounded-full transition-all relative ${
-              isSupabaseConfigured()
-                ? 'text-emerald-400 hover:text-emerald-300 hover:bg-emerald-950/30'
-                : 'text-amber-400 hover:text-amber-300 hover:bg-amber-950/30'
-            }`}
-            title={isSupabaseConfigured() ? 'Supabase Connected' : 'Supabase Setup Needed'}
-            aria-label="Supabase Status"
-          >
-            <Database className="w-4 h-4" />
-          </button>
-
-          {/* Admin Security Portal Button */}
-          <button
-            onClick={onOpenAdminModal}
-            className={`p-2 rounded-full transition-all relative ${
-              currentUser
-                ? 'text-white bg-emerald-950/50 ring-1 ring-emerald-500/50'
-                : 'text-neutral-400 hover:text-white hover:bg-white/10'
-            }`}
-            title={currentUser ? `Admin Active: ${currentUser.email}` : 'Admin Sign In'}
-            aria-label="Admin Security Portal"
-          >
-            <Shield className="w-4 h-4" />
-            {currentUser && (
-              <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-              </span>
-            )}
-          </button>
-
-          {/* Add Memory Button (Admin only) */}
-          {currentUser && (
-            <button
-              onClick={onOpenAddModal}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E50914] hover:bg-[#b80710] text-white text-xs font-semibold rounded-md shadow-md transition-colors cursor-pointer whitespace-nowrap active:scale-95 animate-in fade-in"
-              title="Add a new relationship memory"
-            >
-              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span className="hidden sm:inline">Add Memory</span>
-            </button>
-          )}
-
-          {/* Notifications Bell */}
+          {/* Notifications Flyout */}
           <div className="relative">
             <button
-              onClick={() => {
-                setIsNotificationsOpen((prev) => !prev);
-                setIsProfileMenuOpen(false);
-              }}
-              className="p-2 text-neutral-300 hover:text-white transition-colors rounded-full hover:bg-white/10 relative"
-              aria-label="Open notifications"
+              onClick={() => setIsNotificationsOpen((prev) => !prev)}
+              className="p-2 text-[#FFFFFF] hover:text-[#B3B3B3] transition-colors rounded hover:bg-[#181818] relative cursor-pointer"
+              aria-label="Notifications"
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#E50914]" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-[#E50914] rounded-full ring-2 ring-[#000000]" />
               )}
             </button>
 
-            {/* Notifications Dropdown */}
             {isNotificationsOpen && (
-              <div className="absolute right-0 mt-3 w-80 bg-[#181818] border border-white/10 rounded-lg shadow-2xl py-3 z-50 text-xs">
-                <div className="flex items-center justify-between px-4 pb-2 border-b border-white/10">
-                  <span className="font-semibold text-white tracking-wide">Notifications</span>
-                  <span className="text-neutral-400 text-[11px]">{unreadCount} unread</span>
+              <div className="absolute right-0 mt-3 w-72 sm:w-80 bg-[#141414] border border-[#808080]/40 rounded shadow-2xl py-3 z-50 text-xs">
+                <div className="px-4 pb-2 border-b border-[#181818] flex items-center justify-between">
+                  <span className="font-semibold text-[#FFFFFF]">Notifications</span>
+                  {unreadCount > 0 && (
+                    <span className="text-[10px] bg-[#E50914] text-[#FFFFFF] px-2 py-0.5 rounded font-bold">
+                      {unreadCount} new
+                    </span>
+                  )}
                 </div>
-                <div className="divide-y divide-white/5 max-h-72 overflow-y-auto dark-scrollbar">
+                <div className="max-h-64 overflow-y-auto divide-y divide-[#181818]">
                   {notifications.map((n) => (
                     <div
                       key={n.id}
@@ -311,18 +284,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onNotificationClick(n.id, n.memoryId);
                         setIsNotificationsOpen(false);
                       }}
-                      className={`p-3 cursor-pointer hover:bg-white/5 transition-colors flex items-start gap-2.5 ${
-                        !n.read ? 'bg-[#E50914]/5' : ''
+                      className={`p-3 hover:bg-[#181818] cursor-pointer transition-colors ${
+                        !n.read ? 'bg-[#181818]/60' : ''
                       }`}
                     >
-                      <Sparkles className="w-4 h-4 text-[#ff4d5a] shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <p className="font-medium text-white">{n.title}</p>
-                        <p className="text-neutral-400 mt-0.5 text-[11px] leading-relaxed">
-                          {n.message}
-                        </p>
-                        <span className="text-[10px] text-neutral-500 mt-1 block">{n.time}</span>
+                      <div className="font-medium text-[#FFFFFF] mb-0.5">{n.title}</div>
+                      <div className="text-[#B3B3B3] text-[11px] leading-relaxed">
+                        {n.message}
                       </div>
+                      <div className="text-[#808080] text-[10px] mt-1">{n.time}</div>
                     </div>
                   ))}
                 </div>
@@ -330,28 +300,24 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
-          {/* Profile Switcher */}
+          {/* Profile Switcher Menu */}
           <div className="relative">
             <button
-              onClick={() => {
-                setIsProfileMenuOpen((prev) => !prev);
-                setIsNotificationsOpen(false);
-              }}
-              className="flex items-center gap-1.5 p-1 rounded-md hover:bg-white/10 transition-colors group"
-              aria-label="Switch Profile"
+              onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+              className="flex items-center gap-1.5 p-1 rounded hover:bg-[#181818] transition-colors cursor-pointer"
+              aria-label="User Profile"
             >
               <div
-                className={`w-7 h-7 rounded flex items-center justify-center text-xs shadow ${activeProfile.avatarBg}`}
+                className="w-8 h-8 rounded bg-[#E50914] flex items-center justify-center text-sm font-bold text-[#FFFFFF] shadow"
               >
-                <span>{activeProfile.avatarEmoji}</span>
+                <span>{activeProfile.avatarEmoji || '❤️'}</span>
               </div>
-              <ChevronDown className="w-3.5 h-3.5 text-neutral-400 group-hover:text-white transition-transform" />
+              <ChevronDown className="w-3.5 h-3.5 text-[#B3B3B3]" />
             </button>
 
-            {/* Profile Dropdown */}
             {isProfileMenuOpen && (
-              <div className="absolute right-0 mt-3 w-56 bg-[#181818] border border-white/10 rounded-lg shadow-2xl py-2 z-50 text-xs">
-                <div className="px-3 py-1.5 text-neutral-400 text-[11px] uppercase tracking-wider font-semibold border-b border-white/10">
+              <div className="absolute right-0 mt-3 w-56 bg-[#141414] border border-[#808080]/40 rounded shadow-2xl py-2 z-50 text-xs">
+                <div className="px-3 py-1.5 text-[#B3B3B3] text-[11px] uppercase tracking-wider font-semibold border-b border-[#181818]">
                   Who's Watching?
                 </div>
                 <div className="py-1">
@@ -362,34 +328,34 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onSelectProfile(p);
                         setIsProfileMenuOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-3 py-2 text-left hover:bg-white/10 transition-colors ${
-                        p.id === activeProfile.id ? 'text-white font-bold bg-white/5' : 'text-neutral-300'
+                      className={`w-full flex items-center justify-between px-3 py-2 text-left hover:bg-[#181818] transition-colors cursor-pointer ${
+                        p.id === activeProfile.id ? 'text-[#FFFFFF] font-bold bg-[#181818]' : 'text-[#B3B3B3]'
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
                         <div
-                          className={`w-6 h-6 rounded flex items-center justify-center text-xs ${p.avatarBg}`}
+                          className="w-6 h-6 rounded bg-[#E50914] flex items-center justify-center text-xs text-[#FFFFFF]"
                         >
-                          <span>{p.avatarEmoji}</span>
+                          <span>{p.avatarEmoji || '❤️'}</span>
                         </div>
                         <span className="truncate">{p.name}</span>
                       </div>
                       {p.id === activeProfile.id && (
-                        <Heart className="w-3.5 h-3.5 text-[#E50914] fill-[#E50914]" />
+                        <span className="w-2 h-2 rounded-full bg-[#E50914]" />
                       )}
                     </button>
                   ))}
                 </div>
 
-                <div className="pt-2 mt-2 border-t border-white/10 space-y-1">
+                <div className="pt-2 mt-2 border-t border-[#181818] space-y-1">
                   <button
                     onClick={() => {
                       onOpenAdminModal();
                       setIsProfileMenuOpen(false);
                     }}
-                    className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-neutral-300 hover:text-white hover:bg-white/10 transition-colors"
+                    className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer"
                   >
-                    <Shield className="w-3.5 h-3.5 text-neutral-400" />
+                    <Shield className="w-3.5 h-3.5 text-[#E50914]" />
                     <span>{currentUser ? 'Admin Panel (Active)' : 'Admin Sign In'}</span>
                   </button>
 
@@ -398,10 +364,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onOpenSetupModal();
                       setIsProfileMenuOpen(false);
                     }}
-                    className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-neutral-300 hover:text-white hover:bg-white/10 transition-colors"
+                    className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer"
                   >
-                    <Database className="w-3.5 h-3.5 text-neutral-400" />
-                    <span>Supabase Diagnostics</span>
+                    <Database className="w-3.5 h-3.5 text-[#808080]" />
+                    <span>Cloud Storage Setup</span>
                   </button>
                 </div>
               </div>
@@ -411,45 +377,63 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* Mobile Navigation Strip */}
-      <div className="md:hidden flex items-center justify-around px-2 pt-2 border-t border-white/5 text-[11px] font-medium text-neutral-400">
+      <div className="md:hidden flex items-center justify-around px-2 pt-2.5 border-t border-[#181818] text-[11px] font-medium text-[#B3B3B3] overflow-x-auto no-scrollbar bg-[#000000]">
         <button
           onClick={() => setActiveTab('home')}
-          className={`py-1 px-2 ${activeTab === 'home' ? 'text-white font-bold' : ''}`}
+          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
+            activeTab === 'home' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          }`}
         >
           Home
         </button>
         <button
           onClick={() => setActiveTab('our-story')}
-          className={`py-1 px-2 ${activeTab === 'our-story' ? 'text-white font-bold' : ''}`}
+          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
+            activeTab === 'our-story' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          }`}
         >
-          Story
+          Series
         </button>
         <button
           onClick={() => setActiveTab('memories')}
-          className={`py-1 px-2 ${activeTab === 'memories' ? 'text-white font-bold' : ''}`}
+          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
+            activeTab === 'memories' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          }`}
         >
-          Memories
+          Movies
+        </button>
+        <button
+          onClick={() => setActiveTab('scrapbook')}
+          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
+            activeTab === 'scrapbook' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          }`}
+        >
+          Scrapbook
         </button>
         <button
           onClick={() => setActiveTab('little-things')}
-          className={`py-1 px-2 ${activeTab === 'little-things' ? 'text-white font-bold' : ''}`}
+          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
+            activeTab === 'little-things' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          }`}
         >
           Quirks
         </button>
         <button
           onClick={() => setActiveTab('places-list')}
-          className={`py-1 px-2 ${activeTab === 'places-list' ? 'text-white font-bold' : ''}`}
+          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
+            activeTab === 'places-list' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          }`}
         >
-          Places
+          My List
         </button>
         <button
           onClick={() => setActiveTab('secret-vault')}
-          className={`py-1 px-2 text-[#ff4d5a] flex items-center gap-1 ${
-            activeTab === 'secret-vault' ? 'font-bold' : ''
+          className={`py-1 px-2 whitespace-nowrap text-[#B3B3B3] flex items-center gap-1 cursor-pointer ${
+            activeTab === 'secret-vault' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
           }`}
         >
-          <Lock className="w-3 h-3" />
-          Vault
+          <Lock className="w-3 h-3 text-[#E50914]" />
+          <span>Vault</span>
         </button>
       </div>
     </header>

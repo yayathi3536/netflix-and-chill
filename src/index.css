@@ -3,33 +3,31 @@
 @layer base {
   :root {
     --netflix-red: #E50914;
-    --netflix-red-hover: #b80710;
-    --netflix-dark: #141414;
-    --netflix-card: #181818;
-    --netflix-hover-card: #202020;
+    --netflix-black: #000000;
+    --netflix-dark-charcoal: #141414;
+    --netflix-dark-gray: #181818;
+    --netflix-mid-gray: #808080;
+    --netflix-light-gray: #B3B3B3;
+    --netflix-white: #FFFFFF;
   }
 
   body {
-    background-color: #141414;
-    color: #ffffff;
+    background-color: #000000;
+    color: #FFFFFF;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
 
 .font-bebas {
   font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
 
-.font-montserrat {
-  font-family: 'Montserrat', sans-serif;
+.font-serif-romantic {
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
-.font-romantic {
-  font-family: 'Great Vibes', cursive;
-}
-
-/* Custom Netflix Hide Scrollbars while allowing smooth scrolling */
+/* Custom Scrollbar - Strict Netflix Dark Style */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -38,60 +36,58 @@
   scrollbar-width: none;
 }
 
-/* Subtle dark custom scrollbar for modals & letters */
 .dark-scrollbar::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 .dark-scrollbar::-webkit-scrollbar-track {
-  background: rgba(20, 20, 20, 0.6);
+  background: #000000;
 }
 .dark-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: #808080;
   border-radius: 9999px;
 }
 .dark-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(229, 9, 20, 0.6);
+  background: #B3B3B3;
 }
 
-/* Cinematic film grain & vignette utilities */
-.cinematic-vignette {
-  background: radial-gradient(circle at center, transparent 40%, rgba(20, 20, 20, 0.85) 100%);
-}
-
-.hero-gradient-overlay {
+/* Pure Netflix Cinematic Overlays */
+.hero-netflix-overlay {
   background: linear-gradient(
     77deg,
-    rgba(20, 20, 20, 0.98) 0%,
-    rgba(20, 20, 20, 0.88) 25%,
-    rgba(20, 20, 20, 0.45) 55%,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.75) 40%,
+    rgba(0, 0, 0, 0.3) 70%,
     transparent 100%
   );
 }
 
-.hero-bottom-scrim {
+.hero-netflix-scrim {
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(20, 20, 20, 0.3) 40%,
-    rgba(20, 20, 20, 0.8) 75%,
-    #141414 100%
+    rgba(0, 0, 0, 0.3) 30%,
+    rgba(0, 0, 0, 0.75) 70%,
+    #000000 100%
   );
 }
 
-/* Ken Burns subtle slow zoom */
+/* Netflix Card Elevation & Hover */
+.netflix-card-shadow {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.netflix-modal-shadow {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95);
+}
+
+/* Ken Burns subtle cinematic zoom */
 @keyframes kenburns {
-  0% {
-    transform: scale(1) translate(0, 0);
-  }
-  50% {
-    transform: scale(1.08) translate(-1%, -1%);
-  }
-  100% {
-    transform: scale(1) translate(0, 0);
-  }
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.05) translate(-0.5%, -0.5%); }
+  100% { transform: scale(1) translate(0, 0); }
 }
 
 .animate-ken-burns {
-  animation: kenburns 24s ease-in-out infinite alternate;
+  animation: kenburns 26s ease-in-out infinite alternate;
 }

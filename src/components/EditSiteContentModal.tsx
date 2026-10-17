@@ -117,11 +117,11 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl bg-[#161616] rounded-xl overflow-hidden shadow-2xl border border-white/10 my-auto text-white flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-4xl bg-[#181818] rounded-xl overflow-hidden shadow-2xl border border-white/10 my-auto text-white flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between shrink-0 bg-[#1a1a1a]">
+        <div className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between shrink-0 bg-[#141414]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-[#E50914] flex items-center justify-center shadow-lg shadow-[#E50914]/30">
               <Sparkles className="w-5 h-5 text-white" />
@@ -155,7 +155,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                 : 'border-transparent text-neutral-400 hover:text-white'
             }`}
           >
-            <Type className="w-4 h-4 text-[#ff4d5a]" />
+            <Type className="w-4 h-4 text-[#E50914]" />
             <span>Hero Billboard & Media</span>
           </button>
 
@@ -168,7 +168,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                 : 'border-transparent text-neutral-400 hover:text-white'
             }`}
           >
-            <Heart className="w-4 h-4 text-rose-400" />
+            <Heart className="w-4 h-4 text-[#E50914]" />
             <span>Personal Love Letter</span>
           </button>
 
@@ -181,7 +181,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                 : 'border-transparent text-neutral-400 hover:text-white'
             }`}
           >
-            <Users className="w-4 h-4 text-amber-400" />
+            <Users className="w-4 h-4 text-white" />
             <span>Couple Info & Passcode</span>
           </button>
 
@@ -194,7 +194,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                 : 'border-transparent text-neutral-400 hover:text-white'
             }`}
           >
-            <Sliders className="w-4 h-4 text-sky-400" />
+            <Sliders className="w-4 h-4 text-[#B3B3B3]" />
             <span>Section Headings</span>
           </button>
         </div>
@@ -206,14 +206,14 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
             <div
               className={`p-3.5 rounded-lg text-xs flex items-center gap-2 animate-in fade-in duration-200 ${
                 statusMsg.type === 'success'
-                  ? 'bg-emerald-950/60 border border-emerald-500/40 text-emerald-200'
-                  : 'bg-red-950/60 border border-red-500/40 text-red-200'
+                  ? 'bg-[#181818] border border-[#E50914] text-white'
+                  : 'bg-[#181818] border border-[#E50914] text-white'
               }`}
             >
               {statusMsg.type === 'success' ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-[#E50914] shrink-0" />
               ) : (
-                <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0" />
               )}
               <span>{statusMsg.text}</span>
             </div>
@@ -286,11 +286,11 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
               <div className="p-4 bg-black/40 rounded-xl border border-white/10 space-y-3">
                 <label className="block text-xs font-semibold text-white flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
-                    <ImageIcon className="w-4 h-4 text-[#ff4d5a]" />
+                    <ImageIcon className="w-4 h-4 text-[#E50914]" />
                     <span>Hero Backdrop Image (Custom Relationship Photo)</span>
                   </span>
                   {isUploadingPhoto && (
-                    <span className="text-[11px] text-amber-400 font-normal">
+                    <span className="text-[11px] text-[#B3B3B3] font-normal">
                       Uploading to Supabase Storage...
                     </span>
                   )}
@@ -342,7 +342,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
           {/* TAB 2: PERSONAL LOVE LETTER */}
           {activeTab === 'letter' && (
             <div className="space-y-4">
-              <div className="p-3 bg-rose-950/30 rounded-lg border border-rose-500/20 text-xs text-rose-200">
+              <div className="p-3 bg-[#181818] rounded border border-[#808080]/30 text-xs text-[#B3B3B3]">
                 This personal handwritten letter is displayed inside the locked Secret Vault and can be read by your girlfriend whenever she unlocks it or taps to reveal.
               </div>
 
@@ -404,17 +404,17 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
 
               {/* Live Preview Box */}
               <div className="pt-2">
-                <label className="block text-xs font-semibold text-amber-300 mb-2 flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5" />
+                <label className="block text-xs font-semibold text-[#FFFFFF] mb-2 flex items-center gap-1.5">
+                  <FileText className="w-3.5 h-3.5 text-[#E50914]" />
                   <span>Live Letter Preview (As seen by your partner)</span>
                 </label>
-                <div className="bg-[#1f1917] p-5 sm:p-6 rounded-xl border border-amber-900/40 text-neutral-200 text-xs sm:text-sm leading-relaxed whitespace-pre-line font-light shadow-inner">
-                  <h4 className="font-bebas text-xl text-amber-200 mb-2">
+                <div className="bg-[#181818] p-5 sm:p-6 rounded border border-[#808080]/30 text-[#B3B3B3] text-xs sm:text-sm leading-relaxed whitespace-pre-line font-light shadow-inner">
+                  <h4 className="font-bebas text-xl text-[#FFFFFF] mb-2 uppercase tracking-wide">
                     {formData.letter_title || 'A Private Letter'}
                   </h4>
                   {formData.letter_content}
                   {formData.letter_signoff && (
-                    <p className="mt-4 font-serif italic text-amber-300 font-normal">
+                    <p className="mt-4 font-serif italic text-[#FFFFFF] font-normal">
                       {formData.letter_signoff}
                     </p>
                   )}
@@ -474,7 +474,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
 
                 <div>
                   <label className="block text-xs font-semibold text-neutral-300 mb-1 flex items-center gap-1.5">
-                    <Lock className="w-3.5 h-3.5 text-[#ff4d5a]" />
+                    <Lock className="w-3.5 h-3.5 text-[#E50914]" />
                     <span>Secret Vault Passcode (PIN)</span>
                   </label>
                   <input

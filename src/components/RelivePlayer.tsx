@@ -10,12 +10,10 @@ import {
   Minimize2,
   X,
   SkipForward,
-  Heart,
   MessageSquare,
 } from 'lucide-react';
 import { MemoryItem, Episode } from '../types';
 import { VisualArt } from './VisualArt';
-import { romanticAudio } from '../utils/romanticAudio';
 
 interface RelivePlayerProps {
   memory: MemoryItem;
@@ -38,14 +36,6 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
   const [showControls, setShowControls] = useState(true);
 
   const duration = 120; // 2 minutes simulated cinematic relive loop
-
-  useEffect(() => {
-    // Start ambient soundtrack when playback begins
-    romanticAudio.play();
-    return () => {
-      // Don't kill audio automatically if user likes it, or keep consistent
-    };
-  }, []);
 
   useEffect(() => {
     let interval: number;
@@ -96,7 +86,6 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // Romantic subtitle lines that change with progress
   const getSubtitle = () => {
     if (!showCaptions) return null;
     const percent = (currentTime / duration) * 100;
@@ -112,7 +101,7 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center select-none overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-[#000000] flex flex-col items-center justify-center select-none overflow-hidden">
       {/* Cinematic Main Viewport */}
       <div className="relative w-full h-full flex items-center justify-center">
         {/* Memory Visual with Ken Burns movement */}
@@ -122,7 +111,7 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
             category={memory.category}
             title={memory.title}
             imageUrl={memory.backdropUrl}
-            fallbackGradient={memory.fallbackGradient}
+            fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
             className="w-full h-full object-cover"
           />
         </div>
@@ -133,7 +122,7 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
         {/* Subtitles Overlay */}
         {showCaptions && (
           <div className="absolute bottom-28 left-4 right-4 text-center z-30 pointer-events-none">
-            <p className="inline-block px-5 py-2 rounded-lg bg-black/75 backdrop-blur-xs text-sm sm:text-base md:text-lg text-white font-medium drop-shadow-lg max-w-2xl leading-relaxed">
+            <p className="inline-block px-5 py-2 rounded bg-[#000000]/80 text-sm sm:text-base md:text-lg text-[#FFFFFF] font-medium drop-shadow-lg max-w-2xl leading-relaxed">
               {getSubtitle()}
             </p>
           </div>
@@ -141,25 +130,25 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
 
         {/* Top Header Controls */}
         <div
-          className={`absolute top-0 left-0 right-0 p-6 flex items-center justify-between z-40 bg-gradient-to-b from-black/80 to-transparent transition-opacity duration-300 ${
+          className={`absolute top-0 left-0 right-0 p-6 flex items-center justify-between z-40 bg-gradient-to-b from-[#000000]/90 to-transparent transition-opacity duration-300 ${
             showControls ? 'opacity-100' : 'opacity-0'
           }`}
         >
           <div className="flex items-center gap-4">
             <button
               onClick={onClose}
-              className="p-2 rounded-full hover:bg-white/20 text-white transition-colors cursor-pointer"
+              className="p-2 rounded-full hover:bg-[#181818] text-[#FFFFFF] transition-colors cursor-pointer"
               aria-label="Back to browse"
             >
               <X className="w-6 h-6" />
             </button>
             <div>
-              <h2 className="text-white font-bold text-lg sm:text-xl tracking-wide flex items-center gap-2">
+              <h2 className="text-[#FFFFFF] font-bold text-lg sm:text-xl tracking-wide flex items-center gap-2 font-bebas uppercase">
                 <span>{memory.title}</span>
-                <Heart className="w-4 h-4 text-[#E50914] fill-[#E50914]" />
+                <span className="w-2 h-2 rounded-full bg-[#E50914]" />
               </h2>
-              <p className="text-xs text-neutral-400">
-                {episode ? episode.title : memory.subtitle || 'Reliving Our Story'}
+              <p className="text-xs text-[#B3B3B3]">
+                {episode ? episode.title : memory.subtitle || 'Streaming Our Story'}
               </p>
             </div>
           </div>
@@ -167,8 +156,8 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowCaptions(!showCaptions)}
-              className={`p-2 rounded-full transition-colors ${
-                showCaptions ? 'text-[#ff4d5a] bg-white/10' : 'text-neutral-400 hover:text-white'
+              className={`p-2 rounded transition-colors ${
+                showCaptions ? 'text-[#E50914] bg-[#181818]' : 'text-[#808080] hover:text-[#FFFFFF]'
               }`}
               title="Toggle Captions"
             >
@@ -179,17 +168,17 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
 
         {/* Bottom Playback Controls */}
         <div
-          className={`absolute bottom-0 left-0 right-0 p-6 z-40 bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-opacity duration-300 space-y-3 ${
+          className={`absolute bottom-0 left-0 right-0 p-6 z-40 bg-gradient-to-t from-[#000000]/95 via-[#000000]/60 to-transparent transition-opacity duration-300 space-y-3 ${
             showControls ? 'opacity-100' : 'opacity-0'
           }`}
         >
           {/* Seekbar */}
           <div className="flex items-center gap-3">
-            <span className="text-xs text-neutral-400 font-mono">
+            <span className="text-xs text-[#808080] font-mono">
               {formatTime(currentTime)}
             </span>
             <div
-              className="flex-1 h-1.5 bg-neutral-700 rounded-full overflow-hidden cursor-pointer relative group/bar"
+              className="flex-1 h-1.5 bg-[#181818] rounded overflow-hidden cursor-pointer relative group/bar"
               onClick={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
                 const pos = (e.clientX - rect.left) / rect.width;
@@ -200,10 +189,10 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
                 className="h-full bg-[#E50914] relative transition-all"
                 style={{ width: `${(currentTime / duration) * 100}%` }}
               >
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow opacity-0 group-hover/bar:opacity-100 transition-opacity" />
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-[#FFFFFF] rounded-full shadow opacity-0 group-hover/bar:opacity-100 transition-opacity" />
               </div>
             </div>
-            <span className="text-xs text-neutral-400 font-mono">
+            <span className="text-xs text-[#808080] font-mono">
               {formatTime(duration)}
             </span>
           </div>
@@ -214,7 +203,7 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
               {/* Play / Pause */}
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
-                className="w-10 h-10 rounded-full bg-white hover:bg-neutral-200 text-black flex items-center justify-center transition-transform active:scale-95 cursor-pointer"
+                className="w-10 h-10 rounded-full bg-[#FFFFFF] hover:bg-[#B3B3B3] text-[#000000] flex items-center justify-center transition-transform active:scale-95 cursor-pointer"
                 aria-label={isPlaying ? 'Pause' : 'Play'}
               >
                 {isPlaying ? (
@@ -227,7 +216,7 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
               {/* Rewind 10s */}
               <button
                 onClick={() => setCurrentTime((t) => Math.max(0, t - 10))}
-                className="p-2 text-neutral-300 hover:text-white transition-colors"
+                className="p-2 text-[#B3B3B3] hover:text-[#FFFFFF] transition-colors"
                 title="Rewind 10s"
               >
                 <RotateCcw className="w-5 h-5" />
@@ -236,20 +225,20 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
               {/* Fast Forward 10s */}
               <button
                 onClick={() => setCurrentTime((t) => Math.min(duration, t + 10))}
-                className="p-2 text-neutral-300 hover:text-white transition-colors"
+                className="p-2 text-[#B3B3B3] hover:text-[#FFFFFF] transition-colors"
                 title="Forward 10s"
               >
                 <RotateCw className="w-5 h-5" />
               </button>
 
-              {/* Audio Mute / Unmute */}
+              {/* Audio Toggle */}
               <button
                 onClick={() => {
-                  romanticAudio.toggle();
+                  window.dispatchEvent(new CustomEvent('ouruniverse:toggleplay'));
                   setIsMuted(!isMuted);
                 }}
-                className="p-2 text-neutral-300 hover:text-white transition-colors"
-                title="Soundtrack audio"
+                className="p-2 text-[#B3B3B3] hover:text-[#FFFFFF] transition-colors"
+                title="Toggle soundtrack"
               >
                 {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
               </button>
@@ -260,9 +249,9 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
               {onNextMemory && (
                 <button
                   onClick={onNextMemory}
-                  className="flex items-center gap-1.5 text-xs font-semibold text-neutral-300 hover:text-white px-3 py-1.5 rounded bg-white/10 hover:bg-white/20 transition-colors"
+                  className="flex items-center gap-1.5 text-xs font-semibold text-[#B3B3B3] hover:text-[#FFFFFF] px-3 py-1.5 rounded bg-[#181818] hover:bg-white/10 transition-colors uppercase tracking-wider"
                 >
-                  <span>Next Memory</span>
+                  <span>Next Title</span>
                   <SkipForward className="w-4 h-4" />
                 </button>
               )}
@@ -270,7 +259,7 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
               {/* Fullscreen */}
               <button
                 onClick={toggleFullscreen}
-                className="p-2 text-neutral-300 hover:text-white transition-colors"
+                className="p-2 text-[#B3B3B3] hover:text-[#FFFFFF] transition-colors"
                 title="Toggle Fullscreen"
               >
                 {isFullscreen ? (

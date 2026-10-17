@@ -153,7 +153,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
       tags: tags.length > 0 ? tags : ['Love', 'Special Moment'],
       backdropUrl: imageUrl || undefined,
       posterUrl: imageUrl || undefined,
-      fallbackGradient: memoryToEdit?.fallbackGradient || 'from-rose-950 via-red-950 to-neutral-950',
+      fallbackGradient: memoryToEdit?.fallbackGradient || 'from-[#141414] via-[#181818] to-[#000000]',
       isInWatchlist: memoryToEdit ? memoryToEdit.isInWatchlist : true,
       isFavorite: memoryToEdit ? memoryToEdit.isFavorite : true,
       isSecret,
@@ -218,7 +218,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             <button
               type="button"
               onClick={handleDelete}
-              className="p-2 text-red-400 hover:text-red-300 hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
+              className="p-2 text-[#E50914] hover:text-white hover:bg-[#E50914]/20 rounded transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
               title="Delete this memory"
             >
               <Trash2 className="w-4 h-4" />
@@ -229,8 +229,8 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
 
         {/* Admin notice if Supabase is connected but user is guest */}
         {isSupabaseReady && !currentUser && (
-          <div className="p-3 mb-4 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+          <div className="p-3 mb-4 rounded bg-[#181818] border border-[#808080]/30 text-[#B3B3B3] text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0" />
             <span>
               Tip: Sign in via Admin Access to save permanently to Supabase with Row Level Security.
             </span>
@@ -379,7 +379,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
               <label className="w-full sm:w-auto px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-lg cursor-pointer flex items-center justify-center gap-2 border border-white/10 shrink-0 transition-colors">
                 {isUploading ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin text-[#ff4d5a]" />
+                    <Loader2 className="w-4 h-4 animate-spin text-[#E50914]" />
                     <span>Uploading...</span>
                   </>
                 ) : (
@@ -399,15 +399,15 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             </div>
 
             {uploadError && (
-              <p className="text-xs text-red-400 flex items-center gap-1.5 mt-1">
+              <p className="text-xs text-[#E50914] flex items-center gap-1.5 mt-1">
                 <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                 <span>{uploadError}</span>
               </p>
             )}
 
             {uploadSuccess && (
-              <p className="text-xs text-emerald-400 flex items-center gap-1.5 mt-1">
-                <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+              <p className="text-xs text-white flex items-center gap-1.5 mt-1">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#E50914] shrink-0" />
                 <span>{uploadSuccess}</span>
               </p>
             )}
@@ -434,7 +434,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                 className="w-4 h-4 accent-[#E50914] rounded"
               />
               <span className="font-semibold text-neutral-200 flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5 text-[#ff4d5a]" />
+                <Lock className="w-3.5 h-3.5 text-[#E50914]" />
                 Password-Protect in Secret Vault
               </span>
             </label>

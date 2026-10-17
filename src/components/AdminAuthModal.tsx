@@ -154,7 +154,7 @@ create table if not exists public.memories (
   tags text[] default '{}'::text[],
   backdrop_url text,
   poster_url text,
-  fallback_gradient text default 'from-rose-950 via-red-950 to-neutral-950',
+  fallback_gradient text default 'from-[#141414] via-[#181818] to-[#000000]',
   progress integer check (progress between 0 and 100),
   is_top_10 integer,
   is_favorite boolean default false,
@@ -232,14 +232,14 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
 
         {/* Supabase Status Check */}
         {!supabaseReady && (
-          <div className="p-3 mb-4 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs space-y-1">
-            <div className="flex items-center gap-1.5 font-semibold">
-              <AlertCircle className="w-4 h-4 text-amber-400" />
+          <div className="p-3 mb-4 rounded bg-[#181818] border border-[#808080]/30 text-[#B3B3B3] text-xs space-y-1">
+            <div className="flex items-center gap-1.5 font-semibold text-[#FFFFFF]">
+              <AlertCircle className="w-4 h-4 text-[#E50914]" />
               <span>Supabase Environment Not Configured</span>
             </div>
-            <p className="text-[11px] text-amber-300/80 leading-relaxed">
-              Add <code className="bg-black/40 px-1 rounded">VITE_SUPABASE_URL</code> and{' '}
-              <code className="bg-black/40 px-1 rounded">VITE_SUPABASE_ANON_KEY</code> to enable
+            <p className="text-[11px] text-[#B3B3B3] leading-relaxed">
+              Add <code className="bg-black/60 px-1 rounded text-[#FFFFFF]">VITE_SUPABASE_URL</code> and{' '}
+              <code className="bg-black/60 px-1 rounded text-[#FFFFFF]">VITE_SUPABASE_ANON_KEY</code> to enable
               live cloud database storage and role-based editing.
             </p>
           </div>
@@ -249,14 +249,14 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
         {currentUser ? (
           <div className="space-y-5">
             <div
-              className={`p-4 rounded-lg border space-y-2 ${
+              className={`p-4 rounded border space-y-2 ${
                 isAdminUser
-                  ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
-                  : 'bg-amber-950/40 border-amber-500/40 text-amber-200'
+                  ? 'bg-[#181818] border-[#E50914] text-[#FFFFFF]'
+                  : 'bg-[#181818] border-[#808080]/40 text-[#B3B3B3]'
               }`}
             >
-              <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider">
-                <CheckCircle2 className="w-4 h-4" />
+              <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-[#FFFFFF]">
+                <CheckCircle2 className="w-4 h-4 text-[#E50914]" />
                 <span>
                   {isAdminUser ? 'Verified Administrator' : 'Viewer Account (Read-Only)'}
                 </span>
@@ -275,7 +275,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
             {isAdminUser && (
               <div className="space-y-2 pt-2 border-t border-white/10">
                 <h4 className="text-xs font-semibold text-neutral-300 flex items-center gap-1.5">
-                  <Database className="w-3.5 h-3.5 text-[#ff4d5a]" />
+                  <Database className="w-3.5 h-3.5 text-[#E50914]" />
                   <span>Cloud Synchronization</span>
                 </h4>
                 <p className="text-[11px] text-neutral-400">
@@ -303,12 +303,12 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                 <span className="font-semibold text-neutral-300">RLS SQL Migration Script</span>
                 <button
                   onClick={handleCopySql}
-                  className="flex items-center gap-1 text-[#ff4d5a] hover:text-[#ff7882] cursor-pointer font-semibold"
+                  className="flex items-center gap-1 text-[#E50914] hover:text-[#b80710] cursor-pointer font-semibold"
                 >
                   {copiedSql ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      <span className="text-emerald-400">Copied!</span>
+                      <Check className="w-3.5 h-3.5 text-[#E50914]" />
+                      <span className="text-[#FFFFFF]">Copied!</span>
                     </>
                   ) : (
                     <>
@@ -376,15 +376,15 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
             </div>
 
             {errorMsg && (
-              <div className="p-3 rounded-lg bg-red-950/60 border border-red-500/40 text-red-200 text-xs flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+              <div className="p-3 rounded bg-[#181818] border border-[#E50914] text-[#FFFFFF] text-xs flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5" />
                 <span>{errorMsg}</span>
               </div>
             )}
 
             {successMsg && (
-              <div className="p-3 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-xs flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="p-3 rounded bg-[#181818] border border-[#E50914] text-[#FFFFFF] text-xs flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5" />
                 <span>{successMsg}</span>
               </div>
             )}
@@ -476,7 +476,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
             {authMethod === 'sql' && (
               <div className="space-y-3 text-xs">
                 <p className="text-neutral-300 leading-relaxed">
-                  Run the SQL migration in your <strong>Supabase Dashboard &gt; SQL Editor</strong> to create <code className="text-[#ff4d5a]">site_content</code>, <code className="text-[#ff4d5a]">memories</code>, and enforce Row-Level Security.
+                  Run the SQL migration in your <strong>Supabase Dashboard &gt; SQL Editor</strong> to create <code className="text-[#E50914]">site_content</code>, <code className="text-[#E50914]">memories</code>, and enforce Row-Level Security.
                 </p>
 
                 <button
@@ -485,12 +485,12 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                 >
                   {copiedSql ? (
                     <>
-                      <Check className="w-4 h-4 text-emerald-400" />
-                      <span className="text-emerald-400 font-bold">SQL Script Copied to Clipboard!</span>
+                      <Check className="w-4 h-4 text-[#E50914]" />
+                      <span className="text-[#FFFFFF] font-bold">SQL Script Copied to Clipboard!</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-4 h-4 text-[#ff4d5a]" />
+                      <Copy className="w-4 h-4 text-[#E50914]" />
                       <span>Copy Full Database & RLS Script</span>
                     </>
                   )}

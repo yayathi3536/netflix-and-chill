@@ -56,28 +56,28 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
 
   return (
     <div className="relative group/row my-6 sm:my-8 px-4 sm:px-6 lg:px-8">
-      {/* Row Header */}
+      {/* Netflix Row Header */}
       <div className="flex items-baseline justify-between mb-3">
-        <div className="flex items-baseline gap-3">
-          <h2 className="font-bebas text-xl sm:text-2xl lg:text-3xl tracking-wide text-neutral-100 font-bold hover:text-white transition-colors cursor-pointer">
+        <div className="flex items-baseline gap-3 flex-wrap">
+          <h2 className="font-bebas text-2xl sm:text-3xl lg:text-4xl tracking-wider text-[#FFFFFF] font-black uppercase hover:text-[#B3B3B3] transition-colors">
             {title}
           </h2>
           {subtitle && (
-            <span className="text-xs text-neutral-400 font-normal hidden sm:inline">
+            <span className="text-xs text-[#B3B3B3] font-normal hidden sm:inline">
               {subtitle}
             </span>
           )}
           {onEditSection && (
             <button
               onClick={onEditSection}
-              className="p-1 rounded hover:bg-white/10 text-neutral-500 hover:text-amber-400 transition-colors"
-              title="Edit section title & subtitle"
+              className="p-1 rounded hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer"
+              title="Edit row title & subtitle"
             >
-              <Edit3 className="w-3.5 h-3.5" />
+              <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
             </button>
           )}
         </div>
-        <span className="text-xs text-neutral-500 font-medium">
+        <span className="text-xs text-[#808080] font-semibold tracking-wider uppercase">
           {items.length} {items.length === 1 ? 'Title' : 'Titles'}
         </span>
       </div>
@@ -88,10 +88,10 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
         {showLeftArrow && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-black/60 hover:bg-black/90 text-white flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all rounded-r-md backdrop-blur-xs cursor-pointer"
+            className="absolute left-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-[#000000]/80 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all cursor-pointer"
             aria-label="Scroll left"
           >
-            <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
+            <ChevronLeft className="w-7 h-7 stroke-[2.5] text-[#FFFFFF]" />
           </button>
         )}
 
@@ -118,13 +118,13 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
         </div>
 
         {/* Right Arrow Button */}
-        {showRightArrow && items.length > 3 && (
+        {showRightArrow && items.length > 2 && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-black/60 hover:bg-black/90 text-white flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all rounded-l-md backdrop-blur-xs cursor-pointer"
+            className="absolute right-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-[#000000]/80 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all cursor-pointer"
             aria-label="Scroll right"
           >
-            <ChevronRight className="w-6 h-6 stroke-[2.5]" />
+            <ChevronRight className="w-7 h-7 stroke-[2.5] text-[#FFFFFF]" />
           </button>
         )}
       </div>

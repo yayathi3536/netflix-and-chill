@@ -5,7 +5,6 @@ import {
   Plus,
   Database,
   LogOut,
-  Sparkles,
 } from 'lucide-react';
 import { User } from '@supabase/supabase-js';
 
@@ -31,22 +30,22 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
       aria-label="Admin Control Bar"
       className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-3xl animate-in slide-in-from-bottom-6 duration-300 pointer-events-none"
     >
-      <div className="bg-[#141414]/95 backdrop-blur-md border border-[#E50914]/40 rounded-full px-4 sm:px-6 py-2.5 shadow-2xl shadow-black/80 flex items-center justify-between gap-3 text-white pointer-events-auto">
+      <div className="bg-[#141414]/95 backdrop-blur-md border border-[#E50914]/50 rounded px-4 sm:px-6 py-2.5 shadow-2xl flex items-center justify-between gap-3 text-[#FFFFFF] pointer-events-auto">
         {/* Left: Admin Status & Identity */}
         <div className="flex items-center gap-2.5 shrink-0">
-          <div className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+          <div className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E50914] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E50914]"></span>
           </div>
           <div className="hidden sm:flex items-center gap-1.5 text-xs">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span className="font-bold text-white tracking-wide">Admin Mode</span>
-            <span className="text-neutral-500">·</span>
-            <span className="text-neutral-400 max-w-[140px] truncate" title={currentUser.email}>
+            <ShieldCheck className="w-4 h-4 text-[#E50914]" />
+            <span className="font-bold text-[#FFFFFF] tracking-wide uppercase font-bebas text-sm">Admin Verified</span>
+            <span className="text-[#808080]">·</span>
+            <span className="text-[#B3B3B3] max-w-[140px] truncate" title={currentUser.email}>
               {currentUser.email}
             </span>
           </div>
-          <div className="sm:hidden flex items-center gap-1 text-xs font-bold text-emerald-400">
+          <div className="sm:hidden flex items-center gap-1 text-xs font-bold text-[#E50914]">
             <ShieldCheck className="w-4 h-4" />
             <span>Admin</span>
           </div>
@@ -57,43 +56,43 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
           {/* Edit Site Texts & Letters */}
           <button
             onClick={() => onOpenEditSiteContent()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer border border-white/10"
-            title="Edit headings, love letters, and site texts"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#181818] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold transition-all cursor-pointer border border-[#808080]/30"
+            title="Edit texts & letters"
           >
-            <Edit3 className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden md:inline">Edit Texts & Letters</span>
-            <span className="md:hidden">Texts</span>
+            <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
+            <span className="hidden md:inline">Edit Content</span>
+            <span className="md:hidden">Edit</span>
           </button>
 
           {/* Add New Memory */}
           <button
             onClick={onOpenAddMemory}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#E50914] hover:bg-[#b80710] text-white text-xs font-bold shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
-            title="Create a new relationship memory"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] text-xs font-bold shadow transition-all cursor-pointer"
+            title="Create new title"
           >
             <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span>New Memory</span>
+            <span>New Title</span>
           </button>
 
-          {/* Supabase Portal / SQL Setup */}
+          {/* Database Setup */}
           <button
             onClick={onOpenAdminPortal}
-            className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-full bg-white/5 hover:bg-white/15 text-neutral-300 hover:text-white text-xs font-medium transition-colors cursor-pointer border border-white/5"
-            title="Open Admin Portal & SQL Setup"
+            className="p-1.5 sm:px-2.5 sm:py-1.5 rounded bg-[#181818] hover:bg-white/10 text-[#B3B3B3] hover:text-[#FFFFFF] text-xs font-medium transition-colors cursor-pointer border border-[#808080]/30"
+            title="Database Configuration"
           >
-            <Database className="w-3.5 h-3.5 text-[#ff4d5a]" />
-            <span className="hidden lg:inline ml-1">Portal</span>
+            <Database className="w-3.5 h-3.5 text-[#808080]" />
+            <span className="hidden lg:inline ml-1">Database</span>
           </button>
         </div>
 
         {/* Right: Quick Logout */}
-        <div className="shrink-0 pl-1 border-l border-white/10">
+        <div className="shrink-0 pl-1 border-l border-[#181818]">
           <button
             onClick={onLogout}
-            className="p-1.5 sm:px-2.5 sm:py-1 rounded-full text-neutral-400 hover:text-rose-400 hover:bg-rose-950/30 text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+            className="p-1.5 sm:px-2.5 sm:py-1 rounded text-[#808080] hover:text-[#FFFFFF] hover:bg-[#181818] text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
             title="Sign out of Admin Mode"
           >
-            <LogOut className="w-3.5 h-3.5" />
+            <LogOut className="w-3.5 h-3.5 text-[#E50914]" />
             <span className="hidden sm:inline">Exit</span>
           </button>
         </div>

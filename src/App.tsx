@@ -33,6 +33,11 @@ import { EditSiteContentModal } from './components/EditSiteContentModal';
 import { AdminModeBar } from './components/AdminModeBar';
 import { MovieCard } from './components/MovieCard';
 import { MusicPlayer } from './components/MusicPlayer';
+import { ScrapbookView } from './components/ScrapbookView';
+import { SoundtrackRow } from './components/SoundtrackRow';
+import { SurpriseModal } from './components/SurpriseModal';
+import { ConstellationSection } from './components/ConstellationSection';
+import { TRACKS } from './data/tracks';
 import { romanticAudio } from './utils/romanticAudio';
 import { User } from '@supabase/supabase-js';
 
@@ -63,6 +68,8 @@ export default function App() {
   const [isEditSiteContentOpen, setIsEditSiteContentOpen] = useState(false);
   const [editSiteContentInitialTab, setEditSiteContentInitialTab] = useState<SiteContentSection>('hero');
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [isSurpriseModalOpen, setIsSurpriseModalOpen] = useState(false);
+  const [soundtrackTrackIndex, setSoundtrackTrackIndex] = useState(0);
 
   // Computed verified administrator status
   const isAdmin = useMemo(() => checkIsAdmin(currentUser), [currentUser]);
@@ -111,7 +118,7 @@ export default function App() {
         setIsAdminModalOpen(true);
         return;
       }
-      const validTabs = ['home', 'our-story', 'memories', 'little-things', 'places-list', 'secret-vault'];
+      const validTabs = ['home', 'our-story', 'memories', 'scrapbook', 'little-things', 'places-list', 'secret-vault'];
       if (validTabs.includes(hash)) {
         setActiveTab(hash);
       }
@@ -259,9 +266,24 @@ export default function App() {
     }
   };
 
+  useEffect(() => {
+    const handleAudioState = (e: Event) => {
+      const customEvent = e as CustomEvent<{ isPlaying: boolean; currentTrackIndex: number }>;
+      if (customEvent.detail) {
+        if (typeof customEvent.detail.isPlaying === 'boolean') {
+          setIsAudioPlaying(customEvent.detail.isPlaying);
+        }
+        if (typeof customEvent.detail.currentTrackIndex === 'number') {
+          setSoundtrackTrackIndex(customEvent.detail.currentTrackIndex);
+        }
+      }
+    };
+    window.addEventListener('ouruniverse:audiostate', handleAudioState);
+    return () => window.removeEventListener('ouruniverse:audiostate', handleAudioState);
+  }, []);
+
   const toggleAudio = () => {
-    const active = romanticAudio.toggle();
-    setIsAudioPlaying(active);
+    window.dispatchEvent(new CustomEvent('ouruniverse:toggleplay'));
   };
 
   // Groupings for Netflix Rows
@@ -314,7 +336,7 @@ export default function App() {
   const isSupabaseReady = isSupabaseConfigured();
 
   return (
-    <div className="min-h-screen bg-[#141414] text-white flex flex-col selection:bg-[#E50914] selection:text-white">
+    <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex flex-col selection:bg-[#E50914] selection:text-[#FFFFFF]">
       {/* NETFLIX-STYLE TOP NAVIGATION */}
       <Navbar
         activeTab={activeTab}
@@ -338,16 +360,16 @@ export default function App() {
       {/* TOP SYSTEM STATUS NOTIFICATION (Non-intrusive) */}
       {!isSupabaseReady ? (
         <div className="pt-20 px-4 sm:px-8 max-w-7xl mx-auto w-full">
-          <div className="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200">
+          <div className="flex items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-[#808080]/30 text-xs text-[#B3B3B3]">
             <div className="flex items-center gap-2">
-              <Database className="w-4 h-4 text-amber-400 shrink-0" />
+              <Database className="w-4 h-4 text-[#E50914] shrink-0" />
               <span>
-                <strong>Local Mode:</strong> Supabase credentials not detected in environment. Using persistent browser storage.
+                <strong className="text-[#FFFFFF]">Local Mode:</strong> Supabase credentials not detected in environment. Using persistent browser storage.
               </span>
             </div>
             <button
               onClick={() => setIsSetupModalOpen(true)}
-              className="text-white bg-amber-500/30 hover:bg-amber-500/50 px-2.5 py-1 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer"
+              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-3 py-1 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer"
             >
               Setup Supabase &rarr;
             </button>
@@ -355,19 +377,19 @@ export default function App() {
         </div>
       ) : isSchemaMissing ? (
         <div className="pt-20 px-4 sm:px-8 max-w-7xl mx-auto w-full">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-lg bg-amber-950/40 border border-amber-500/40 text-xs text-amber-200 shadow-xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded bg-[#181818] border border-[#E50914]/50 text-xs text-[#B3B3B3] shadow-xl">
             <div className="flex items-start sm:items-center gap-2.5">
-              <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5 sm:mt-0" />
+              <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5 sm:mt-0" />
               <div>
-                <span className="font-semibold text-white">Database Tables Need Setup:</span>{' '}
-                <span className="text-amber-300/90">
+                <span className="font-semibold text-[#FFFFFF]">Database Tables Need Setup:</span>{' '}
+                <span className="text-[#B3B3B3]">
                   Supabase is connected, but the <code>public.memories</code> table has not been created yet. Copy and run the SQL migration script in your Supabase SQL Editor.
                 </span>
               </div>
             </div>
             <button
               onClick={() => setIsSetupModalOpen(true)}
-              className="text-white bg-[#E50914] hover:bg-[#b80710] px-3.5 py-1.5 rounded-md text-xs font-bold whitespace-nowrap transition-colors cursor-pointer shadow active:scale-95 shrink-0"
+              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-3.5 py-1.5 rounded-md text-xs font-bold whitespace-nowrap transition-colors cursor-pointer shadow active:scale-95 shrink-0"
             >
               Copy SQL Migration &rarr;
             </button>
@@ -375,14 +397,14 @@ export default function App() {
         </div>
       ) : statusNotification ? (
         <div className="pt-20 px-4 sm:px-8 max-w-7xl mx-auto w-full">
-          <div className="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-xs text-blue-200">
+          <div className="flex items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-[#808080]/30 text-xs text-[#B3B3B3]">
             <div className="flex items-center gap-2">
-              <Info className="w-4 h-4 text-blue-400 shrink-0" />
-              <span>{statusNotification}</span>
+              <Info className="w-4 h-4 text-[#E50914] shrink-0" />
+              <span className="text-[#FFFFFF]">{statusNotification}</span>
             </div>
             <button
               onClick={() => setIsAdminModalOpen(true)}
-              className="text-white bg-blue-500/30 hover:bg-blue-500/50 px-2.5 py-1 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer"
+              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-2.5 py-1 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer"
             >
               Sync Database
             </button>
@@ -406,7 +428,7 @@ export default function App() {
               </div>
               <button
                 onClick={() => setSearchQuery('')}
-                className="text-xs text-[#ff4d5a] hover:underline cursor-pointer"
+                className="text-xs text-[#E50914] hover:underline cursor-pointer"
               >
                 Clear Search
               </button>
@@ -450,6 +472,7 @@ export default function App() {
                     onPlay={(m) => setPlayingMemory({ memory: m })}
                     onOpenInfo={(m) => setSelectedMemory(m)}
                     onToggleWatchlist={handleToggleWatchlist}
+                    onExploreMemories={() => handleTabChange('scrapbook')}
                     isAudioPlaying={isAudioPlaying}
                     onToggleAudio={toggleAudio}
                     isAdmin={isAdmin}
@@ -466,12 +489,43 @@ export default function App() {
                   />
                 )}
 
+                {/* INTERACTIVE "OPEN YOUR SURPRISE" CAPSULE */}
+                <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-8 mb-6">
+                  <div
+                    onClick={() => setIsSurpriseModalOpen(true)}
+                    className="group relative overflow-hidden rounded bg-[#141414] border border-[#181818] hover:border-[#808080]/60 p-4 sm:p-5 shadow-2xl transition-all cursor-pointer hover:scale-[1.01] flex items-center justify-between gap-4"
+                  >
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-11 h-11 rounded bg-[#181818] border border-[#E50914] flex items-center justify-center text-xl shadow text-[#E50914] group-hover:scale-110 transition-transform">
+                        💌
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bebas text-lg sm:text-xl text-[#FFFFFF] font-bold tracking-wider uppercase">
+                            Open Your Surprise
+                          </span>
+                          <span className="text-[10px] bg-[#E50914] text-[#FFFFFF] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+                            Special
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#B3B3B3] line-clamp-1">
+                          A private love letter, anniversary counter & redeemable romantic coupons.
+                        </p>
+                      </div>
+                    </div>
+
+                    <button className="px-5 py-2.5 rounded bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shadow cursor-pointer">
+                      Reveal Letter &rarr;
+                    </button>
+                  </div>
+                </div>
+
                 {/* CONTENT ROWS SECTION */}
-                <div className="relative z-20 -mt-10 sm:-mt-16 space-y-2">
+                <div className="relative z-20 space-y-2">
                   {/* ROW 1: CONTINUE WATCHING: OUR MEMORIES */}
                   {continueWatchingItems.length > 0 && (
                     <CarouselRow
-                      title={siteContent.section_continue_title || "Continue Watching: Our Memories"}
+                      title={siteContent.section_continue_title || "Our Favorite Moments"}
                       subtitle={siteContent.section_continue_sub || "Pick up right where we left off"}
                       items={continueWatchingItems}
                       onPlay={(m) => setPlayingMemory({ memory: m })}
@@ -489,7 +543,7 @@ export default function App() {
                   {/* ROW 2: ORIGINAL SERIES: OUR STORY (TOP 10 PORTRAITS) */}
                   {ourStorySeries.length > 0 && (
                     <CarouselRow
-                      title={siteContent.section_our_story_title || "Original Series: Our Story"}
+                      title={siteContent.section_our_story_title || "Episodes of Us"}
                       subtitle={siteContent.section_our_story_sub || "Top 10 Relationship Chapters of All Time"}
                       items={ourStorySeries}
                       isPortrait={true}
@@ -505,10 +559,31 @@ export default function App() {
                     />
                   )}
 
-                  {/* ROW 3: COLLECTION: LITTLE THINGS I LOVE ABOUT YOU */}
+                  {/* ROW 3: OUR SOUNDTRACK (INTERACTIVE STREAMING MUSIC ROW) */}
+                  <SoundtrackRow
+                    tracks={TRACKS}
+                    currentTrackIndex={soundtrackTrackIndex}
+                    isPlaying={isAudioPlaying}
+                    onSelectTrack={(idx) => {
+                      setSoundtrackTrackIndex(idx);
+                      window.dispatchEvent(
+                        new CustomEvent('ouruniverse:playtrack', {
+                          detail: { index: idx, autoOpen: true },
+                        })
+                      );
+                    }}
+                    onTogglePlay={() => {
+                      window.dispatchEvent(new CustomEvent('ouruniverse:toggleplay'));
+                    }}
+                    onOpenPlayer={() => {
+                      window.dispatchEvent(new CustomEvent('ouruniverse:openplayer'));
+                    }}
+                  />
+
+                  {/* ROW 4: COLLECTION: LITTLE THINGS I LOVE ABOUT YOU */}
                   {littleThingsCollection.length > 0 && (
                     <CarouselRow
-                      title={siteContent.section_little_things_title || "Collection: Little Things I Love About You"}
+                      title={siteContent.section_little_things_title || "Little Things I Love About You"}
                       subtitle={siteContent.section_little_things_sub || "Micro-moments that steal my heart every single day"}
                       items={littleThingsCollection}
                       onPlay={(m) => setPlayingMemory({ memory: m })}
@@ -523,10 +598,10 @@ export default function App() {
                     />
                   )}
 
-                  {/* ROW 4: MY LIST: PLACES & EXPERIENCES TOGETHER */}
+                  {/* ROW 5: MY LIST: PLACES & EXPERIENCES TOGETHER */}
                   {placesListItems.length > 0 && (
                     <CarouselRow
-                      title={siteContent.section_places_title || "My List: Places and Experiences Together"}
+                      title={siteContent.section_places_title || "Memories Worth Rewatching: Places & Adventures"}
                       subtitle={siteContent.section_places_sub || "Our travel passport & dream bucket list"}
                       items={placesListItems}
                       onPlay={(m) => setPlayingMemory({ memory: m })}
@@ -541,10 +616,10 @@ export default function App() {
                     />
                   )}
 
-                  {/* ROW 5: HIDDEN EPISODES: PERSONAL SURPRISES & LETTERS */}
+                  {/* ROW 6: HIDDEN EPISODES: PERSONAL SURPRISES & LETTERS */}
                   {secretVaultItems.length > 0 && (
                     <CarouselRow
-                      title={siteContent.section_vault_title || "Hidden Episodes: Personal Surprises and Letters"}
+                      title={siteContent.section_vault_title || "Hidden Episodes: Secret Vault & Letters"}
                       subtitle={siteContent.section_vault_sub || "Locked confidential notes for your eyes only"}
                       items={secretVaultItems}
                       onPlay={(m) => setPlayingMemory({ memory: m })}
@@ -559,22 +634,28 @@ export default function App() {
                       } : undefined}
                     />
                   )}
+
+                  {/* CELESTIAL CONSTELLATION MAP SECTION */}
+                  <ConstellationSection
+                    milestones={ourStorySeries}
+                    onSelectMilestone={(m) => setSelectedMemory(m)}
+                  />
                 </div>
               </div>
             )}
 
             {/* TAB: OUR STORY (Dedicated Timeline & Story View) */}
             {activeTab === 'our-story' && (
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 text-xs text-[#ff4d5a] font-bold tracking-widest uppercase mb-1">
+                  <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>Chronological Journey</span>
+                    <span>ORIGINAL SERIES · CHRONOLOGICAL TIMELINE</span>
                   </div>
-                  <h1 className="font-bebas text-4xl sm:text-5xl text-white font-black tracking-wide">
-                    Original Series: Our Story
+                  <h1 className="font-bebas text-4xl sm:text-6xl text-[#FFFFFF] font-black tracking-wider uppercase">
+                    Episodes of Us
                   </h1>
-                  <p className="text-xs sm:text-sm text-neutral-400 max-w-2xl mt-1">
+                  <p className="text-xs sm:text-sm text-[#B3B3B3] max-w-2xl mt-1.5">
                     Every milestone chapter in order from the day the universe aligned our paths to building our forever future.
                   </p>
                 </div>
@@ -584,12 +665,12 @@ export default function App() {
                     <div
                       key={ch.id}
                       onClick={() => setSelectedMemory(ch)}
-                      className="bg-[#181818] rounded-xl overflow-hidden border border-white/10 hover:border-white/30 transition-all cursor-pointer group hover:scale-[1.02] flex flex-col justify-between"
+                      className="bg-[#141414] rounded overflow-hidden border border-[#181818] hover:border-[#808080]/60 transition-all cursor-pointer group hover:scale-[1.02] flex flex-col justify-between shadow-xl"
                     >
                       <div className="relative aspect-video overflow-hidden">
                         <div className="absolute top-3 left-3 z-20">
-                          <span className="font-bebas text-lg px-2.5 py-0.5 rounded bg-[#E50914] text-white font-bold shadow">
-                            Chapter {idx + 1}
+                          <span className="font-bebas text-xs px-2.5 py-1 rounded bg-[#E50914] text-[#FFFFFF] font-black uppercase tracking-wider shadow">
+                            Episode {idx + 1}
                           </span>
                         </div>
                         <div className="w-full h-full group-hover:scale-105 transition-transform duration-500">
@@ -602,14 +683,14 @@ export default function App() {
                         </div>
                       </div>
                       <div className="p-4 space-y-2">
-                        <div className="flex items-center justify-between text-xs text-neutral-400">
+                        <div className="flex items-center justify-between text-xs text-[#808080] font-medium">
                           <span>{ch.date}</span>
-                          <span className="text-emerald-400 font-bold">{ch.matchScore}% Match</span>
+                          <span className="text-[#FFFFFF] font-bold">{ch.matchScore}% Match</span>
                         </div>
-                        <h3 className="font-bebas text-xl text-white font-bold leading-tight group-hover:text-[#ff4d5a] transition-colors">
+                        <h3 className="font-bebas text-xl text-[#FFFFFF] font-bold leading-tight group-hover:text-[#FFFFFF] uppercase tracking-wide">
                           {ch.title}
                         </h3>
-                        <p className="text-xs text-neutral-300 line-clamp-3 leading-relaxed">
+                        <p className="text-xs text-[#B3B3B3] line-clamp-3 leading-relaxed">
                           {ch.synopsis}
                         </p>
                       </div>
@@ -621,12 +702,16 @@ export default function App() {
 
             {/* TAB: MEMORIES (Continue Watching & All Memories) */}
             {activeTab === 'memories' && (
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div>
-                  <h1 className="font-bebas text-4xl sm:text-5xl text-white font-black tracking-wide">
+                  <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
+                    <Film className="w-3.5 h-3.5" />
+                    <span>FEATURE FILMS & MEMORIES</span>
+                  </div>
+                  <h1 className="font-bebas text-4xl sm:text-6xl text-[#FFFFFF] font-black tracking-wider uppercase">
                     Our Memories
                   </h1>
-                  <p className="text-xs sm:text-sm text-neutral-400 max-w-2xl mt-1">
+                  <p className="text-xs sm:text-sm text-[#B3B3B3] max-w-2xl mt-1.5">
                     Unscripted moments, laughing fits, rainy dates, and cozy quiet evenings.
                   </p>
                 </div>
@@ -648,18 +733,30 @@ export default function App() {
               </div>
             )}
 
+            {/* TAB: SCRAPBOOK (Digital Memory Book) */}
+            {activeTab === 'scrapbook' && (
+              <ScrapbookView
+                memories={memories}
+                onPlayMemory={(m) => setPlayingMemory({ memory: m })}
+                onOpenInfo={(m) => setSelectedMemory(m)}
+                onToggleWatchlist={handleToggleWatchlist}
+                onToggleFavorite={handleToggleFavorite}
+                onOpenAddModal={() => setIsAddModalOpen(true)}
+              />
+            )}
+
             {/* TAB: LITTLE THINGS I LOVE ABOUT YOU */}
             {activeTab === 'little-things' && (
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 text-xs text-rose-400 font-bold tracking-widest uppercase mb-1">
-                    <Heart className="w-3.5 h-3.5 fill-rose-400" />
-                    <span>The Uncensored Truth</span>
+                  <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
+                    <Heart className="w-3.5 h-3.5 fill-[#E50914]" />
+                    <span>ORIGINAL COLLECTION</span>
                   </div>
-                  <h1 className="font-bebas text-4xl sm:text-5xl text-white font-black tracking-wide">
+                  <h1 className="font-bebas text-4xl sm:text-6xl text-[#FFFFFF] font-black tracking-wider uppercase">
                     Little Things I Love About You
                   </h1>
-                  <p className="text-xs sm:text-sm text-neutral-400 max-w-2xl mt-1">
+                  <p className="text-xs sm:text-sm text-[#B3B3B3] max-w-2xl mt-1.5">
                     The microscopic quirks, gestures, and adorable habits that make you the only person for me.
                   </p>
                 </div>
@@ -669,29 +766,29 @@ export default function App() {
                     <div
                       key={item.id}
                       onClick={() => setSelectedMemory(item)}
-                      className="p-6 rounded-xl bg-gradient-to-br from-[#1a1719] to-[#121214] border border-white/10 hover:border-rose-500/40 transition-all cursor-pointer shadow-lg hover:scale-[1.02] space-y-3 flex flex-col justify-between"
+                      className="p-5 rounded bg-[#141414] border border-[#181818] hover:border-[#808080]/60 transition-all cursor-pointer shadow-xl hover:scale-[1.02] space-y-3.5 flex flex-col justify-between group"
                     >
-                      <div className="space-y-2">
+                      <div className="space-y-2.5">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] text-rose-400 font-semibold tracking-wider uppercase">
+                          <span className="text-[11px] text-[#E50914] font-bold tracking-wider uppercase">
                             {item.duration}
                           </span>
-                          <Heart className="w-4 h-4 text-rose-500 fill-rose-500/20" />
+                          <Heart className="w-4 h-4 text-[#E50914] fill-[#E50914]/40 group-hover:fill-[#E50914] transition-colors" />
                         </div>
-                        <h3 className="font-bebas text-2xl text-white font-bold leading-tight">
+                        <h3 className="font-bebas text-2xl text-[#FFFFFF] font-bold leading-tight uppercase tracking-wide">
                           {item.title}
                         </h3>
-                        <p className="text-xs text-neutral-400 italic">
+                        <p className="text-xs text-[#B3B3B3] font-medium italic">
                           "{item.subtitle}"
                         </p>
-                        <p className="text-xs text-neutral-300 leading-relaxed font-light">
+                        <p className="text-xs text-[#B3B3B3] leading-relaxed font-light">
                           {item.fullStory}
                         </p>
                       </div>
 
-                      <div className="pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-neutral-400">
-                        <span>Click for details</span>
-                        <span className="text-emerald-400 font-bold">{item.matchScore}% Match</span>
+                      <div className="pt-3 border-t border-[#181818] flex items-center justify-between text-[11px] text-[#808080]">
+                        <span className="uppercase tracking-wider font-semibold group-hover:text-[#FFFFFF] transition-colors">More Info &rarr;</span>
+                        <span className="text-[#FFFFFF] font-bold">{item.matchScore}% Match</span>
                       </div>
                     </div>
                   ))}
@@ -701,53 +798,53 @@ export default function App() {
 
             {/* TAB: PLACES & LIST (Interactive Travel Board) */}
             {activeTab === 'places-list' && (
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                   <div>
-                    <div className="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-bold tracking-widest uppercase mb-1">
+                    <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
                       <Compass className="w-3.5 h-3.5" />
-                      <span>Travel Passport</span>
+                      <span>MY LIST & EXPEDITIONS</span>
                     </div>
-                    <h1 className="font-bebas text-4xl sm:text-5xl text-white font-black tracking-wide">
+                    <h1 className="font-bebas text-4xl sm:text-6xl text-[#FFFFFF] font-black tracking-wider uppercase">
                       Places & Experiences Together
                     </h1>
-                    <p className="text-xs sm:text-sm text-neutral-400 max-w-2xl mt-1">
+                    <p className="text-xs sm:text-sm text-[#B3B3B3] max-w-2xl mt-1.5">
                       Our favorite shared adventures and future dream destinations.
                     </p>
                   </div>
 
-                  {/* Filter Controls (Constitution-compliant segmented control buttons) */}
-                  <div className="flex items-center gap-1 p-1 bg-white/5 rounded-lg border border-white/10 shrink-0">
+                  {/* Filter Controls */}
+                  <div className="flex items-center gap-1 p-1 bg-[#141414] rounded border border-[#808080]/30 shrink-0">
                     <button
                       onClick={() => setPlacesFilter('all')}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+                      className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors cursor-pointer ${
                         placesFilter === 'all'
-                          ? 'bg-white text-black shadow'
-                          : 'text-neutral-400 hover:text-white'
+                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
+                          : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
                       }`}
                     >
                       All Places ({memories.filter((m) => m.category === 'places-list').length})
                     </button>
                     <button
                       onClick={() => setPlacesFilter('visited')}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors flex items-center gap-1 ${
+                      className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors flex items-center gap-1 cursor-pointer ${
                         placesFilter === 'visited'
-                          ? 'bg-white text-black shadow'
-                          : 'text-neutral-400 hover:text-white'
+                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
+                          : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
                       }`}
                     >
-                      <CheckCircle className="w-3 h-3 text-emerald-600" />
+                      <CheckCircle className="w-3 h-3 text-[#FFFFFF]" />
                       <span>Visited</span>
                     </button>
                     <button
                       onClick={() => setPlacesFilter('bucket-list')}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors flex items-center gap-1 ${
+                      className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors flex items-center gap-1 cursor-pointer ${
                         placesFilter === 'bucket-list'
-                          ? 'bg-white text-black shadow'
-                          : 'text-neutral-400 hover:text-white'
+                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
+                          : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
                       }`}
                     >
-                      <Clock className="w-3 h-3 text-amber-500" />
+                      <Clock className="w-3 h-3 text-[#FFFFFF]" />
                       <span>Bucket List</span>
                     </button>
                   </div>
@@ -770,16 +867,16 @@ export default function App() {
 
             {/* TAB: SECRET VAULT */}
             {activeTab === 'secret-vault' && (
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 text-xs text-[#ff4d5a] font-bold tracking-widest uppercase mb-1">
+                  <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
                     <Lock className="w-3.5 h-3.5" />
-                    <span>Top Secret</span>
+                    <span>CONFIDENTIAL & PROTECTED</span>
                   </div>
-                  <h1 className="font-bebas text-4xl sm:text-5xl text-white font-black tracking-wide">
+                  <h1 className="font-bebas text-4xl sm:text-6xl text-[#FFFFFF] font-black tracking-wider uppercase">
                     Hidden Episodes: Personal Surprises & Letters
                   </h1>
-                  <p className="text-xs sm:text-sm text-neutral-400 max-w-2xl mt-1">
+                  <p className="text-xs sm:text-sm text-[#B3B3B3] max-w-2xl mt-1.5">
                     Password-protected love letters, intimate confessions, and redeemable surprise date night coupons.
                   </p>
                 </div>
@@ -789,26 +886,26 @@ export default function App() {
                     <div
                       key={vault.id}
                       onClick={() => setSecretVaultMemory(vault)}
-                      className="p-6 rounded-xl bg-gradient-to-br from-[#1c1214] to-[#121212] border border-[#E50914]/30 hover:border-[#E50914] transition-all cursor-pointer shadow-xl hover:scale-[1.02] flex flex-col justify-between group"
+                      className="p-6 rounded bg-[#141414] border border-[#181818] hover:border-[#808080]/60 transition-all cursor-pointer shadow-xl hover:scale-[1.02] flex flex-col justify-between group"
                     >
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] uppercase tracking-wider font-bold text-[#ff4d5a] bg-[#E50914]/15 px-2 py-0.5 rounded">
-                            CLASSIFIED
+                          <span className="text-[10px] uppercase tracking-wider font-bold text-[#FFFFFF] bg-[#E50914] px-2.5 py-0.5 rounded shadow">
+                            CONFIDENTIAL
                           </span>
-                          <Lock className="w-4 h-4 text-[#ff4d5a] group-hover:animate-bounce" />
+                          <Lock className="w-4 h-4 text-[#E50914] group-hover:scale-110 transition-transform" />
                         </div>
-                        <h3 className="font-bebas text-2xl sm:text-3xl text-white font-bold">
+                        <h3 className="font-bebas text-2xl sm:text-3xl text-[#FFFFFF] font-bold uppercase tracking-wide">
                           {vault.title}
                         </h3>
-                        <p className="text-xs text-neutral-400 leading-relaxed">
+                        <p className="text-xs text-[#B3B3B3] leading-relaxed font-light">
                           {vault.synopsis}
                         </p>
                       </div>
 
-                      <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between text-xs">
-                        <span className="text-neutral-400">Unlock with anniversary code</span>
-                        <span className="font-bold text-[#ff4d5a] group-hover:underline">
+                      <div className="pt-4 mt-4 border-t border-[#181818] flex items-center justify-between text-xs">
+                        <span className="text-[#808080]">Unlock with anniversary code</span>
+                        <span className="font-bold text-[#E50914] group-hover:underline uppercase tracking-wider">
                           Tap to Unlock &rarr;
                         </span>
                       </div>
@@ -821,18 +918,18 @@ export default function App() {
         )}
       </main>
 
-      {/* FOOTER */}
-      <footer className="border-t border-white/10 bg-black/60 py-10 px-4 sm:px-6 lg:px-8 text-neutral-400 text-xs">
+      {/* FOOTER - STRICT NETFLIX DARK THEME */}
+      <footer className="border-t border-[#181818] bg-[#000000] py-12 px-4 sm:px-6 lg:px-8 text-[#808080] text-xs">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center sm:text-left">
             <div className="flex items-center justify-center sm:justify-start gap-2">
-              <span className="font-bebas text-xl text-[#E50914] font-black">
+              <span className="font-bebas text-2xl text-[#E50914] font-black tracking-widest uppercase">
                 OUR UNIVERSE
               </span>
-              <span className="text-neutral-500">·</span>
-              <span className="text-neutral-300">Season Forever</span>
+              <span className="text-[#808080]">·</span>
+              <span className="text-[#FFFFFF] font-bold text-xs uppercase tracking-wider">Season Forever</span>
             </div>
-            <p className="text-[11px] text-neutral-400">
+            <p className="text-[11px] text-[#B3B3B3] max-w-md">
               Built with all my love for you. Every moment, every memory, forever streaming in our hearts.
             </p>
           </div>
@@ -841,11 +938,11 @@ export default function App() {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button
               onClick={() => setIsSetupModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#141414] hover:bg-[#181818] border border-[#808080]/30 text-[11px] transition-colors cursor-pointer text-[#B3B3B3] hover:text-[#FFFFFF]"
             >
               <Database
                 className={`w-3.5 h-3.5 ${
-                  storageSource === 'supabase' ? 'text-emerald-400' : 'text-amber-400'
+                  storageSource === 'supabase' ? 'text-[#E50914]' : 'text-[#808080]'
                 }`}
               />
               <span>
@@ -857,11 +954,11 @@ export default function App() {
 
             <button
               onClick={() => setIsAdminModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#141414] hover:bg-[#181818] border border-[#808080]/30 text-[11px] transition-colors cursor-pointer text-[#B3B3B3] hover:text-[#FFFFFF]"
             >
               <Shield
                 className={`w-3.5 h-3.5 ${
-                  currentUser ? 'text-emerald-400' : 'text-neutral-400'
+                  currentUser ? 'text-[#E50914]' : 'text-[#808080]'
                 }`}
               />
               <span>{currentUser ? 'Admin Verified' : 'Admin Sign In'}</span>
@@ -869,7 +966,7 @@ export default function App() {
 
             <button
               onClick={handleExportData}
-              className="flex items-center gap-1 px-3 py-1.5 rounded bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer text-[11px]"
+              className="flex items-center gap-1 px-3 py-1.5 rounded bg-[#181818] hover:bg-white/10 border border-[#808080]/30 text-[#FFFFFF] transition-colors cursor-pointer text-[11px]"
               title="Download memory backup JSON"
             >
               <Download className="w-3 h-3" />
@@ -878,7 +975,7 @@ export default function App() {
 
             <button
               onClick={handleResetDefaults}
-              className="p-1.5 rounded hover:bg-white/10 text-neutral-400 hover:text-white transition-colors"
+              className="p-1.5 rounded hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer"
               title="Reset default relationship story"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -1020,6 +1117,15 @@ export default function App() {
           }}
         />
       )}
+
+      {/* INTERACTIVE SURPRISE MODAL */}
+      <SurpriseModal
+        isOpen={isSurpriseModalOpen}
+        onClose={() => setIsSurpriseModalOpen(false)}
+        anniversaryDateStr={siteContent.anniversary_date || '2022-10-14'}
+        partner1={siteContent.partner1_name || 'My Girl 👑'}
+        partner2={siteContent.partner2_name || 'Your Guy 🌙'}
+      />
 
       {/* PERSISTENT FLOATING MUSIC PLAYER */}
       <MusicPlayer />

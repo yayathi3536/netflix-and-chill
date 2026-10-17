@@ -57,7 +57,7 @@ create table if not exists public.memories (
   tags text[] default '{}'::text[],
   backdrop_url text,
   poster_url text,
-  fallback_gradient text default 'from-rose-950 via-red-950 to-neutral-950',
+  fallback_gradient text default 'from-[#141414] via-[#181818] to-[#000000]',
   progress integer,
   is_top_10 integer,
   is_favorite boolean default false,
@@ -147,16 +147,16 @@ create policy "Authenticated upload photos" on storage.objects for insert to aut
         {/* Environment Status Banner */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div
-            className={`p-3 rounded-lg border flex items-start gap-2.5 ${
+            className={`p-3 rounded border flex items-start gap-2.5 ${
               status.configured
-                ? 'bg-emerald-950/30 border-emerald-500/30 text-emerald-200'
-                : 'bg-amber-950/30 border-amber-500/30 text-amber-200'
+                ? 'bg-[#141414] border-[#E50914] text-[#FFFFFF]'
+                : 'bg-[#141414] border-[#808080]/30 text-[#B3B3B3]'
             }`}
           >
             {status.configured ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5" />
             ) : (
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <AlertTriangle className="w-4 h-4 text-[#808080] shrink-0 mt-0.5" />
             )}
             <div>
               <p className="font-semibold text-white">VITE_SUPABASE_URL</p>
@@ -167,16 +167,16 @@ create policy "Authenticated upload photos" on storage.objects for insert to aut
           </div>
 
           <div
-            className={`p-3 rounded-lg border flex items-start gap-2.5 ${
+            className={`p-3 rounded border flex items-start gap-2.5 ${
               status.hasKey
-                ? 'bg-emerald-950/30 border-emerald-500/30 text-emerald-200'
-                : 'bg-amber-950/30 border-amber-500/30 text-amber-200'
+                ? 'bg-[#141414] border-[#E50914] text-[#FFFFFF]'
+                : 'bg-[#141414] border-[#808080]/30 text-[#B3B3B3]'
             }`}
           >
             {status.hasKey ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5" />
             ) : (
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <AlertTriangle className="w-4 h-4 text-[#808080] shrink-0 mt-0.5" />
             )}
             <div>
               <p className="font-semibold text-white">VITE_SUPABASE_ANON_KEY</p>
@@ -193,7 +193,7 @@ create policy "Authenticated upload photos" on storage.objects for insert to aut
             onClick={() => setActiveTab('guide')}
             className={`flex-1 py-1.5 rounded-md font-semibold transition-colors ${
               activeTab === 'guide'
-                ? 'bg-white text-black shadow'
+                ? 'bg-[#E50914] text-white shadow'
                 : 'text-neutral-400 hover:text-white'
             }`}
           >
@@ -203,7 +203,7 @@ create policy "Authenticated upload photos" on storage.objects for insert to aut
             onClick={() => setActiveTab('sql')}
             className={`flex-1 py-1.5 rounded-md font-semibold transition-colors ${
               activeTab === 'sql'
-                ? 'bg-white text-black shadow'
+                ? 'bg-[#E50914] text-white shadow'
                 : 'text-neutral-400 hover:text-white'
             }`}
           >
@@ -213,7 +213,7 @@ create policy "Authenticated upload photos" on storage.objects for insert to aut
             onClick={() => setActiveTab('github')}
             className={`flex-1 py-1.5 rounded-md font-semibold transition-colors ${
               activeTab === 'github'
-                ? 'bg-white text-black shadow'
+                ? 'bg-[#E50914] text-white shadow'
                 : 'text-neutral-400 hover:text-white'
             }`}
           >
@@ -231,7 +231,7 @@ create policy "Authenticated upload photos" on storage.objects for insert to aut
                   href="https://supabase.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[#ff4d5a] underline inline-flex items-center gap-1"
+                  className="text-[#E50914] underline inline-flex items-center gap-1"
                 >
                   supabase.com <ExternalLink className="w-3 h-3" />
                 </a>{' '}
@@ -252,7 +252,7 @@ create policy "Authenticated upload photos" on storage.objects for insert to aut
                 <strong className="text-white">Set Environment Variables:</strong> Go to{' '}
                 <strong>Project Settings &gt; API</strong> and copy your Project URL and Anon key.
                 Add them to your <code className="bg-black/50 px-1 rounded">.env</code> file:
-                <pre className="mt-1.5 p-2 bg-black/60 rounded text-[11px] font-mono text-emerald-400 overflow-x-auto">
+                <pre className="mt-1.5 p-2 bg-black/60 rounded text-[11px] font-mono text-white overflow-x-auto">
 {`VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGci...`}
                 </pre>
@@ -265,11 +265,11 @@ VITE_SUPABASE_ANON_KEY=eyJhbGci...`}
         {activeTab === 'sql' && (
           <div className="space-y-3">
             {isSchemaMissing && (
-              <div className="p-3 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-200 text-xs flex items-start gap-2.5">
-                <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <div className="p-3 rounded bg-[#181818] border border-[#E50914] text-[#B3B3B3] text-xs flex items-start gap-2.5">
+                <AlertTriangle className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold text-white">Missing Table: 'public.memories' (PGRST205)</p>
-                  <p className="text-[11px] text-amber-300/90 leading-relaxed mt-0.5">
+                  <p className="text-[11px] text-[#B3B3B3] leading-relaxed mt-0.5">
                     Your Supabase URL and key are connected, but the database tables have not been created yet. Click <strong>Copy SQL</strong> below, open your Supabase project's <strong>SQL Editor</strong>, paste this script, and click <strong>Run</strong>.
                   </p>
                 </div>
@@ -282,7 +282,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGci...`}
                 onClick={copyToClipboard}
                 className="flex items-center gap-1 text-white bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded transition-colors cursor-pointer"
               >
-                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copied ? <Check className="w-3.5 h-3.5 text-[#E50914]" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{copied ? 'Copied!' : 'Copy SQL'}</span>
               </button>
             </div>
@@ -312,13 +312,13 @@ VITE_SUPABASE_ANON_KEY=eyJhbGci...`}
               <p className="font-semibold text-white">GitHub Actions Repository Secrets:</p>
               <ul className="list-disc list-inside text-[11px] text-neutral-300 space-y-0.5">
                 <li>
-                  <code className="text-emerald-400">VITE_SUPABASE_URL</code> (Repository Secret or Variable)
+                  <code className="text-white">VITE_SUPABASE_URL</code> (Repository Secret or Variable)
                 </li>
                 <li>
-                  <code className="text-emerald-400">VITE_SUPABASE_ANON_KEY</code> (Repository Secret or Variable)
+                  <code className="text-white">VITE_SUPABASE_ANON_KEY</code> (Repository Secret or Variable)
                 </li>
                 <li>
-                  <code className="text-emerald-400">VITE_BASE_PATH</code> (Set to your repository name, e.g. <code className="text-white">/our-universe/</code>)
+                  <code className="text-white">VITE_BASE_PATH</code> (Set to your repository name, e.g. <code className="text-white">/our-universe/</code>)
                 </li>
               </ul>
             </div>
