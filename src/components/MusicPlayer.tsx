@@ -97,7 +97,7 @@ export function MusicPlayer() {
     setCurrentTime(0);
 
     const audio = audioRef.current;
-    audio.src = getAssetUrl(currentTrack.src);
+    audio.src = currentTrack.src;
     audio.load();
 
     if (isPlaying) {
