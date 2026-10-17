@@ -15,7 +15,7 @@ import {
   Shield,
 } from 'lucide-react';
 import { MemoryItem, MemoryCategory } from '../types';
-import { supabaseService } from '../services/supabaseService';
+import { supabaseService, checkIsAdmin } from '../services/supabaseService';
 import { isSupabaseConfigured } from '../services/supabaseClient';
 import { User } from '@supabase/supabase-js';
 
@@ -89,9 +89,60 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
 
   if (!isOpen) return null;
 
+  const isAdmin = checkIsAdmin(currentUser || null);
+
+  // If a visitor or non-admin attempts to access this modal, show strict access-denied gate
+  if (!isAdmin) {
+    return (
+      <div
+        className="fixed inset-0 z-50 overflow-y-auto dark-scrollbar bg-black/85 backdrop-blur-md flex justify-center p-3 sm:p-6 animate-in fade-in duration-200"
+        onClick={onClose}
+      >
+        <div
+          className="relative w-full max-w-md bg-[#181818] rounded-xl overflow-hidden shadow-2xl border border-[#E50914]/50 my-auto text-white p-6 sm:p-8 text-center space-y-4"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="w-12 h-12 rounded-full bg-[#E50914]/20 border border-[#E50914] text-[#E50914] flex items-center justify-center mx-auto">
+            <Shield className="w-6 h-6" />
+          </div>
+          <h3 className="font-bebas text-2xl sm:text-3xl tracking-wide text-white font-bold leading-tight">
+            Administrator Access Required
+          </h3>
+          <p className="text-xs text-[#B3B3B3] leading-relaxed">
+            Only the verified administrator can add, edit, or delete titles in Our Universe. Public visitors browse in read-only mode.
+          </p>
+          <div className="pt-2 flex flex-col sm:flex-row gap-2">
+            <button
+              onClick={onClose}
+              className="flex-1 py-2 px-4 rounded bg-[#141414] hover:bg-white/10 border border-[#808080]/30 text-xs font-semibold text-white transition-colors cursor-pointer"
+            >
+              Close
+            </button>
+            {onOpenAdminModal && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onOpenAdminModal();
+                }}
+                className="flex-1 py-2 px-4 rounded bg-[#E50914] hover:bg-[#b80710] text-xs font-bold text-white transition-colors cursor-pointer"
+              >
+                Admin Sign In
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (!isAdmin) {
+      setUploadError('Unauthorized: Only the verified administrator can upload media.');
+      return;
+    }
 
     setUploadError('');
     setUploadSuccess('');
@@ -130,6 +181,10 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isAdmin) {
+      alert('Unauthorized: Only the verified administrator can add or edit titles.');
+      return;
+    }
     if (!title.trim() || !synopsis.trim()) return;
 
     const tags = tagsString
@@ -169,6 +224,10 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
   };
 
   const handleDelete = () => {
+    if (!isAdmin) {
+      alert('Unauthorized: Only the verified administrator can delete titles.');
+      return;
+    }
     if (memoryToEdit && onDeleteMemory) {
       if (window.confirm(`Are you sure you want to delete "${memoryToEdit.title}"?`)) {
         onDeleteMemory(memoryToEdit.id, memoryToEdit.backdropUrl);

@@ -19,7 +19,7 @@ interface ScrapbookViewProps {
   onOpenInfo: (memory: MemoryItem) => void;
   onToggleWatchlist: (id: string) => void;
   onToggleFavorite?: (id: string) => void;
-  onOpenAddModal: () => void;
+  onOpenAddModal?: () => void;
 }
 
 export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
@@ -28,7 +28,6 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
   onOpenInfo,
   onToggleWatchlist,
   onToggleFavorite,
-  onOpenAddModal,
 }) => {
   const [selectedTag, setSelectedTag] = useState<string>('all');
   const [lightboxMemory, setLightboxMemory] = useState<MemoryItem | null>(null);

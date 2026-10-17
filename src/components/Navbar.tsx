@@ -22,7 +22,7 @@ interface NavbarProps {
   activeProfile: UserProfile;
   profiles: UserProfile[];
   onSelectProfile: (profile: UserProfile) => void;
-  onOpenAddModal: () => void;
+  onOpenAddModal?: () => void;
   notifications: NotificationItem[];
   onNotificationClick: (id: string, memoryId?: string) => void;
   currentUser: User | null;
@@ -218,16 +218,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             )}
           </div>
-
-          {/* Add Memory Button */}
-          <button
-            onClick={onOpenAddModal}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#181818] hover:bg-white/10 border border-[#808080]/30 text-xs font-semibold text-[#FFFFFF] transition-all cursor-pointer"
-            title="Add a new chapter or memory"
-          >
-            <Plus className="w-3.5 h-3.5 text-[#E50914]" />
-            <span>Add Title</span>
-          </button>
 
           {/* Music Soundtrack Toggle Button */}
           <button
