@@ -228,6 +228,20 @@ class UnifiedStorageService {
     return DEFAULT_PROFILES;
   }
 
+  public getAuthorizedProfiles(userId?: string, userEmail?: string, isAdmin: boolean = false): UserProfile[] {
+    const allProfiles = this.getProfiles();
+    const normalizedEmail = (userEmail || '').toLowerCase().trim();
+
+    const filtered = allProfiles.filter((p) => {
+      if (p.isAdminOnly && !isAdmin) return false;
+      if (p.ownerId && !isAdmin && p.ownerId !== userId) return false;
+      if (p.ownerEmail && !isAdmin && p.ownerEmail.toLowerCase().trim() !== normalizedEmail) return false;
+      return true;
+    });
+
+    return filtered.length > 0 ? filtered : allProfiles.filter((p) => !p.isAdminOnly);
+  }
+
   public getActiveProfile(): UserProfile {
     const profiles = this.getProfiles();
     const activeId = localStorage.getItem(STORAGE_KEYS.ACTIVE_PROFILE);
@@ -235,8 +249,40 @@ class UnifiedStorageService {
     return found || profiles[0] || DEFAULT_PROFILES[0];
   }
 
-  public setActiveProfile(profileId: string): void {
+  public setActiveProfile(profileId: string, userId?: string): void {
     localStorage.setItem(STORAGE_KEYS.ACTIVE_PROFILE, profileId);
+    if (userId) {
+      try {
+        sessionStorage.setItem(`our_universe_session_profile_${userId}`, profileId);
+      } catch (e) {
+        // Ignore sessionStorage errors in restricted frames
+      }
+    }
+  }
+
+  public getSelectedSessionProfileId(userId?: string): string | null {
+    if (!userId) return null;
+    try {
+      return sessionStorage.getItem(`our_universe_session_profile_${userId}`);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  public clearSelectedSessionProfile(userId?: string): void {
+    try {
+      if (userId) {
+        sessionStorage.removeItem(`our_universe_session_profile_${userId}`);
+      } else {
+        Object.keys(sessionStorage).forEach((key) => {
+          if (key.startsWith('our_universe_session_profile_')) {
+            sessionStorage.removeItem(key);
+          }
+        });
+      }
+    } catch (e) {
+      // Ignore sessionStorage errors
+    }
   }
 
   public saveProfilesList(list: UserProfile[]): void {

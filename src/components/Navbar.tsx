@@ -10,6 +10,8 @@ import {
   Shield,
   Database,
   Film,
+  Users,
+  LogOut,
 } from 'lucide-react';
 import { UserProfile, NotificationItem } from '../types';
 import { User } from '@supabase/supabase-js';
@@ -22,6 +24,8 @@ interface NavbarProps {
   activeProfile: UserProfile;
   profiles: UserProfile[];
   onSelectProfile: (profile: UserProfile) => void;
+  onSwitchProfileScreen?: () => void;
+  onSignOut?: () => void;
   onOpenAddModal?: () => void;
   notifications: NotificationItem[];
   onNotificationClick: (id: string, memoryId?: string) => void;
@@ -38,6 +42,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   activeProfile,
   profiles,
   onSelectProfile,
+  onSwitchProfileScreen,
+  onSignOut,
   onOpenAddModal,
   notifications,
   onNotificationClick,
@@ -338,6 +344,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
 
                 <div className="pt-2 mt-2 border-t border-[#181818] space-y-1">
+                  {onSwitchProfileScreen && (
+                    <button
+                      onClick={() => {
+                        onSwitchProfileScreen();
+                        setIsProfileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer"
+                    >
+                      <Users className="w-3.5 h-3.5 text-[#E50914]" />
+                      <span>Switch Profiles</span>
+                    </button>
+                  )}
+
                   <button
                     onClick={() => {
                       onOpenAdminModal();
@@ -346,7 +365,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer"
                   >
                     <Shield className="w-3.5 h-3.5 text-[#E50914]" />
-                    <span>{currentUser ? 'Admin Panel (Active)' : 'Admin Sign In'}</span>
+                    <span>{currentUser ? 'Admin Panel (Active)' : 'Account & Admin'}</span>
                   </button>
 
                   {currentUser && (
@@ -359,6 +378,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                     >
                       <Database className="w-3.5 h-3.5 text-[#808080]" />
                       <span>Cloud Storage Setup</span>
+                    </button>
+                  )}
+
+                  {onSignOut && (
+                    <button
+                      onClick={() => {
+                        onSignOut();
+                        setIsProfileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer border-t border-[#181818] pt-2 mt-1"
+                    >
+                      <LogOut className="w-3.5 h-3.5 text-[#E50914]" />
+                      <span>Sign Out of OUR UNIVERSE</span>
                     </button>
                   )}
                 </div>

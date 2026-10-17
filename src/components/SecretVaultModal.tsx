@@ -55,7 +55,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
   if (!memory) return null;
 
   const isPrimaryVaultLetter = memory.id === 'vault-1';
-  const effectivePasscode = customPasscode || memory.secretPasscode || '1402';
+  const effectivePasscode = (customPasscode || memory.secretPasscode || '').trim();
   const effectiveTitle = isPrimaryVaultLetter
     ? customLetterTitle || memory.title || memory.subtitle || 'Confidential Memo'
     : memory.title || memory.subtitle || customLetterTitle || 'Confidential Memo';
@@ -72,17 +72,12 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
 
   const handleUnlock = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passcode.trim() === effectivePasscode || passcode.trim() === 'love') {
+    if (effectivePasscode && passcode.trim() === effectivePasscode) {
       setIsUnlocked(true);
       setErrorMsg('');
     } else {
-      setErrorMsg(`Incorrect passcode. Try ${effectivePasscode} or use the quick access hint below.`);
+      setErrorMsg('Incorrect passcode. Please enter your authorized vault code.');
     }
-  };
-
-  const handleQuickBypass = () => {
-    setIsUnlocked(true);
-    setErrorMsg('');
   };
 
   const handleRedeem = async (couponId: string) => {
@@ -142,7 +137,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
                     setPasscode(e.target.value);
                     setErrorMsg('');
                   }}
-                  placeholder="Enter Passcode (e.g. 1402)"
+                  placeholder="Enter Vault Passcode"
                   className="w-full text-center text-lg tracking-widest font-mono bg-[#000000] border border-[#808080]/40 focus:border-[#E50914] rounded py-3 px-4 text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-colors"
                 />
               </div>
@@ -156,16 +151,6 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
                 <KeyRound className="w-4 h-4" />
                 <span>Unlock Confidential Vault</span>
               </button>
-
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={handleQuickBypass}
-                  className="text-xs text-[#B3B3B3] hover:text-[#FFFFFF] underline underline-offset-4 flex items-center justify-center gap-1.5 mx-auto transition-colors"
-                >
-                  <span>Quick Access Hint (1402)</span>
-                </button>
-              </div>
             </form>
           </div>
         ) : (

@@ -403,7 +403,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="karanamyayathi9@gmail.com"
+                      placeholder="admin@example.com"
                       className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2.5 pl-9 pr-3 text-white placeholder-neutral-500 focus:outline-none"
                     />
                   </div>
@@ -451,7 +451,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="karanamyayathi9@gmail.com"
+                      placeholder="admin@example.com"
                       className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2.5 pl-9 pr-3 text-white placeholder-neutral-500 focus:outline-none"
                     />
                   </div>

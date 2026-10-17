@@ -63,6 +63,9 @@ export interface UserProfile {
   avatarEmoji: string;
   avatarBg: string;
   favoriteSeason?: string;
+  ownerId?: string;
+  ownerEmail?: string;
+  isAdminOnly?: boolean;
 }
 
 export interface NotificationItem {

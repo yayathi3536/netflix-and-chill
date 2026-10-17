@@ -98,16 +98,15 @@ export const checkIsAdmin = (user: User | null): boolean => {
     return true;
   }
 
-  // 3. Approved administrator email check (env var or creator email)
-  const configuredAdminEmail = (import.meta.env.VITE_ADMIN_EMAIL as string || 'karanamyayathi9@gmail.com').toLowerCase();
-  const userEmail = (user.email || '').toLowerCase();
+  // 3. Approved administrator email check via environment variable (if configured)
+  const configuredAdminEmail = ((import.meta.env.VITE_ADMIN_EMAIL as string) || '').toLowerCase().trim();
+  const userEmail = (user.email || '').toLowerCase().trim();
 
-  if (userEmail && (userEmail === configuredAdminEmail || userEmail === 'admin@ouruniverse.love' || userEmail.endsWith('@ouruniverse.love'))) {
+  if (configuredAdminEmail && userEmail && userEmail === configuredAdminEmail) {
     return true;
   }
 
-  // 4. Default: If a user is authenticated into their own connected project without multi-tenant users, allow admin
-  return true;
+  return false;
 };
 
 
@@ -505,6 +504,67 @@ class SupabaseService {
     };
   }
 
+  public async signUpWithPassword(
+    email: string,
+    password: string,
+    displayName?: string
+  ): Promise<{ user: User | null; session: Session | null; error: AuthError | null }> {
+    if (!supabase || !isSupabaseConfigured()) {
+      return {
+        user: null,
+        session: null,
+        error: new AuthError('Supabase is not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment.'),
+      };
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: window.location.origin + window.location.pathname,
+        data: displayName ? { full_name: displayName, display_name: displayName } : undefined,
+      },
+    });
+
+    return {
+      user: data.user,
+      session: data.session,
+      error,
+    };
+  }
+
+  public async resetPasswordForEmail(email: string): Promise<{ error: AuthError | null }> {
+    if (!supabase || !isSupabaseConfigured()) {
+      return {
+        error: new AuthError('Supabase is not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment.'),
+      };
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + window.location.pathname,
+    });
+
+    return { error };
+  }
+
+  public async updateUserPassword(newPassword: string): Promise<{ user: User | null; error: AuthError | null }> {
+    if (!supabase || !isSupabaseConfigured()) {
+      return {
+        user: null,
+        error: new AuthError('Supabase is not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment.'),
+      };
+    }
+
+    const { data, error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    return {
+      user: data.user,
+      error,
+    };
+  }
+
   public async signInWithOtp(email: string): Promise<{ error: AuthError | null }> {
     if (!supabase || !isSupabaseConfigured()) {
       return {
@@ -540,10 +600,10 @@ class SupabaseService {
     return data.user;
   }
 
-  public onAuthStateChange(callback: (user: User | null, session: Session | null) => void) {
+  public onAuthStateChange(callback: (user: User | null, session: Session | null, event?: string) => void) {
     if (!supabase || !isSupabaseConfigured()) return () => {};
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      callback(session?.user || null, session);
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      callback(session?.user || null, session, event);
     });
     return () => {
       authListener.subscription.unsubscribe();

@@ -37,6 +37,8 @@ import { ScrapbookView } from './components/ScrapbookView';
 import { SoundtrackRow } from './components/SoundtrackRow';
 import { SurpriseModal } from './components/SurpriseModal';
 import { ConstellationSection } from './components/ConstellationSection';
+import { AuthScreen } from './components/AuthScreen';
+import ProfileSelect from './components/ProfileSelect';
 import { TRACKS } from './data/tracks';
 import { romanticAudio } from './utils/romanticAudio';
 import { hasValidVideo, isLetterItem } from './utils/mediaHelpers';
@@ -53,6 +55,9 @@ export default function App() {
 
   // Supabase & Auth State
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isAuthChecking, setIsAuthChecking] = useState<boolean>(isSupabaseConfigured());
+  const [hasSelectedProfile, setHasSelectedProfile] = useState<boolean>(false);
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState<boolean>(false);
   const [storageSource, setStorageSource] = useState<'supabase' | 'local'>('local');
   const [isSchemaMissing, setIsSchemaMissing] = useState(false);
   const [statusNotification, setStatusNotification] = useState<string | null>(null);
@@ -75,6 +80,10 @@ export default function App() {
   // Computed verified administrator status
   const isAdmin = useMemo(() => checkIsAdmin(currentUser), [currentUser]);
 
+  // Authorized profiles for the signed-in user
+  const authorizedProfiles = useMemo(() => {
+    return storageService.getAuthorizedProfiles(currentUser?.id, currentUser?.email, isAdmin);
+  }, [profiles, currentUser, isAdmin]);
 
   // Places filter tab state
   const [placesFilter, setPlacesFilter] = useState<'all' | 'visited' | 'bucket-list'>('all');
@@ -92,12 +101,38 @@ export default function App() {
 
     // 3. Fetch authenticated Supabase session
     if (isSupabaseConfigured()) {
-      supabaseService.getCurrentUser().then((user) => {
-        setCurrentUser(user);
-      });
+      supabaseService
+        .getCurrentUser()
+        .then((user) => {
+          setCurrentUser(user);
+          if (user) {
+            const sessionProfileId = storageService.getSelectedSessionProfileId(user.id);
+            const allowed = storageService.getAuthorizedProfiles(
+              user.id,
+              user.email,
+              checkIsAdmin(user)
+            );
+            const matchedProfile = allowed.find((p) => p.id === sessionProfileId);
+            if (matchedProfile) {
+              setActiveProfile(matchedProfile);
+              setHasSelectedProfile(true);
+            } else {
+              setHasSelectedProfile(false);
+            }
+          }
+        })
+        .finally(() => {
+          setIsAuthChecking(false);
+        });
 
-      const unsubscribe = supabaseService.onAuthStateChange((user) => {
+      const unsubscribe = supabaseService.onAuthStateChange((user, _session, event) => {
         setCurrentUser(user);
+        if (event === 'PASSWORD_RECOVERY') {
+          setIsPasswordRecovery(true);
+        } else if (event === 'SIGNED_OUT' || !user) {
+          setHasSelectedProfile(false);
+          setIsPasswordRecovery(false);
+        }
       });
 
       // 4. Load remote memories asynchronously
@@ -108,6 +143,7 @@ export default function App() {
       };
     } else {
       setStorageSource('local');
+      setIsAuthChecking(false);
     }
   }, []);
 
@@ -188,8 +224,19 @@ export default function App() {
   };
 
   const handleSelectProfile = (profile: UserProfile) => {
-    storageService.setActiveProfile(profile.id);
-    setActiveProfile(profile);
+    const isAllowed = authorizedProfiles.some((p) => p.id === profile.id);
+    const chosen = isAllowed ? profile : authorizedProfiles[0] || profile;
+    storageService.setActiveProfile(chosen.id, currentUser?.id);
+    setActiveProfile(chosen);
+    setHasSelectedProfile(true);
+  };
+
+  const handleSignOut = async () => {
+    storageService.clearSelectedSessionProfile(currentUser?.id);
+    await supabaseService.signOut();
+    setCurrentUser(null);
+    setHasSelectedProfile(false);
+    setIsPasswordRecovery(false);
   };
 
   const handleOpenItem = (memory: MemoryItem) => {
@@ -348,6 +395,50 @@ export default function App() {
 
   const isSupabaseReady = isSupabaseConfigured();
 
+  // 1. INITIAL SESSION CHECK LOADING SCREEN
+  if (isAuthChecking) {
+    return (
+      <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex flex-col items-center justify-center gap-4 selection:bg-[#E50914] selection:text-[#FFFFFF]">
+        <div className="font-bebas text-4xl sm:text-5xl tracking-widest text-[#E50914] font-black uppercase animate-pulse">
+          OUR UNIVERSE
+        </div>
+        <Loader2 className="w-7 h-7 text-[#E50914] animate-spin" />
+      </div>
+    );
+  }
+
+  // 2. UNAUTHENTICATED VISITOR (OR PASSWORD RECOVERY) -> LOGIN / SIGN UP
+  if (!currentUser || isPasswordRecovery) {
+    return (
+      <AuthScreen
+        initialMode={isPasswordRecovery ? 'update-password' : 'signin'}
+        onAuthSuccess={(user) => {
+          storageService.clearSelectedSessionProfile(user.id);
+          setCurrentUser(user);
+          setIsPasswordRecovery(false);
+          setHasSelectedProfile(false);
+          fetchRemoteMemories();
+          storageService.loadSiteContent().then((content) => setSiteContent(content));
+        }}
+        onPasswordUpdated={() => setIsPasswordRecovery(false)}
+      />
+    );
+  }
+
+  // 3. AUTHENTICATED USER -> WHO'S WATCHING? PROFILE SELECTION
+  if (!hasSelectedProfile) {
+    return (
+      <ProfileSelect
+        profiles={authorizedProfiles}
+        onSelect={handleSelectProfile}
+        userEmail={currentUser.email}
+        isAdmin={isAdmin}
+        onSignOut={handleSignOut}
+      />
+    );
+  }
+
+  // 4. SELECTED AUTHORIZED PROFILE -> OUR UNIVERSE HOME
   return (
     <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex flex-col selection:bg-[#E50914] selection:text-[#FFFFFF]">
       {/* NETFLIX-STYLE TOP NAVIGATION */}
@@ -357,8 +448,13 @@ export default function App() {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         activeProfile={activeProfile}
-        profiles={profiles}
+        profiles={authorizedProfiles}
         onSelectProfile={handleSelectProfile}
+        onSwitchProfileScreen={() => {
+          storageService.clearSelectedSessionProfile(currentUser.id);
+          setHasSelectedProfile(false);
+        }}
+        onSignOut={handleSignOut}
         onOpenAddModal={() => {
           setMemoryToEdit(null);
           setIsAddModalOpen(true);
@@ -1145,10 +1241,7 @@ export default function App() {
             setIsAddModalOpen(true);
           }}
           onOpenAdminPortal={() => setIsAdminModalOpen(true)}
-          onLogout={async () => {
-            await supabaseService.signOut();
-            setCurrentUser(null);
-          }}
+          onLogout={handleSignOut}
         />
       )}
 
