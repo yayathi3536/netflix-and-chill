@@ -148,36 +148,43 @@ class SupabaseService {
       console.warn('Could not fetch love notes:', noteError);
     }
 
-    // Group chapters & coupons by memory_id
+    // Resolve chapter thumbnails before grouping them by memory.
+    const resolvedChapters = await Promise.all(
+      ((chapterRows as ChapterRow[]) || []).map(async (chapter) => ({
+        ...chapter,
+        thumbnail_url: await this.resolvePhotoUrl(chapter.thumbnail_url),
+      }))
+    );
+
     const chaptersByMemory: Record<string, Episode[]> = {};
-    (chapterRows as ChapterRow[] || []).forEach((c) => {
-      if (!chaptersByMemory[c.memory_id]) chaptersByMemory[c.memory_id] = [];
-      chaptersByMemory[c.memory_id].push({
-        id: c.id,
-        episodeNumber: c.episode_number,
-        title: c.title,
-        duration: c.duration,
-        date: c.date || undefined,
-        description: c.description,
-        thumbnailUrl: c.thumbnail_url || undefined,
-        gradient: c.gradient || 'from-neutral-900 to-black',
+    resolvedChapters.forEach((chapter) => {
+      if (!chaptersByMemory[chapter.memory_id]) chaptersByMemory[chapter.memory_id] = [];
+      chaptersByMemory[chapter.memory_id].push({
+        id: chapter.id,
+        episodeNumber: chapter.episode_number,
+        title: chapter.title,
+        duration: chapter.duration,
+        date: chapter.date || undefined,
+        description: chapter.description,
+        thumbnailUrl: chapter.thumbnail_url || undefined,
+        gradient: chapter.gradient || 'from-neutral-900 to-black',
       });
     });
 
     const couponsByMemory: Record<string, CouponItem[]> = {};
-    (noteRows as LoveNoteRow[] || []).forEach((n) => {
-      if (!couponsByMemory[n.memory_id]) couponsByMemory[n.memory_id] = [];
-      couponsByMemory[n.memory_id].push({
-        id: n.id,
-        title: n.title,
-        perk: n.perk,
-        terms: n.terms,
-        redeemed: n.redeemed,
+    ((noteRows as LoveNoteRow[]) || []).forEach((note) => {
+      if (!couponsByMemory[note.memory_id]) couponsByMemory[note.memory_id] = [];
+      couponsByMemory[note.memory_id].push({
+        id: note.id,
+        title: note.title,
+        perk: note.perk,
+        terms: note.terms,
+        redeemed: note.redeemed,
       });
     });
 
-    // Map rows to MemoryItem
-    return (memoryRows as MemoryRow[]).map((row) => ({
+    // Resolve memory image URLs asynchronously while leaving third-party URLs intact.
+    return Promise.all((memoryRows as MemoryRow[]).map(async (row) => ({
       id: row.id,
       title: row.title,
       subtitle: row.subtitle || undefined,
@@ -191,8 +198,8 @@ class SupabaseService {
       fullStory: row.full_story,
       location: row.location || undefined,
       tags: row.tags || [],
-      backdropUrl: row.backdrop_url || undefined,
-      posterUrl: row.poster_url || undefined,
+      backdropUrl: await this.resolvePhotoUrl(row.backdrop_url),
+      posterUrl: await this.resolvePhotoUrl(row.poster_url),
       fallbackGradient: row.fallback_gradient,
       progress: row.progress !== null ? row.progress : undefined,
       isTop10: row.is_top_10 !== null ? row.is_top_10 : undefined,
@@ -204,7 +211,7 @@ class SupabaseService {
       listStatus: row.list_status || undefined,
       episodes: chaptersByMemory[row.id] || [],
       coupons: couponsByMemory[row.id] || [],
-    }));
+    })));
   }
 
   // 2. CREATE MEMORY
@@ -351,6 +358,44 @@ class SupabaseService {
     }
   }
 
+  /**
+   * Resolve legacy public or signed memory-photos URLs to a fresh, short-lived URL.
+   * Only this bucket is signed; third-party image URLs remain unchanged.
+   */
+  public async resolvePhotoUrl(urlOrPath: string | null | undefined): Promise<string | undefined> {
+    if (!urlOrPath) return undefined;
+    if (!supabase || !isSupabaseConfigured()) return urlOrPath;
+
+    try {
+      let path: string | null = null;
+      if (urlOrPath.startsWith('memories/')) {
+        path = urlOrPath;
+      } else if (urlOrPath.includes('/memory-photos/')) {
+        const pathname = urlOrPath.startsWith('http')
+          ? new URL(urlOrPath).pathname
+          : urlOrPath.split('?')[0];
+        const marker = '/memory-photos/';
+        const markerIndex = pathname.indexOf(marker);
+        if (markerIndex >= 0) {
+          path = decodeURIComponent(pathname.slice(markerIndex + marker.length));
+        }
+      }
+
+      if (!path) return urlOrPath;
+      const { data, error } = await supabase.storage
+        .from('memory-photos')
+        .createSignedUrl(path, 60 * 60);
+      if (error || !data?.signedUrl) {
+        console.warn('Could not create a signed photo URL:', error?.message || 'No URL returned');
+        return undefined;
+      }
+      return data.signedUrl;
+    } catch (e) {
+      console.warn('Could not resolve a photo URL:', e);
+      return undefined;
+    }
+  }
+
   // 5. STORAGE: REAL PHOTO UPLOADS
   public async uploadPhoto(file: File): Promise<{ url: string | null; error: Error | null }> {
     if (!supabase || !isSupabaseConfigured()) {
@@ -390,12 +435,14 @@ class SupabaseService {
 
       if (error) throw error;
 
-      // Get public URL
-      const { data: urlData } = supabase.storage
+      // Return a short-lived signed URL for immediate preview. The stored URL is
+      // resolved again on future fetches, so expiration never gets persisted as a dependency.
+      const { data: urlData, error: urlError } = await supabase.storage
         .from('memory-photos')
-        .getPublicUrl(data.path);
+        .createSignedUrl(data.path, 60 * 60);
+      if (urlError || !urlData?.signedUrl) throw urlError || new Error('Could not create a signed image URL.');
 
-      return { url: urlData.publicUrl, error: null };
+      return { url: urlData.signedUrl, error: null };
     } catch (e) {
       console.error('Failed to upload image to Supabase storage:', e);
       return { url: null, error: e as Error };
@@ -409,7 +456,16 @@ class SupabaseService {
     try {
       let path = urlOrPath;
       if (urlOrPath.includes('/memory-photos/')) {
-        path = urlOrPath.split('/memory-photos/')[1];
+        const pathname = urlOrPath.startsWith('http')
+          ? new URL(urlOrPath).pathname
+          : urlOrPath.split('?')[0];
+        const marker = '/memory-photos/';
+        const markerIndex = pathname.indexOf(marker);
+        path = markerIndex >= 0
+          ? decodeURIComponent(pathname.slice(markerIndex + marker.length))
+          : '';
+      } else {
+        path = urlOrPath.split('?')[0];
       }
       if (!path) return false;
 
