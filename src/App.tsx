@@ -31,6 +31,7 @@ import { AdminAuthModal } from './components/AdminAuthModal';
 import { SupabaseSetupModal } from './components/SupabaseSetupModal';
 import { EditSiteContentModal } from './components/EditSiteContentModal';
 import { AdminModeBar } from './components/AdminModeBar';
+import { AdminStudioModal } from './components/AdminStudioModal';
 import { MovieCard } from './components/MovieCard';
 import { MusicPlayer } from './components/MusicPlayer';
 import { ScrapbookView } from './components/ScrapbookView';
@@ -70,6 +71,7 @@ export default function App() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [memoryToEdit, setMemoryToEdit] = useState<MemoryItem | null>(null);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [isAdminStudioOpen, setIsAdminStudioOpen] = useState(false);
   const [isSetupModalOpen, setIsSetupModalOpen] = useState(false);
   const [isEditSiteContentOpen, setIsEditSiteContentOpen] = useState(false);
   const [editSiteContentInitialTab, setEditSiteContentInitialTab] = useState<SiteContentSection>('hero');
@@ -1296,7 +1298,21 @@ export default function App() {
             setIsAddModalOpen(true);
           }}
           onOpenAdminPortal={() => setIsAdminModalOpen(true)}
+          onOpenStudio={() => setIsAdminStudioOpen(true)}
           onLogout={handleSignOut}
+        />
+      )}
+
+      {/* LIVE ADMIN STUDIO — uses the same authorized memory state and existing editor */}
+      {isAdmin && isAdminStudioOpen && (
+        <AdminStudioModal
+          memories={memories}
+          onClose={() => setIsAdminStudioOpen(false)}
+          onAddMemory={() => {
+            setMemoryToEdit(null);
+            setIsAddModalOpen(true);
+          }}
+          onEditMemory={handleOpenEditMemoryModal}
         />
       )}
 
