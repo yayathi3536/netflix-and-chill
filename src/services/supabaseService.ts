@@ -148,6 +148,41 @@ class SupabaseService {
       console.warn('Could not fetch love notes:', noteError);
     }
 
+    // Resolve chapter thumbnails before grouping them by memory.
+    const resolvedChapters = await Promise.all(
+      ((chapterRows as ChapterRow[]) || []).map(async (chapter) => ({
+        ...chapter,
+        thumbnail_url: await this.resolvePhotoUrl(chapter.thumbnail_url),
+      }))
+    );
+
+    const chaptersByMemory: Record<string, Episode[]> = {};
+    resolvedChapters.forEach((chapter) => {
+      if (!chaptersByMemory[chapter.memory_id]) chaptersByMemory[chapter.memory_id] = [];
+      chaptersByMemory[chapter.memory_id].push({
+        id: chapter.id,
+        episodeNumber: chapter.episode_number,
+        title: chapter.title,
+        duration: chapter.duration,
+        date: chapter.date || undefined,
+        description: chapter.description,
+        thumbnailUrl: chapter.thumbnail_url || undefined,
+        gradient: chapter.gradient || 'from-neutral-900 to-black',
+      });
+    });
+
+    const couponsByMemory: Record<string, CouponItem[]> = {};
+    ((noteRows as LoveNoteRow[]) || []).forEach((note) => {
+      if (!couponsByMemory[note.memory_id]) couponsByMemory[note.memory_id] = [];
+      couponsByMemory[note.memory_id].push({
+        id: note.id,
+        title: note.title,
+        perk: note.perk,
+        terms: note.terms,
+        redeemed: note.redeemed,
+      });
+    });
+
     // Resolve memory image URLs asynchronously while leaving third-party URLs intact.
     return Promise.all((memoryRows as MemoryRow[]).map(async (row) => ({
       id: row.id,
