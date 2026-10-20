@@ -129,6 +129,21 @@ export default function App() {
 
       const unsubscribe = supabaseService.onAuthStateChange((user, _session, event) => {
         setCurrentUser(user);
+
+        // Never leave private content in React state after sign-out or a pending-account transition.
+        if (!user || !checkIsApproved(user)) {
+          setHasSelectedProfile(false);
+          setMemories([]);
+          setSiteContent({});
+          setSelectedMemory(null);
+          setPlayingMemory(null);
+          setSecretVaultMemory(null);
+        } else if (event !== 'TOKEN_REFRESHED') {
+          // Refresh server-authorized content after sign-in/account changes.
+          void fetchRemoteMemories();
+          void storageService.loadSiteContent().then((content) => setSiteContent(content));
+        }
+
         if (event === 'PASSWORD_RECOVERY') {
           setIsPasswordRecovery(true);
         } else if (event === 'SIGNED_OUT' || !user) {
