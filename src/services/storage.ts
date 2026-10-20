@@ -293,6 +293,20 @@ class UnifiedStorageService {
     }
   }
 
+  public saveProfile(updatedProfile: UserProfile): UserProfile[] {
+    const current = this.getProfiles();
+    const index = current.findIndex((p) => p.id === updatedProfile.id);
+    let next: UserProfile[];
+    if (index >= 0) {
+      next = [...current];
+      next[index] = { ...current[index], ...updatedProfile };
+    } else {
+      next = [...current, updatedProfile];
+    }
+    this.saveProfilesList(next);
+    return next;
+  }
+
   // 8. NOTIFICATIONS
   public getNotifications(): NotificationItem[] {
     try {

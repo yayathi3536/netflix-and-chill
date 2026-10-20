@@ -62,6 +62,8 @@ export interface UserProfile {
   role: 'partner1' | 'partner2' | 'together';
   avatarEmoji: string;
   avatarBg: string;
+  avatarUrl?: string;
+  avatarId?: string;
   favoriteSeason?: string;
   ownerId?: string;
   ownerEmail?: string;

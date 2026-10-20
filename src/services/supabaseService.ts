@@ -98,8 +98,12 @@ export const checkIsAdmin = (user: User | null): boolean => {
     return true;
   }
 
-  // 3. Approved administrator email check via environment variable (if configured)
-  const configuredAdminEmail = ((import.meta.env.VITE_ADMIN_EMAIL as string) || '').toLowerCase().trim();
+  // 3. Approved administrator email check via environment variable or project owner fallback
+  const configuredAdminEmail = (
+    (import.meta.env.VITE_ADMIN_EMAIL as string) || 'karanamyayathi9@gmail.com'
+  )
+    .toLowerCase()
+    .trim();
   const userEmail = (user.email || '').toLowerCase().trim();
 
   if (configuredAdminEmail && userEmail && userEmail === configuredAdminEmail) {

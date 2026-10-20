@@ -304,9 +304,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               aria-label="User Profile"
             >
               <div
-                className="w-8 h-8 rounded bg-[#E50914] flex items-center justify-center text-sm font-bold text-[#FFFFFF] shadow"
+                className="w-8 h-8 rounded bg-[#E50914] overflow-hidden flex items-center justify-center text-sm font-bold text-[#FFFFFF] shadow"
               >
-                <span>{activeProfile.avatarEmoji || '❤️'}</span>
+                {activeProfile.avatarUrl ? (
+                  <img
+                    src={activeProfile.avatarUrl}
+                    alt={activeProfile.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span>{activeProfile.avatarEmoji || '❤️'}</span>
+                )}
               </div>
               <ChevronDown className="w-3.5 h-3.5 text-[#B3B3B3]" />
             </button>
@@ -330,9 +338,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                     >
                       <div className="flex items-center gap-2.5">
                         <div
-                          className="w-6 h-6 rounded bg-[#E50914] flex items-center justify-center text-xs text-[#FFFFFF]"
+                          className="w-6 h-6 rounded bg-[#E50914] overflow-hidden flex items-center justify-center text-xs text-[#FFFFFF] shrink-0"
                         >
-                          <span>{p.avatarEmoji || '❤️'}</span>
+                          {p.avatarUrl ? (
+                            <img
+                              src={p.avatarUrl}
+                              alt={p.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <span>{p.avatarEmoji || '❤️'}</span>
+                          )}
                         </div>
                         <span className="truncate">{p.name}</span>
                       </div>

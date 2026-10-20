@@ -231,6 +231,14 @@ export default function App() {
     setHasSelectedProfile(true);
   };
 
+  const handleSaveProfile = (updatedProfile: UserProfile) => {
+    const updatedList = storageService.saveProfile(updatedProfile);
+    setProfiles(updatedList);
+    if (activeProfile.id === updatedProfile.id) {
+      setActiveProfile(updatedProfile);
+    }
+  };
+
   const handleSignOut = async () => {
     storageService.clearSelectedSessionProfile(currentUser?.id);
     await supabaseService.signOut();
@@ -431,6 +439,7 @@ export default function App() {
       <ProfileSelect
         profiles={authorizedProfiles}
         onSelect={handleSelectProfile}
+        onSaveProfile={handleSaveProfile}
         userEmail={currentUser.email}
         isAdmin={isAdmin}
         onSignOut={handleSignOut}
