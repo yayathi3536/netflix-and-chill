@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { MemoryItem, Episode, UserProfile, NotificationItem, SiteContentMap, SiteContentSection } from './types';
 import { storageService } from './services/storage';
-import { supabaseService, checkIsAdmin } from './services/supabaseService';
+import { supabaseService, checkIsAdmin, checkIsApproved } from './services/supabaseService';
 import { isSupabaseConfigured } from './services/supabaseClient';
 import { Navbar } from './components/Navbar';
 import { HeroBanner } from './components/HeroBanner';
@@ -77,8 +77,9 @@ export default function App() {
   const [isSurpriseModalOpen, setIsSurpriseModalOpen] = useState(false);
   const [soundtrackTrackIndex, setSoundtrackTrackIndex] = useState(0);
 
-  // Computed verified administrator status
+  // Authorization must come from server-controlled app_metadata.
   const isAdmin = useMemo(() => checkIsAdmin(currentUser), [currentUser]);
+  const isApproved = useMemo(() => checkIsApproved(currentUser), [currentUser]);
 
   // Authorized profiles for the signed-in user
   const authorizedProfiles = useMemo(() => {
@@ -94,18 +95,15 @@ export default function App() {
     setActiveProfile(storageService.getActiveProfile());
     setNotifications(storageService.getNotifications());
 
-    // 2. Load site texts & letters
-    storageService.loadSiteContent().then((content) => {
-      setSiteContent(content);
-    });
-
-    // 3. Fetch authenticated Supabase session
+    // 2. Fetch authenticated Supabase session. Private content is loaded only for approved accounts.
     if (isSupabaseConfigured()) {
       supabaseService
         .getCurrentUser()
         .then((user) => {
           setCurrentUser(user);
-          if (user) {
+          if (user && checkIsApproved(user)) {
+            storageService.loadSiteContent().then((content) => setSiteContent(content));
+            fetchRemoteMemories();
             const sessionProfileId = storageService.getSelectedSessionProfileId(user.id);
             const allowed = storageService.getAuthorizedProfiles(
               user.id,
@@ -119,6 +117,10 @@ export default function App() {
             } else {
               setHasSelectedProfile(false);
             }
+          } else {
+            setHasSelectedProfile(false);
+            setMemories([]);
+            setSiteContent({});
           }
         })
         .finally(() => {
@@ -134,9 +136,6 @@ export default function App() {
           setIsPasswordRecovery(false);
         }
       });
-
-      // 4. Load remote memories asynchronously
-      fetchRemoteMemories();
 
       return () => {
         unsubscribe();
@@ -425,15 +424,47 @@ export default function App() {
           setCurrentUser(user);
           setIsPasswordRecovery(false);
           setHasSelectedProfile(false);
-          fetchRemoteMemories();
-          storageService.loadSiteContent().then((content) => setSiteContent(content));
+          if (checkIsApproved(user)) {
+            fetchRemoteMemories();
+            storageService.loadSiteContent().then((content) => setSiteContent(content));
+          } else {
+            setMemories([]);
+            setSiteContent({});
+          }
         }}
         onPasswordUpdated={() => setIsPasswordRecovery(false)}
       />
     );
   }
 
-  // 3. AUTHENTICATED USER -> WHO'S WATCHING? PROFILE SELECTION
+  // 3. Authenticated but not manually approved: do not render cached/private content.
+  if (currentUser && !isApproved) {
+    return (
+      <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex items-center justify-center px-6">
+        <div className="w-full max-w-lg rounded-xl border border-[#333333] bg-[#141414] p-8 text-center">
+          <div className="font-bebas text-4xl tracking-widest text-[#E50914] font-black uppercase mb-5">
+            OUR UNIVERSE
+          </div>
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#E50914]/10">
+            <Shield className="h-7 w-7 text-[#E50914]" />
+          </div>
+          <h1 className="text-2xl font-semibold mb-3">Waiting for approval</h1>
+          <p className="text-sm leading-6 text-[#B3B3B3] mb-6">
+            Your email is verified, but this account has not been approved yet. Please ask the site owner to approve it in Supabase. Your private memories and letters stay hidden until approval.
+          </p>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="rounded bg-[#E50914] px-5 py-2.5 text-sm font-semibold hover:bg-[#b80710] transition-colors"
+          >
+            Sign out
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // 4. APPROVED USER -> WHO'S WATCHING? PROFILE SELECTION
   if (!hasSelectedProfile) {
     return (
       <ProfileSelect
