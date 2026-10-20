@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { UserProfile, NotificationItem } from '../types';
 import { User } from '@supabase/supabase-js';
+import { getProfileAvatarUrl } from '../data/builtInAvatars';
 
 interface NavbarProps {
   activeTab: string;
@@ -307,23 +308,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               aria-label="User Profile"
             >
               <div
-                className="w-8 h-8 rounded bg-[#E50914] overflow-hidden flex items-center justify-center text-sm font-bold text-[#FFFFFF] shadow"
+                className="w-8 h-8 rounded-lg bg-[#E50914] overflow-hidden flex items-center justify-center text-sm font-bold text-[#FFFFFF] shadow ring-1 ring-white/20"
               >
-                {activeProfile.avatarUrl ? (
-                  <img
-                    src={activeProfile.avatarUrl}
-                    alt={activeProfile.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span>{activeProfile.avatarEmoji || '❤️'}</span>
-                )}
+                <img
+                  src={getProfileAvatarUrl(activeProfile)}
+                  alt={activeProfile.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <ChevronDown className="w-3.5 h-3.5 text-[#B3B3B3]" />
             </button>
 
             {isProfileMenuOpen && (
-              <div className="absolute right-0 mt-3 w-56 bg-[#141414] border border-[#808080]/40 rounded shadow-2xl py-2 z-50 text-xs">
+              <div className="absolute right-0 mt-3 w-56 bg-[#141414] border border-[#808080]/40 rounded-xl shadow-2xl py-2 z-50 text-xs backdrop-blur-md">
                 <div className="px-3 py-1.5 text-[#B3B3B3] text-[11px] uppercase tracking-wider font-semibold border-b border-[#181818]">
                   Who's Watching?
                 </div>
@@ -341,17 +338,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                     >
                       <div className="flex items-center gap-2.5">
                         <div
-                          className="w-6 h-6 rounded bg-[#E50914] overflow-hidden flex items-center justify-center text-xs text-[#FFFFFF] shrink-0"
+                          className="w-6 h-6 rounded-md bg-[#E50914] overflow-hidden flex items-center justify-center text-xs text-[#FFFFFF] shrink-0 ring-1 ring-white/10"
                         >
-                          {p.avatarUrl ? (
-                            <img
-                              src={p.avatarUrl}
-                              alt={p.name}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <span>{p.avatarEmoji || '❤️'}</span>
-                          )}
+                          <img
+                            src={getProfileAvatarUrl(p)}
+                            alt={p.name}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
                         <span className="truncate">{p.name}</span>
                       </div>

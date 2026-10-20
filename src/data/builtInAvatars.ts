@@ -1,15 +1,16 @@
 export type BuiltInAvatarCategory =
   | 'illustrated'
   | 'anime'
-  | 'cute'
   | 'cinematic'
-  | 'abstract';
+  | 'cosmic'
+  | 'artistic';
 
 export interface BuiltInAvatarItem {
   id: string;
   name: string;
   category: BuiltInAvatarCategory;
   categoryLabel: string;
+  description: string;
   url: string;
 }
 
@@ -17,487 +18,523 @@ const svgToDataUri = (svg: string): string =>
   `data:image/svg+xml;utf8,${encodeURIComponent(svg.trim())}`;
 
 export const BUILT_IN_AVATAR_CATEGORIES: { id: 'all' | BuiltInAvatarCategory; label: string }[] = [
-  { id: 'all', label: 'All Avatars' },
-  { id: 'illustrated', label: 'Illustrated' },
+  { id: 'all', label: 'All Curated' },
+  { id: 'illustrated', label: 'Cinematic Illustrated' },
   { id: 'anime', label: 'Anime Portraits' },
-  { id: 'cute', label: 'Cute Characters' },
-  { id: 'cinematic', label: 'Cinematic' },
-  { id: 'abstract', label: 'Abstract Icons' },
+  { id: 'cinematic', label: 'Film & Noir' },
+  { id: 'cosmic', label: 'Cosmic & Celestial' },
+  { id: 'artistic', label: 'Artistic Silhouettes' },
 ];
 
 export const BUILT_IN_AVATARS: BuiltInAvatarItem[] = [
   // =========================================================================
-  // 1. ORIGINAL ILLUSTRATED CHARACTERS
+  // 1. SIGNATURE CINEMATIC ILLUSTRATED PORTRAITS
   // =========================================================================
   {
-    id: 'illus-crimson-muse',
-    name: 'Crimson Muse',
+    id: 'illus-cosmic-duo',
+    name: 'Cosmic Lovers (The Duo)',
     category: 'illustrated',
-    categoryLabel: 'Illustrated',
+    categoryLabel: 'Cinematic Illustrated',
+    description: 'Two silhouettes under a glowing crimson nebula with shooting stars.',
     url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
         <defs>
-          <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#E50914"/>
-            <stop offset="100%" stop-color="#5c0308"/>
+          <radialGradient id="nebula1" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#E50914" stop-opacity="0.85"/>
+            <stop offset="45%" stop-color="#450a12" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#08080a"/>
+          </radialGradient>
+          <linearGradient id="rimLight1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ffedd5" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#E50914" stop-opacity="0.2"/>
           </linearGradient>
         </defs>
-        <rect width="160" height="160" fill="url(#bg1)"/>
-        <circle cx="80" cy="40" r="65" fill="#ffffff" fill-opacity="0.07"/>
-        <path d="M35 160 C35 118 125 118 125 160 Z" fill="#141414"/>
-        <path d="M40 76 C40 42 120 42 120 76 C120 112 112 126 112 126 L48 126 C48 126 40 112 40 76 Z" fill="#1c1214"/>
-        <circle cx="80" cy="80" r="28" fill="#f6c7b3"/>
-        <path d="M50 74 C54 48 106 48 110 74 C98 62 68 62 50 74 Z" fill="#1c1214"/>
-        <circle cx="70" cy="80" r="3.2" fill="#1a1a1a"/>
-        <circle cx="90" cy="80" r="3.2" fill="#1a1a1a"/>
-        <circle cx="71" cy="79" r="1" fill="#ffffff"/>
-        <circle cx="91" cy="79" r="1" fill="#ffffff"/>
-        <path d="M65 73 Q70 70 75 73" stroke="#1c1214" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <path d="M85 73 Q90 70 95 73" stroke="#1c1214" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <path d="M74 92 Q80 97 86 92" stroke="#E50914" stroke-width="3" fill="none" stroke-linecap="round"/>
-        <circle cx="52" cy="86" r="4" fill="#fbbf24"/>
-        <circle cx="108" cy="86" r="4" fill="#fbbf24"/>
+        <rect width="200" height="200" fill="url(#nebula1)"/>
+        <!-- Star particles -->
+        <circle cx="28" cy="35" r="1.5" fill="#ffffff" opacity="0.9"/>
+        <circle cx="165" cy="42" r="1.2" fill="#ffffff" opacity="0.8"/>
+        <circle cx="95" cy="24" r="1.8" fill="#ffd54f" opacity="0.95"/>
+        <circle cx="45" cy="85" r="1.1" fill="#ffffff" opacity="0.6"/>
+        <circle cx="178" cy="98" r="1.3" fill="#ffffff" opacity="0.7"/>
+        <circle cx="135" cy="72" r="1.6" fill="#ffffff" opacity="0.85"/>
+        <!-- Shooting Star -->
+        <line x1="140" y1="18" x2="185" y2="35" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.9"/>
+        <line x1="120" y1="10" x2="185" y2="35" stroke="#E50914" stroke-width="0.8" opacity="0.6"/>
+        <!-- Giant glowing celestial moon crescent -->
+        <circle cx="100" cy="88" r="68" fill="#ffffff" opacity="0.04"/>
+        <circle cx="100" cy="88" r="54" fill="#ffffff" opacity="0.06"/>
+        <!-- Couple silhouette -->
+        <!-- Hill base -->
+        <path d="M0 200 Q100 152 200 200 Z" fill="#09090b"/>
+        <path d="M0 200 Q100 155 200 200 Z" stroke="#E50914" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <!-- Partner Left (Her) -->
+        <path d="M58 200 C58 152 74 135 84 125 C82 120 78 108 78 98 C78 84 89 74 98 74 C99 74 100 74 100 74 C96 82 96 92 98 98 C100 106 96 118 92 126 C102 136 114 154 116 200 Z" fill="#0d0d10"/>
+        <!-- Partner Right (Him) with arm resting around her -->
+        <path d="M96 200 C96 150 110 130 120 120 C118 114 116 104 116 94 C116 80 126 70 136 70 C146 70 154 80 154 94 C154 104 148 114 144 120 C154 130 166 150 166 200 Z" fill="#08080a"/>
+        <!-- Warm glowing starlight lantern / heart between them -->
+        <circle cx="106" cy="138" r="9" fill="#ffb703" opacity="0.85"/>
+        <circle cx="106" cy="138" r="18" fill="#E50914" opacity="0.45"/>
+        <path d="M106 133 C106 133 100 128 100 123 C100 120 102 118 104.5 118 C105.8 118 106 119.5 106 119.5 C106 119.5 106.2 118 107.5 118 C110 118 112 120 112 123 C112 128 106 133 106 133 Z" fill="#ffffff"/>
       </svg>
     `),
   },
   {
-    id: 'illus-midnight-poet',
-    name: 'Midnight Poet',
+    id: 'illus-starlight-muse',
+    name: 'The Starlight Muse (Her)',
     category: 'illustrated',
-    categoryLabel: 'Illustrated',
+    categoryLabel: 'Cinematic Illustrated',
+    description: 'An elegant portrait of Her with starlit dark hair, gold highlights, and a starlight crown.',
     url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
         <defs>
-          <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#1e293b"/>
-            <stop offset="100%" stop-color="#090d16"/>
-          </linearGradient>
-        </defs>
-        <rect width="160" height="160" fill="url(#bg2)"/>
-        <circle cx="122" cy="34" r="14" fill="#fde047" fill-opacity="0.85"/>
-        <circle cx="127" cy="31" r="12" fill="#172030"/>
-        <path d="M32 160 C34 116 126 116 128 160 Z" fill="#E50914"/>
-        <path d="M62 124 L80 144 L98 124 Z" fill="#141414"/>
-        <circle cx="80" cy="80" r="28" fill="#eab69f"/>
-        <path d="M50 72 C50 44 110 44 110 72 C106 58 88 54 74 58 C62 60 54 66 50 72 Z" fill="#111827"/>
-        <rect x="61" y="74" width="15" height="11" rx="3" stroke="#ffffff" stroke-width="2.2" fill="none"/>
-        <rect x="84" y="74" width="15" height="11" rx="3" stroke="#ffffff" stroke-width="2.2" fill="none"/>
-        <line x1="76" y1="79" x2="84" y2="79" stroke="#ffffff" stroke-width="2.2"/>
-        <circle cx="68.5" cy="79.5" r="2.2" fill="#111827"/>
-        <circle cx="91.5" cy="79.5" r="2.2" fill="#111827"/>
-        <path d="M74 94 Q80 98 86 94" stroke="#7c2d12" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'illus-golden-dreamer',
-    name: 'Golden Hour Dreamer',
-    category: 'illustrated',
-    categoryLabel: 'Illustrated',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <defs>
-          <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#b45309"/>
-            <stop offset="100%" stop-color="#451a03"/>
-          </linearGradient>
-        </defs>
-        <rect width="160" height="160" fill="url(#bg3)"/>
-        <circle cx="80" cy="80" r="62" fill="#fde68a" fill-opacity="0.1"/>
-        <path d="M36 160 C38 118 122 118 124 160 Z" fill="#fef3c7"/>
-        <circle cx="52" cy="64" r="18" fill="#29150c"/>
-        <circle cx="108" cy="64" r="18" fill="#29150c"/>
-        <circle cx="80" cy="82" r="28" fill="#d99b78"/>
-        <path d="M52 74 Q80 50 108 74 Q80 62 52 74 Z" fill="#29150c"/>
-        <circle cx="70" cy="82" r="3" fill="#1c1917"/>
-        <circle cx="90" cy="82" r="3" fill="#1c1917"/>
-        <circle cx="64" cy="88" r="4.5" fill="#E50914" fill-opacity="0.35"/>
-        <circle cx="96" cy="88" r="4.5" fill="#E50914" fill-opacity="0.35"/>
-        <path d="M73 93 Q80 99 87 93" stroke="#451a03" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'illus-velvet-voyager',
-    name: 'Velvet Voyager',
-    category: 'illustrated',
-    categoryLabel: 'Illustrated',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <defs>
-          <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#881337"/>
-            <stop offset="100%" stop-color="#1f0912"/>
-          </linearGradient>
-        </defs>
-        <rect width="160" height="160" fill="url(#bg4)"/>
-        <path d="M34 160 C38 118 122 118 126 160 Z" fill="#181818"/>
-        <circle cx="80" cy="80" r="29" fill="#f3c6b1"/>
-        <path d="M46 66 C52 38 108 38 114 66 L108 72 C94 56 66 56 52 72 Z" fill="#E50914"/>
-        <rect x="60" y="75" width="17" height="10" rx="2" fill="#141414"/>
-        <rect x="83" y="75" width="17" height="10" rx="2" fill="#141414"/>
-        <line x1="77" y1="79" x2="83" y2="79" stroke="#fbbf24" stroke-width="2.5"/>
-        <path d="M73 94 Q80 99 87 94" stroke="#9f1239" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-      </svg>
-    `),
-  },
-
-  // =========================================================================
-  // 2. ANIME-INSPIRED PORTRAITS
-  // =========================================================================
-  {
-    id: 'anime-starlight-heroine',
-    name: 'Starlight Heroine',
-    category: 'anime',
-    categoryLabel: 'Anime Portrait',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <defs>
-          <linearGradient id="an1" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#311042"/>
-            <stop offset="100%" stop-color="#0f0718"/>
-          </linearGradient>
-        </defs>
-        <rect width="160" height="160" fill="url(#an1)"/>
-        <circle cx="32" cy="36" r="2" fill="#ffffff"/>
-        <circle cx="132" cy="44" r="2.5" fill="#fde047"/>
-        <path d="M38 160 C42 120 118 120 122 160 Z" fill="#E50914"/>
-        <path d="M36 74 C36 34 124 34 124 74 L132 134 L106 118 L104 82 L56 82 L54 118 L28 134 Z" fill="#f43f5e"/>
-        <path d="M54 78 L80 110 L106 78 C106 54 54 54 54 78 Z" fill="#ffe4d6"/>
-        <path d="M46 68 L62 82 L68 64 L80 80 L92 64 L98 82 L114 68 C108 42 52 42 46 68 Z" fill="#e11d48"/>
-        <ellipse cx="68" cy="84" rx="5.5" ry="6.5" fill="#1e1b4b"/>
-        <ellipse cx="92" cy="84" rx="5.5" ry="6.5" fill="#1e1b4b"/>
-        <circle cx="66.5" cy="81.5" r="2.2" fill="#ffffff"/>
-        <circle cx="90.5" cy="81.5" r="2.2" fill="#ffffff"/>
-        <circle cx="70" cy="86.5" r="1.2" fill="#f43f5e"/>
-        <circle cx="94" cy="86.5" r="1.2" fill="#f43f5e"/>
-        <path d="M76 97 Q80 101 84 97" stroke="#e11d48" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'anime-moonlight-senpai',
-    name: 'Moonlight Senpai',
-    category: 'anime',
-    categoryLabel: 'Anime Portrait',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <defs>
-          <linearGradient id="an2" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#0f172a"/>
-            <stop offset="100%" stop-color="#1e1b4b"/>
-          </linearGradient>
-        </defs>
-        <rect width="160" height="160" fill="url(#an2)"/>
-        <circle cx="122" cy="38" r="16" fill="#e2e8f0" fill-opacity="0.2"/>
-        <path d="M35 160 C40 120 120 120 125 160 Z" fill="#181818"/>
-        <path d="M68 122 L80 146 L92 122 Z" fill="#E50914"/>
-        <path d="M54 76 L80 112 L106 76 C106 52 54 52 54 76 Z" fill="#fde6d8"/>
-        <path d="M40 72 L52 46 L70 54 L84 38 L100 52 L118 48 L120 76 L104 66 L94 78 L80 62 L66 78 L54 66 Z" fill="#e2e8f0"/>
-        <ellipse cx="68" cy="82" rx="5" ry="4.5" fill="#E50914"/>
-        <ellipse cx="92" cy="82" rx="5" ry="4.5" fill="#E50914"/>
-        <circle cx="67" cy="80.5" r="1.8" fill="#ffffff"/>
-        <circle cx="91" cy="80.5" r="1.8" fill="#ffffff"/>
-        <path d="M61 75 L73 77" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
-        <path d="M99 75 L87 77" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
-        <path d="M75 96 Q80 99 85 96" stroke="#94a3b8" stroke-width="2" fill="none" stroke-linecap="round"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'anime-sakura-spirit',
-    name: 'Sakura Spirit',
-    category: 'anime',
-    categoryLabel: 'Anime Portrait',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <defs>
-          <linearGradient id="an3" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#4c0519"/>
-            <stop offset="100%" stop-color="#181818"/>
-          </linearGradient>
-        </defs>
-        <rect width="160" height="160" fill="url(#an3)"/>
-        <path d="M38 160 C42 122 118 122 122 160 Z" fill="#ffffff"/>
-        <path d="M65 125 L80 150 L95 125 Z" fill="#E50914"/>
-        <circle cx="44" cy="60" r="16" fill="#fda4af"/>
-        <circle cx="116" cy="60" r="16" fill="#fda4af"/>
-        <path d="M54 78 L80 110 L106 78 C106 54 54 54 54 78 Z" fill="#ffedd5"/>
-        <path d="M48 74 C52 44 108 44 112 74 C96 60 64 60 48 74 Z" fill="#fda4af"/>
-        <ellipse cx="68" cy="84" rx="5.2" ry="6" fill="#881337"/>
-        <ellipse cx="92" cy="84" rx="5.2" ry="6" fill="#881337"/>
-        <circle cx="66.5" cy="82" r="2" fill="#ffffff"/>
-        <circle cx="90.5" cy="82" r="2" fill="#ffffff"/>
-        <path d="M75 96 Q80 101 85 96" stroke="#e11d48" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'anime-cyber-ronin',
-    name: 'Crimson Ronin',
-    category: 'anime',
-    categoryLabel: 'Anime Portrait',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <rect width="160" height="160" fill="#111111"/>
-        <circle cx="80" cy="80" r="54" fill="#E50914" fill-opacity="0.18"/>
-        <path d="M32 160 C38 118 122 118 128 160 Z" fill="#1f1f1f"/>
-        <path d="M54 78 L80 112 L106 78 C106 52 54 52 54 78 Z" fill="#f5d0c5"/>
-        <path d="M42 66 L58 40 L80 50 L102 40 L118 66 L104 64 L80 54 L56 64 Z" fill="#181818"/>
-        <rect x="54" y="76" width="52" height="11" rx="5.5" fill="#E50914"/>
-        <line x1="62" y1="81.5" x2="98" y2="81.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M56 94 L104 94 L96 116 L64 116 Z" fill="#181818"/>
-      </svg>
-    `),
-  },
-
-  // =========================================================================
-  // 3. CUTE CHARACTERS
-  // =========================================================================
-  {
-    id: 'cute-cozy-bear',
-    name: 'Cozy Mocha Bear',
-    category: 'cute',
-    categoryLabel: 'Cute Character',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <rect width="160" height="160" fill="#7f1d1d"/>
-        <circle cx="46" cy="50" r="18" fill="#92400e"/>
-        <circle cx="46" cy="50" r="10" fill="#fde68a"/>
-        <circle cx="114" cy="50" r="18" fill="#92400e"/>
-        <circle cx="114" cy="50" r="10" fill="#fde68a"/>
-        <circle cx="80" cy="86" r="44" fill="#b45309"/>
-        <ellipse cx="80" cy="94" rx="18" ry="14" fill="#fef3c7"/>
-        <circle cx="64" cy="78" r="5" fill="#1c1917"/>
-        <circle cx="96" cy="78" r="5" fill="#1c1917"/>
-        <circle cx="62.5" cy="76.5" r="1.8" fill="#ffffff"/>
-        <circle cx="94.5" cy="76.5" r="1.8" fill="#ffffff"/>
-        <ellipse cx="80" cy="89" rx="6" ry="4.5" fill="#451a03"/>
-        <path d="M74 96 Q80 101 86 96" stroke="#451a03" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <circle cx="54" cy="88" r="6" fill="#E50914" fill-opacity="0.45"/>
-        <circle cx="106" cy="88" r="6" fill="#E50914" fill-opacity="0.45"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'cute-star-bunny',
-    name: 'Celestial Bunny',
-    category: 'cute',
-    categoryLabel: 'Cute Character',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <rect width="160" height="160" fill="#1e1b4b"/>
-        <rect x="52" y="18" width="18" height="54" rx="9" fill="#ffffff"/>
-        <rect x="56" y="24" width="10" height="42" rx="5" fill="#fda4af"/>
-        <rect x="90" y="18" width="18" height="54" rx="9" fill="#ffffff"/>
-        <rect x="94" y="24" width="10" height="42" rx="5" fill="#fda4af"/>
-        <circle cx="80" cy="96" r="40" fill="#ffffff"/>
-        <circle cx="65" cy="92" r="4.8" fill="#1e1b4b"/>
-        <circle cx="95" cy="92" r="4.8" fill="#1e1b4b"/>
-        <circle cx="63.5" cy="90.5" r="1.8" fill="#ffffff"/>
-        <circle cx="93.5" cy="90.5" r="1.8" fill="#ffffff"/>
-        <circle cx="55" cy="100" r="6" fill="#fb7185" fill-opacity="0.55"/>
-        <circle cx="105" cy="100" r="6" fill="#fb7185" fill-opacity="0.55"/>
-        <polygon points="80,96 75,102 85,102" fill="#f43f5e"/>
-        <path d="M74 105 Q80 110 86 105" stroke="#1e1b4b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'cute-velvet-kitty',
-    name: 'Midnight Kitty',
-    category: 'cute',
-    categoryLabel: 'Cute Character',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <rect width="160" height="160" fill="#E50914"/>
-        <polygon points="38,84 44,34 80,60" fill="#141414"/>
-        <polygon points="44,74 48,44 72,62" fill="#fda4af"/>
-        <polygon points="122,84 116,34 80,60" fill="#141414"/>
-        <polygon points="116,74 112,44 88,62" fill="#fda4af"/>
-        <circle cx="80" cy="92" r="42" fill="#141414"/>
-        <ellipse cx="64" cy="88" rx="6.5" ry="7" fill="#fde047"/>
-        <ellipse cx="96" cy="88" rx="6.5" ry="7" fill="#fde047"/>
-        <ellipse cx="64" cy="88" rx="2.5" ry="5" fill="#141414"/>
-        <ellipse cx="96" cy="88" rx="2.5" ry="5" fill="#141414"/>
-        <polygon points="80,96 75,102 85,102" fill="#fda4af"/>
-        <path d="M72 106 Q80 111 88 106" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'cute-love-penguin',
-    name: 'Penguin Heart',
-    category: 'cute',
-    categoryLabel: 'Cute Character',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <rect width="160" height="160" fill="#0f172a"/>
-        <ellipse cx="80" cy="92" rx="44" ry="48" fill="#1e293b"/>
-        <ellipse cx="80" cy="98" rx="32" ry="36" fill="#ffffff"/>
-        <circle cx="65" cy="78" r="5" fill="#0f172a"/>
-        <circle cx="95" cy="78" r="5" fill="#0f172a"/>
-        <circle cx="63.5" cy="76.5" r="1.8" fill="#ffffff"/>
-        <circle cx="93.5" cy="76.5" r="1.8" fill="#ffffff"/>
-        <polygon points="80,92 71,83 89,83" fill="#f59e0b"/>
-        <circle cx="54" cy="86" r="5.5" fill="#E50914" fill-opacity="0.55"/>
-        <circle cx="106" cy="86" r="5.5" fill="#E50914" fill-opacity="0.55"/>
-        <path d="M48 122 C65 132 95 132 112 122" stroke="#E50914" stroke-width="9" stroke-linecap="round" fill="none"/>
-      </svg>
-    `),
-  },
-
-  // =========================================================================
-  // 4. CINEMATIC CHARACTERS
-  // =========================================================================
-  {
-    id: 'cinema-noir-detective',
-    name: 'Noir Detective',
-    category: 'cinematic',
-    categoryLabel: 'Cinematic',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <rect width="160" height="160" fill="#141414"/>
-        <circle cx="80" cy="80" r="60" fill="#E50914" fill-opacity="0.18"/>
-        <path d="M28 160 L50 112 L110 112 L132 160 Z" fill="#262626"/>
-        <polygon points="64,112 80,142 96,112" fill="#E50914"/>
-        <circle cx="80" cy="84" r="24" fill="#d4d4d8"/>
-        <ellipse cx="80" cy="62" rx="46" ry="9" fill="#0a0a0a"/>
-        <path d="M50 62 L58 34 L80 38 L102 34 L110 62 Z" fill="#0a0a0a"/>
-        <rect x="52" y="55" width="56" height="5" fill="#E50914"/>
-        <rect x="60" y="74" width="16" height="9" rx="2" fill="#0a0a0a"/>
-        <rect x="84" y="74" width="16" height="9" rx="2" fill="#0a0a0a"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'cinema-cosmic-voyager',
-    name: 'Cosmic Voyager',
-    category: 'cinematic',
-    categoryLabel: 'Cinematic',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <rect width="160" height="160" fill="#090d16"/>
-        <circle cx="30" cy="34" r="1.8" fill="#ffffff"/>
-        <circle cx="134" cy="48" r="2" fill="#ffffff"/>
-        <path d="M30 160 C34 120 126 120 130 160 Z" fill="#f8fafc"/>
-        <rect x="64" y="132" width="32" height="16" rx="4" fill="#E50914"/>
-        <circle cx="80" cy="82" r="38" fill="#ffffff" stroke="#cbd5e1" stroke-width="4"/>
-        <rect x="50" y="64" width="60" height="36" rx="18" fill="#0f172a" stroke="#E50914" stroke-width="3"/>
-        <path d="M58 74 Q80 66 102 74" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" stroke-opacity="0.65"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'cinema-auteur-director',
-    name: 'Auteur Director',
-    category: 'cinematic',
-    categoryLabel: 'Cinematic',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <rect width="160" height="160" fill="#181818"/>
-        <rect x="28" y="42" width="104" height="86" rx="8" fill="#0a0a0a" stroke="#ffffff" stroke-width="3"/>
-        <path d="M28 42 L132 42 L132 62 L28 62 Z" fill="#E50914"/>
-        <line x1="45" y1="42" x2="35" y2="62" stroke="#ffffff" stroke-width="4"/>
-        <line x1="75" y1="42" x2="65" y2="62" stroke="#ffffff" stroke-width="4"/>
-        <line x1="105" y1="42" x2="95" y2="62" stroke="#ffffff" stroke-width="4"/>
-        <polygon points="70,78 70,108 98,93" fill="#ffffff"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'cinema-matinee-star',
-    name: 'Premiere Spotlight',
-    category: 'cinematic',
-    categoryLabel: 'Cinematic',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <defs>
-          <linearGradient id="cm4" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#E50914"/>
-            <stop offset="100%" stop-color="#141414"/>
-          </linearGradient>
-        </defs>
-        <rect width="160" height="160" fill="url(#cm4)"/>
-        <polygon points="80,26 95,60 132,64 104,89 112,126 80,107 48,126 56,89 28,64 65,60" fill="#fde047" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
-        <circle cx="70" cy="76" r="3.5" fill="#141414"/>
-        <circle cx="90" cy="76" r="3.5" fill="#141414"/>
-        <path d="M73 88 Q80 94 87 88" stroke="#141414" stroke-width="3" fill="none" stroke-linecap="round"/>
-      </svg>
-    `),
-  },
-
-  // =========================================================================
-  // 5. ABSTRACT & COSMIC ICONS
-  // =========================================================================
-  {
-    id: 'abstract-nebula-heart',
-    name: 'Nebula Heart',
-    category: 'abstract',
-    categoryLabel: 'Abstract Icon',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <defs>
-          <radialGradient id="ab1" cx="50%" cy="50%" r="60%">
-            <stop offset="0%" stop-color="#E50914"/>
-            <stop offset="65%" stop-color="#4c0519"/>
+          <radialGradient id="museGlow" cx="50%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#b91c1c"/>
+            <stop offset="50%" stop-color="#450a0a"/>
             <stop offset="100%" stop-color="#09090b"/>
           </radialGradient>
-        </defs>
-        <rect width="160" height="160" fill="url(#ab1)"/>
-        <circle cx="80" cy="80" r="56" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1.5" fill="none"/>
-        <path d="M80 116 C80 116 42 92 42 65 C42 50 54 40 67 40 C75 40 80 46 80 46 C80 46 85 40 93 40 C106 40 118 50 118 65 C118 92 80 116 80 116 Z" fill="#ffffff"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'abstract-twin-eclipse',
-    name: 'Twin Eclipse',
-    category: 'abstract',
-    categoryLabel: 'Abstract Icon',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <rect width="160" height="160" fill="#0a0a0a"/>
-        <circle cx="68" cy="80" r="38" fill="#E50914"/>
-        <circle cx="94" cy="80" r="34" fill="#141414" stroke="#ffffff" stroke-width="3"/>
-        <circle cx="42" cy="40" r="2" fill="#ffffff"/>
-        <circle cx="124" cy="118" r="2.5" fill="#E50914"/>
-      </svg>
-    `),
-  },
-  {
-    id: 'abstract-crimson-infinity',
-    name: 'Forever Infinity',
-    category: 'abstract',
-    categoryLabel: 'Abstract Icon',
-    url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <defs>
-          <linearGradient id="ab3" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#181818"/>
+          <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffedd5"/>
+            <stop offset="100%" stop-color="#fbcfe8"/>
+          </linearGradient>
+          <linearGradient id="hairGold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#261014"/>
+            <stop offset="60%" stop-color="#14070a"/>
             <stop offset="100%" stop-color="#000000"/>
           </linearGradient>
         </defs>
-        <rect width="160" height="160" fill="url(#ab3)"/>
-        <path d="M54 62 C36 62 28 98 54 98 C72 98 88 62 106 62 C132 62 124 98 106 98 C88 98 72 62 54 62 Z" stroke="#E50914" stroke-width="10" fill="none" stroke-linecap="round"/>
-        <path d="M54 62 C36 62 28 98 54 98 C72 98 88 62 106 62 C132 62 124 98 106 98 C88 98 72 62 54 62 Z" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-opacity="0.6"/>
+        <rect width="200" height="200" fill="url(#museGlow)"/>
+        <!-- Star dust -->
+        <circle cx="34" cy="42" r="1.3" fill="#ffffff" opacity="0.8"/>
+        <circle cx="166" cy="38" r="1.5" fill="#fde047" opacity="0.9"/>
+        <circle cx="175" cy="85" r="1.1" fill="#ffffff" opacity="0.6"/>
+        <circle cx="28" cy="115" r="1.4" fill="#ffffff" opacity="0.7"/>
+        <!-- Glowing Halo Ring behind head -->
+        <circle cx="100" cy="88" r="56" stroke="#fde047" stroke-width="1.6" stroke-dasharray="3 3" fill="none" opacity="0.65"/>
+        <circle cx="100" cy="88" r="64" stroke="#E50914" stroke-width="1.2" fill="none" opacity="0.4"/>
+        <!-- Shoulders / Crimson Gown -->
+        <path d="M40 200 C45 158 75 142 100 142 C125 142 155 158 160 200 Z" fill="#E50914"/>
+        <path d="M60 200 C68 168 88 156 100 156 C112 156 132 168 140 200 Z" fill="#991b1b"/>
+        <!-- Slender neck -->
+        <path d="M88 120 L88 145 C94 148 106 148 112 145 L112 120 Z" fill="url(#skin)"/>
+        <!-- Elegant jawline / face -->
+        <path d="M66 84 C66 122 84 136 100 136 C116 136 134 122 134 84 C134 52 116 48 100 48 C84 48 66 52 66 84 Z" fill="url(#skin)"/>
+        <!-- Flowing voluminous hair -->
+        <path d="M64 80 C56 50 74 32 100 32 C126 32 144 50 136 80 C146 112 148 152 146 182 C140 184 136 172 134 154 C132 134 130 114 130 96 C118 70 82 70 70 96 C70 114 68 134 66 154 C64 172 60 184 54 182 C52 152 54 112 64 80 Z" fill="url(#hairGold)"/>
+        <!-- Bangs & gentle waves -->
+        <path d="M72 64 Q100 44 128 64 Q100 58 72 64 Z" fill="#1c090d"/>
+        <!-- Gold Constellation Tiara / Crown -->
+        <path d="M82 46 L90 38 L100 44 L110 38 L118 46" stroke="#fde047" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="100" cy="36" r="3" fill="#fde047"/>
+        <circle cx="90" cy="38" r="1.8" fill="#ffffff"/>
+        <circle cx="110" cy="38" r="1.8" fill="#ffffff"/>
+        <!-- Eyes (gentle starlight, serene glance) -->
+        <ellipse cx="86" cy="90" rx="4.5" ry="3.5" fill="#1f2937"/>
+        <ellipse cx="114" cy="90" rx="4.5" ry="3.5" fill="#1f2937"/>
+        <circle cx="85" cy="89" r="1.5" fill="#ffffff"/>
+        <circle cx="113" cy="89" r="1.5" fill="#ffffff"/>
+        <path d="M80 84 Q86 80 92 84" stroke="#374151" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M108 84 Q114 80 120 84" stroke="#374151" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <!-- Soft blush -->
+        <circle cx="78" cy="98" r="6" fill="#f43f5e" opacity="0.35"/>
+        <circle cx="122" cy="98" r="6" fill="#f43f5e" opacity="0.35"/>
+        <!-- Lips -->
+        <path d="M94 114 Q100 120 106 114 Q100 117 94 114 Z" fill="#E50914"/>
       </svg>
     `),
   },
   {
-    id: 'abstract-golden-constellation',
-    name: 'Starlight Constellation',
-    category: 'abstract',
-    categoryLabel: 'Abstract Icon',
+    id: 'illus-midnight-voyager',
+    name: 'The Midnight Voyager (Him)',
+    category: 'illustrated',
+    categoryLabel: 'Cinematic Illustrated',
+    description: 'A handsome, cinematic portrait of Him with midnight charcoal jacket and starlight rim light.',
     url: svgToDataUri(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-        <rect width="160" height="160" fill="#111827"/>
-        <polyline points="38,108 64,56 96,92 124,44" stroke="#E50914" stroke-width="3" fill="none"/>
-        <circle cx="38" cy="108" r="6" fill="#ffffff"/>
-        <circle cx="64" cy="56" r="7" fill="#fde047"/>
-        <circle cx="96" cy="92" r="6" fill="#ffffff"/>
-        <circle cx="124" cy="44" r="8" fill="#E50914" stroke="#ffffff" stroke-width="2.5"/>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <defs>
+          <radialGradient id="himGlow" cx="50%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#1e1b4b"/>
+            <stop offset="50%" stop-color="#0f172a"/>
+            <stop offset="100%" stop-color="#050508"/>
+          </radialGradient>
+          <linearGradient id="himSkin" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffedd5"/>
+            <stop offset="100%" stop-color="#fed7aa"/>
+          </linearGradient>
+          <linearGradient id="jacketCrimson" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#18181b"/>
+            <stop offset="50%" stop-color="#27272a"/>
+            <stop offset="100%" stop-color="#09090b"/>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="200" fill="url(#himGlow)"/>
+        <!-- Star dust & Crescent Moon -->
+        <circle cx="155" cy="40" r="16" fill="#fde047" opacity="0.8"/>
+        <circle cx="160" cy="37" r="14" fill="#0f172a"/>
+        <circle cx="38" cy="45" r="1.4" fill="#ffffff" opacity="0.9"/>
+        <circle cx="52" cy="95" r="1.2" fill="#ffffff" opacity="0.7"/>
+        <circle cx="170" cy="110" r="1.5" fill="#fde047" opacity="0.7"/>
+        <!-- Shoulders / Dark jacket with sharp Netflix red lapel accent -->
+        <path d="M30 200 C36 150 70 136 100 136 C130 136 164 150 170 200 Z" fill="url(#jacketCrimson)"/>
+        <!-- Collar Red Piping -->
+        <path d="M72 144 L100 176 L128 144" stroke="#E50914" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+        <path d="M85 142 L100 162 L115 142" fill="#ffffff" opacity="0.9"/>
+        <!-- Neck -->
+        <path d="M86 114 L86 142 C92 146 108 146 114 142 L114 114 Z" fill="url(#himSkin)"/>
+        <!-- Defined Chiseled Jawline -->
+        <path d="M68 76 C68 116 86 130 100 130 C114 130 132 116 132 76 C132 50 114 46 100 46 C86 46 68 50 68 76 Z" fill="url(#himSkin)"/>
+        <!-- Textured dark modern hair with silver/crimson starlight highlights -->
+        <path d="M64 74 C62 48 76 30 100 30 C118 30 136 40 136 68 C132 58 122 52 114 56 C106 50 94 48 86 54 C78 52 70 60 64 74 Z" fill="#18181b"/>
+        <path d="M82 38 Q100 28 122 38 Q102 34 82 38 Z" fill="#52525b"/>
+        <!-- Eyes (sharp, thoughtful, warm) -->
+        <ellipse cx="85" cy="84" rx="4.8" ry="3.2" fill="#0f172a"/>
+        <ellipse cx="115" cy="84" rx="4.8" ry="3.2" fill="#0f172a"/>
+        <circle cx="84" cy="83" r="1.4" fill="#ffffff"/>
+        <circle cx="114" cy="83" r="1.4" fill="#ffffff"/>
+        <path d="M78 77 L92 78" stroke="#27272a" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M122 77 L108 78" stroke="#27272a" stroke-width="2.4" stroke-linecap="round"/>
+        <!-- Confident smile -->
+        <path d="M92 108 Q100 114 108 108" stroke="#831843" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      </svg>
+    `),
+  },
+
+  // =========================================================================
+  // 2. ROMANTIC & COSMIC CELESTIAL
+  // =========================================================================
+  {
+    id: 'cosmic-aurora-borealis',
+    name: 'Aurora Serenade',
+    category: 'cosmic',
+    categoryLabel: 'Cosmic & Celestial',
+    description: 'Emerald and crimson northern lights dancing across an obsidian sky.',
+    url: svgToDataUri(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="auroraSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#022c22"/>
+            <stop offset="40%" stop-color="#450a0a"/>
+            <stop offset="100%" stop-color="#09090b"/>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="200" fill="url(#auroraSky)"/>
+        <!-- Aurora bands -->
+        <path d="M0 60 Q60 20 120 70 T200 40 L200 90 Q140 50 80 100 T0 80 Z" fill="#10b981" opacity="0.45"/>
+        <path d="M0 80 Q70 40 140 90 T200 60 L200 120 Q130 70 70 120 T0 100 Z" fill="#E50914" opacity="0.4"/>
+        <circle cx="35" cy="25" r="1.5" fill="#ffffff"/>
+        <circle cx="165" cy="30" r="1.8" fill="#ffffff"/>
+        <circle cx="100" cy="18" r="2.2" fill="#fde047"/>
+        <!-- Pine silhouette mountains -->
+        <polygon points="20,180 35,140 50,180" fill="#09090b"/>
+        <polygon points="45,180 60,130 75,180" fill="#050507"/>
+        <polygon points="120,180 140,135 160,180" fill="#09090b"/>
+        <polygon points="150,180 170,125 190,180" fill="#050507"/>
+        <!-- Twin lovers holding hands on ridge -->
+        <circle cx="95" cy="148" r="4" fill="#ffffff"/>
+        <circle cx="106" cy="149" r="3.8" fill="#fde047"/>
+        <path d="M92 180 L95 152 L98 180" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+        <path d="M103 180 L106 153 L109 180" stroke="#fde047" stroke-width="3" stroke-linecap="round"/>
+        <line x1="97" y1="160" x2="104" y2="160" stroke="#E50914" stroke-width="2"/>
+        <path d="M0 200 Q100 170 200 200 Z" fill="#09090b"/>
+      </svg>
+    `),
+  },
+  {
+    id: 'cosmic-nebula-heart',
+    name: 'Eternal Nebula Heart',
+    category: 'cosmic',
+    categoryLabel: 'Cosmic & Celestial',
+    description: 'Swirling deep crimson and violet galaxy formed into an infinite heart.',
+    url: svgToDataUri(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <defs>
+          <radialGradient id="nebHeart" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#E50914"/>
+            <stop offset="45%" stop-color="#701a75"/>
+            <stop offset="85%" stop-color="#1e1b4b"/>
+            <stop offset="100%" stop-color="#050508"/>
+          </radialGradient>
+        </defs>
+        <rect width="200" height="200" fill="url(#nebHeart)"/>
+        <!-- Orbital Rings -->
+        <ellipse cx="100" cy="100" rx="84" ry="32" stroke="#ffffff" stroke-width="1.2" stroke-opacity="0.3" fill="none" transform="rotate(-25 100 100)"/>
+        <ellipse cx="100" cy="100" rx="72" ry="24" stroke="#fde047" stroke-width="1.4" stroke-opacity="0.4" fill="none" transform="rotate(35 100 100)"/>
+        <!-- Star dust -->
+        <circle cx="45" cy="40" r="1.5" fill="#ffffff"/>
+        <circle cx="160" cy="50" r="1.8" fill="#ffffff"/>
+        <circle cx="150" cy="155" r="1.2" fill="#ffffff"/>
+        <circle cx="35" cy="160" r="1.4" fill="#ffffff"/>
+        <!-- Glowing Sacred Heart Silhouette -->
+        <path d="M100 148 C100 148 52 115 52 78 C52 56 68 42 86 42 C96 42 100 48 100 48 C100 48 104 42 114 42 C132 42 148 56 148 78 C148 115 100 148 100 148 Z" fill="#ffffff" opacity="0.95"/>
+        <path d="M100 140 C100 140 60 110 60 80 C60 62 72 50 88 50 C96 50 100 56 100 56 C100 56 104 50 112 50 C128 50 140 62 140 80 C140 110 100 140 100 140 Z" fill="#E50914"/>
+        <circle cx="100" cy="85" r="14" fill="#ffffff" opacity="0.75"/>
+      </svg>
+    `),
+  },
+  {
+    id: 'cosmic-golden-constellation',
+    name: 'Constellation Soulmates',
+    category: 'cosmic',
+    categoryLabel: 'Cosmic & Celestial',
+    description: 'Golden starlight geometry connecting two destiny stars.',
+    url: svgToDataUri(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <rect width="200" height="200" fill="#09090d"/>
+        <!-- Deep crimson ambient back-glow -->
+        <circle cx="100" cy="100" r="70" fill="#E50914" opacity="0.25"/>
+        <polyline points="40,140 70,70 110,120 150,55 170,105" stroke="#E50914" stroke-width="2.5" fill="none" opacity="0.85"/>
+        <polyline points="40,140 90,150 140,145 170,105" stroke="#fde047" stroke-width="1.8" stroke-dasharray="4 4" fill="none" opacity="0.7"/>
+        <circle cx="40" cy="140" r="6" fill="#ffffff"/>
+        <circle cx="70" cy="70" r="8" fill="#fde047"/>
+        <circle cx="110" cy="120" r="7" fill="#ffffff"/>
+        <circle cx="150" cy="55" r="9" fill="#E50914"/>
+        <circle cx="170" cy="105" r="6" fill="#fde047"/>
+        <circle cx="90" cy="150" r="4.5" fill="#ffffff"/>
+        <circle cx="140" cy="145" r="5" fill="#ffffff"/>
+        <!-- Destiny rings -->
+        <circle cx="150" cy="55" r="16" stroke="#ffffff" stroke-width="1.2" fill="none" opacity="0.6"/>
+        <circle cx="70" cy="70" r="14" stroke="#fde047" stroke-width="1.2" fill="none" opacity="0.6"/>
+      </svg>
+    `),
+  },
+
+  // =========================================================================
+  // 3. ANIME-INSPIRED CINEMATIC PORTRAITS
+  // =========================================================================
+  {
+    id: 'anime-sakura-dreamer',
+    name: 'Sakura Starlight',
+    category: 'anime',
+    categoryLabel: 'Anime Portrait',
+    description: 'A serene anime heroine surrounded by glowing crimson blossom petals.',
+    url: svgToDataUri(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="sakuraBg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#4c0519"/>
+            <stop offset="60%" stop-color="#18181b"/>
+            <stop offset="100%" stop-color="#09090b"/>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="200" fill="url(#sakuraBg)"/>
+        <!-- Falling petals -->
+        <circle cx="40" cy="45" r="3.5" fill="#fda4af" opacity="0.8"/>
+        <circle cx="160" cy="65" r="4" fill="#fda4af" opacity="0.9"/>
+        <circle cx="145" cy="145" r="3" fill="#f43f5e" opacity="0.7"/>
+        <circle cx="55" cy="130" r="2.8" fill="#fda4af" opacity="0.75"/>
+        <!-- Shoulders / Kimono -->
+        <path d="M40 200 C45 155 75 145 100 145 C125 145 155 155 160 200 Z" fill="#ffffff"/>
+        <path d="M75 145 L100 180 L125 145 Z" fill="#E50914"/>
+        <!-- Head & flowing twintails -->
+        <path d="M46 95 C38 60 52 40 80 40 L120 40 C148 40 162 60 154 95 C164 135 166 185 162 200 C154 185 150 150 144 120 C138 90 62 90 56 120 C50 150 46 185 38 200 C34 185 36 135 46 95 Z" fill="#fda4af"/>
+        <!-- Face -->
+        <path d="M68 80 L100 125 L132 80 C132 55 68 55 68 80 Z" fill="#fff1f2"/>
+        <!-- Anime Bangs -->
+        <path d="M64 74 L78 92 L86 70 L100 90 L114 70 L122 92 L136 74 C128 48 72 48 64 74 Z" fill="#fb7185"/>
+        <!-- Anime Sparkling Eyes -->
+        <ellipse cx="84" cy="94" rx="7" ry="8.5" fill="#9f1239"/>
+        <ellipse cx="116" cy="94" rx="7" ry="8.5" fill="#9f1239"/>
+        <circle cx="82" cy="90.5" r="2.8" fill="#ffffff"/>
+        <circle cx="114" cy="90.5" r="2.8" fill="#ffffff"/>
+        <circle cx="86" cy="97" r="1.4" fill="#fda4af"/>
+        <circle cx="118" cy="97" r="1.4" fill="#fda4af"/>
+        <circle cx="75" cy="106" r="4.5" fill="#f43f5e" opacity="0.4"/>
+        <circle cx="125" cy="106" r="4.5" fill="#f43f5e" opacity="0.4"/>
+        <path d="M96 112 Q100 116 104 112" stroke="#e11d48" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      </svg>
+    `),
+  },
+  {
+    id: 'anime-crimson-ronin',
+    name: 'Midnight Ronin',
+    category: 'anime',
+    categoryLabel: 'Anime Portrait',
+    description: 'A focused midnight warrior with a crimson crest and starlit katana.',
+    url: svgToDataUri(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <rect width="200" height="200" fill="#09090b"/>
+        <!-- Giant red moon backdrop -->
+        <circle cx="100" cy="85" r="62" fill="#E50914" opacity="0.25"/>
+        <!-- Armor shoulders -->
+        <path d="M35 200 C40 150 72 138 100 138 C128 138 160 150 165 200 Z" fill="#18181b"/>
+        <rect x="70" y="145" width="60" height="12" rx="3" fill="#E50914"/>
+        <!-- Neck & Chin -->
+        <path d="M88 115 L88 142 C94 146 106 146 112 142 L112 115 Z" fill="#fed7aa"/>
+        <path d="M70 78 L100 126 L130 78 C130 52 70 52 70 78 Z" fill="#ffedd5"/>
+        <!-- Spiky Ronin Hair -->
+        <path d="M56 70 L72 40 L90 52 L108 34 L126 50 L144 42 L142 76 L130 68 L100 58 L70 68 Z" fill="#27272a"/>
+        <!-- Crimson Headband -->
+        <rect x="68" y="72" width="64" height="12" rx="3" fill="#E50914"/>
+        <circle cx="100" cy="78" r="3.5" fill="#fde047"/>
+        <!-- Eyes (intense, focused) -->
+        <ellipse cx="85" cy="94" rx="6" ry="4" fill="#09090b"/>
+        <ellipse cx="115" cy="94" rx="6" ry="4" fill="#09090b"/>
+        <circle cx="84" cy="93" r="1.5" fill="#ffffff"/>
+        <circle cx="114" cy="93" r="1.5" fill="#ffffff"/>
+        <path d="M78 87 L92 89" stroke="#E50914" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M122 87 L108 89" stroke="#E50914" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+    `),
+  },
+
+  // =========================================================================
+  // 4. FILM & CINEMATIC NOIR
+  // =========================================================================
+  {
+    id: 'cinema-auteur',
+    name: 'The Auteur',
+    category: 'cinematic',
+    categoryLabel: 'Film & Noir',
+    description: '35mm cinema clapper with warm projection glow and signature crimson accents.',
+    url: svgToDataUri(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="cinemaLight" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#E50914" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#09090b"/>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="200" fill="url(#cinemaLight)"/>
+        <!-- Film Reel Background Circle -->
+        <circle cx="100" cy="100" r="74" stroke="#27272a" stroke-width="6" fill="#0c0c0e"/>
+        <circle cx="100" cy="100" r="28" stroke="#E50914" stroke-width="4" fill="#18181b"/>
+        <circle cx="100" cy="100" r="8" fill="#ffffff"/>
+        <!-- Reel cutouts -->
+        <circle cx="100" cy="56" r="14" fill="#09090b"/>
+        <circle cx="100" cy="144" r="14" fill="#09090b"/>
+        <circle cx="56" cy="100" r="14" fill="#09090b"/>
+        <circle cx="144" cy="100" r="14" fill="#09090b"/>
+        <!-- Clapperboard overlay in front -->
+        <rect x="42" y="112" width="116" height="58" rx="6" fill="#18181b" stroke="#ffffff" stroke-width="2"/>
+        <polygon points="42,112 158,112 158,92 42,92" fill="#E50914"/>
+        <line x1="60" y1="92" x2="50" y2="112" stroke="#ffffff" stroke-width="4"/>
+        <line x1="90" y1="92" x2="80" y2="112" stroke="#ffffff" stroke-width="4"/>
+        <line x1="120" y1="92" x2="110" y2="112" stroke="#ffffff" stroke-width="4"/>
+        <line x1="150" y1="92" x2="140" y2="112" stroke="#ffffff" stroke-width="4"/>
+        <!-- Play heart in center -->
+        <polygon points="94,130 94,152 114,141" fill="#ffffff"/>
+      </svg>
+    `),
+  },
+  {
+    id: 'cinema-golden-premiere',
+    name: 'Premiere Night',
+    category: 'cinematic',
+    categoryLabel: 'Film & Noir',
+    description: 'Golden theatre spotlight illuminating a gleaming premiere star.',
+    url: svgToDataUri(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="spotlight1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#E50914"/>
+            <stop offset="60%" stop-color="#7f1d1d"/>
+            <stop offset="100%" stop-color="#09090b"/>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="200" fill="url(#spotlight1)"/>
+        <!-- Spotlight cones -->
+        <polygon points="0,0 200,200 120,200 0,60" fill="#ffffff" opacity="0.08"/>
+        <polygon points="200,0 0,200 60,200 200,40" fill="#fde047" opacity="0.08"/>
+        <!-- Glowing Premiere Star -->
+        <polygon points="100,35 118,78 164,82 128,114 139,158 100,134 61,158 72,114 36,82 82,78" fill="#fde047" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="100" cy="100" r="16" fill="#E50914"/>
+        <circle cx="100" cy="100" r="8" fill="#ffffff"/>
+      </svg>
+    `),
+  },
+
+  // =========================================================================
+  // 5. ARTISTIC SILHOUETTES & MINIMAL LUXURY
+  // =========================================================================
+  {
+    id: 'art-golden-hour',
+    name: 'Golden Hour Silhouette',
+    category: 'artistic',
+    categoryLabel: 'Artistic Silhouettes',
+    description: 'A warm sunset horizon reflecting pure romance and memory warmth.',
+    url: svgToDataUri(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="sunsetSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#b45309"/>
+            <stop offset="40%" stop-color="#E50914"/>
+            <stop offset="80%" stop-color="#450a0a"/>
+            <stop offset="100%" stop-color="#09090b"/>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="200" fill="url(#sunsetSky)"/>
+        <!-- Giant Setting Sun -->
+        <circle cx="100" cy="115" r="48" fill="#fef08a" opacity="0.95"/>
+        <circle cx="100" cy="115" r="64" fill="#fde047" opacity="0.25"/>
+        <!-- Horizon wave -->
+        <path d="M0 135 Q50 125 100 135 T200 135 L200 200 L0 200 Z" fill="#09090b"/>
+        <!-- Two silhouettes leaning in against setting sun -->
+        <circle cx="88" cy="108" r="8" fill="#09090b"/>
+        <circle cx="112" cy="110" r="7.5" fill="#09090b"/>
+        <path d="M78 145 C78 125 86 118 96 118 C98 126 102 126 104 118 C114 118 122 125 122 145 Z" fill="#09090b"/>
+      </svg>
+    `),
+  },
+  {
+    id: 'art-crimson-infinity',
+    name: 'Forever Infinity',
+    category: 'artistic',
+    categoryLabel: 'Artistic Silhouettes',
+    description: 'The iconic infinity symbol glowing with signature Netflix red neon.',
+    url: svgToDataUri(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+        <rect width="200" height="200" fill="#09090b"/>
+        <circle cx="100" cy="100" r="70" fill="#E50914" opacity="0.18"/>
+        <!-- Infinity Neon Tube -->
+        <path d="M70 75 C45 75 35 125 70 125 C92 125 110 75 130 75 C165 75 155 125 130 125 C110 125 92 75 70 75 Z" stroke="#E50914" stroke-width="14" fill="none" stroke-linecap="round"/>
+        <path d="M70 75 C45 75 35 125 70 125 C92 125 110 75 130 75 C165 75 155 125 130 125 C110 125 92 75 70 75 Z" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.9"/>
       </svg>
     `),
   },
 ];
+
+/**
+ * Returns a deterministic, high-quality illustrated avatar for any profile.
+ * - If profile has a custom user-selected or uploaded avatarUrl, returns it.
+ * - Otherwise maps the profile id or role to our signature illustrated artworks:
+ *   - 'profile-together' / 'together' -> Cosmic Lovers (Duo)
+ *   - 'profile-her' / 'partner1'      -> The Starlight Muse (Her)
+ *   - 'profile-him' / 'partner2'      -> The Midnight Voyager (Him)
+ *   - Other profiles                  -> Deterministic illustrated avatar based on ID
+ */
+export function getProfileAvatarUrl(profile: {
+  id?: string;
+  role?: string;
+  avatarUrl?: string;
+  avatarId?: string;
+}): string {
+  if (profile.avatarUrl && profile.avatarUrl.trim() !== '') {
+    return profile.avatarUrl;
+  }
+
+  if (profile.avatarId) {
+    const found = BUILT_IN_AVATARS.find((a) => a.id === profile.avatarId);
+    if (found) return found.url;
+  }
+
+  const role = (profile.role || '').toLowerCase();
+  const id = (profile.id || '').toLowerCase();
+
+  if (role === 'together' || id.includes('together') || id.includes('universe')) {
+    return BUILT_IN_AVATARS[0].url; // Cosmic Lovers Duo
+  }
+  if (role === 'partner1' || id.includes('her') || id.includes('girl')) {
+    return BUILT_IN_AVATARS[1].url; // The Starlight Muse
+  }
+  if (role === 'partner2' || id.includes('him') || id.includes('guy')) {
+    return BUILT_IN_AVATARS[2].url; // The Midnight Voyager
+  }
+
+  // Hash the id to choose a stable, non-random avatar
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash << 5) - hash + id.charCodeAt(i);
+    hash |= 0;
+  }
+  const index = Math.abs(hash) % BUILT_IN_AVATARS.length;
+  return BUILT_IN_AVATARS[index].url;
+}

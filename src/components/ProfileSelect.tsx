@@ -6,6 +6,7 @@ import {
   BUILT_IN_AVATAR_CATEGORIES,
   BuiltInAvatarCategory,
   BuiltInAvatarItem,
+  getProfileAvatarUrl,
 } from '../data/builtInAvatars';
 
 export default function ProfileSelect({
@@ -46,7 +47,7 @@ export default function ProfileSelect({
     setEditingProfile(profile);
     setDraftName(profile.name);
     setDraftSeason(profile.favoriteSeason || '');
-    setDraftAvatarUrl(profile.avatarUrl);
+    setDraftAvatarUrl(profile.avatarUrl || getProfileAvatarUrl(profile));
     setDraftAvatarId(profile.avatarId);
     setDraftEmoji(profile.avatarEmoji || '❤️');
     setDraftBg(profile.avatarBg || 'bg-[#E50914]');
@@ -125,24 +126,35 @@ export default function ProfileSelect({
       : BUILT_IN_AVATARS.filter((a) => a.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-[#141414] text-[#FFFFFF] flex flex-col items-center justify-between relative overflow-hidden selection:bg-[#E50914] selection:text-[#FFFFFF]">
-      {/* Top-to-bottom Netflix vignette */}
-      <div
-        className="pointer-events-none fixed inset-0 bg-gradient-to-b from-[#000000]/90 via-[#141414] to-[#000000]"
-        aria-hidden="true"
-      />
+    <div className="min-h-screen bg-[#050507] text-[#FFFFFF] flex flex-col items-center justify-between relative overflow-hidden select-none selection:bg-[#E50914] selection:text-[#FFFFFF]">
+      {/* 1. Deep-black cinematic background with delicate starlight dust */}
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
+        <div className="absolute inset-0 bg-[#000000]" />
+        {/* Subtle top & bottom dark vignettes */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-transparent to-[#000000]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(229,9,20,0.12)_0%,transparent_60%)]" />
+
+        {/* 2. SUBTLE DARK CRIMSON AMBIENT LIGHTING BEHIND PROFILE CARDS */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] max-w-[96vw] h-[480px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(229,9,20,0.22)_0%,rgba(180,10,25,0.10)_42%,transparent_72%)] blur-3xl opacity-90"
+        />
+        {/* Secondary softer deep crimson bloom */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] max-w-[80vw] h-[300px] rounded-full bg-[radial-gradient(circle,rgba(229,9,20,0.18)_0%,transparent_70%)] blur-2xl"
+        />
+      </div>
 
       {/* Top Header Bar */}
-      <header className="relative z-10 w-full max-w-7xl px-6 sm:px-12 pt-6 sm:pt-7 flex flex-wrap justify-between items-center gap-4">
-        <div className="font-bebas text-3xl sm:text-4xl tracking-widest text-[#E50914] font-black uppercase select-none">
+      <header className="relative z-10 w-full max-w-7xl px-6 sm:px-12 pt-6 sm:pt-8 flex flex-wrap justify-between items-center gap-4">
+        <div className="font-bebas text-3xl sm:text-5xl tracking-[0.25em] text-[#E50914] font-black uppercase drop-shadow-[0_2px_14px_rgba(229,9,20,0.4)] transition-transform duration-300 hover:scale-[1.02]">
           OUR UNIVERSE
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
           {userEmail && (
-            <div className="hidden sm:flex items-center gap-2 text-xs text-[#B3B3B3]">
+            <div className="hidden sm:flex items-center gap-2 text-xs text-[#a3a3a3] bg-white/[0.03] px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-sm">
               {isAdmin && <ShieldCheck className="w-3.5 h-3.5 text-[#E50914] shrink-0" />}
-              <span className="truncate max-w-[220px]">{userEmail}</span>
+              <span className="truncate max-w-[220px] font-medium">{userEmail}</span>
             </div>
           )}
 
@@ -150,11 +162,11 @@ export default function ProfileSelect({
             <button
               type="button"
               onClick={onOpenAdminPrototype}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] bg-[#181818] hover:bg-[#FFFFFF]/10 border border-[#E50914]/50 text-xs text-[#E50914] hover:text-[#FFFFFF] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/60 hover:bg-white/10 border border-[#E50914]/50 text-xs text-[#E50914] hover:text-[#FFFFFF] transition-all cursor-pointer backdrop-blur-sm"
               title="Launch isolated in-memory Admin Panel Prototype"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#E50914]" />
-              <span className="hidden xs:inline">Admin Prototype</span>
+              <span className="hidden xs:inline font-medium">Admin Prototype</span>
             </button>
           )}
 
@@ -162,231 +174,213 @@ export default function ProfileSelect({
             <button
               type="button"
               onClick={onSignOut}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-[4px] bg-[#181818] hover:bg-[#FFFFFF]/10 border border-[#808080]/40 text-xs text-[#B3B3B3] hover:text-[#FFFFFF] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/10 border border-white/15 text-xs text-[#a3a3a3] hover:text-[#FFFFFF] transition-all cursor-pointer backdrop-blur-sm"
             >
               <LogOut className="w-3.5 h-3.5 text-[#E50914]" />
-              <span>Sign Out</span>
+              <span className="font-medium">Sign Out</span>
             </button>
           )}
         </div>
       </header>
 
-      {/* Main Centered "Who's watching?" Gate */}
-      <main className="relative z-10 flex-1 w-full max-w-5xl flex flex-col items-center justify-center px-6 py-12 animate-in fade-in duration-300">
-        <h1 className="text-3xl sm:text-5xl md:text-[54px] font-medium mb-3 text-center tracking-wide text-[#FFFFFF]">
-          {isManageMode ? 'Manage Profiles:' : "Who's watching?"}
-        </h1>
-        <p className="text-xs sm:text-sm text-[#808080] mb-8 sm:mb-12 text-center">
-          {isManageMode
-            ? 'Select a profile below to customize its ready-made avatar or name'
-            : 'Choose your profile to enter OUR UNIVERSE'}
-        </p>
+      {/* Main Centered "Who's watching?" Gateway */}
+      <main className="relative z-10 flex-1 w-full max-w-6xl flex flex-col items-center justify-center px-4 sm:px-8 py-10 sm:py-16 animate-in fade-in zoom-in-95 duration-500">
+        <div className="text-center mb-8 sm:mb-14">
+          <h1 className="text-4xl sm:text-6xl md:text-[68px] font-medium tracking-tight text-white mb-3 text-center drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+            {isManageMode ? 'Manage Profiles' : "Who's watching?"}
+          </h1>
+          <p className="text-xs sm:text-sm md:text-base text-[#a3a3a3] font-light text-center tracking-wide max-w-md mx-auto">
+            {isManageMode
+              ? 'Select a profile to customize its illustrated avatar, name, or memories.'
+              : 'Choose your profile to begin your journey through OUR UNIVERSE'}
+          </p>
+        </div>
 
-        <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-10">
-          {profiles.map((profile) => (
-            <div
-              key={profile.id}
-              className="group w-28 sm:w-36 md:w-40 flex flex-col items-center gap-3"
-            >
-              <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (isManageMode) {
-                      openEditModal(profile);
-                    } else {
-                      onSelect(profile);
-                    }
-                  }}
-                  className={`w-full h-full rounded-[4px] ${
-                    profile.avatarBg || 'bg-[#181818]'
-                  } ring-2 ring-transparent group-hover:ring-[#FFFFFF] focus-visible:ring-[#FFFFFF] overflow-hidden flex items-center justify-center transition-all duration-200 group-hover:scale-105 shadow-[0_10px_30px_rgba(0,0,0,0.75)] relative cursor-pointer focus:outline-none`}
-                  aria-label={
-                    isManageMode
-                      ? `Edit profile and avatar for ${profile.name}`
-                      : `Select profile ${profile.name}`
-                  }
-                >
-                  {profile.avatarUrl ? (
-                    <img
-                      src={profile.avatarUrl}
-                      alt={profile.name}
-                      className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105 select-none"
-                    />
-                  ) : (
-                    <>
-                      <div
-                        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.18),transparent_65%)]"
-                        aria-hidden="true"
-                      />
-                      {profile.avatarEmoji ? (
-                        <span
-                          className="relative z-10 text-4xl sm:text-5xl md:text-6xl group-hover:scale-110 transition-transform duration-200 select-none"
-                          aria-hidden="true"
-                        >
-                          {profile.avatarEmoji}
-                        </span>
-                      ) : (
-                        <span className="relative z-10 text-3xl sm:text-4xl font-bold text-[#FFFFFF]">
-                          {profile.name.slice(0, 1).toUpperCase()}
-                        </span>
-                      )}
-                    </>
-                  )}
+        {/* Profile Cards Grid */}
+        <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 md:gap-12 lg:gap-14 w-full">
+          {profiles.map((profile) => {
+            const avatarSrc = getProfileAvatarUrl(profile);
 
-                  {/* Netflix Manage Mode Pencil Overlay */}
-                  {isManageMode && (
-                    <div className="absolute inset-0 bg-[#000000]/60 flex items-center justify-center transition-opacity">
-                      <div className="w-11 h-11 rounded-full border-2 border-[#FFFFFF] bg-[#000000]/70 flex items-center justify-center text-[#FFFFFF] shadow-lg">
-                        <Pencil className="w-5 h-5" />
-                      </div>
-                    </div>
-                  )}
-                </button>
-
-                {/* Quick Edit Avatar Corner Button when not in full manage mode */}
-                {!isManageMode && (
+            return (
+              <div
+                key={profile.id}
+                className="group w-36 sm:w-44 md:w-48 lg:w-52 flex flex-col items-center text-center focus-within:outline-none"
+              >
+                <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 lg:w-52 lg:h-52">
                   <button
                     type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      openEditModal(profile);
+                    onClick={() => {
+                      if (isManageMode) {
+                        openEditModal(profile);
+                      } else {
+                        onSelect(profile);
+                      }
                     }}
-                    title={`Change avatar for ${profile.name}`}
-                    aria-label={`Change avatar for ${profile.name}`}
-                    className="opacity-0 group-hover:opacity-100 focus:opacity-100 absolute top-2 right-2 z-20 w-7 h-7 rounded-full bg-[#000000]/80 hover:bg-[#E50914] text-[#FFFFFF] border border-[#FFFFFF]/30 flex items-center justify-center transition-all duration-150 cursor-pointer shadow"
+                    className={`w-full h-full rounded-2xl overflow-hidden relative cursor-pointer border-2 border-white/10 group-hover:border-[#E50914] focus-visible:border-white shadow-[0_14px_45px_rgba(0,0,0,0.9)] group-hover:shadow-[0_20px_60px_rgba(229,9,20,0.45),0_0_35px_rgba(229,9,20,0.3)] transition-all duration-300 ease-out group-hover:scale-105 group-hover:-translate-y-2 focus:outline-none bg-[#101014]`}
+                    aria-label={
+                      isManageMode
+                        ? `Edit profile and avatar for ${profile.name}`
+                        : `Select profile ${profile.name}`
+                    }
                   >
-                    <Pencil className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
+                    {/* Illustrated Artwork */}
+                    <img
+                      src={avatarSrc}
+                      alt={profile.name}
+                      className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105 select-none"
+                    />
 
-              <div className="text-center space-y-0.5 w-full">
-                <span className="block text-sm sm:text-base md:text-lg text-[#808080] group-hover:text-[#FFFFFF] font-normal transition-colors duration-200 truncate">
-                  {profile.name}
-                </span>
-                {profile.favoriteSeason && (
-                  <span className="block text-[11px] text-[#808080]/80 group-hover:text-[#B3B3B3] transition-colors line-clamp-1">
-                    {profile.favoriteSeason}
+                    {/* Subtle cinematic glass/rim overlay */}
+                    <div
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-white/10 opacity-70 group-hover:opacity-40 transition-opacity duration-300"
+                      aria-hidden="true"
+                    />
+
+                    {/* Manage Mode Pencil Overlay */}
+                    {isManageMode && (
+                      <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center transition-opacity">
+                        <div className="w-12 h-12 rounded-full border-2 border-white bg-black/80 flex items-center justify-center text-white shadow-2xl">
+                          <Pencil className="w-5 h-5 text-white" />
+                        </div>
+                      </div>
+                    )}
+                  </button>
+
+                  {/* Quick Edit Pencil Shortcut when hovering */}
+                  {!isManageMode && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openEditModal(profile);
+                      }}
+                      title={`Customize avatar for ${profile.name}`}
+                      aria-label={`Customize avatar for ${profile.name}`}
+                      className="opacity-0 group-hover:opacity-100 focus:opacity-100 absolute top-2.5 right-2.5 z-20 w-8 h-8 rounded-full bg-black/85 hover:bg-[#E50914] text-white border border-white/30 flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg hover:scale-110"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Profile Name & Tagline */}
+                <div className="w-full text-center mt-3.5 space-y-0.5">
+                  <span className="block text-base sm:text-lg md:text-xl font-medium text-[#B3B3B3] group-hover:text-white transition-colors duration-200 truncate tracking-wide">
+                    {profile.name}
                   </span>
-                )}
+                  {profile.favoriteSeason && (
+                    <span className="block text-xs text-[#737373] group-hover:text-[#a3a3a3] transition-colors duration-200 line-clamp-1 font-light">
+                      {profile.favoriteSeason}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* Add Profile Card when in Manage Mode */}
           {isManageMode && (
             <button
               type="button"
               onClick={openCreateModal}
-              className="group w-28 sm:w-36 md:w-40 flex flex-col items-center gap-3 transition-transform duration-200 hover:scale-105 cursor-pointer focus:outline-none"
+              className="group w-36 sm:w-44 md:w-48 lg:w-52 flex flex-col items-center text-center cursor-pointer focus:outline-none transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
               aria-label="Add Profile"
             >
-              <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-[4px] bg-[#181818]/70 hover:bg-[#181818] border-2 border-dashed border-[#808080]/60 group-hover:border-[#FFFFFF] flex items-center justify-center transition-all duration-200">
-                <div className="w-12 h-12 rounded-full bg-[#141414] group-hover:bg-[#E50914] text-[#808080] group-hover:text-[#FFFFFF] flex items-center justify-center transition-colors">
-                  <Plus className="w-6 h-6" />
+              <div className="w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border-2 border-dashed border-white/20 group-hover:border-[#E50914] flex items-center justify-center transition-all duration-300 shadow-[0_14px_45px_rgba(0,0,0,0.6)] group-hover:shadow-[0_20px_50px_rgba(229,9,20,0.3)]">
+                <div className="w-14 h-14 rounded-full bg-black/70 group-hover:bg-[#E50914] text-[#a3a3a3] group-hover:text-white flex items-center justify-center transition-all duration-200 border border-white/10 group-hover:border-transparent shadow">
+                  <Plus className="w-7 h-7" />
                 </div>
               </div>
-              <span className="block text-sm sm:text-base md:text-lg text-[#808080] group-hover:text-[#FFFFFF] font-normal transition-colors">
-                Add Profile
-              </span>
+              <div className="w-full text-center mt-3.5">
+                <span className="block text-base sm:text-lg font-medium text-[#808080] group-hover:text-white transition-colors tracking-wide">
+                  Add Profile
+                </span>
+              </div>
             </button>
           )}
         </div>
 
-        {/* Bottom Manage Profiles / Done Button */}
-        <div className="mt-12 sm:mt-16 flex items-center gap-4">
+        {/* Manage Profiles / Done Action Button */}
+        <div className="mt-12 sm:mt-16 flex items-center justify-center">
           <button
             type="button"
             onClick={() => {
               setIsManageMode((prev) => !prev);
               if (onManage && !isManageMode) onManage();
             }}
-            className={`px-7 py-2.5 text-xs sm:text-sm uppercase tracking-[0.2em] font-semibold transition-all duration-200 cursor-pointer rounded-[2px] ${
+            className={`px-8 sm:px-10 py-2.5 sm:py-3 text-xs sm:text-sm uppercase tracking-[0.25em] font-semibold transition-all duration-200 cursor-pointer rounded-[3px] border ${
               isManageMode
-                ? 'bg-[#FFFFFF] text-[#000000] hover:bg-[#E50914] hover:text-[#FFFFFF]'
-                : 'border border-[#808080] hover:border-[#FFFFFF] text-[#808080] hover:text-[#FFFFFF]'
-            }`}
+                ? 'bg-white text-black border-white hover:bg-[#E50914] hover:text-white hover:border-[#E50914] shadow-[0_0_25px_rgba(255,255,255,0.4)]'
+                : 'border-[#737373] text-[#8c8c8c] hover:border-white hover:text-white hover:bg-white/[0.05]'
+            } active:scale-95`}
           >
             {isManageMode ? 'Done' : 'Manage Profiles'}
           </button>
         </div>
       </main>
 
-      {/* Subtle Bottom Caption */}
-      <footer className="relative z-10 pb-8 px-6 text-center text-xs text-[#808080]">
-        <p>Select your profile to enter OUR UNIVERSE</p>
+      {/* Subtle Bottom Ambient Caption */}
+      <footer className="relative z-10 pb-6 px-6 text-center text-xs text-[#525252] tracking-wider">
+        <span>OUR UNIVERSE · PRIVATE MEMORY STREAM</span>
       </footer>
 
       {/* BUILT-IN AVATAR PICKER & PROFILE EDITOR MODAL */}
       {editingProfile && (
         <div
-          className="fixed inset-0 z-50 overflow-y-auto dark-scrollbar bg-[#000000]/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 overflow-y-auto dark-scrollbar bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
           onClick={closeEditor}
         >
           <div
-            className="relative w-full max-w-3xl bg-[#141414] border border-[#FFFFFF]/15 rounded-[4px] shadow-[0_20px_60px_rgba(0,0,0,0.95)] text-[#FFFFFF] p-6 sm:p-10 my-auto max-h-[92vh] flex flex-col"
+            className="relative w-full max-w-3xl bg-[#121215] border border-white/15 rounded-2xl shadow-[0_25px_70px_rgba(0,0,0,0.98)] text-white p-6 sm:p-10 my-auto max-h-[92vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Close Button */}
             <button
               type="button"
               onClick={closeEditor}
-              className="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#181818] hover:bg-[#FFFFFF]/15 text-[#B3B3B3] hover:text-[#FFFFFF] flex items-center justify-center transition-colors cursor-pointer border border-[#FFFFFF]/10"
+              className="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/5 hover:bg-[#E50914] text-[#a3a3a3] hover:text-white flex items-center justify-center transition-colors cursor-pointer border border-white/10"
               aria-label="Cancel and close avatar picker"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Header */}
-            <div className="pb-5 border-b border-[#FFFFFF]/10 shrink-0">
-              <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-[#FFFFFF]">
-                {isCreatingNew ? 'Add Profile' : 'Edit Profile & Avatar'}
+            <div className="pb-5 border-b border-white/10 shrink-0">
+              <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white">
+                {isCreatingNew ? 'Add Profile' : 'Customize Profile & Artwork'}
               </h2>
-              <p className="text-xs sm:text-sm text-[#B3B3B3] mt-1">
-                Choose a ready-made avatar from our curated collection below.
+              <p className="text-xs sm:text-sm text-[#a3a3a3] mt-1">
+                Choose a ready-made illustrated portrait from our curated collection below.
               </p>
             </div>
 
             <form onSubmit={handleSave} className="flex-1 overflow-y-auto dark-scrollbar pr-1 py-6 space-y-6">
               {/* Top Section: Selected Avatar Preview + Profile Name */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 border-b border-[#FFFFFF]/10">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 border-b border-white/10">
                 <div className="shrink-0 flex flex-col items-center gap-2">
                   <div
-                    className={`w-28 h-28 sm:w-32 sm:h-32 rounded-[4px] ${
-                      draftBg || 'bg-[#181818]'
-                    } ring-2 ring-[#E50914] overflow-hidden flex items-center justify-center shadow-xl relative`}
+                    className={`w-32 h-32 sm:w-36 sm:h-36 rounded-2xl overflow-hidden flex items-center justify-center ring-2 ring-[#E50914] shadow-[0_0_30px_rgba(229,9,20,0.35)] relative bg-[#18181c]`}
                   >
-                    {draftAvatarUrl ? (
-                      <img
-                        src={draftAvatarUrl}
-                        alt={draftName || 'Selected avatar preview'}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-5xl select-none">{draftEmoji}</span>
-                    )}
+                    <img
+                      src={draftAvatarUrl || getProfileAvatarUrl(editingProfile)}
+                      alt={draftName || 'Selected avatar preview'}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  {draftAvatarUrl && (
-                    <button
-                      type="button"
-                      onClick={handleClearBuiltInAvatar}
-                      className="text-[11px] text-[#B3B3B3] hover:text-[#FFFFFF] underline cursor-pointer"
-                    >
-                      Use Classic Emoji Icon
-                    </button>
-                  )}
+                  <span className="text-[11px] text-[#a3a3a3] font-medium tracking-wide">
+                    Active Portrait
+                  </span>
                 </div>
 
                 <div className="flex-1 w-full space-y-4">
                   {formError && (
-                    <div className="p-3 rounded-[4px] bg-[#E50914]/15 border border-[#E50914] text-xs text-[#FFFFFF]">
+                    <div className="p-3 rounded-lg bg-[#E50914]/20 border border-[#E50914] text-xs text-white">
                       {formError}
                     </div>
                   )}
 
                   <div>
-                    <label htmlFor="profile-name-input" className="block text-xs font-semibold text-[#B3B3B3] uppercase tracking-wider mb-1.5">
+                    <label htmlFor="profile-name-input" className="block text-xs font-semibold text-[#a3a3a3] uppercase tracking-wider mb-1.5">
                       Profile Name
                     </label>
                     <input
@@ -399,13 +393,13 @@ export default function ProfileSelect({
                         setDraftName(e.target.value);
                         setFormError('');
                       }}
-                      placeholder="Enter profile name"
-                      className="w-full bg-[#181818] border border-[#808080]/60 focus:border-[#FFFFFF] rounded-[4px] py-3 px-4 text-sm sm:text-base text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-colors"
+                      placeholder="e.g. My Girl 👑, Our Universe, Your Guy 🌙"
+                      className="w-full bg-[#18181c] border border-white/20 focus:border-[#E50914] focus:ring-1 focus:ring-[#E50914] rounded-lg py-3 px-4 text-sm sm:text-base text-white placeholder-[#737373] focus:outline-none transition-all"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="profile-season-input" className="block text-xs font-semibold text-[#B3B3B3] uppercase tracking-wider mb-1.5">
+                    <label htmlFor="profile-season-input" className="block text-xs font-semibold text-[#a3a3a3] uppercase tracking-wider mb-1.5">
                       Favorite Season / Tagline (optional)
                     </label>
                     <input
@@ -415,7 +409,7 @@ export default function ProfileSelect({
                       value={draftSeason}
                       onChange={(e) => setDraftSeason(e.target.value)}
                       placeholder="e.g. Season 1: How We Met"
-                      className="w-full bg-[#181818] border border-[#808080]/60 focus:border-[#FFFFFF] rounded-[4px] py-2.5 px-4 text-xs sm:text-sm text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-colors"
+                      className="w-full bg-[#18181c] border border-white/20 focus:border-[#E50914] focus:ring-1 focus:ring-[#E50914] rounded-lg py-2.5 px-4 text-xs sm:text-sm text-white placeholder-[#737373] focus:outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -425,11 +419,11 @@ export default function ProfileSelect({
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <h3 className="text-base sm:text-lg font-bold text-[#FFFFFF]">
-                      Choose an Avatar
+                    <h3 className="text-base sm:text-lg font-bold text-white">
+                      Select Curated Artwork
                     </h3>
-                    <p className="text-xs text-[#808080]">
-                      Ready-made original characters, anime portraits, cute mascots &amp; cinematic icons
+                    <p className="text-xs text-[#a3a3a3]">
+                      Original cinematic portraits, celestial cosmic duos &amp; anime artwork
                     </p>
                   </div>
 
@@ -440,10 +434,10 @@ export default function ProfileSelect({
                         key={cat.id}
                         type="button"
                         onClick={() => setActiveCategory(cat.id)}
-                        className={`px-3 py-1.5 rounded-[4px] text-xs font-semibold transition-colors cursor-pointer ${
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                           activeCategory === cat.id
-                            ? 'bg-[#E50914] text-[#FFFFFF] shadow'
-                            : 'bg-[#181818] text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#FFFFFF]/10'
+                            ? 'bg-[#E50914] text-white shadow-[0_0_15px_rgba(229,9,20,0.5)]'
+                            : 'bg-white/5 text-[#a3a3a3] hover:text-white hover:bg-white/10'
                         }`}
                       >
                         {cat.label}
@@ -453,7 +447,7 @@ export default function ProfileSelect({
                 </div>
 
                 {/* Avatar Grid */}
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3.5 sm:gap-4 pt-1">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 sm:gap-4 pt-1">
                   {filteredAvatars.map((avatar) => {
                     const isSelected =
                       draftAvatarId === avatar.id || draftAvatarUrl === avatar.url;
@@ -462,15 +456,15 @@ export default function ProfileSelect({
                         key={avatar.id}
                         type="button"
                         onClick={() => handleSelectBuiltInAvatar(avatar)}
-                        className={`group/tile flex flex-col items-center gap-1.5 text-center cursor-pointer focus:outline-none`}
+                        className={`group/tile flex flex-col items-center gap-2 text-center cursor-pointer focus:outline-none`}
                         aria-label={`Select avatar ${avatar.name}`}
                         aria-pressed={isSelected}
                       >
                         <div
-                          className={`relative w-full aspect-square rounded-[4px] overflow-hidden transition-all duration-200 group-hover/tile:scale-105 ${
+                          className={`relative w-full aspect-square rounded-xl overflow-hidden transition-all duration-300 group-hover/tile:scale-105 bg-[#18181c] ${
                             isSelected
-                              ? 'ring-3 ring-[#E50914] shadow-[0_0_20px_rgba(229,9,20,0.45)]'
-                              : 'ring-2 ring-transparent group-hover/tile:ring-[#FFFFFF]'
+                              ? 'ring-3 ring-[#E50914] shadow-[0_0_25px_rgba(229,9,20,0.55)] scale-102'
+                              : 'ring-1 ring-white/10 group-hover/tile:ring-white/40'
                           }`}
                         >
                           <img
@@ -480,16 +474,16 @@ export default function ProfileSelect({
                             className="w-full h-full object-cover select-none"
                           />
                           {isSelected && (
-                            <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-[#E50914] text-[#FFFFFF] flex items-center justify-center shadow-md">
+                            <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#E50914] text-white flex items-center justify-center shadow-lg">
                               <Check className="w-3.5 h-3.5 stroke-[3]" />
                             </div>
                           )}
                         </div>
                         <span
-                          className={`text-[11px] truncate w-full transition-colors ${
+                          className={`text-xs truncate w-full transition-colors ${
                             isSelected
-                              ? 'text-[#FFFFFF] font-semibold'
-                              : 'text-[#808080] group-hover/tile:text-[#FFFFFF]'
+                              ? 'text-white font-semibold'
+                              : 'text-[#808080] group-hover/tile:text-white'
                           }`}
                         >
                           {avatar.name}
@@ -501,19 +495,19 @@ export default function ProfileSelect({
               </div>
 
               {/* Save / Cancel Footer */}
-              <div className="pt-5 border-t border-[#FFFFFF]/10 flex items-center justify-end gap-3 shrink-0">
+              <div className="pt-5 border-t border-white/10 flex items-center justify-end gap-3 shrink-0">
                 <button
                   type="button"
                   onClick={closeEditor}
-                  className="px-6 py-2.5 border border-[#808080] hover:border-[#FFFFFF] text-[#B3B3B3] hover:text-[#FFFFFF] text-xs sm:text-sm font-semibold uppercase tracking-wider rounded-[2px] transition-colors cursor-pointer"
+                  className="px-6 py-2.5 border border-white/20 hover:border-white text-[#a3a3a3] hover:text-white text-xs sm:text-sm font-semibold uppercase tracking-wider rounded-md transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-8 py-2.5 bg-[#E50914] hover:bg-[#c11119] text-[#FFFFFF] text-xs sm:text-sm font-bold uppercase tracking-wider rounded-[2px] shadow-lg transition-colors cursor-pointer"
+                  className="px-8 py-2.5 bg-[#E50914] hover:bg-[#c11119] text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-md shadow-lg shadow-red-900/40 transition-all cursor-pointer hover:scale-102 active:scale-98"
                 >
-                  Save
+                  Save Profile
                 </button>
               </div>
             </form>
