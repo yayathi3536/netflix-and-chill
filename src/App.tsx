@@ -1321,7 +1321,7 @@ export default function App() {
         isOpen={isSurpriseModalOpen}
         onClose={() => setIsSurpriseModalOpen(false)}
         anniversaryDateStr={
-          siteContent.anniversary_date && siteContent.anniversary_date !== '2022-10-14'
+          siteContent.anniversary_date && siteContent.anniversary_date >= '2025-06-15'
             ? siteContent.anniversary_date
             : '2025-06-15'
         }

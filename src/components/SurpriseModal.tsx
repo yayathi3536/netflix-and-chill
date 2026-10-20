@@ -17,10 +17,12 @@ interface Coupon {
   emoji: string;
 }
 
+export const EARLIEST_TIMELINE_DATE = '2025-06-15';
+
 export const SurpriseModal: React.FC<SurpriseModalProps> = ({
   isOpen,
   onClose,
-  anniversaryDateStr = '2025-06-15',
+  anniversaryDateStr = EARLIEST_TIMELINE_DATE,
   partner1 = 'Partner 1',
   partner2 = 'Partner 2',
 }) => {
@@ -73,17 +75,21 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
 
   useEffect(() => {
     const calculateTime = () => {
+      // Enforce lower bound: earliest displayed date is 15 June 2025, inclusive
+      const effectiveDateStr =
+        !anniversaryDateStr || anniversaryDateStr < EARLIEST_TIMELINE_DATE
+          ? EARLIEST_TIMELINE_DATE
+          : anniversaryDateStr;
+
       let start: number;
-      if (!anniversaryDateStr) {
-        start = new Date(2025, 5, 15, 0, 0, 0).getTime();
-      } else if (anniversaryDateStr.includes('T')) {
-        start = new Date(anniversaryDateStr).getTime();
+      if (effectiveDateStr.includes('T')) {
+        start = new Date(effectiveDateStr).getTime();
       } else {
-        const parts = anniversaryDateStr.split('-').map(Number);
+        const parts = effectiveDateStr.split('-').map(Number);
         if (parts.length === 3 && !isNaN(parts[0]) && !isNaN(parts[1]) && !isNaN(parts[2])) {
           start = new Date(parts[0], parts[1] - 1, parts[2], 0, 0, 0).getTime();
         } else {
-          start = new Date(anniversaryDateStr).getTime();
+          start = new Date(effectiveDateStr).getTime();
         }
       }
 

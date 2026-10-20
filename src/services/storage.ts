@@ -426,7 +426,7 @@ class UnifiedStorageService {
       const stored = localStorage.getItem(STORAGE_KEYS.SITE_CONTENT);
       if (stored) {
         const parsed = JSON.parse(stored) as SiteContentMap;
-        if (parsed.anniversary_date === '2022-10-14') {
+        if (parsed.anniversary_date && parsed.anniversary_date < '2025-06-15') {
           parsed.anniversary_date = '2025-06-15';
         }
         return parsed;

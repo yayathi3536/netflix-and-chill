@@ -460,16 +460,30 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-neutral-300 mb-1 flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-neutral-400" />
-                    <span>Anniversary Date</span>
+                  <label className="block text-xs font-semibold text-neutral-300 mb-1 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-neutral-400" />
+                      <span>Timeline Tracker Date</span>
+                    </span>
+                    <span className="text-[10px] text-[#E50914] font-medium">From 15 June 2025</span>
                   </label>
                   <input
                     type="date"
-                    value={formData.anniversary_date || ''}
-                    onChange={(e) => handleChange('anniversary_date', e.target.value)}
+                    min="2025-06-15"
+                    value={formData.anniversary_date && formData.anniversary_date >= '2025-06-15' ? formData.anniversary_date : '2025-06-15'}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val && val < '2025-06-15') {
+                        handleChange('anniversary_date', '2025-06-15');
+                      } else {
+                        handleChange('anniversary_date', val);
+                      }
+                    }}
                     className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2 px-3 text-white text-xs focus:outline-none"
                   />
+                  <p className="text-[10px] text-[#808080] mt-1">
+                    Earliest selectable date is 15 June 2025 (2025-06-15).
+                  </p>
                 </div>
 
                 <div>
