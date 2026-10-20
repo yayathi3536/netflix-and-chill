@@ -425,7 +425,11 @@ class UnifiedStorageService {
     try {
       const stored = localStorage.getItem(STORAGE_KEYS.SITE_CONTENT);
       if (stored) {
-        return JSON.parse(stored) as SiteContentMap;
+        const parsed = JSON.parse(stored) as SiteContentMap;
+        if (parsed.anniversary_date === '2022-10-14') {
+          parsed.anniversary_date = '2025-06-15';
+        }
+        return parsed;
       }
     } catch (e) {
       console.warn('Could not read site content from localStorage:', e);

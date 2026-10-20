@@ -108,7 +108,7 @@ Happy Anniversary, my love. Forever and always.`,
     key: 'anniversary_date',
     section: 'couple',
     label: 'Anniversary Date',
-    value: '2022-10-14',
+    value: '2025-06-15',
     type: 'date',
   },
   {

@@ -1320,7 +1320,11 @@ export default function App() {
       <SurpriseModal
         isOpen={isSurpriseModalOpen}
         onClose={() => setIsSurpriseModalOpen(false)}
-        anniversaryDateStr={siteContent.anniversary_date || '2022-10-14'}
+        anniversaryDateStr={
+          siteContent.anniversary_date && siteContent.anniversary_date !== '2022-10-14'
+            ? siteContent.anniversary_date
+            : '2025-06-15'
+        }
         partner1={siteContent.partner1_name || 'My Girl 👑'}
         partner2={siteContent.partner2_name || 'Your Guy 🌙'}
       />

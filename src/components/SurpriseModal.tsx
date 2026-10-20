@@ -20,7 +20,7 @@ interface Coupon {
 export const SurpriseModal: React.FC<SurpriseModalProps> = ({
   isOpen,
   onClose,
-  anniversaryDateStr = '2022-10-14',
+  anniversaryDateStr = '2025-06-15',
   partner1 = 'Partner 1',
   partner2 = 'Partner 2',
 }) => {
@@ -73,7 +73,20 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
 
   useEffect(() => {
     const calculateTime = () => {
-      const start = new Date(anniversaryDateStr).getTime();
+      let start: number;
+      if (!anniversaryDateStr) {
+        start = new Date(2025, 5, 15, 0, 0, 0).getTime();
+      } else if (anniversaryDateStr.includes('T')) {
+        start = new Date(anniversaryDateStr).getTime();
+      } else {
+        const parts = anniversaryDateStr.split('-').map(Number);
+        if (parts.length === 3 && !isNaN(parts[0]) && !isNaN(parts[1]) && !isNaN(parts[2])) {
+          start = new Date(parts[0], parts[1] - 1, parts[2], 0, 0, 0).getTime();
+        } else {
+          start = new Date(anniversaryDateStr).getTime();
+        }
+      }
+
       const now = new Date().getTime();
       const diff = Math.max(0, now - start);
 
@@ -240,6 +253,11 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
         {/* TAB 3: DAYS TOGETHER COUNTER */}
         {activeTab === 'counter' && (
           <div className="space-y-6 text-center py-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E50914]/15 border border-[#E50914]/40 text-[#E50914] text-xs font-semibold uppercase tracking-wider shadow-sm">
+              <Clock className="w-3.5 h-3.5" />
+              <span>Timeline Tracker · Since 15th June 2025</span>
+            </div>
+
             <div className="grid grid-cols-4 gap-2 sm:gap-3">
               <div className="p-3 sm:p-4 rounded bg-[#181818] border border-[#808080]/30">
                 <span className="block font-bebas text-3xl sm:text-5xl text-[#FFFFFF] font-bold tabular-nums">
