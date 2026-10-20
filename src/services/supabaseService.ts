@@ -82,35 +82,22 @@ export const isSchemaMissingError = (err: unknown): boolean => {
 };
 
 /**
- * Checks whether a Supabase user has verified Administrator privileges.
- * Enforces role verification via app_metadata, user_metadata, or approved admin email.
+ * Authorization is based only on server-controlled app_metadata.
+ * Never trust user_metadata or a client-side email allowlist for admin privileges.
  */
 export const checkIsAdmin = (user: User | null): boolean => {
-  if (!user) return false;
+  return Boolean(
+    user &&
+    (user.app_metadata?.is_admin === true || user.app_metadata?.role === 'admin')
+  );
+};
 
-  // 1. Role / flag in app_metadata (securely set via Supabase Auth Admin API or SQL)
-  if (user.app_metadata?.is_admin === true || user.app_metadata?.role === 'admin') {
-    return true;
-  }
-
-  // 2. Role / flag in user_metadata
-  if (user.user_metadata?.is_admin === true || user.user_metadata?.role === 'admin') {
-    return true;
-  }
-
-  // 3. Approved administrator email check via environment variable or project owner fallback
-  const configuredAdminEmail = (
-    (import.meta.env.VITE_ADMIN_EMAIL as string) || 'karanamyayathi9@gmail.com'
-  )
-    .toLowerCase()
-    .trim();
-  const userEmail = (user.email || '').toLowerCase().trim();
-
-  if (configuredAdminEmail && userEmail && userEmail === configuredAdminEmail) {
-    return true;
-  }
-
-  return false;
+/** Existing admin accounts are approved automatically; other accounts require manual approval. */
+export const checkIsApproved = (user: User | null): boolean => {
+  return Boolean(
+    user &&
+    (checkIsAdmin(user) || user.app_metadata?.is_approved === true)
+  );
 };
 
 
