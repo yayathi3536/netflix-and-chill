@@ -5,6 +5,7 @@ import {
   Plus,
   Database,
   LogOut,
+  LayoutDashboard,
 } from 'lucide-react';
 import { User } from '@supabase/supabase-js';
 
@@ -13,6 +14,7 @@ interface AdminModeBarProps {
   onOpenEditSiteContent: (section?: 'hero' | 'letter' | 'sections' | 'couple') => void;
   onOpenAddMemory: () => void;
   onOpenAdminPortal: () => void;
+  onOpenStudio: () => void;
   onLogout: () => void;
 }
 
@@ -21,6 +23,7 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
   onOpenEditSiteContent,
   onOpenAddMemory,
   onOpenAdminPortal,
+  onOpenStudio,
   onLogout,
 }) => {
   if (!currentUser) return null;
@@ -72,6 +75,16 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
           >
             <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>New Title</span>
+          </button>
+
+          {/* Live Content Studio */}
+          <button
+            onClick={onOpenStudio}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#181818] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold transition-all cursor-pointer border border-[#E50914]/40"
+            title="Open live content studio"
+          >
+            <LayoutDashboard className="w-3.5 h-3.5 text-[#E50914]" />
+            <span className="hidden md:inline">Studio</span>
           </button>
 
           {/* Database Setup */}
