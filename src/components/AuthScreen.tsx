@@ -11,6 +11,7 @@ import {
   ArrowLeft,
   KeyRound,
   Heart,
+  Sparkles,
 } from 'lucide-react';
 import { supabaseService } from '../services/supabaseService';
 import { isSupabaseConfigured } from '../services/supabaseClient';
@@ -22,12 +23,14 @@ interface AuthScreenProps {
   initialMode?: AuthViewMode;
   onAuthSuccess: (user: User) => void;
   onPasswordUpdated?: () => void;
+  onOpenAdminPrototype?: () => void;
 }
 
 export const AuthScreen: React.FC<AuthScreenProps> = ({
   initialMode = 'signin',
   onAuthSuccess,
   onPasswordUpdated,
+  onOpenAdminPrototype,
 }) => {
   const [mode, setMode] = useState<AuthViewMode>(initialMode);
   const [displayName, setDisplayName] = useState('');
@@ -219,23 +222,37 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
           </span>
         </div>
 
-        {mode === 'signin' ? (
-          <button
-            type="button"
-            onClick={() => switchMode('signup')}
-            className="px-4 py-1.5 rounded-[4px] bg-[#E50914] hover:bg-[#c11119] text-[#FFFFFF] text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow"
-          >
-            Sign Up
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() => switchMode('signin')}
-            className="px-4 py-1.5 rounded-[4px] bg-[#E50914] hover:bg-[#c11119] text-[#FFFFFF] text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow"
-          >
-            Sign In
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {onOpenAdminPrototype && (
+            <button
+              type="button"
+              onClick={onOpenAdminPrototype}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] bg-[#181818]/90 hover:bg-[#FFFFFF]/10 border border-[#E50914]/50 text-xs text-[#E50914] hover:text-[#FFFFFF] transition-colors cursor-pointer"
+              title="Explore standalone in-memory Admin Panel Prototype"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#E50914]" />
+              <span className="hidden xs:inline">Admin Prototype</span>
+            </button>
+          )}
+
+          {mode === 'signin' ? (
+            <button
+              type="button"
+              onClick={() => switchMode('signup')}
+              className="px-4 py-1.5 rounded-[4px] bg-[#E50914] hover:bg-[#c11119] text-[#FFFFFF] text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow"
+            >
+              Sign Up
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => switchMode('signin')}
+              className="px-4 py-1.5 rounded-[4px] bg-[#E50914] hover:bg-[#c11119] text-[#FFFFFF] text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow"
+            >
+              Sign In
+            </button>
+          )}
+        </div>
       </header>
 
       {/* Main Centered Netflix Auth Card */}

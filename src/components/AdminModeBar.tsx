@@ -6,6 +6,7 @@ import {
   Database,
   LogOut,
   LayoutDashboard,
+  Sparkles,
 } from 'lucide-react';
 import { User } from '@supabase/supabase-js';
 
@@ -15,6 +16,7 @@ interface AdminModeBarProps {
   onOpenAddMemory: () => void;
   onOpenAdminPortal: () => void;
   onOpenStudio: () => void;
+  onOpenAdminPrototype?: () => void;
   onLogout: () => void;
 }
 
@@ -24,6 +26,7 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
   onOpenAddMemory,
   onOpenAdminPortal,
   onOpenStudio,
+  onOpenAdminPrototype,
   onLogout,
 }) => {
   if (!currentUser) return null;
@@ -86,6 +89,18 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
             <LayoutDashboard className="w-3.5 h-3.5 text-[#E50914]" />
             <span className="hidden md:inline">Studio</span>
           </button>
+
+          {/* New Admin Prototype Studio */}
+          {onOpenAdminPrototype && (
+            <button
+              onClick={onOpenAdminPrototype}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-gradient-to-r from-[#181818] to-[#261012] hover:to-[#3b1216] text-[#FFFFFF] text-xs font-semibold transition-all cursor-pointer border border-[#E50914]/60 shadow"
+              title="Launch standalone Admin Prototype"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#E50914]" />
+              <span className="hidden sm:inline">Prototype</span>
+            </button>
+          )}
 
           {/* Database Setup */}
           <button

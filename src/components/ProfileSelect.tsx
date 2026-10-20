@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, ShieldCheck, Pencil, Plus, Check, X } from 'lucide-react';
+import { LogOut, ShieldCheck, Pencil, Plus, Check, X, Sparkles } from 'lucide-react';
 import { UserProfile } from '../types';
 import {
   BUILT_IN_AVATARS,
@@ -15,6 +15,7 @@ export default function ProfileSelect({
   onSaveProfile,
   userEmail,
   isAdmin = false,
+  onOpenAdminPrototype,
   onSignOut,
 }: {
   profiles: UserProfile[];
@@ -23,6 +24,7 @@ export default function ProfileSelect({
   onSaveProfile?: (profile: UserProfile) => void;
   userEmail?: string;
   isAdmin?: boolean;
+  onOpenAdminPrototype?: () => void;
   onSignOut?: () => void;
 }) {
   const [isManageMode, setIsManageMode] = useState(false);
@@ -136,12 +138,24 @@ export default function ProfileSelect({
           OUR UNIVERSE
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           {userEmail && (
             <div className="hidden sm:flex items-center gap-2 text-xs text-[#B3B3B3]">
               {isAdmin && <ShieldCheck className="w-3.5 h-3.5 text-[#E50914] shrink-0" />}
               <span className="truncate max-w-[220px]">{userEmail}</span>
             </div>
+          )}
+
+          {onOpenAdminPrototype && (
+            <button
+              type="button"
+              onClick={onOpenAdminPrototype}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] bg-[#181818] hover:bg-[#FFFFFF]/10 border border-[#E50914]/50 text-xs text-[#E50914] hover:text-[#FFFFFF] transition-colors cursor-pointer"
+              title="Launch isolated in-memory Admin Panel Prototype"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#E50914]" />
+              <span className="hidden xs:inline">Admin Prototype</span>
+            </button>
           )}
 
           {onSignOut && (
