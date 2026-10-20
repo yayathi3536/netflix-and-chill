@@ -40,7 +40,6 @@ import { SurpriseModal } from './components/SurpriseModal';
 import { ConstellationSection } from './components/ConstellationSection';
 import { AuthScreen } from './components/AuthScreen';
 import ProfileSelect from './components/ProfileSelect';
-import { AdminPrototypeApp } from './components/admin-prototype/AdminPrototypeApp';
 import { TRACKS } from './data/tracks';
 import { romanticAudio } from './utils/romanticAudio';
 import { hasValidVideo, isLetterItem } from './utils/mediaHelpers';
@@ -73,11 +72,6 @@ export default function App() {
   const [memoryToEdit, setMemoryToEdit] = useState<MemoryItem | null>(null);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [isAdminStudioOpen, setIsAdminStudioOpen] = useState(false);
-  const [isAdminPrototypeOpen, setIsAdminPrototypeOpen] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    const hash = window.location.hash.replace('#', '').trim();
-    return hash === 'admin-prototype' || hash === 'prototype';
-  });
   const [isSetupModalOpen, setIsSetupModalOpen] = useState(false);
   const [isEditSiteContentOpen, setIsEditSiteContentOpen] = useState(false);
   const [editSiteContentInitialTab, setEditSiteContentInitialTab] = useState<SiteContentSection>('hero');
@@ -173,10 +167,6 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').trim();
-      if (hash === 'admin-prototype' || hash === 'prototype') {
-        setIsAdminPrototypeOpen(true);
-        return;
-      }
       if (hash === 'admin' || hash === 'login') {
         setIsAdminModalOpen(true);
         return;
@@ -429,21 +419,6 @@ export default function App() {
 
   const isSupabaseReady = isSupabaseConfigured();
 
-  // 0. STANDALONE ADMIN PROTOTYPE (Completely isolated in-memory dashboard prototype)
-  if (isAdminPrototypeOpen) {
-    return (
-      <AdminPrototypeApp
-        onExit={() => {
-          setIsAdminPrototypeOpen(false);
-          const hash = window.location.hash.replace('#', '').trim();
-          if (hash === 'admin-prototype' || hash === 'prototype') {
-            history.replaceState(null, '', window.location.pathname + window.location.search);
-          }
-        }}
-      />
-    );
-  }
-
   // 1. INITIAL SESSION CHECK LOADING SCREEN
   if (isAuthChecking) {
     return (
@@ -475,7 +450,6 @@ export default function App() {
           }
         }}
         onPasswordUpdated={() => setIsPasswordRecovery(false)}
-        onOpenAdminPrototype={() => setIsAdminPrototypeOpen(true)}
       />
     );
   }
@@ -495,22 +469,13 @@ export default function App() {
           <p className="text-sm leading-6 text-[#B3B3B3] mb-6">
             Your email is verified, but this account has not been approved yet. Please ask the site owner to approve it in Supabase. Your private memories and letters stay hidden until approval.
           </p>
-          <div className="flex items-center justify-center gap-3">
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="rounded bg-[#E50914] px-5 py-2.5 text-sm font-semibold hover:bg-[#b80710] transition-colors"
-            >
-              Sign out
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsAdminPrototypeOpen(true)}
-              className="rounded border border-[#E50914]/60 bg-[#181818] px-4 py-2.5 text-sm font-semibold text-[#FFFFFF] hover:bg-[#FFFFFF]/10 transition-colors"
-            >
-              Preview Admin Prototype
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="rounded bg-[#E50914] px-5 py-2.5 text-sm font-semibold hover:bg-[#b80710] transition-colors"
+          >
+            Sign out
+          </button>
         </div>
       </div>
     );
@@ -525,7 +490,6 @@ export default function App() {
         onSaveProfile={handleSaveProfile}
         userEmail={currentUser.email}
         isAdmin={isAdmin}
-        onOpenAdminPrototype={() => setIsAdminPrototypeOpen(true)}
         onSignOut={handleSignOut}
       />
     );
@@ -557,7 +521,6 @@ export default function App() {
         currentUser={isAdmin ? currentUser : null}
         onOpenAdminModal={() => setIsAdminModalOpen(true)}
         onOpenSetupModal={() => setIsSetupModalOpen(true)}
-        onOpenAdminPrototype={() => setIsAdminPrototypeOpen(true)}
       />
 
       {/* TOP SYSTEM STATUS NOTIFICATION (Admin Only) */}
@@ -1336,7 +1299,6 @@ export default function App() {
           }}
           onOpenAdminPortal={() => setIsAdminModalOpen(true)}
           onOpenStudio={() => setIsAdminStudioOpen(true)}
-          onOpenAdminPrototype={() => setIsAdminPrototypeOpen(true)}
           onLogout={handleSignOut}
         />
       )}
@@ -1362,19 +1324,6 @@ export default function App() {
         partner1={siteContent.partner1_name || 'My Girl 👑'}
         partner2={siteContent.partner2_name || 'Your Guy 🌙'}
       />
-
-      {/* FLOATING ADMIN PROTOTYPE LAUNCHER PILL */}
-      <div className="fixed bottom-24 right-5 z-40">
-        <button
-          type="button"
-          onClick={() => setIsAdminPrototypeOpen(true)}
-          className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#141414]/95 hover:bg-[#E50914] text-[#FFFFFF] text-xs font-semibold shadow-[0_10px_25px_rgba(0,0,0,0.8)] border border-[#E50914]/60 transition-all duration-200 hover:scale-105 cursor-pointer backdrop-blur-md group"
-          title="Open isolated Admin Panel Prototype"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-[#E50914] group-hover:text-[#FFFFFF] transition-colors" />
-          <span className="font-medium tracking-wide">Admin Prototype</span>
-        </button>
-      </div>
 
       {/* PERSISTENT FLOATING MUSIC PLAYER */}
       <MusicPlayer isAdmin={isAdmin} />

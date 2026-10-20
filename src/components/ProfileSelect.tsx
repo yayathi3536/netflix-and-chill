@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, ShieldCheck, Pencil, Plus, Check, X, Sparkles } from 'lucide-react';
+import { LogOut, ShieldCheck, Pencil, Plus, Check, X } from 'lucide-react';
 import { UserProfile } from '../types';
 import {
   BUILT_IN_AVATARS,
@@ -16,7 +16,6 @@ export default function ProfileSelect({
   onSaveProfile,
   userEmail,
   isAdmin = false,
-  onOpenAdminPrototype,
   onSignOut,
 }: {
   profiles: UserProfile[];
@@ -25,7 +24,6 @@ export default function ProfileSelect({
   onSaveProfile?: (profile: UserProfile) => void;
   userEmail?: string;
   isAdmin?: boolean;
-  onOpenAdminPrototype?: () => void;
   onSignOut?: () => void;
 }) {
   const [isManageMode, setIsManageMode] = useState(false);
@@ -158,18 +156,6 @@ export default function ProfileSelect({
             </div>
           )}
 
-          {onOpenAdminPrototype && (
-            <button
-              type="button"
-              onClick={onOpenAdminPrototype}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/60 hover:bg-white/10 border border-[#E50914]/50 text-xs text-[#E50914] hover:text-[#FFFFFF] transition-all cursor-pointer backdrop-blur-sm"
-              title="Launch isolated in-memory Admin Panel Prototype"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#E50914]" />
-              <span className="hidden xs:inline font-medium">Admin Prototype</span>
-            </button>
-          )}
-
           {onSignOut && (
             <button
               type="button"
@@ -191,7 +177,7 @@ export default function ProfileSelect({
           </h1>
           <p className="text-xs sm:text-sm md:text-base text-[#a3a3a3] font-light text-center tracking-wide max-w-md mx-auto">
             {isManageMode
-              ? 'Select a profile to customize its illustrated avatar, name, or memories.'
+              ? 'Select a profile to customize its avatar tile, name, or tagline.'
               : 'Choose your profile to begin your journey through OUR UNIVERSE'}
           </p>
         </div>
@@ -347,10 +333,10 @@ export default function ProfileSelect({
             {/* Header */}
             <div className="pb-5 border-b border-white/10 shrink-0">
               <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white">
-                {isCreatingNew ? 'Add Profile' : 'Customize Profile & Artwork'}
+                {isCreatingNew ? 'Add Profile' : 'Customize Profile Tile'}
               </h2>
               <p className="text-xs sm:text-sm text-[#a3a3a3] mt-1">
-                Choose a ready-made illustrated portrait from our curated collection below.
+                Choose an elegant Netflix-style colored tile with a clean symbol.
               </p>
             </div>
 
@@ -359,7 +345,7 @@ export default function ProfileSelect({
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 border-b border-white/10">
                 <div className="shrink-0 flex flex-col items-center gap-2">
                   <div
-                    className={`w-32 h-32 sm:w-36 sm:h-36 rounded-2xl overflow-hidden flex items-center justify-center ring-2 ring-[#E50914] shadow-[0_0_30px_rgba(229,9,20,0.35)] relative bg-[#18181c]`}
+                    className={`w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden flex items-center justify-center ring-2 ring-[#E50914] shadow-[0_0_30px_rgba(229,9,20,0.35)] relative bg-[#18181c]`}
                   >
                     <img
                       src={draftAvatarUrl || getProfileAvatarUrl(editingProfile)}
@@ -368,7 +354,7 @@ export default function ProfileSelect({
                     />
                   </div>
                   <span className="text-[11px] text-[#a3a3a3] font-medium tracking-wide">
-                    Active Portrait
+                    Active Tile
                   </span>
                 </div>
 
@@ -420,10 +406,10 @@ export default function ProfileSelect({
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <h3 className="text-base sm:text-lg font-bold text-white">
-                      Select Curated Artwork
+                      Choose Avatar Tile
                     </h3>
                     <p className="text-xs text-[#a3a3a3]">
-                      Original cinematic portraits, celestial cosmic duos &amp; anime artwork
+                      Clean, solid-color and gradient tiles with white symbols
                     </p>
                   </div>
 
@@ -447,7 +433,7 @@ export default function ProfileSelect({
                 </div>
 
                 {/* Avatar Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 sm:gap-4 pt-1">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 sm:gap-4 pt-1">
                   {filteredAvatars.map((avatar) => {
                     const isSelected =
                       draftAvatarId === avatar.id || draftAvatarUrl === avatar.url;

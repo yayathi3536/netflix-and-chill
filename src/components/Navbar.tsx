@@ -34,7 +34,6 @@ interface NavbarProps {
   currentUser: User | null;
   onOpenAdminModal: () => void;
   onOpenSetupModal: () => void;
-  onOpenAdminPrototype?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -53,7 +52,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   currentUser,
   onOpenAdminModal,
   onOpenSetupModal,
-  onOpenAdminPrototype,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -379,19 +377,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <Shield className="w-3.5 h-3.5 text-[#E50914]" />
                     <span>{currentUser ? 'Admin Panel (Active)' : 'Account & Admin'}</span>
                   </button>
-
-                  {onOpenAdminPrototype && (
-                    <button
-                      onClick={() => {
-                        onOpenAdminPrototype();
-                        setIsProfileMenuOpen(false);
-                      }}
-                      className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-white hover:bg-[#181818] transition-colors cursor-pointer"
-                    >
-                      <Sparkles className="w-3.5 h-3.5 text-[#E50914]" />
-                      <span className="font-semibold text-[#E50914]">Admin Studio Prototype</span>
-                    </button>
-                  )}
 
                   {currentUser && (
                     <button
