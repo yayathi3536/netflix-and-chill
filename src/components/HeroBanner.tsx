@@ -87,7 +87,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           </div>
 
           {/* Cinematic Title */}
-          <h1 className="font-bebas text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-wider text-[#FFFFFF] font-black leading-none uppercase drop-shadow-2xl break-words">
+          <h1 className="font-bebas text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-wider text-[#FFFFFF] font-black leading-none uppercase drop-shadow-2xl break-words">
             {displayTitle}
           </h1>
 
@@ -172,7 +172,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         </div>
 
         {/* Right Volume & Rating Pill */}
-        <div className="absolute right-3 sm:right-8 bottom-4 sm:bottom-28 flex items-center gap-2 sm:gap-3 z-20">
+        <div className="absolute right-3 sm:right-8 top-24 sm:top-auto sm:bottom-28 flex items-center gap-2 sm:gap-3 z-20">
           <button
             onClick={onToggleAudio}
             className="w-10 h-10 rounded-full border border-[#808080]/40 bg-[#000000]/70 text-[#FFFFFF] hover:bg-[#181818] transition-all cursor-pointer flex items-center justify-center"

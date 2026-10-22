@@ -45,6 +45,7 @@ export interface MemoryItem {
   fallbackGradient: string;
   progress?: number; // 0 to 100 (for Continue Watching)
   isTop10?: number; // 1 to 10 (for Original Series rank)
+  sortOrder?: number; // Custom manual storyline order
   isFavorite?: boolean;
   isInWatchlist?: boolean;
   isSecret?: boolean;

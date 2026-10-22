@@ -40,6 +40,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+  const [heroFit, setHeroFit] = useState<'cover' | 'contain'>('cover');
 
   useEffect(() => {
     if (isOpen) {
@@ -138,7 +139,8 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
 
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20"
+            className="w-11 h-11 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20 min-h-[44px] min-w-[44px] shrink-0"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
@@ -319,20 +321,49 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                 </div>
 
                 {formData.hero_backdrop_url && (
-                  <div className="relative aspect-video max-h-48 rounded-lg overflow-hidden border border-white/20 bg-neutral-900">
-                    <img
-                      src={formData.hero_backdrop_url}
-                      alt="Hero Preview"
-                      className="w-full h-full object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleChange('hero_backdrop_url', '')}
-                      className="absolute top-2 right-2 p-1 rounded-full bg-black/70 hover:bg-black text-white text-xs"
-                      title="Clear image"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
+                  <div className="space-y-2 mt-3 pt-2 border-t border-white/10">
+                    <div className="flex items-center justify-between text-[11px] text-neutral-400">
+                      <span className="font-semibold text-white">Billboard 16:9 Preview:</span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setHeroFit('cover')}
+                          className={`cursor-pointer ${
+                            heroFit === 'cover' ? 'text-white font-bold underline' : 'hover:text-white'
+                          }`}
+                        >
+                          Cover (Fill Billboard)
+                        </button>
+                        <span>&middot;</span>
+                        <button
+                          type="button"
+                          onClick={() => setHeroFit('contain')}
+                          className={`cursor-pointer ${
+                            heroFit === 'contain' ? 'text-white font-bold underline' : 'hover:text-white'
+                          }`}
+                        >
+                          Contain (Full Photo)
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="relative aspect-video max-h-52 w-full rounded-lg overflow-hidden border border-white/20 bg-neutral-900 flex items-center justify-center">
+                      <img
+                        src={formData.hero_backdrop_url}
+                        alt="Hero Preview"
+                        className={`max-h-full max-w-full ${
+                          heroFit === 'contain' ? 'object-contain' : 'w-full h-full object-cover'
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleChange('hero_backdrop_url', '')}
+                        className="absolute top-2 right-2 p-1.5 rounded-full bg-black/75 hover:bg-[#E50914] text-white text-xs border border-white/20 shadow transition-colors cursor-pointer"
+                        title="Clear image"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>

@@ -101,7 +101,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
             </div>
             <button
               onClick={onClose}
-              className="rounded-full border border-white/10 bg-black/30 p-2.5 text-white/70 transition hover:border-white/30 hover:bg-white/10 hover:text-white"
+              className="rounded-full border border-white/10 bg-black/30 w-11 h-11 flex items-center justify-center text-white/70 transition hover:border-white/30 hover:bg-white/10 hover:text-white min-h-[44px] min-w-[44px] shrink-0"
               aria-label="Close Admin Studio"
             >
               <X className="h-5 w-5" />
@@ -110,7 +110,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
           <div className="relative mt-6 flex flex-wrap items-center gap-3">
             <button
               onClick={openAdd}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#E50914] px-4 py-2.5 text-sm font-bold shadow-lg shadow-red-950/30 transition hover:bg-[#f6121d]"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#E50914] px-4 py-2.5 text-sm font-bold shadow-lg shadow-red-950/30 transition hover:bg-[#f6121d] min-h-[44px]"
             >
               <Plus className="h-4 w-4" />
               Add a title
@@ -176,7 +176,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                   key={memory.id}
                   className="group flex min-w-0 gap-3 rounded-xl border border-white/[0.08] bg-white/[0.025] p-3 transition hover:border-[#E50914]/35 hover:bg-white/[0.045]"
                 >
-                  <div className="relative h-28 w-20 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-[#421116] to-[#111111] sm:h-32 sm:w-24">
+                  <div className="relative aspect-[3/4] w-20 sm:w-24 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-[#421116] to-[#111111]">
                     {memory.posterUrl || memory.backdropUrl ? (
                       <img
                         src={memory.posterUrl || memory.backdropUrl}

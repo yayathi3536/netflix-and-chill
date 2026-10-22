@@ -204,13 +204,14 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg bg-[#181818] rounded-xl overflow-hidden shadow-2xl border border-white/10 my-auto text-white p-6 sm:p-8"
+        className="relative w-full max-w-lg bg-[#181818] rounded-xl overflow-hidden shadow-2xl border border-white/10 my-auto text-white p-4 sm:p-8 max-h-[92vh] overflow-y-auto dark-scrollbar"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-40 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-11 h-11 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20 min-h-[44px] min-w-[44px]"
+          aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>

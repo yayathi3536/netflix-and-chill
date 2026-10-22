@@ -143,12 +143,12 @@ export default function ProfileSelect({
       </div>
 
       {/* Top Header Bar */}
-      <header className="relative z-10 w-full max-w-7xl px-6 sm:px-12 pt-6 sm:pt-8 flex flex-wrap justify-between items-center gap-4">
-        <div className="font-bebas text-3xl sm:text-5xl tracking-[0.25em] text-[#E50914] font-black uppercase drop-shadow-[0_2px_14px_rgba(229,9,20,0.4)] transition-transform duration-300 hover:scale-[1.02]">
+      <header className="relative z-10 w-full max-w-7xl px-4 sm:px-12 pt-5 sm:pt-8 flex flex-wrap justify-between items-center gap-3">
+        <div className="font-bebas text-2xl sm:text-5xl tracking-[0.18em] sm:tracking-[0.25em] text-[#E50914] font-black uppercase drop-shadow-[0_2px_14px_rgba(229,9,20,0.4)] transition-transform duration-300 hover:scale-[1.02]">
           OUR UNIVERSE
         </div>
 
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2.5 sm:gap-4">
           {userEmail && (
             <div className="hidden sm:flex items-center gap-2 text-xs text-[#a3a3a3] bg-white/[0.03] px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-sm">
               {isAdmin && <ShieldCheck className="w-3.5 h-3.5 text-[#E50914] shrink-0" />}
@@ -160,7 +160,7 @@ export default function ProfileSelect({
             <button
               type="button"
               onClick={onSignOut}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/10 border border-white/15 text-xs text-[#a3a3a3] hover:text-[#FFFFFF] transition-all cursor-pointer backdrop-blur-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/10 border border-white/15 text-xs text-[#a3a3a3] hover:text-[#FFFFFF] transition-all cursor-pointer backdrop-blur-sm min-h-[40px]"
             >
               <LogOut className="w-3.5 h-3.5 text-[#E50914]" />
               <span className="font-medium">Sign Out</span>
@@ -170,12 +170,12 @@ export default function ProfileSelect({
       </header>
 
       {/* Main Centered "Who's watching?" Gateway */}
-      <main className="relative z-10 flex-1 w-full max-w-6xl flex flex-col items-center justify-center px-4 sm:px-8 py-10 sm:py-16 animate-in fade-in zoom-in-95 duration-500">
-        <div className="text-center mb-8 sm:mb-14">
-          <h1 className="text-4xl sm:text-6xl md:text-[68px] font-medium tracking-tight text-white mb-3 text-center drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+      <main className="relative z-10 flex-1 w-full max-w-6xl flex flex-col items-center justify-center px-4 sm:px-8 py-8 sm:py-16 animate-in fade-in zoom-in-95 duration-500">
+        <div className="text-center mb-6 sm:mb-14">
+          <h1 className="text-3xl sm:text-6xl md:text-[68px] font-medium tracking-tight text-white mb-2 sm:mb-3 text-center drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
             {isManageMode ? 'Manage Profiles' : "Who's watching?"}
           </h1>
-          <p className="text-xs sm:text-sm md:text-base text-[#a3a3a3] font-light text-center tracking-wide max-w-md mx-auto">
+          <p className="text-xs sm:text-sm md:text-base text-[#a3a3a3] font-light text-center tracking-wide max-w-md mx-auto px-2">
             {isManageMode
               ? 'Select a profile to customize its avatar tile, name, or tagline.'
               : 'Choose your profile to begin your journey through OUR UNIVERSE'}
@@ -183,16 +183,16 @@ export default function ProfileSelect({
         </div>
 
         {/* Profile Cards Grid */}
-        <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 md:gap-12 lg:gap-14 w-full">
+        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-10 md:gap-12 lg:gap-14 w-full">
           {profiles.map((profile) => {
             const avatarSrc = getProfileAvatarUrl(profile);
 
             return (
               <div
                 key={profile.id}
-                className="group w-36 sm:w-44 md:w-48 lg:w-52 flex flex-col items-center text-center focus-within:outline-none"
+                className="group w-32 xs:w-36 sm:w-44 md:w-48 lg:w-52 flex flex-col items-center text-center focus-within:outline-none shrink-0"
               >
-                <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 lg:w-52 lg:h-52">
+                <div className="relative w-32 h-32 xs:w-36 xs:h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 lg:w-52 lg:h-52 aspect-square">
                   <button
                     type="button"
                     onClick={() => {
@@ -232,7 +232,7 @@ export default function ProfileSelect({
                     )}
                   </button>
 
-                  {/* Quick Edit Pencil Shortcut when hovering */}
+                  {/* Quick Edit Pencil Shortcut */}
                   {!isManageMode && (
                     <button
                       type="button"
@@ -242,7 +242,7 @@ export default function ProfileSelect({
                       }}
                       title={`Customize avatar for ${profile.name}`}
                       aria-label={`Customize avatar for ${profile.name}`}
-                      className="opacity-0 group-hover:opacity-100 focus:opacity-100 absolute top-2.5 right-2.5 z-20 w-8 h-8 rounded-full bg-black/85 hover:bg-[#E50914] text-white border border-white/30 flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg hover:scale-110"
+                      className="opacity-70 sm:opacity-0 group-hover:opacity-100 focus:opacity-100 absolute top-2 right-2 z-20 w-8 h-8 rounded-full bg-black/85 hover:bg-[#E50914] text-white border border-white/30 flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg hover:scale-110"
                     >
                       <Pencil className="w-3.5 h-3.5" />
                     </button>
@@ -250,12 +250,12 @@ export default function ProfileSelect({
                 </div>
 
                 {/* Profile Name & Tagline */}
-                <div className="w-full text-center mt-3.5 space-y-0.5">
-                  <span className="block text-base sm:text-lg md:text-xl font-medium text-[#B3B3B3] group-hover:text-white transition-colors duration-200 truncate tracking-wide">
+                <div className="w-full text-center mt-3 space-y-0.5 px-1">
+                  <span className="block text-sm sm:text-lg md:text-xl font-medium text-[#B3B3B3] group-hover:text-white transition-colors duration-200 truncate tracking-wide">
                     {profile.name}
                   </span>
                   {profile.favoriteSeason && (
-                    <span className="block text-xs text-[#737373] group-hover:text-[#a3a3a3] transition-colors duration-200 line-clamp-1 font-light">
+                    <span className="block text-[11px] sm:text-xs text-[#737373] group-hover:text-[#a3a3a3] transition-colors duration-200 line-clamp-1 font-light">
                       {profile.favoriteSeason}
                     </span>
                   )}
@@ -269,16 +269,16 @@ export default function ProfileSelect({
             <button
               type="button"
               onClick={openCreateModal}
-              className="group w-36 sm:w-44 md:w-48 lg:w-52 flex flex-col items-center text-center cursor-pointer focus:outline-none transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
+              className="group w-32 xs:w-36 sm:w-44 md:w-48 lg:w-52 flex flex-col items-center text-center cursor-pointer focus:outline-none transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
               aria-label="Add Profile"
             >
-              <div className="w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border-2 border-dashed border-white/20 group-hover:border-[#E50914] flex items-center justify-center transition-all duration-300 shadow-[0_14px_45px_rgba(0,0,0,0.6)] group-hover:shadow-[0_20px_50px_rgba(229,9,20,0.3)]">
-                <div className="w-14 h-14 rounded-full bg-black/70 group-hover:bg-[#E50914] text-[#a3a3a3] group-hover:text-white flex items-center justify-center transition-all duration-200 border border-white/10 group-hover:border-transparent shadow">
-                  <Plus className="w-7 h-7" />
+              <div className="w-32 h-32 xs:w-36 xs:h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border-2 border-dashed border-white/20 group-hover:border-[#E50914] flex items-center justify-center transition-all duration-300 shadow-[0_14px_45px_rgba(0,0,0,0.6)] group-hover:shadow-[0_20px_50px_rgba(229,9,20,0.3)]">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black/70 group-hover:bg-[#E50914] text-[#a3a3a3] group-hover:text-white flex items-center justify-center transition-all duration-200 border border-white/10 group-hover:border-transparent shadow">
+                  <Plus className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
               </div>
-              <div className="w-full text-center mt-3.5">
-                <span className="block text-base sm:text-lg font-medium text-[#808080] group-hover:text-white transition-colors tracking-wide">
+              <div className="w-full text-center mt-3">
+                <span className="block text-sm sm:text-lg font-medium text-[#808080] group-hover:text-white transition-colors tracking-wide">
                   Add Profile
                 </span>
               </div>
@@ -317,22 +317,22 @@ export default function ProfileSelect({
           onClick={closeEditor}
         >
           <div
-            className="relative w-full max-w-3xl bg-[#121215] border border-white/15 rounded-2xl shadow-[0_25px_70px_rgba(0,0,0,0.98)] text-white p-6 sm:p-10 my-auto max-h-[92vh] flex flex-col"
+            className="relative w-full max-w-3xl bg-[#121215] border border-white/15 rounded-2xl shadow-[0_25px_70px_rgba(0,0,0,0.98)] text-white p-4 sm:p-8 md:p-10 my-auto max-h-[92vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Close Button */}
             <button
               type="button"
               onClick={closeEditor}
-              className="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/5 hover:bg-[#E50914] text-[#a3a3a3] hover:text-white flex items-center justify-center transition-colors cursor-pointer border border-white/10"
+              className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 w-10 h-10 rounded-full bg-white/5 hover:bg-[#E50914] text-[#a3a3a3] hover:text-white flex items-center justify-center transition-colors cursor-pointer border border-white/10 min-h-[44px] min-w-[44px]"
               aria-label="Cancel and close avatar picker"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Header */}
-            <div className="pb-5 border-b border-white/10 shrink-0">
-              <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white">
+            <div className="pb-4 sm:pb-5 border-b border-white/10 shrink-0 pr-10">
+              <h2 className="text-xl sm:text-4xl font-bold tracking-tight text-white">
                 {isCreatingNew ? 'Add Profile' : 'Customize Profile Tile'}
               </h2>
               <p className="text-xs sm:text-sm text-[#a3a3a3] mt-1">
@@ -345,7 +345,7 @@ export default function ProfileSelect({
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 border-b border-white/10">
                 <div className="shrink-0 flex flex-col items-center gap-2">
                   <div
-                    className={`w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden flex items-center justify-center ring-2 ring-[#E50914] shadow-[0_0_30px_rgba(229,9,20,0.35)] relative bg-[#18181c]`}
+                    className="w-28 h-28 sm:w-32 sm:h-32 aspect-square rounded-2xl overflow-hidden flex items-center justify-center ring-2 ring-[#E50914] shadow-[0_0_30px_rgba(229,9,20,0.35)] relative bg-[#18181c]"
                   >
                     <img
                       src={draftAvatarUrl || getProfileAvatarUrl(editingProfile)}
@@ -414,13 +414,13 @@ export default function ProfileSelect({
                   </div>
 
                   {/* Category Filter Tabs */}
-                  <div className="flex flex-wrap items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 max-w-full">
                     {BUILT_IN_AVATAR_CATEGORIES.map((cat) => (
                       <button
                         key={cat.id}
                         type="button"
                         onClick={() => setActiveCategory(cat.id)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap min-h-[36px] ${
                           activeCategory === cat.id
                             ? 'bg-[#E50914] text-white shadow-[0_0_15px_rgba(229,9,20,0.5)]'
                             : 'bg-white/5 text-[#a3a3a3] hover:text-white hover:bg-white/10'
@@ -433,7 +433,7 @@ export default function ProfileSelect({
                 </div>
 
                 {/* Avatar Grid */}
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 sm:gap-4 pt-1">
+                <div className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-4 md:grid-cols-6 gap-2.5 sm:gap-4 pt-1">
                   {filteredAvatars.map((avatar) => {
                     const isSelected =
                       draftAvatarId === avatar.id || draftAvatarUrl === avatar.url;

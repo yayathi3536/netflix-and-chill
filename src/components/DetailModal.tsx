@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   X,
   Play,
@@ -8,6 +8,8 @@ import {
   Calendar,
   MapPin,
   ChevronRight,
+  ChevronLeft,
+  Maximize2,
   Edit3,
   BookOpen,
   Mail,
@@ -48,15 +50,41 @@ export const DetailModal: React.FC<DetailModalProps> = ({
   onEditMemory,
 }) => {
   const [expandedEpisodeId, setExpandedEpisodeId] = useState<string | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [lightboxFit, setLightboxFit] = useState<'contain' | 'cover'>('contain');
+
+  const isVideo = memory ? hasValidVideo(memory) : false;
+  const isLetter = memory ? isLetterItem(memory) : false;
+  const photoEntries = memory ? getPhotoEntries(memory) : [];
+  // Additional photos beyond the main backdrop/poster image
+  const primaryImageUrl = memory ? (memory.backdropUrl || memory.posterUrl) : undefined;
+  const additionalPhotos = photoEntries.filter(
+    (p): p is typeof p & { url: string } => Boolean(p.url && p.url !== primaryImageUrl)
+  );
+
+  const allPhotos = useMemo(() => {
+    const list: Array<{ url: string; caption?: string; title?: string }> = [];
+    if (primaryImageUrl) {
+      list.push({ url: primaryImageUrl, title: memory?.title, caption: memory?.subtitle || 'Main Artwork' });
+    }
+    additionalPhotos.forEach((p, idx) => {
+      list.push({ url: p.url, caption: p.caption || `Photo ${idx + 1}`, title: memory?.title });
+    });
+    return list;
+  }, [primaryImageUrl, additionalPhotos, memory?.title, memory?.subtitle]);
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxIndex(null);
+      if (e.key === 'ArrowRight') setLightboxIndex((prev) => (prev !== null && prev < allPhotos.length - 1 ? prev + 1 : 0));
+      if (e.key === 'ArrowLeft') setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : allPhotos.length - 1));
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxIndex, allPhotos.length]);
 
   if (!memory) return null;
-
-  const isVideo = hasValidVideo(memory);
-  const isLetter = isLetterItem(memory);
-  const photoEntries = getPhotoEntries(memory);
-  // Additional photos beyond the main backdrop/poster image
-  const primaryImageUrl = memory.backdropUrl || memory.posterUrl;
-  const additionalPhotos = photoEntries.filter((p) => p.url && p.url !== primaryImageUrl);
 
   return (
     <div
@@ -71,44 +99,59 @@ export const DetailModal: React.FC<DetailModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-40 w-9 h-9 rounded-full bg-[#141414]/90 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center transition-colors cursor-pointer border border-[#808080]/40"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-11 h-11 rounded-full bg-[#141414]/90 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center transition-colors cursor-pointer border border-[#808080]/40 min-h-[44px] min-w-[44px] shadow-lg"
           aria-label="Close details"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* Direct, Full-Clarity Image Display at Top (No View Photo prompt needed) */}
-        <div className="relative aspect-video w-full overflow-hidden bg-[#000000]">
+        {/* Direct, Full-Clarity Image Display at Top */}
+        <div className="relative aspect-video min-h-[220px] sm:min-h-0 w-full overflow-hidden bg-[#000000] group">
           <VisualArt
             id={memory.id}
             category={memory.category}
             title={memory.title}
             imageUrl={primaryImageUrl}
+            fit="cover"
+            aspectRatio="16/9"
             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover cursor-pointer"
+            onClick={() => primaryImageUrl && setLightboxIndex(0)}
           />
 
-          {/* Subtle bottom gradient only at the very bottom edge for title legibility */}
-          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#181818] via-[#181818]/50 to-transparent" />
+          {/* Full-view Zoom Button */}
+          {primaryImageUrl && (
+            <button
+              onClick={() => setLightboxIndex(0)}
+              className="absolute top-3 left-3 sm:top-4 sm:left-4 z-40 px-3 py-1.5 rounded-full bg-[#000000]/75 hover:bg-[#E50914] text-white flex items-center gap-1.5 transition-colors cursor-pointer border border-[#808080]/40 min-h-[38px] text-xs font-semibold shadow-lg backdrop-blur-sm"
+              title="View full-size photo in original proportions"
+            >
+              <Maximize2 className="w-3.5 h-3.5" />
+              <span className="hidden xs:inline">View Full Photo</span>
+            </button>
+          )}
+
+          {/* Gradient covering lower half on desktop, 70% on mobile */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-4/5 sm:h-1/2 bg-gradient-to-t from-[#181818] via-[#181818]/60 to-transparent" />
 
           {/* Floating Title & Actions on Bottom Edge */}
-          <div className="absolute bottom-5 left-6 right-6 flex items-end justify-between gap-4">
-            <div className="space-y-2.5 max-w-2xl">
-              <h2 className="font-bebas text-3xl sm:text-5xl text-[#FFFFFF] font-black tracking-wider leading-none drop-shadow-lg uppercase">
+          <div className="absolute bottom-3 sm:bottom-5 left-3 sm:left-6 right-3 sm:right-6 flex items-end justify-between gap-4">
+            <div className="space-y-1.5 sm:space-y-2.5 max-w-2xl w-full">
+              <h2 className="font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#FFFFFF] font-black tracking-wider leading-none drop-shadow-lg uppercase break-words">
                 {memory.title}
               </h2>
               {memory.subtitle && (
-                <p className="text-xs sm:text-sm text-[#B3B3B3] font-medium drop-shadow">
+                <p className="text-xs sm:text-sm text-[#B3B3B3] font-medium drop-shadow line-clamp-1 sm:line-clamp-2">
                   {memory.subtitle}
                 </p>
               )}
 
-              <div className="flex flex-wrap items-center gap-3 pt-1">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-1">
                 {/* Show Play Video ONLY when a genuine video source exists */}
                 {isVideo && (
                   <button
                     onClick={() => onPlay(memory)}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-sm rounded shadow transition-transform active:scale-95 cursor-pointer"
+                    className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs sm:text-sm rounded shadow transition-transform active:scale-95 cursor-pointer min-h-[44px]"
                   >
                     <Play className="w-4 h-4 fill-white" />
                     <span>Play Video</span>
@@ -119,7 +162,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                 {isLetter && onUnlockVault && (
                   <button
                     onClick={() => onUnlockVault(memory)}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] text-sm font-bold rounded shadow transition-colors active:scale-95 cursor-pointer"
+                    className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] text-xs sm:text-sm font-bold rounded shadow transition-colors active:scale-95 cursor-pointer min-h-[44px]"
                   >
                     <Mail className="w-4 h-4" />
                     <span>{memory.isSecret ? 'Read Confidential Letter' : 'Read Letter'}</span>
@@ -130,7 +173,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                 {/* My List Button */}
                 <button
                   onClick={() => onToggleWatchlist(memory.id)}
-                  className="p-2.5 rounded-full bg-[#141414]/90 hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-colors active:scale-90 cursor-pointer"
+                  className="w-11 h-11 rounded-full bg-[#141414]/90 hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-colors active:scale-90 cursor-pointer flex items-center justify-center min-h-[44px] min-w-[44px]"
                   title={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
                 >
                   {memory.isInWatchlist ? (
@@ -174,7 +217,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 space-y-8 bg-[#181818]">
+        <div className="p-4 sm:p-6 space-y-6 sm:space-y-8 bg-[#181818]">
           {/* Main Info Split */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Left 2 Cols: Story & Synopsis */}
@@ -191,7 +234,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                 </span>
               </div>
 
-              <p className="text-sm text-[#FFFFFF] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#FFFFFF] leading-relaxed break-words">
                 {memory.synopsis}
               </p>
 
@@ -200,19 +243,19 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                   <BookOpen className="w-3.5 h-3.5 text-[#E50914]" />
                   <span>Full Story & Memory Details</span>
                 </h4>
-                <p className="text-xs sm:text-sm text-[#B3B3B3] leading-relaxed whitespace-pre-line font-light">
+                <p className="text-xs sm:text-sm text-[#B3B3B3] leading-relaxed whitespace-pre-line font-light break-words">
                   {memory.fullStory}
                 </p>
               </div>
 
               {/* Readable Letter View if unlocked / non-secret letter content exists */}
               {!memory.isSecret && memory.letterContent && (
-                <div className="mt-4 p-5 sm:p-6 rounded bg-[#141414] border border-[#808080]/30 space-y-3">
+                <div className="mt-4 p-4 sm:p-6 rounded bg-[#141414] border border-[#808080]/30 space-y-3">
                   <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E50914]">
                     <Mail className="w-4 h-4" />
                     <span>Personal Love Note</span>
                   </div>
-                  <div className="font-serif-italic text-sm sm:text-base text-[#FFFFFF] leading-relaxed whitespace-pre-line">
+                  <div className="font-serif-italic text-sm sm:text-base text-[#FFFFFF] leading-relaxed whitespace-pre-line break-words">
                     {memory.letterContent}
                   </div>
                 </div>
@@ -280,28 +323,40 @@ export const DetailModal: React.FC<DetailModalProps> = ({
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {additionalPhotos.map((photo, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-[#141414] rounded overflow-hidden border border-[#808080]/20"
-                  >
-                    <div className="relative aspect-video bg-[#000000] overflow-hidden">
-                      <VisualArt
-                        id={`${memory.id}-photo-${idx}`}
-                        category={memory.category}
-                        title={photo.caption}
-                        imageUrl={photo.url}
-                        fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    {photo.caption && (
-                      <div className="p-3">
-                        <p className="text-xs text-[#B3B3B3]">{photo.caption}</p>
+                {additionalPhotos.map((photo, idx) => {
+                  const targetIndex = primaryImageUrl ? idx + 1 : idx;
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => setLightboxIndex(targetIndex)}
+                      className="group bg-[#141414] rounded overflow-hidden border border-[#808080]/20 hover:border-[#808080]/60 transition-all cursor-pointer flex flex-col justify-between"
+                    >
+                      <div className="relative aspect-video bg-[#000000] overflow-hidden">
+                        <VisualArt
+                          id={`${memory.id}-photo-${idx}`}
+                          category={memory.category}
+                          title={photo.caption || 'Memory Photo'}
+                          imageUrl={photo.url}
+                          fit="cover"
+                          aspectRatio="16/9"
+                          fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-[#000000]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#000000]/80 text-[#FFFFFF] text-xs font-semibold border border-white/20 shadow-lg">
+                            <Maximize2 className="w-3.5 h-3.5 text-[#E50914]" />
+                            <span>View Full Size</span>
+                          </span>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                ))}
+                      {photo.caption && (
+                        <div className="p-3">
+                          <p className="text-xs text-[#B3B3B3] line-clamp-2">{photo.caption}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -430,6 +485,112 @@ export const DetailModal: React.FC<DetailModalProps> = ({
           )}
         </div>
       </div>
+
+      {/* FULL PHOTO LIGHTBOX / VIEWER — Preserves Intrinsic Aspect Ratio */}
+      {lightboxIndex !== null && allPhotos[lightboxIndex] && (
+        <div
+          className="fixed inset-0 z-[100] bg-[#000000]/95 backdrop-blur-md flex flex-col justify-between p-3 sm:p-6 animate-in fade-in duration-200 select-none"
+          onClick={() => setLightboxIndex(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Full-size photo viewer"
+        >
+          {/* Lightbox Header Bar */}
+          <div
+            className="flex items-center justify-between gap-3 text-white z-10 w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="min-w-0 pr-2">
+              <h3 className="font-bebas text-xl sm:text-2xl text-white tracking-wide truncate">
+                {allPhotos[lightboxIndex].title || memory.title}
+              </h3>
+              {allPhotos[lightboxIndex].caption && (
+                <p className="text-xs text-[#B3B3B3] truncate">
+                  {allPhotos[lightboxIndex].caption}
+                </p>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-xs text-[#808080] font-mono px-2.5 py-1 bg-white/5 rounded border border-white/10">
+                {lightboxIndex + 1} / {allPhotos.length}
+              </span>
+
+              {/* Fit mode toggle: Contain (fit whole image without crop) vs Cover (fill viewport) */}
+              <button
+                type="button"
+                onClick={() => setLightboxFit((f) => (f === 'contain' ? 'cover' : 'contain'))}
+                className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-semibold text-white border border-white/20 transition-colors flex items-center gap-1.5 min-h-[40px] cursor-pointer"
+                title={lightboxFit === 'contain' ? 'Switch to Fill View' : 'Switch to Fit View (Uncropped)'}
+              >
+                <span>{lightboxFit === 'contain' ? 'Fit Screen (100% visible)' : 'Fill Screen'}</span>
+              </button>
+
+              {/* Close Lightbox */}
+              <button
+                type="button"
+                onClick={() => setLightboxIndex(null)}
+                className="w-11 h-11 rounded-full bg-[#141414] hover:bg-[#E50914] text-white flex items-center justify-center transition-colors border border-white/20 min-h-[44px] min-w-[44px] cursor-pointer shadow-lg"
+                aria-label="Close photo viewer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Center Full-Res Image Viewer */}
+          <div
+            className="relative flex-1 flex items-center justify-center my-2 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={allPhotos[lightboxIndex].url}
+              alt={allPhotos[lightboxIndex].caption || memory.title}
+              className={`max-h-[82vh] max-w-[94vw] rounded-md transition-all duration-300 ${
+                lightboxFit === 'contain'
+                  ? 'object-contain max-h-[82vh] max-w-[94vw]'
+                  : 'object-cover w-full h-full'
+              }`}
+              style={{ margin: 'auto' }}
+            />
+
+            {/* Prev button */}
+            {allPhotos.length > 1 && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : allPhotos.length - 1));
+                }}
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#000000]/75 hover:bg-[#E50914] text-white flex items-center justify-center border border-white/25 transition-all cursor-pointer min-h-[44px] min-w-[44px] shadow-xl"
+                aria-label="Previous photo"
+              >
+                <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
+              </button>
+            )}
+
+            {/* Next button */}
+            {allPhotos.length > 1 && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIndex((prev) => (prev !== null && prev < allPhotos.length - 1 ? prev + 1 : 0));
+                }}
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#000000]/75 hover:bg-[#E50914] text-white flex items-center justify-center border border-white/25 transition-all cursor-pointer min-h-[44px] min-w-[44px] shadow-xl"
+                aria-label="Next photo"
+              >
+                <ChevronRight className="w-6 h-6 stroke-[2.5]" />
+              </button>
+            )}
+          </div>
+
+          {/* Lightbox Footer Captions */}
+          <div className="text-center text-xs text-[#808080] py-1" onClick={(e) => e.stopPropagation()}>
+            Use keyboard arrow keys &larr; &rarr; to browse photos &middot; Press Esc to close
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -149,6 +149,13 @@ Happy Anniversary, my love. Forever and always.`,
     type: 'text',
   },
   {
+    key: 'storyline_custom_order',
+    section: 'sections',
+    label: 'Custom Storyline Chapter Order (JSON array of IDs)',
+    value: '[]',
+    type: 'text',
+  },
+  {
     key: 'section_little_things_title',
     section: 'sections',
     label: 'Little Things Collection Title',

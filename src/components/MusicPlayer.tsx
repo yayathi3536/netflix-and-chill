@@ -363,20 +363,20 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
           onClick={() => setIsOpen(false)}
         >
           <div
-            className="relative w-full max-w-lg bg-[#141414] border border-[#181818] rounded-t-2xl sm:rounded-2xl shadow-2xl p-6 overflow-hidden flex flex-col space-y-5"
+            className="relative w-full max-w-lg bg-[#141414] border border-[#181818] rounded-t-2xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 overflow-hidden flex flex-col space-y-4 sm:space-y-5 max-h-[92vh] overflow-y-auto dark-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header: Title & Close */}
-            <div className="flex items-center justify-between border-b border-[#181818] pb-4">
+            <div className="flex items-center justify-between border-b border-[#181818] pb-3 sm:pb-4 gap-2">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded bg-[#E50914] flex items-center justify-center text-xs text-[#FFFFFF] font-black font-bebas">
+                <div className="w-7 h-7 rounded bg-[#E50914] flex items-center justify-center text-xs text-[#FFFFFF] font-black font-bebas shrink-0">
                   N
                 </div>
                 <div>
-                  <h2 className="font-bebas text-xl text-[#FFFFFF] font-bold tracking-wider uppercase">
+                  <h2 className="font-bebas text-lg sm:text-xl text-[#FFFFFF] font-bold tracking-wider uppercase">
                     Original Soundtrack
                   </h2>
-                  <span className="text-[11px] text-[#B3B3B3]">
+                  <span className="text-[10px] sm:text-[11px] text-[#B3B3B3]">
                     {tracks.length} Curated Tracks
                   </span>
                 </div>
@@ -384,10 +384,10 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
 
               <div className="flex items-center gap-1.5">
                 {/* Tab Switcher */}
-                <div className="flex bg-[#181818] rounded p-0.5 border border-[#808080]/30 text-xs mr-2">
+                <div className="flex bg-[#181818] rounded-lg p-0.5 border border-[#808080]/30 text-xs">
                   <button
                     onClick={() => setActiveTab('nowPlaying')}
-                    className={`px-3 py-1 rounded font-medium transition-colors cursor-pointer ${
+                    className={`px-2.5 sm:px-3 py-1.5 rounded font-medium transition-colors cursor-pointer min-h-[36px] ${
                       activeTab === 'nowPlaying'
                         ? 'bg-[#E50914] text-[#FFFFFF] font-bold'
                         : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
@@ -397,7 +397,7 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
                   </button>
                   <button
                     onClick={() => setActiveTab('playlist')}
-                    className={`px-3 py-1 rounded font-medium transition-colors cursor-pointer ${
+                    className={`px-2.5 sm:px-3 py-1.5 rounded font-medium transition-colors cursor-pointer min-h-[36px] ${
                       activeTab === 'playlist'
                         ? 'bg-[#E50914] text-[#FFFFFF] font-bold'
                         : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
@@ -409,7 +409,7 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
 
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer"
+                  className="w-10 h-10 rounded-full hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer flex items-center justify-center min-h-[44px] min-w-[44px]"
                   aria-label="Close player"
                 >
                   <ChevronDown className="w-5 h-5" />
@@ -427,9 +427,9 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
 
             {/* TAB: NOW PLAYING */}
             {activeTab === 'nowPlaying' && (
-              <div className="space-y-5 animate-in fade-in duration-150">
+              <div className="space-y-4 sm:space-y-5 animate-in fade-in duration-150">
                 {/* Album Art */}
-                <div className="relative aspect-square max-w-[260px] mx-auto rounded overflow-hidden shadow-2xl border border-[#181818] group bg-[#000000]">
+                <div className="relative aspect-square max-w-[190px] xs:max-w-[230px] sm:max-w-[260px] mx-auto rounded-xl overflow-hidden shadow-2xl border border-[#181818] group bg-[#000000]">
                   {currentTrack.coverUrl ? (
                     <img
                       src={currentTrack.coverUrl}

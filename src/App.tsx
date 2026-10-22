@@ -22,6 +22,8 @@ import { supabaseService, checkIsAdmin, checkIsApproved } from './services/supab
 import { isSupabaseConfigured } from './services/supabaseClient';
 import { Navbar } from './components/Navbar';
 import { HeroBanner } from './components/HeroBanner';
+import { VisualArt } from './components/VisualArt';
+import { StorylineView } from './components/StorylineView';
 import { CarouselRow } from './components/CarouselRow';
 import { DetailModal } from './components/DetailModal';
 import { RelivePlayer } from './components/RelivePlayer';
@@ -384,10 +386,64 @@ export default function App() {
   }, [memories]);
 
   const ourStorySeries = useMemo(() => {
-    return memories
-      .filter((m) => m.category === 'our-story' && m.id !== 'featured-story-of-us')
-      .sort((a, b) => (a.isTop10 || 99) - (b.isTop10 || 99));
-  }, [memories]);
+    const rawStories = memories.filter(
+      (m) => m.category === 'our-story' && m.id !== 'featured-story-of-us'
+    );
+
+    // Retrieve custom order from siteContent or local storage
+    let customOrderIds: string[] | null = null;
+    if (siteContent.storyline_custom_order) {
+      try {
+        const parsed = JSON.parse(siteContent.storyline_custom_order);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          customOrderIds = parsed;
+        }
+      } catch (e) {
+        // ignore parse error
+      }
+    }
+    if (!customOrderIds) {
+      customOrderIds = storageService.getStorylineOrder();
+    }
+
+    if (customOrderIds && customOrderIds.length > 0) {
+      return [...rawStories].sort((a, b) => {
+        const indexA = customOrderIds!.indexOf(a.id);
+        const indexB = customOrderIds!.indexOf(b.id);
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+        const rankA = a.sortOrder ?? a.isTop10 ?? 999;
+        const rankB = b.sortOrder ?? b.isTop10 ?? 999;
+        return rankA - rankB;
+      });
+    }
+
+    return [...rawStories].sort((a, b) => {
+      const rankA = a.sortOrder ?? a.isTop10 ?? 999;
+      const rankB = b.sortOrder ?? b.isTop10 ?? 999;
+      return rankA - rankB;
+    });
+  }, [memories, siteContent.storyline_custom_order]);
+
+  const handleReorderStoryline = async (newOrderedStories: MemoryItem[]) => {
+    const orderedIds = newOrderedStories.map((s) => s.id);
+    const updatedMemories = memories.map((m) => {
+      const idx = orderedIds.indexOf(m.id);
+      if (idx !== -1) {
+        return { ...m, isTop10: idx + 1, sortOrder: idx + 1 };
+      }
+      return m;
+    });
+    setMemories(updatedMemories);
+
+    setSiteContent((prev) => ({
+      ...prev,
+      storyline_custom_order: JSON.stringify(orderedIds),
+    }));
+
+    return await storageService.saveStorylineOrder(newOrderedStories);
+  };
 
   const littleThingsCollection = useMemo(() => {
     return memories.filter((m) => m.category === 'little-things');
@@ -525,8 +581,8 @@ export default function App() {
 
       {/* TOP SYSTEM STATUS NOTIFICATION (Admin Only) */}
       {isAdmin && (!isSupabaseReady ? (
-        <div className="pt-20 px-4 sm:px-8 max-w-7xl mx-auto w-full">
-          <div className="flex items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-[#808080]/30 text-xs text-[#B3B3B3]">
+        <div className="pt-28 sm:pt-24 px-4 sm:px-8 max-w-7xl mx-auto w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-[#808080]/30 text-xs text-[#B3B3B3]">
             <div className="flex items-center gap-2">
               <Database className="w-4 h-4 text-[#E50914] shrink-0" />
               <span>
@@ -535,14 +591,14 @@ export default function App() {
             </div>
             <button
               onClick={() => setIsSetupModalOpen(true)}
-              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-3 py-1 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer"
+              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-3 py-1.5 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer self-start sm:self-auto min-h-[36px]"
             >
               Setup Supabase &rarr;
             </button>
           </div>
         </div>
       ) : isSchemaMissing ? (
-        <div className="pt-20 px-4 sm:px-8 max-w-7xl mx-auto w-full">
+        <div className="pt-28 sm:pt-24 px-4 sm:px-8 max-w-7xl mx-auto w-full">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded bg-[#181818] border border-[#E50914]/50 text-xs text-[#B3B3B3] shadow-xl">
             <div className="flex items-start sm:items-center gap-2.5">
               <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5 sm:mt-0" />
@@ -555,22 +611,22 @@ export default function App() {
             </div>
             <button
               onClick={() => setIsSetupModalOpen(true)}
-              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-3.5 py-1.5 rounded-md text-xs font-bold whitespace-nowrap transition-colors cursor-pointer shadow active:scale-95 shrink-0"
+              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-3.5 py-1.5 rounded-md text-xs font-bold whitespace-nowrap transition-colors cursor-pointer shadow active:scale-95 shrink-0 min-h-[36px]"
             >
               Copy SQL Migration &rarr;
             </button>
           </div>
         </div>
       ) : statusNotification ? (
-        <div className="pt-20 px-4 sm:px-8 max-w-7xl mx-auto w-full">
-          <div className="flex items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-[#808080]/30 text-xs text-[#B3B3B3]">
+        <div className="pt-28 sm:pt-24 px-4 sm:px-8 max-w-7xl mx-auto w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-[#808080]/30 text-xs text-[#B3B3B3]">
             <div className="flex items-center gap-2">
               <Info className="w-4 h-4 text-[#E50914] shrink-0" />
               <span className="text-[#FFFFFF]">{statusNotification}</span>
             </div>
             <button
               onClick={() => setIsAdminModalOpen(true)}
-              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-2.5 py-1 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer"
+              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-2.5 py-1.5 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer self-start sm:self-auto min-h-[36px]"
             >
               Sync Database
             </button>
@@ -616,6 +672,7 @@ export default function App() {
                   <MovieCard
                     key={m.id}
                     memory={m}
+                    className="w-full"
                     onPlay={(mem) => handlePlayMemory(mem)}
                     onOpenInfo={(mem) => handleOpenItem(mem)}
                     onToggleWatchlist={handleToggleWatchlist}
@@ -657,16 +714,16 @@ export default function App() {
                 )}
 
                 {/* INTERACTIVE "OPEN YOUR SURPRISE" CAPSULE */}
-                <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-8 mb-6">
+                <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 sm:-mt-8 mb-6">
                   <div
                     onClick={() => setIsSurpriseModalOpen(true)}
-                    className="group relative overflow-hidden rounded bg-[#141414] border border-[#181818] hover:border-[#808080]/60 p-4 sm:p-5 shadow-2xl transition-all cursor-pointer hover:scale-[1.01] flex items-center justify-between gap-4"
+                    className="group relative overflow-hidden rounded-xl bg-[#141414] border border-[#181818] hover:border-[#808080]/60 p-4 sm:p-5 shadow-2xl transition-all cursor-pointer hover:scale-[1.01] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="w-11 h-11 rounded bg-[#181818] border border-[#E50914] flex items-center justify-center text-xl shadow text-[#E50914] group-hover:scale-110 transition-transform">
+                      <div className="w-11 h-11 rounded-lg bg-[#181818] border border-[#E50914] flex items-center justify-center text-xl shadow text-[#E50914] group-hover:scale-110 transition-transform shrink-0">
                         💌
                       </div>
-                      <div>
+                      <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="font-bebas text-lg sm:text-xl text-[#FFFFFF] font-bold tracking-wider uppercase">
                             Open Your Surprise
@@ -681,7 +738,7 @@ export default function App() {
                       </div>
                     </div>
 
-                    <button className="px-5 py-2.5 rounded bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shadow cursor-pointer">
+                    <button className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shadow cursor-pointer text-center min-h-[44px] flex items-center justify-center">
                       Reveal Letter &rarr;
                     </button>
                   </div>
@@ -815,62 +872,18 @@ export default function App() {
               </div>
             )}
 
-            {/* TAB: OUR STORY (Dedicated Timeline & Story View) */}
+            {/* TAB: OUR STORY (Dedicated Timeline & Story View with Custom Drag-and-Drop Order) */}
             {activeTab === 'our-story' && (
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
-                <div>
-                  <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>ORIGINAL SERIES · CHRONOLOGICAL TIMELINE</span>
-                  </div>
-                  <h1 className="font-bebas text-4xl sm:text-6xl text-[#FFFFFF] font-black tracking-wider uppercase">
-                    Episodes of Us
-                  </h1>
-                  <p className="text-xs sm:text-sm text-[#B3B3B3] max-w-2xl mt-1.5">
-                    Every milestone chapter in order from the day the universe aligned our paths to building our forever future.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {ourStorySeries.map((ch, idx) => (
-                    <div
-                      key={ch.id}
-                      onClick={() => setSelectedMemory(ch)}
-                      className="bg-[#141414] rounded overflow-hidden border border-[#181818] hover:border-[#808080]/60 transition-all cursor-pointer group hover:scale-[1.02] flex flex-col justify-between shadow-xl"
-                    >
-                      <div className="relative aspect-video overflow-hidden">
-                        <div className="absolute top-3 left-3 z-20">
-                          <span className="font-bebas text-xs px-2.5 py-1 rounded bg-[#E50914] text-[#FFFFFF] font-black uppercase tracking-wider shadow">
-                            Episode {idx + 1}
-                          </span>
-                        </div>
-                        <div className="w-full h-full group-hover:scale-105 transition-transform duration-500">
-                          <MovieCard
-                            memory={ch}
-                            onPlay={(m) => handlePlayMemory(m)}
-                            onOpenInfo={(m) => handleOpenItem(m)}
-                            onToggleWatchlist={handleToggleWatchlist}
-                            onUnlockVault={(m) => setSecretVaultMemory(m)}
-                            onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
-                          />
-                        </div>
-                      </div>
-                      <div className="p-4 space-y-2">
-                        <div className="flex items-center justify-between text-xs text-[#808080] font-medium">
-                          <span>{ch.date}</span>
-                          <span className="text-[#FFFFFF] font-bold">{ch.matchScore}% Match</span>
-                        </div>
-                        <h3 className="font-bebas text-xl text-[#FFFFFF] font-bold leading-tight group-hover:text-[#FFFFFF] uppercase tracking-wide">
-                          {ch.title}
-                        </h3>
-                        <p className="text-xs text-[#B3B3B3] line-clamp-3 leading-relaxed">
-                          {ch.synopsis}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <StorylineView
+                stories={ourStorySeries}
+                onReorder={handleReorderStoryline}
+                onSelectStory={(ch) => handleOpenItem(ch)}
+                onPlayStory={(ch) => handlePlayMemory(ch)}
+                onToggleWatchlist={handleToggleWatchlist}
+                onUnlockVault={(ch) => setSecretVaultMemory(ch)}
+                onEditStory={isAdmin ? handleOpenEditMemoryModal : undefined}
+                isAdmin={isAdmin}
+              />
             )}
 
             {/* TAB: MEMORIES (Continue Watching & All Memories) */}
@@ -896,6 +909,7 @@ export default function App() {
                       <MovieCard
                         key={m.id}
                         memory={m}
+                        className="w-full"
                         onPlay={(mem) => handlePlayMemory(mem)}
                         onOpenInfo={(mem) => handleOpenItem(mem)}
                         onToggleWatchlist={handleToggleWatchlist}

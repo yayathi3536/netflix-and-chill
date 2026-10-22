@@ -53,6 +53,9 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [uploadSuccess, setUploadSuccess] = useState('');
+  const [previewPreset, setPreviewPreset] = useState<'16/9' | '3/4' | '1/1' | 'natural'>('16/9');
+  const [previewFit, setPreviewFit] = useState<'cover' | 'contain'>('cover');
+  const [imageMeta, setImageMeta] = useState<{ width: number; height: number; ratioStr: string } | null>(null);
 
   useEffect(() => {
     if (memoryToEdit) {
@@ -252,13 +255,14 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-[#181818] rounded-xl overflow-hidden shadow-2xl border border-white/10 my-auto text-white p-6 sm:p-8"
+        className="relative w-full max-w-2xl bg-[#181818] rounded-xl overflow-hidden shadow-2xl border border-white/10 my-auto text-white p-4 sm:p-8 max-h-[92vh] overflow-y-auto dark-scrollbar"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-40 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-11 h-11 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20 min-h-[44px] min-w-[44px]"
+          aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>
@@ -480,13 +484,148 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             )}
 
             {imageUrl && (
-              <div className="relative aspect-video max-h-36 rounded-lg overflow-hidden border border-white/20 mt-2 bg-black">
-                <img
-                  src={imageUrl}
-                  alt="Preview"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover"
-                />
+              <div className="space-y-2 mt-2 pt-2 border-t border-white/10">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <div className="flex items-center gap-1.5 text-neutral-300">
+                    <span className="font-semibold">Preset Frame:</span>
+                    {imageMeta && (
+                      <span className="text-[10px] text-[#B3B3B3] bg-white/5 px-2 py-0.5 rounded border border-white/10">
+                        {imageMeta.width} &times; {imageMeta.height} ({imageMeta.ratioStr})
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Preset Buttons */}
+                  <div className="flex items-center gap-1 bg-black/60 p-0.5 rounded border border-white/10 text-[11px]">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewPreset('16/9')}
+                      className={`px-2 py-1 rounded transition-colors ${
+                        previewPreset === '16/9'
+                          ? 'bg-[#E50914] text-white font-bold'
+                          : 'text-neutral-400 hover:text-white'
+                      }`}
+                      title="16:9 Landscape (Hero & Carousel)"
+                    >
+                      16:9
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewPreset('3/4')}
+                      className={`px-2 py-1 rounded transition-colors ${
+                        previewPreset === '3/4'
+                          ? 'bg-[#E50914] text-white font-bold'
+                          : 'text-neutral-400 hover:text-white'
+                      }`}
+                      title="3:4 Portrait (Top 10 Series & Posters)"
+                    >
+                      3:4
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewPreset('1/1')}
+                      className={`px-2 py-1 rounded transition-colors ${
+                        previewPreset === '1/1'
+                          ? 'bg-[#E50914] text-white font-bold'
+                          : 'text-neutral-400 hover:text-white'
+                      }`}
+                      title="1:1 Square (Avatar & Thumbnails)"
+                    >
+                      1:1
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPreviewPreset('natural');
+                        setPreviewFit('contain');
+                      }}
+                      className={`px-2 py-1 rounded transition-colors ${
+                        previewPreset === 'natural'
+                          ? 'bg-[#E50914] text-white font-bold'
+                          : 'text-neutral-400 hover:text-white'
+                      }`}
+                      title="Natural Uncropped Ratio"
+                    >
+                      Original
+                    </button>
+                  </div>
+                </div>
+
+                {/* Fit Mode Toggle */}
+                <div className="flex items-center justify-between text-[11px] text-neutral-400">
+                  <span>Display Framing:</span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewFit('cover')}
+                      className={`cursor-pointer ${
+                        previewFit === 'cover' ? 'text-white font-bold underline' : 'hover:text-white'
+                      }`}
+                    >
+                      Fill Frame (Cover)
+                    </button>
+                    <span>&middot;</span>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewFit('contain')}
+                      className={`cursor-pointer ${
+                        previewFit === 'contain' ? 'text-white font-bold underline' : 'hover:text-white'
+                      }`}
+                    >
+                      Fit Whole Photo (Contain)
+                    </button>
+                  </div>
+                </div>
+
+                {/* Preview Frame Box */}
+                <div
+                  className={`relative overflow-hidden rounded-lg border border-white/20 bg-black flex items-center justify-center transition-all duration-200 ${
+                    previewPreset === '16/9'
+                      ? 'aspect-video w-full max-h-52'
+                      : previewPreset === '3/4'
+                      ? 'aspect-[3/4] max-w-[240px] max-h-60 mx-auto'
+                      : previewPreset === '1/1'
+                      ? 'aspect-square max-w-[220px] max-h-56 mx-auto'
+                      : 'max-h-60 w-full'
+                  }`}
+                >
+                  <img
+                    src={imageUrl}
+                    alt="Preview"
+                    referrerPolicy="no-referrer"
+                    onLoad={(e) => {
+                      const img = e.currentTarget;
+                      const w = img.naturalWidth;
+                      const h = img.naturalHeight;
+                      let ratioStr = 'Custom';
+                      const ratio = w / h;
+                      if (Math.abs(ratio - 16 / 9) < 0.08) ratioStr = '16:9 Landscape';
+                      else if (Math.abs(ratio - 4 / 3) < 0.08) ratioStr = '4:3 Standard';
+                      else if (Math.abs(ratio - 3 / 4) < 0.08) ratioStr = '3:4 Portrait';
+                      else if (Math.abs(ratio - 9 / 16) < 0.08) ratioStr = '9:16 Vertical';
+                      else if (Math.abs(ratio - 1) < 0.08) ratioStr = '1:1 Square';
+                      else if (ratio > 1) ratioStr = `${ratio.toFixed(2)}:1 Landscape`;
+                      else ratioStr = `1:${(1 / ratio).toFixed(2)} Portrait`;
+                      setImageMeta({ width: w, height: h, ratioStr });
+                    }}
+                    className={`max-h-full max-w-full ${
+                      previewFit === 'contain' ? 'object-contain' : 'w-full h-full object-cover'
+                    }`}
+                  />
+                  <div className="pointer-events-none absolute bottom-1 right-1 bg-black/75 px-1.5 py-0.5 rounded text-[9px] text-white/70">
+                    {previewPreset === '16/9'
+                      ? '16:9 Landscape Card'
+                      : previewPreset === '3/4'
+                      ? '3:4 Portrait Poster'
+                      : previewPreset === '1/1'
+                      ? '1:1 Square Card'
+                      : 'Full Uncropped'}
+                  </div>
+                </div>
+
+                <p className="text-[10px] text-neutral-400 text-center">
+                  Original image file is uploaded and preserved intact without downscaling or loss.
+                </p>
               </div>
             )}
           </div>

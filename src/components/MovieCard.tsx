@@ -57,14 +57,16 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         </div>
 
         {/* Poster Card */}
-        <div className="relative w-36 sm:w-44 h-52 sm:h-64 rounded overflow-hidden bg-[#141414] shadow-xl border border-[#181818] z-10 group-hover:border-[#808080]/50 transition-all">
+        <div className="relative w-32 xs:w-36 sm:w-44 aspect-[3/4] rounded-lg overflow-hidden bg-[#141414] shadow-xl border border-[#181818] z-10 group-hover:border-[#808080]/50 transition-all">
           <VisualArt
             id={memory.id}
             category={memory.category}
             title={memory.title}
             imageUrl={memory.posterUrl || memory.backdropUrl}
+            fit="cover"
+            aspectRatio="3/4"
             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full group-hover:scale-110 transition-transform duration-500"
           />
 
           {/* Top Netflix badge & Admin Edit */}
@@ -115,8 +117,10 @@ export const MovieCard: React.FC<MovieCardProps> = ({
           category={memory.category}
           title={memory.title}
           imageUrl={memory.backdropUrl || memory.posterUrl}
+          fit="cover"
+          aspectRatio="16/9"
           fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full group-hover:scale-105 transition-transform duration-500"
         />
 
         {/* Top Indicators */}

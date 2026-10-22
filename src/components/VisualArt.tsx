@@ -7,6 +7,9 @@ interface VisualArtProps {
   title: string;
   className?: string;
   imageUrl?: string;
+  fit?: 'cover' | 'contain' | 'scale-down';
+  aspectRatio?: '16/9' | '3/4' | '1/1' | 'auto';
+  onClick?: () => void;
 }
 
 export const VisualArt: React.FC<VisualArtProps> = ({
@@ -15,8 +18,27 @@ export const VisualArt: React.FC<VisualArtProps> = ({
   title,
   fallbackGradient = 'from-[#141414] via-[#181818] to-[#000000]',
   className = 'w-full h-full',
+  fit = 'cover',
+  aspectRatio,
+  onClick,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
+
+  const fitClass =
+    fit === 'contain'
+      ? 'object-contain'
+      : fit === 'scale-down'
+      ? 'object-scale-down'
+      : 'object-cover';
+
+  const ratioClass =
+    aspectRatio === '16/9'
+      ? 'aspect-video'
+      : aspectRatio === '3/4'
+      ? 'aspect-[3/4]'
+      : aspectRatio === '1/1'
+      ? 'aspect-square'
+      : '';
 
   if (imageUrl && !imageFailed) {
     return (
@@ -24,8 +46,10 @@ export const VisualArt: React.FC<VisualArtProps> = ({
         src={imageUrl}
         alt={title}
         referrerPolicy="no-referrer"
+        loading="lazy"
         onError={() => setImageFailed(true)}
-        className={`object-cover ${className}`}
+        onClick={onClick}
+        className={`${fitClass} ${ratioClass} ${className}`.trim()}
       />
     );
   }

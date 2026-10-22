@@ -159,6 +159,66 @@ class UnifiedStorageService {
     return { success: true };
   }
 
+  // 3b. STORYLINE CUSTOM ORDERING
+  public getStorylineOrder(): string[] | null {
+    try {
+      const stored = localStorage.getItem('our_universe_storyline_order');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn('Could not read storyline order from localStorage:', e);
+    }
+    return null;
+  }
+
+  public saveLocalStorylineOrder(orderedIds: string[]): void {
+    try {
+      localStorage.setItem('our_universe_storyline_order', JSON.stringify(orderedIds));
+    } catch (e) {
+      console.error('Failed to save storyline order to localStorage:', e);
+    }
+  }
+
+  public async saveStorylineOrder(
+    orderedStories: MemoryItem[]
+  ): Promise<{ success: boolean; error?: string }> {
+    const orderedIds = orderedStories.map((s) => s.id);
+
+    // 1. Save locally in dedicated key immediately
+    this.saveLocalStorylineOrder(orderedIds);
+
+    // 2. Update local memories cache with new rank (isTop10 & sortOrder)
+    const list = this.getLocalMemories();
+    const updatedMemories = list.map((m) => {
+      const idx = orderedIds.indexOf(m.id);
+      if (idx !== -1) {
+        return { ...m, isTop10: idx + 1, sortOrder: idx + 1 };
+      }
+      return m;
+    });
+    this.saveLocalMemories(updatedMemories);
+
+    // 3. Update local site content
+    const siteContent = this.getLocalSiteContent();
+    siteContent['storyline_custom_order'] = JSON.stringify(orderedIds);
+    this.saveLocalSiteContent(siteContent);
+
+    // 4. Sync to Supabase if configured
+    if (isSupabaseConfigured()) {
+      const { success, error } = await supabaseService.saveStorylineOrder(orderedIds);
+      if (!success) {
+        return {
+          success: false,
+          error: error?.message || 'Failed to save custom storyline order to Supabase database',
+        };
+      }
+    }
+
+    return { success: true };
+  }
+
   // 4. TOGGLE WATCHLIST
   public async toggleWatchlist(id: string): Promise<boolean> {
     const list = this.getLocalMemories();

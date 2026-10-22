@@ -123,24 +123,25 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="relative max-w-xl w-full bg-[#141414] border border-[#181818] rounded shadow-2xl p-6 sm:p-8 space-y-6"
+        className="relative max-w-xl w-full bg-[#141414] border border-[#181818] rounded-xl shadow-2xl p-4 sm:p-8 space-y-5 sm:space-y-6 my-auto max-h-[92vh] overflow-y-auto dark-scrollbar"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 w-11 h-11 rounded-full hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer flex items-center justify-center min-h-[44px] min-w-[44px]"
+          aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Header */}
-        <div className="text-center space-y-1">
+        <div className="text-center space-y-1 pt-1 pr-6 pl-6">
           <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold uppercase tracking-widest">
             <Gift className="w-3.5 h-3.5" />
             <span>ORIGINAL SPECIAL FEATURE</span>
           </div>
-          <h2 className="font-bebas text-3xl sm:text-4xl text-[#FFFFFF] font-black uppercase tracking-wider">
+          <h2 className="font-bebas text-2xl sm:text-4xl text-[#FFFFFF] font-black uppercase tracking-wider">
             Private Vault & Notes
           </h2>
           <p className="text-xs text-[#B3B3B3] font-normal">
@@ -149,11 +150,11 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex justify-center">
-          <div className="flex bg-[#181818] p-1 rounded border border-[#808080]/30 text-xs">
+        <div className="flex justify-center w-full overflow-x-auto no-scrollbar py-0.5">
+          <div className="inline-flex bg-[#181818] p-1 rounded-lg border border-[#808080]/30 text-xs shrink-0 gap-1">
             <button
               onClick={() => setActiveTab('letter')}
-              className={`px-3.5 py-1.5 rounded font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-2.5 sm:px-3.5 py-2 rounded-md font-semibold transition-all cursor-pointer flex items-center gap-1.5 min-h-[40px] text-[11px] sm:text-xs whitespace-nowrap ${
                 activeTab === 'letter'
                   ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
                   : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
@@ -164,7 +165,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('coupons')}
-              className={`px-3.5 py-1.5 rounded font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-2.5 sm:px-3.5 py-2 rounded-md font-semibold transition-all cursor-pointer flex items-center gap-1.5 min-h-[40px] text-[11px] sm:text-xs whitespace-nowrap ${
                 activeTab === 'coupons'
                   ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
                   : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
@@ -175,7 +176,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('counter')}
-              className={`px-3.5 py-1.5 rounded font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-2.5 sm:px-3.5 py-2 rounded-md font-semibold transition-all cursor-pointer flex items-center gap-1.5 min-h-[40px] text-[11px] sm:text-xs whitespace-nowrap ${
                 activeTab === 'counter'
                   ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
                   : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
@@ -264,36 +265,36 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
               <span>Timeline Tracker · Since 15th June 2025</span>
             </div>
 
-            <div className="grid grid-cols-4 gap-2 sm:gap-3">
-              <div className="p-3 sm:p-4 rounded bg-[#181818] border border-[#808080]/30">
-                <span className="block font-bebas text-3xl sm:text-5xl text-[#FFFFFF] font-bold tabular-nums">
+            <div className="grid grid-cols-4 gap-1.5 sm:gap-3">
+              <div className="p-2 sm:p-4 rounded-lg bg-[#181818] border border-[#808080]/30">
+                <span className="block font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#FFFFFF] font-bold tabular-nums">
                   {timeTogether.days}
                 </span>
-                <span className="text-[10px] text-[#808080] uppercase tracking-widest font-semibold">
+                <span className="text-[9px] sm:text-[10px] text-[#808080] uppercase tracking-wider sm:tracking-widest font-semibold">
                   Days
                 </span>
               </div>
-              <div className="p-3 sm:p-4 rounded bg-[#181818] border border-[#808080]/30">
-                <span className="block font-bebas text-3xl sm:text-5xl text-[#FFFFFF] font-bold tabular-nums">
+              <div className="p-2 sm:p-4 rounded-lg bg-[#181818] border border-[#808080]/30">
+                <span className="block font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#FFFFFF] font-bold tabular-nums">
                   {timeTogether.hours}
                 </span>
-                <span className="text-[10px] text-[#808080] uppercase tracking-widest font-semibold">
+                <span className="text-[9px] sm:text-[10px] text-[#808080] uppercase tracking-wider sm:tracking-widest font-semibold">
                   Hours
                 </span>
               </div>
-              <div className="p-3 sm:p-4 rounded bg-[#181818] border border-[#808080]/30">
-                <span className="block font-bebas text-3xl sm:text-5xl text-[#FFFFFF] font-bold tabular-nums">
+              <div className="p-2 sm:p-4 rounded-lg bg-[#181818] border border-[#808080]/30">
+                <span className="block font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#FFFFFF] font-bold tabular-nums">
                   {timeTogether.minutes}
                 </span>
-                <span className="text-[10px] text-[#808080] uppercase tracking-widest font-semibold">
+                <span className="text-[9px] sm:text-[10px] text-[#808080] uppercase tracking-wider sm:tracking-widest font-semibold">
                   Mins
                 </span>
               </div>
-              <div className="p-3 sm:p-4 rounded bg-[#181818] border border-[#808080]/30">
-                <span className="block font-bebas text-3xl sm:text-5xl text-[#E50914] font-bold tabular-nums">
+              <div className="p-2 sm:p-4 rounded-lg bg-[#181818] border border-[#808080]/30">
+                <span className="block font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#E50914] font-bold tabular-nums">
                   {timeTogether.seconds}
                 </span>
-                <span className="text-[10px] text-[#808080] uppercase tracking-widest font-semibold">
+                <span className="text-[9px] sm:text-[10px] text-[#808080] uppercase tracking-wider sm:tracking-widest font-semibold">
                   Secs
                 </span>
               </div>

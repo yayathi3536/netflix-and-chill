@@ -265,7 +265,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             {isNotificationsOpen && (
-              <div className="absolute right-0 mt-3 w-72 sm:w-80 bg-[#141414] border border-[#808080]/40 rounded shadow-2xl py-3 z-50 text-xs">
+              <div className="fixed sm:absolute left-2.5 right-2.5 sm:left-auto sm:right-0 mt-3 sm:w-80 bg-[#141414] border border-[#808080]/40 rounded-xl shadow-2xl py-3 z-50 text-xs backdrop-blur-md">
                 <div className="px-4 pb-2 border-b border-[#181818] flex items-center justify-between">
                   <span className="font-semibold text-[#FFFFFF]">Notifications</span>
                   {unreadCount > 0 && (
@@ -318,7 +318,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             {isProfileMenuOpen && (
-              <div className="absolute right-0 mt-3 w-56 bg-[#141414] border border-[#808080]/40 rounded-xl shadow-2xl py-2 z-50 text-xs backdrop-blur-md">
+              <div className="fixed sm:absolute right-2 sm:right-0 mt-3 w-64 max-w-[calc(100vw-1rem)] bg-[#141414] border border-[#808080]/40 rounded-xl shadow-2xl py-2 z-50 text-xs backdrop-blur-md">
                 <div className="px-3 py-1.5 text-[#B3B3B3] text-[11px] uppercase tracking-wider font-semibold border-b border-[#181818]">
                   Who's Watching?
                 </div>
@@ -330,13 +330,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onSelectProfile(p);
                         setIsProfileMenuOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-3 py-2 text-left hover:bg-[#181818] transition-colors cursor-pointer ${
+                      className={`w-full flex items-center justify-between px-3 py-2.5 text-left hover:bg-[#181818] transition-colors cursor-pointer min-h-[40px] ${
                         p.id === activeProfile.id ? 'text-[#FFFFFF] font-bold bg-[#181818]' : 'text-[#B3B3B3]'
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
                         <div
-                          className="w-6 h-6 rounded-md bg-[#E50914] overflow-hidden flex items-center justify-center text-xs text-[#FFFFFF] shrink-0 ring-1 ring-white/10"
+                          className="w-7 h-7 rounded-md bg-[#E50914] overflow-hidden flex items-center justify-center text-xs text-[#FFFFFF] shrink-0 ring-1 ring-white/10"
                         >
                           <img
                             src={getProfileAvatarUrl(p)}
@@ -360,9 +360,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onSwitchProfileScreen();
                         setIsProfileMenuOpen(false);
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer"
+                      className="w-full flex items-center gap-2 px-3 py-2 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer min-h-[40px]"
                     >
-                      <Users className="w-3.5 h-3.5 text-[#E50914]" />
+                      <Users className="w-4 h-4 text-[#E50914]" />
                       <span>Switch Profiles</span>
                     </button>
                   )}
@@ -372,9 +372,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onOpenAdminModal();
                       setIsProfileMenuOpen(false);
                     }}
-                    className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer"
+                    className="w-full flex items-center gap-2 px-3 py-2 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer min-h-[40px]"
                   >
-                    <Shield className="w-3.5 h-3.5 text-[#E50914]" />
+                    <Shield className="w-4 h-4 text-[#E50914]" />
                     <span>{currentUser ? 'Admin Panel (Active)' : 'Account & Admin'}</span>
                   </button>
 
@@ -384,9 +384,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onOpenSetupModal();
                         setIsProfileMenuOpen(false);
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer"
+                      className="w-full flex items-center gap-2 px-3 py-2 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer min-h-[40px]"
                     >
-                      <Database className="w-3.5 h-3.5 text-[#808080]" />
+                      <Database className="w-4 h-4 text-[#808080]" />
                       <span>Cloud Storage Setup</span>
                     </button>
                   )}
@@ -397,9 +397,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onSignOut();
                         setIsProfileMenuOpen(false);
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer border-t border-[#181818] pt-2 mt-1"
+                      className="w-full flex items-center gap-2 px-3 py-2 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer border-t border-[#181818] pt-2 mt-1 min-h-[40px]"
                     >
-                      <LogOut className="w-3.5 h-3.5 text-[#E50914]" />
+                      <LogOut className="w-4 h-4 text-[#E50914]" />
                       <span>Sign Out of OUR UNIVERSE</span>
                     </button>
                   )}
@@ -411,10 +411,10 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* Mobile Navigation Strip */}
-      <div className="md:hidden flex items-center gap-1 px-2.5 py-1.5 border-t border-[#181818] text-xs font-medium text-[#B3B3B3] overflow-x-auto no-scrollbar bg-[#000000] scroll-smooth">
+      <div className="md:hidden flex items-center gap-1.5 px-3 py-1.5 border-t border-[#181818] text-xs font-medium text-[#B3B3B3] overflow-x-auto no-scrollbar bg-[#000000] scroll-smooth">
         <button
           onClick={() => setActiveTab('home')}
-          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'home'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
               : 'hover:text-[#FFFFFF]'
@@ -424,7 +424,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
         <button
           onClick={() => setActiveTab('our-story')}
-          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'our-story'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
               : 'hover:text-[#FFFFFF]'
@@ -434,7 +434,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
         <button
           onClick={() => setActiveTab('memories')}
-          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'memories'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
               : 'hover:text-[#FFFFFF]'
@@ -444,7 +444,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
         <button
           onClick={() => setActiveTab('scrapbook')}
-          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'scrapbook'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
               : 'hover:text-[#FFFFFF]'
@@ -454,7 +454,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
         <button
           onClick={() => setActiveTab('little-things')}
-          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'little-things'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
               : 'hover:text-[#FFFFFF]'
@@ -464,7 +464,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
         <button
           onClick={() => setActiveTab('places-list')}
-          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'places-list'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
               : 'hover:text-[#FFFFFF]'
@@ -474,13 +474,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
         <button
           onClick={() => setActiveTab('secret-vault')}
-          className={`py-1.5 px-3 rounded whitespace-nowrap text-[#B3B3B3] flex items-center gap-1 cursor-pointer transition-colors min-h-[36px] shrink-0 ${
+          className={`py-2 px-3.5 rounded whitespace-nowrap text-[#B3B3B3] flex items-center gap-1.5 cursor-pointer transition-colors min-h-[44px] shrink-0 ${
             activeTab === 'secret-vault'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
               : 'hover:text-[#FFFFFF]'
           }`}
         >
-          <Lock className="w-3 h-3 text-[#E50914]" />
+          <Lock className="w-3.5 h-3.5 text-[#E50914]" />
           <span>Vault</span>
         </button>
       </div>

@@ -96,22 +96,23 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-3xl bg-[#141414] rounded overflow-hidden shadow-2xl border border-[#181818] my-auto text-[#FFFFFF] p-6 sm:p-8"
+        className="relative w-full max-w-3xl bg-[#141414] rounded-xl overflow-hidden shadow-2xl border border-[#181818] my-auto text-[#FFFFFF] p-4 sm:p-8 max-h-[92vh] overflow-y-auto dark-scrollbar"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-40 w-9 h-9 rounded-full bg-[#000000]/70 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center transition-colors cursor-pointer border border-[#808080]/30"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-11 h-11 rounded-full bg-[#000000]/70 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center transition-colors cursor-pointer border border-[#808080]/30 min-h-[44px] min-w-[44px]"
+          aria-label="Close vault"
         >
           <X className="w-5 h-5" />
         </button>
 
         {!isUnlocked ? (
           /* LOCKED STATE */
-          <div className="text-center py-10 space-y-6 max-w-md mx-auto">
-            <div className="w-16 h-16 rounded bg-[#181818] border border-[#E50914] flex items-center justify-center mx-auto text-[#E50914] shadow-lg">
-              <Lock className="w-8 h-8" />
+          <div className="text-center py-6 sm:py-10 space-y-6 max-w-md mx-auto">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-[#181818] border border-[#E50914] flex items-center justify-center mx-auto text-[#E50914] shadow-lg">
+              <Lock className="w-7 h-7 sm:w-8 sm:h-8" />
             </div>
 
             <div>
@@ -146,7 +147,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-sm rounded shadow transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider"
+                className="w-full py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-sm rounded shadow transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider min-h-[44px]"
               >
                 <KeyRound className="w-4 h-4" />
                 <span>Unlock Confidential Vault</span>
@@ -155,7 +156,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
           </div>
         ) : (
           /* UNLOCKED STATE: LETTER & COUPONS */
-          <div className="space-y-8 animate-in fade-in duration-300">
+          <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
             {/* Header Badge */}
             <div className="flex items-center justify-between pb-4 border-b border-[#181818] gap-2 flex-wrap">
               <div className="flex items-center gap-2">
@@ -169,7 +170,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
                 {isAdmin && onEditLetter && (
                   <button
                     onClick={onEditLetter}
-                    className="flex items-center gap-1.5 px-3 py-1 bg-[#181818] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold rounded border border-[#808080]/30 transition-colors cursor-pointer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#181818] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold rounded border border-[#808080]/30 transition-colors cursor-pointer min-h-[36px]"
                     title="Edit letter"
                   >
                     <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
@@ -180,11 +181,11 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
             </div>
 
             {/* Letter View */}
-            <div className="bg-[#181818] p-6 sm:p-8 rounded border border-[#808080]/30 space-y-4">
-              <h3 className="font-bebas text-2xl tracking-wide text-[#FFFFFF] uppercase">
+            <div className="bg-[#181818] p-4 sm:p-8 rounded-xl border border-[#808080]/30 space-y-4">
+              <h3 className="font-bebas text-2xl tracking-wide text-[#FFFFFF] uppercase break-words">
                 {effectiveTitle}
               </h3>
-              <div className="text-[#B3B3B3] text-sm sm:text-base leading-relaxed whitespace-pre-line font-light">
+              <div className="text-[#B3B3B3] text-sm sm:text-base leading-relaxed whitespace-pre-line font-light break-words">
                 {effectiveContent}
               </div>
               {effectiveSignoff && (

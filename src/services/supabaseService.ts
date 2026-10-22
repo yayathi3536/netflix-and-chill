@@ -321,6 +321,8 @@ class SupabaseService {
       if (updates.backdropUrl !== undefined) dbUpdates.backdrop_url = updates.backdropUrl;
       if (updates.posterUrl !== undefined) dbUpdates.poster_url = updates.posterUrl;
       if (updates.progress !== undefined) dbUpdates.progress = updates.progress;
+      if (updates.isTop10 !== undefined) dbUpdates.is_top_10 = updates.isTop10;
+      if (updates.sortOrder !== undefined) dbUpdates.is_top_10 = updates.sortOrder;
       if (updates.isFavorite !== undefined) dbUpdates.is_favorite = updates.isFavorite;
       if (updates.isInWatchlist !== undefined) dbUpdates.is_in_watchlist = updates.isInWatchlist;
       if (updates.isSecret !== undefined) dbUpdates.is_secret = updates.isSecret;
@@ -354,6 +356,38 @@ class SupabaseService {
 
       return { success: true, error: null };
     } catch (e) {
+      return { success: false, error: e as Error };
+    }
+  }
+
+  // 4b. SAVE STORYLINE ORDER (MANUAL ORDERING)
+  public async saveStorylineOrder(orderedIds: string[]): Promise<{ success: boolean; error: Error | null }> {
+    if (!supabase || !isSupabaseConfigured()) {
+      return { success: false, error: new Error('Supabase client is not configured.') };
+    }
+
+    try {
+      // 1. Update each memory row with its new 1-based index (is_top_10)
+      const updates = orderedIds.map((id, index) =>
+        supabase!
+          .from('memories')
+          .update({ is_top_10: index + 1 })
+          .eq('id', id)
+      );
+
+      const results = await Promise.all(updates);
+      const failed = results.find((r) => r.error);
+      if (failed && failed.error) {
+        throw failed.error;
+      }
+
+      // 2. Persist storyline_custom_order into site_content
+      const jsonValue = JSON.stringify(orderedIds);
+      await this.updateSiteContent('storyline_custom_order', jsonValue, 'sections');
+
+      return { success: true, error: null };
+    } catch (e) {
+      console.warn('Could not save storyline order to Supabase:', (e as Error).message || e);
       return { success: false, error: e as Error };
     }
   }
