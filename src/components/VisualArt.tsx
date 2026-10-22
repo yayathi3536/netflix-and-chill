@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { isVideoUrl } from '../utils/mediaHelpers';
 
 interface VisualArtProps {
   id: string;
@@ -41,6 +42,20 @@ export const VisualArt: React.FC<VisualArtProps> = ({
       : '';
 
   if (imageUrl && !imageFailed) {
+    if (isVideoUrl(imageUrl)) {
+      return (
+        <video
+          src={imageUrl}
+          muted
+          autoPlay
+          loop
+          playsInline
+          onError={() => setImageFailed(true)}
+          onClick={onClick}
+          className={`${fitClass} ${ratioClass} ${className}`.trim()}
+        />
+      );
+    }
     return (
       <img
         src={imageUrl}

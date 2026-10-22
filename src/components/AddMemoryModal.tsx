@@ -13,6 +13,8 @@ import {
   Loader2,
   Trash2,
   Shield,
+  Video,
+  Film,
 } from 'lucide-react';
 import { MemoryItem, MemoryCategory } from '../types';
 import { supabaseService, checkIsAdmin } from '../services/supabaseService';
@@ -53,6 +55,9 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [uploadSuccess, setUploadSuccess] = useState('');
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
+  const [videoUploadError, setVideoUploadError] = useState('');
+  const [videoUploadSuccess, setVideoUploadSuccess] = useState('');
   const [previewPreset, setPreviewPreset] = useState<'16/9' | '3/4' | '1/1' | 'natural'>('16/9');
   const [previewFit, setPreviewFit] = useState<'cover' | 'contain'>('cover');
   const [imageMeta, setImageMeta] = useState<{ width: number; height: number; ratioStr: string } | null>(null);
@@ -91,6 +96,9 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
     setLetterContent('');
     setUploadError('');
     setUploadSuccess('');
+    setIsUploadingVideo(false);
+    setVideoUploadError('');
+    setVideoUploadSuccess('');
   };
 
   if (!isOpen) return null;
@@ -182,6 +190,56 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
         setIsUploading(false);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!isAdmin) {
+      setVideoUploadError('Unauthorized: Only the verified administrator can upload videos.');
+      return;
+    }
+
+    setVideoUploadError('');
+    setVideoUploadSuccess('');
+    setIsUploadingVideo(true);
+
+    if (isSupabaseConfigured()) {
+      try {
+        const { url, error } = await supabaseService.uploadVideo(file);
+        if (error) {
+          setVideoUploadError(`Upload failed: ${error.message}`);
+        } else if (url) {
+          setVideoUrl(url);
+          setVideoUploadSuccess('Video successfully uploaded to Supabase Storage!');
+        }
+      } catch (err) {
+        setVideoUploadError((err as Error).message);
+      } finally {
+        setIsUploadingVideo(false);
+        e.target.value = '';
+      }
+    } else {
+      try {
+        const localBlob = URL.createObjectURL(file);
+        setVideoUrl(localBlob);
+        setVideoUploadSuccess('Video loaded in local preview mode.');
+      } catch {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setVideoUrl(reader.result as string);
+          setVideoUploadSuccess('Video loaded in local preview mode.');
+        };
+        reader.onerror = () => {
+          setVideoUploadError('Failed to read local video file.');
+        };
+        reader.readAsDataURL(file);
+      } finally {
+        setIsUploadingVideo(false);
+        e.target.value = '';
+      }
     }
   };
 
@@ -431,32 +489,24 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
           <div className="space-y-2 p-3 bg-white/5 rounded-lg border border-white/10">
             <div className="flex items-center justify-between">
               <label className="block text-neutral-300 font-semibold">
-                Photo & Backdrop (Cloud Upload)
+                Photo & Backdrop
               </label>
               <span className="text-[10px] text-neutral-400">
                 Max 10MB · JPG, PNG, WEBP, GIF
               </span>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-3">
-              <input
-                type="text"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="Permanent photo URL or cloud path"
-                className="flex-1 bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none w-full"
-              />
-
-              <label className="w-full sm:w-auto px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-lg cursor-pointer flex items-center justify-center gap-2 border border-white/10 shrink-0 transition-colors">
+            <div className="flex flex-col sm:flex-row items-center gap-2.5">
+              <label className="w-full flex-1 py-3 px-4 bg-[#181818] hover:bg-[#202020] text-white rounded-lg cursor-pointer flex items-center justify-center gap-2.5 border border-[#808080]/30 hover:border-[#E50914] transition-all min-h-[44px] shadow-sm group">
                 {isUploading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin text-[#E50914]" />
-                    <span>Uploading...</span>
+                    <span className="font-semibold text-xs text-neutral-200">Uploading to Storage...</span>
                   </>
                 ) : (
                   <>
-                    <UploadCloud className="w-4 h-4 text-white" />
-                    <span>Upload Device Image</span>
+                    <UploadCloud className="w-4 h-4 text-[#E50914] group-hover:scale-110 transition-transform" />
+                    <span className="font-semibold text-xs text-white">Upload from Device</span>
                   </>
                 )}
                 <input
@@ -467,6 +517,21 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                   className="hidden"
                 />
               </label>
+
+              {imageUrl && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setImageUrl('');
+                    setImageMeta(null);
+                  }}
+                  className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-[#E50914]/20 border border-white/15 text-[#E50914] hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
+                  title="Remove selected image"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Remove Image</span>
+                </button>
+              )}
             </div>
 
             {uploadError && (
@@ -630,18 +695,91 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             )}
           </div>
 
-          {/* Optional Video Source URL */}
-          <div>
-            <label className="block text-neutral-300 font-semibold mb-1">
-              Video URL (optional — MP4 / WebM stream)
-            </label>
-            <input
-              type="text"
-              value={videoUrl}
-              onChange={(e) => setVideoUrl(e.target.value)}
-              placeholder="Leave blank for photo/story memories, or paste a direct .mp4/.webm video URL"
-              className="w-full bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
-            />
+          {/* Real Video Clip Upload to Supabase Storage (Device Only) */}
+          <div className="space-y-2 p-3 bg-white/5 rounded-lg border border-white/10">
+            <div className="flex items-center justify-between">
+              <label className="block text-neutral-300 font-semibold flex items-center gap-1.5">
+                <Video className="w-4 h-4 text-[#E50914]" />
+                <span>Video Clip (optional)</span>
+              </label>
+              <span className="text-[10px] text-neutral-400">
+                Max 150MB · MP4, WebM, OGG, MOV
+              </span>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-2.5">
+              <label className="w-full flex-1 py-3 px-4 bg-[#181818] hover:bg-[#202020] text-white rounded-lg cursor-pointer flex items-center justify-center gap-2.5 border border-[#808080]/30 hover:border-[#E50914] transition-all min-h-[44px] shadow-sm group">
+                {isUploadingVideo ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-[#E50914]" />
+                    <span className="font-semibold text-xs text-neutral-200">Uploading Video to Storage...</span>
+                  </>
+                ) : (
+                  <>
+                    <UploadCloud className="w-4 h-4 text-[#E50914] group-hover:scale-110 transition-transform" />
+                    <span className="font-semibold text-xs text-white">Upload Video from Device</span>
+                  </>
+                )}
+                <input
+                  type="file"
+                  accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-m4v"
+                  disabled={isUploadingVideo}
+                  onChange={handleVideoUpload}
+                  className="hidden"
+                />
+              </label>
+
+              {videoUrl && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setVideoUrl('');
+                    setVideoUploadSuccess('');
+                  }}
+                  className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-[#E50914]/20 border border-white/15 text-[#E50914] hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
+                  title="Remove uploaded video"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Remove Video</span>
+                </button>
+              )}
+            </div>
+
+            {videoUploadError && (
+              <p className="text-xs text-[#E50914] flex items-center gap-1.5 mt-1">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                <span>{videoUploadError}</span>
+              </p>
+            )}
+
+            {videoUploadSuccess && !videoUploadError && (
+              <p className="text-xs text-emerald-400 flex items-center gap-1.5 mt-1">
+                <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                <span>{videoUploadSuccess}</span>
+              </p>
+            )}
+
+            {/* Video Player Preview */}
+            {videoUrl && (
+              <div className="mt-3 space-y-2">
+                <div className="flex items-center justify-between text-[11px] text-neutral-300">
+                  <span className="font-semibold text-white flex items-center gap-1.5">
+                    <Film className="w-3.5 h-3.5 text-[#E50914]" />
+                    <span>Uploaded Video Preview</span>
+                  </span>
+                  <span className="text-[10px] text-neutral-400">16:9 Playback</span>
+                </div>
+
+                <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-white/20 bg-black flex items-center justify-center">
+                  <video
+                    src={videoUrl}
+                    controls
+                    className="w-full h-full object-contain"
+                    preload="metadata"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Secret / Vault Toggle */}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { LogOut, ShieldCheck, Pencil, Plus, Check, X } from 'lucide-react';
+import { LogOut, ShieldCheck, Pencil, Plus, Check, X, UploadCloud, Loader2, RotateCcw } from 'lucide-react';
 import { UserProfile } from '../types';
+import { supabaseService } from '../services/supabaseService';
 import {
   BUILT_IN_AVATARS,
   BUILT_IN_AVATAR_CATEGORIES,
@@ -39,6 +40,8 @@ export default function ProfileSelect({
   const [draftBg, setDraftBg] = useState('bg-[#E50914]');
   const [activeCategory, setActiveCategory] = useState<'all' | BuiltInAvatarCategory>('all');
   const [formError, setFormError] = useState('');
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [avatarUploadError, setAvatarUploadError] = useState('');
 
   const openEditModal = (profile: UserProfile) => {
     setIsCreatingNew(false);
@@ -51,6 +54,7 @@ export default function ProfileSelect({
     setDraftBg(profile.avatarBg || 'bg-[#E50914]');
     setActiveCategory('all');
     setFormError('');
+    setAvatarUploadError('');
   };
 
   const openCreateModal = () => {
@@ -75,12 +79,14 @@ export default function ProfileSelect({
     setDraftBg('bg-[#E50914]');
     setActiveCategory('all');
     setFormError('');
+    setAvatarUploadError('');
   };
 
   const closeEditor = () => {
     setEditingProfile(null);
     setIsCreatingNew(false);
     setFormError('');
+    setAvatarUploadError('');
   };
 
   const handleSelectBuiltInAvatar = (avatar: BuiltInAvatarItem) => {
@@ -91,6 +97,43 @@ export default function ProfileSelect({
   const handleClearBuiltInAvatar = () => {
     setDraftAvatarUrl(undefined);
     setDraftAvatarId(undefined);
+  };
+
+  const handleAvatarFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingAvatar(true);
+    setAvatarUploadError('');
+
+    try {
+      const { url, error } = await supabaseService.uploadPhoto(file);
+      if (url) {
+        setDraftAvatarUrl(url);
+        setDraftAvatarId(undefined);
+      } else if (error) {
+        // Fallback: local FileReader if storage bucket not yet reachable
+        const reader = new FileReader();
+        reader.onload = () => {
+          setDraftAvatarUrl(reader.result as string);
+          setDraftAvatarId(undefined);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        const reader = new FileReader();
+        reader.onload = () => {
+          setDraftAvatarUrl(reader.result as string);
+          setDraftAvatarId(undefined);
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (err: any) {
+      console.error('Avatar photo upload error:', err);
+      setAvatarUploadError(err.message || 'Failed to upload photo. Please try again.');
+    } finally {
+      setIsUploadingAvatar(false);
+      e.target.value = '';
+    }
   };
 
   const handleSave = (e: React.FormEvent) => {
@@ -352,10 +395,62 @@ export default function ProfileSelect({
                       alt={draftName || 'Selected avatar preview'}
                       className="w-full h-full object-cover"
                     />
+                    {isUploadingAvatar && (
+                      <div className="absolute inset-0 bg-black/75 flex flex-col items-center justify-center gap-1.5 backdrop-blur-xs">
+                        <Loader2 className="w-6 h-6 animate-spin text-[#E50914]" />
+                        <span className="text-[10px] text-white font-medium">Uploading...</span>
+                      </div>
+                    )}
                   </div>
                   <span className="text-[11px] text-[#a3a3a3] font-medium tracking-wide">
-                    Active Tile
+                    Active Tile (1:1)
                   </span>
+
+                  {/* Device Upload for Profile Avatar */}
+                  <div className="w-full flex flex-col items-center gap-1.5 pt-1">
+                    <label className="w-full py-2 px-3 bg-white/10 hover:bg-white/15 text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer border border-white/15 min-h-[38px] group">
+                      {isUploadingAvatar ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin text-[#E50914]" />
+                          <span className="text-[11px]">Uploading...</span>
+                        </>
+                      ) : (
+                        <>
+                          <UploadCloud className="w-3.5 h-3.5 text-[#E50914] group-hover:scale-110 transition-transform" />
+                          <span className="text-[11px]">Upload Photo</span>
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        className="hidden"
+                        disabled={isUploadingAvatar}
+                        onChange={handleAvatarFileUpload}
+                      />
+                    </label>
+
+                    {draftAvatarUrl && !draftAvatarId && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const fallback = BUILT_IN_AVATARS[0];
+                          setDraftAvatarUrl(fallback.url);
+                          setDraftAvatarId(fallback.id);
+                        }}
+                        className="text-[11px] text-neutral-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1 py-1"
+                        title="Reset to default avatar tile"
+                      >
+                        <RotateCcw className="w-3 h-3 text-[#E50914]" />
+                        <span>Reset to Tile</span>
+                      </button>
+                    )}
+
+                    {avatarUploadError && (
+                      <p className="text-[11px] text-[#E50914] text-center max-w-[160px] leading-tight mt-0.5">
+                        {avatarUploadError}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex-1 w-full space-y-4">

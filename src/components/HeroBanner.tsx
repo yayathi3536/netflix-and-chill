@@ -49,6 +49,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   const displayBadge = customBadge || '#1 in Our Hearts Today';
   const displaySeriesTag = customSeriesTag || 'SERIES';
   const hasHeroVideo = hasValidVideo(memory) || isVideoUrl(customBackdropUrl);
+  const heroMemoryToPlay = customBackdropUrl && isVideoUrl(customBackdropUrl)
+    ? { ...memory, videoUrl: customBackdropUrl }
+    : memory;
 
   return (
     <div className="relative w-full h-[78vh] sm:h-[85vh] min-h-[480px] sm:min-h-[580px] max-h-[880px] overflow-hidden select-none bg-[#000000]">
@@ -117,7 +120,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2 sm:pt-3">
             {hasHeroVideo ? (
               <button
-                onClick={() => onPlay(memory)}
+                onClick={() => onPlay(heroMemoryToPlay)}
                 className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs sm:text-sm md:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
               >
                 <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-white text-white" />

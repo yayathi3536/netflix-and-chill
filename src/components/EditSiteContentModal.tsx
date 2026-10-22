@@ -14,11 +14,13 @@ import {
   Sliders,
   Calendar,
   Users,
+  Video,
 } from 'lucide-react';
 import { SiteContentMap, SiteContentSection } from '../types';
 import { storageService } from '../services/storage';
 import { supabaseService } from '../services/supabaseService';
 import { DEFAULT_SITE_CONTENT_LIST, DEFAULT_SITE_CONTENT_MAP } from '../data/defaultSiteContent';
+import { isVideoUrl } from '../utils/mediaHelpers';
 
 interface EditSiteContentModalProps {
   isOpen: boolean;
@@ -64,17 +66,21 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
     setStatusMsg(null);
 
     try {
-      const { url, error } = await supabaseService.uploadPhoto(file);
+      const { url, error, mediaType } = await supabaseService.uploadMedia(file);
       if (error) {
         setStatusMsg({ text: `Upload failed: ${error.message}`, type: 'error' });
       } else if (url) {
         handleChange(targetKey, url);
-        setStatusMsg({ text: 'Image uploaded successfully to Supabase Storage!', type: 'success' });
+        setStatusMsg({
+          text: `${mediaType === 'video' ? 'Video' : 'Image'} uploaded successfully to Supabase Storage!`,
+          type: 'success',
+        });
       }
     } catch (err) {
       setStatusMsg({ text: `Upload error: ${(err as Error).message}`, type: 'error' });
     } finally {
       setIsUploadingPhoto(false);
+      e.target.value = '';
     }
   };
 
@@ -284,12 +290,16 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                 />
               </div>
 
-              {/* Custom Hero Backdrop Photo Upload */}
+              {/* Custom Hero Backdrop Photo or Video Upload (Device Only) */}
               <div className="p-4 bg-black/40 rounded-xl border border-white/10 space-y-3">
                 <label className="block text-xs font-semibold text-white flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
-                    <ImageIcon className="w-4 h-4 text-[#E50914]" />
-                    <span>Hero Backdrop Image (Custom Relationship Photo)</span>
+                    {isVideoUrl(formData.hero_backdrop_url) ? (
+                      <Video className="w-4 h-4 text-[#E50914]" />
+                    ) : (
+                      <ImageIcon className="w-4 h-4 text-[#E50914]" />
+                    )}
+                    <span>Hero Backdrop Media (Custom Photo or Video from Device)</span>
                   </span>
                   {isUploadingPhoto && (
                     <span className="text-[11px] text-[#B3B3B3] font-normal">
@@ -298,68 +308,83 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                   )}
                 </label>
 
-                <div className="flex flex-col sm:flex-row items-center gap-3">
-                  <input
-                    type="url"
-                    value={formData.hero_backdrop_url || ''}
-                    onChange={(e) => handleChange('hero_backdrop_url', e.target.value)}
-                    placeholder="https://... or upload from your device"
-                    className="flex-1 w-full bg-neutral-900 border border-white/15 focus:border-[#E50914] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
-                  />
-
-                  <label className="w-full sm:w-auto px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer border border-white/10 shrink-0">
-                    <Upload className="w-3.5 h-3.5 text-neutral-300" />
-                    <span>Upload Image</span>
+                <div className="flex flex-col sm:flex-row items-center gap-2.5">
+                  <label className="w-full flex-1 py-3 px-4 bg-white/10 hover:bg-white/15 text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-2.5 transition-colors cursor-pointer border border-white/10 shrink-0 min-h-[44px]">
+                    <Upload className="w-4 h-4 text-[#E50914]" />
+                    <span>Upload Media from Device</span>
                     <input
                       type="file"
-                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/ogg,video/quicktime,video/x-m4v"
                       className="hidden"
                       onChange={(e) => handleFileUpload(e, 'hero_backdrop_url')}
                       disabled={isUploadingPhoto}
                     />
                   </label>
+
+                  {formData.hero_backdrop_url && (
+                    <button
+                      type="button"
+                      onClick={() => handleChange('hero_backdrop_url', '')}
+                      className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-[#E50914]/20 border border-white/15 text-[#E50914] hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
+                      title="Remove backdrop media"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                      <span>Remove Media</span>
+                    </button>
+                  )}
                 </div>
 
                 {formData.hero_backdrop_url && (
                   <div className="space-y-2 mt-3 pt-2 border-t border-white/10">
                     <div className="flex items-center justify-between text-[11px] text-neutral-400">
                       <span className="font-semibold text-white">Billboard 16:9 Preview:</span>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setHeroFit('cover')}
-                          className={`cursor-pointer ${
-                            heroFit === 'cover' ? 'text-white font-bold underline' : 'hover:text-white'
-                          }`}
-                        >
-                          Cover (Fill Billboard)
-                        </button>
-                        <span>&middot;</span>
-                        <button
-                          type="button"
-                          onClick={() => setHeroFit('contain')}
-                          className={`cursor-pointer ${
-                            heroFit === 'contain' ? 'text-white font-bold underline' : 'hover:text-white'
-                          }`}
-                        >
-                          Contain (Full Photo)
-                        </button>
-                      </div>
+                      {!isVideoUrl(formData.hero_backdrop_url) && (
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setHeroFit('cover')}
+                            className={`cursor-pointer ${
+                              heroFit === 'cover' ? 'text-white font-bold underline' : 'hover:text-white'
+                            }`}
+                          >
+                            Cover (Fill Billboard)
+                          </button>
+                          <span>&middot;</span>
+                          <button
+                            type="button"
+                            onClick={() => setHeroFit('contain')}
+                            className={`cursor-pointer ${
+                              heroFit === 'contain' ? 'text-white font-bold underline' : 'hover:text-white'
+                            }`}
+                          >
+                            Contain (Full Photo)
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     <div className="relative aspect-video max-h-52 w-full rounded-lg overflow-hidden border border-white/20 bg-neutral-900 flex items-center justify-center">
-                      <img
-                        src={formData.hero_backdrop_url}
-                        alt="Hero Preview"
-                        className={`max-h-full max-w-full ${
-                          heroFit === 'contain' ? 'object-contain' : 'w-full h-full object-cover'
-                        }`}
-                      />
+                      {isVideoUrl(formData.hero_backdrop_url) ? (
+                        <video
+                          src={formData.hero_backdrop_url}
+                          controls
+                          className="w-full h-full object-contain"
+                          preload="metadata"
+                        />
+                      ) : (
+                        <img
+                          src={formData.hero_backdrop_url}
+                          alt="Hero Preview"
+                          className={`max-h-full max-w-full ${
+                            heroFit === 'contain' ? 'object-contain' : 'w-full h-full object-cover'
+                          }`}
+                        />
+                      )}
                       <button
                         type="button"
                         onClick={() => handleChange('hero_backdrop_url', '')}
                         className="absolute top-2 right-2 p-1.5 rounded-full bg-black/75 hover:bg-[#E50914] text-white text-xs border border-white/20 shadow transition-colors cursor-pointer"
-                        title="Clear image"
+                        title="Clear media"
                       >
                         <X className="w-3.5 h-3.5" />
                       </button>

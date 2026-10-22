@@ -200,6 +200,11 @@ class SupabaseService {
       tags: row.tags || [],
       backdropUrl: await this.resolvePhotoUrl(row.backdrop_url),
       posterUrl: await this.resolvePhotoUrl(row.poster_url),
+      videoUrl: (row as any).video_url
+        ? await this.resolvePhotoUrl((row as any).video_url)
+        : (row.backdrop_url && /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(row.backdrop_url)
+            ? await this.resolvePhotoUrl(row.backdrop_url)
+            : undefined),
       fallbackGradient: row.fallback_gradient,
       progress: row.progress !== null ? row.progress : undefined,
       isTop10: row.is_top_10 !== null ? row.is_top_10 : undefined,
@@ -481,6 +486,75 @@ class SupabaseService {
       console.error('Failed to upload image to Supabase storage:', e);
       return { url: null, error: e as Error };
     }
+  }
+
+  // 5b. STORAGE: REAL VIDEO UPLOADS
+  public async uploadVideo(file: File): Promise<{ url: string | null; error: Error | null }> {
+    if (!supabase || !isSupabaseConfigured()) {
+      return { url: null, error: new Error('Supabase client is not configured.') };
+    }
+
+    // Validation: file type (MP4, WebM, OGG, QuickTime MOV, M4V)
+    const validVideoMimes = [
+      'video/mp4',
+      'video/webm',
+      'video/ogg',
+      'video/quicktime',
+      'video/x-m4v',
+      'video/x-matroska',
+    ];
+    const isVideoExtension = /\.(mp4|webm|ogg|mov|m4v|mkv)$/i.test(file.name);
+    if (!file.type.startsWith('video/') && !validVideoMimes.includes(file.type) && !isVideoExtension) {
+      return {
+        url: null,
+        error: new Error(`Invalid video file format (${file.type || 'unknown'}). Please choose an MP4, WebM, OGG, or MOV file.`),
+      };
+    }
+
+    // Validation: max 150MB
+    const maxVideoSize = 150 * 1024 * 1024;
+    if (file.size > maxVideoSize) {
+      return {
+        url: null,
+        error: new Error(`Video file is too large (${(file.size / (1024 * 1024)).toFixed(1)}MB). Max allowed is 150MB.`),
+      };
+    }
+
+    try {
+      const ext = file.name.split('.').pop() || 'mp4';
+      const cleanName = file.name.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30);
+      const filePath = `memories/videos/${Date.now()}_${cleanName}.${ext}`;
+
+      const { data, error } = await supabase.storage
+        .from('memory-photos')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true,
+        });
+
+      if (error) throw error;
+
+      // Create signed URL for playback
+      const { data: urlData, error: urlError } = await supabase.storage
+        .from('memory-photos')
+        .createSignedUrl(data.path, 60 * 60 * 24);
+      if (urlError || !urlData?.signedUrl) throw urlError || new Error('Could not create a signed video URL.');
+
+      return { url: urlData.signedUrl, error: null };
+    } catch (e) {
+      console.error('Failed to upload video to Supabase storage:', e);
+      return { url: null, error: e as Error };
+    }
+  }
+
+  // 5c. STORAGE: UNIFIED MEDIA UPLOAD (IMAGE OR VIDEO)
+  public async uploadMedia(file: File): Promise<{ url: string | null; error: Error | null; mediaType: 'image' | 'video' }> {
+    if (file.type.startsWith('video/') || /\.(mp4|webm|ogg|mov|m4v)$/i.test(file.name)) {
+      const res = await this.uploadVideo(file);
+      return { ...res, mediaType: 'video' };
+    }
+    const res = await this.uploadPhoto(file);
+    return { ...res, mediaType: 'image' };
   }
 
   // 6. STORAGE: DELETE PHOTO

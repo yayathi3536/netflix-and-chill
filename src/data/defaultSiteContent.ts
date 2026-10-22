@@ -41,7 +41,7 @@ export const DEFAULT_SITE_CONTENT_LIST: SiteContentItem[] = [
   {
     key: 'hero_backdrop_url',
     section: 'hero',
-    label: 'Hero Custom Image URL (leave blank for default)',
+    label: 'Hero Custom Image (Upload from device)',
     value: '',
     type: 'image',
   },

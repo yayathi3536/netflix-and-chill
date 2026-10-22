@@ -9,7 +9,15 @@ export function isVideoUrl(url?: string | null): boolean {
   if (!url || typeof url !== 'string') return false;
   const trimmed = url.trim();
   if (!trimmed) return false;
-  if (trimmed.startsWith('data:video/')) return true;
+  if (trimmed.startsWith('data:video/') || trimmed.startsWith('blob:')) return true;
+  try {
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      const parsed = new URL(trimmed);
+      if (VIDEO_EXTENSIONS.test(parsed.pathname)) return true;
+    }
+  } catch {
+    // continue to regex test
+  }
   return VIDEO_EXTENSIONS.test(trimmed);
 }
 
