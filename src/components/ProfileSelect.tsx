@@ -10,6 +10,14 @@ import {
   getProfileAvatarUrl,
 } from '../data/builtInAvatars';
 
+const PROFILE_TILE_COLORS = ['#E50914', '#176B87', '#6B3FA0', '#237A57', '#B85C24', '#2855A6'];
+
+const getProfileTileColor = (profile: UserProfile) => {
+  const key = profile.id || profile.name;
+  const index = Array.from(key).reduce((sum, character) => sum + character.charCodeAt(0), 0);
+  return PROFILE_TILE_COLORS[index % PROFILE_TILE_COLORS.length];
+};
+
 export default function ProfileSelect({
   profiles,
   onSelect,
@@ -227,11 +235,10 @@ export default function ProfileSelect({
 
         {/* Profile Cards Grid */}
         <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-10 md:gap-12 lg:gap-14 w-full">
-          {profiles.map((profile, profileIndex) => {
+          {profiles.map((profile) => {
             // Netflix-style profile tiles: bold solid colours and a clean initial,
             // while keeping the chosen photo/avatar available in the profile editor.
-            const tileColors = ['#E50914', '#176B87', '#6B3FA0', '#237A57', '#B85C24', '#2855A6'];
-            const tileColor = tileColors[profileIndex % tileColors.length];
+            const tileColor = getProfileTileColor(profile);
             const profileInitial = profile.name.trim().charAt(0).toUpperCase() || '♥';
 
             return (
@@ -258,7 +265,7 @@ export default function ProfileSelect({
                   >
                     {/* Clean Netflix-inspired colour tile (custom avatar remains editable) */}
                     <div
-                      className="absolute inset-0 flex items-center justify-center overflow-hidden transition-transform duration-300 ease-out group-hover:scale-105"
+                      className="absolute inset-0 flex items-center justify-center overflow-hidden transition-transform duration-300 ease-out"
                       style={{ backgroundColor: tileColor }}
                       aria-hidden="true"
                     >
