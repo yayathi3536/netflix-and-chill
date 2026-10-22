@@ -18,25 +18,25 @@ export const ConstellationSection: React.FC<ConstellationSectionProps> = ({
   const current = points[activeStar] || points[0];
 
   return (
-    <div className="relative my-12 sm:my-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+    <div className="relative my-8 sm:my-16 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
       {/* Section Header */}
-      <div className="text-center space-y-2 mb-8">
-        <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold uppercase tracking-widest">
+      <div className="text-center space-y-1.5 sm:space-y-2 mb-6 sm:mb-8">
+        <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs text-[#E50914] font-bold uppercase tracking-widest">
           <Film className="w-3.5 h-3.5" />
           <span>ORIGINAL INTERACTIVE TIMELINE</span>
         </div>
         <h2 className="font-bebas text-3xl sm:text-5xl text-[#FFFFFF] font-black tracking-wider uppercase">
           Timeline of Our Universe
         </h2>
-        <p className="text-xs sm:text-sm text-[#B3B3B3] max-w-xl mx-auto font-normal">
+        <p className="text-xs sm:text-sm text-[#B3B3B3] max-w-xl mx-auto font-normal px-2">
           Every chapter connected across time — explore the milestone pathway that built our story.
         </p>
       </div>
 
       {/* Interactive Constellation Map Canvas */}
-      <div className="relative bg-[#141414] border border-[#181818] rounded p-6 sm:p-10 shadow-2xl">
+      <div className="relative bg-[#141414] border border-[#181818] rounded p-3.5 sm:p-8 md:p-10 shadow-2xl">
         {/* SVG Connectors */}
-        <div className="relative w-full h-44 sm:h-56">
+        <div className="relative w-full h-40 sm:h-56">
           <svg className="w-full h-full" viewBox="0 0 800 220" preserveAspectRatio="none">
             {/* Base line connections */}
             <polyline
@@ -60,20 +60,20 @@ export const ConstellationSection: React.FC<ConstellationSectionProps> = ({
           </svg>
 
           {/* Interactive Nodes */}
-          <div className="absolute inset-0 flex items-center justify-between px-6 sm:px-16 pointer-events-none">
+          <div className="absolute inset-0 flex items-center justify-between px-2 sm:px-10 md:px-16 pointer-events-none">
             {points.map((pt, idx) => {
               const isActive = activeStar === idx;
               return (
                 <div
                   key={pt.id || idx}
                   onClick={() => setActiveStar(idx)}
-                  className={`relative pointer-events-auto cursor-pointer transition-all duration-300 flex flex-col items-center group ${
-                    idx === 1 || idx === 3 ? '-translate-y-8 sm:-translate-y-12' : 'translate-y-4 sm:translate-y-8'
+                  className={`relative pointer-events-auto cursor-pointer transition-all duration-300 flex flex-col items-center group min-h-[44px] justify-center ${
+                    idx === 1 || idx === 3 ? '-translate-y-7 sm:-translate-y-12' : 'translate-y-3 sm:translate-y-8'
                   }`}
                 >
                   {/* Node icon */}
                   <div
-                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded flex items-center justify-center transition-all ${
+                    className={`w-9 h-9 sm:w-12 sm:h-12 rounded flex items-center justify-center transition-all ${
                       isActive
                         ? 'bg-[#E50914] text-[#FFFFFF] shadow-lg scale-110'
                         : 'bg-[#181818] border border-[#808080]/30 group-hover:border-[#E50914] text-[#B3B3B3] group-hover:text-[#FFFFFF]'
@@ -88,7 +88,7 @@ export const ConstellationSection: React.FC<ConstellationSectionProps> = ({
 
                   {/* Title Label */}
                   <span
-                    className={`text-[10px] sm:text-xs font-bold mt-2 whitespace-nowrap transition-colors max-w-[90px] sm:max-w-[120px] truncate text-center uppercase tracking-wide ${
+                    className={`text-[9px] sm:text-xs font-bold mt-1.5 whitespace-nowrap transition-colors max-w-[58px] sm:max-w-[120px] truncate text-center uppercase tracking-wide ${
                       isActive ? 'text-[#FFFFFF] font-bold' : 'text-[#808080] group-hover:text-[#FFFFFF]'
                     }`}
                   >
@@ -102,9 +102,9 @@ export const ConstellationSection: React.FC<ConstellationSectionProps> = ({
 
         {/* Selected Milestone Details Card */}
         {current && (
-          <div className="mt-8 pt-6 border-t border-[#181818] flex flex-col sm:flex-row items-center justify-between gap-4 animate-in fade-in duration-200">
-            <div className="space-y-1 text-center sm:text-left">
-              <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[#E50914] font-bold uppercase tracking-wider">
+          <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-[#181818] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-in fade-in duration-200">
+            <div className="space-y-1 text-left w-full sm:w-auto">
+              <div className="flex items-center gap-2 text-xs text-[#E50914] font-bold uppercase tracking-wider">
                 <span>Chapter #{activeStar + 1}</span>
                 <span className="text-[#808080]">·</span>
                 <span className="text-[#B3B3B3]">{current.date || current.year}</span>
@@ -119,7 +119,7 @@ export const ConstellationSection: React.FC<ConstellationSectionProps> = ({
 
             <button
               onClick={() => onSelectMilestone(current)}
-              className="px-6 py-2.5 rounded bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs shadow transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0 uppercase tracking-wider flex items-center gap-1.5"
+              className="w-full sm:w-auto justify-center px-6 py-3 rounded bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs shadow transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0 uppercase tracking-wider flex items-center gap-1.5 min-h-[44px]"
             >
               <span>View Chapter Details</span>
               <ChevronRight className="w-4 h-4" />

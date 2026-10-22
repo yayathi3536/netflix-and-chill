@@ -14,6 +14,7 @@ interface MovieCardProps {
   onToggleFavorite?: (id: string) => void;
   onUnlockVault?: (memory: MemoryItem) => void;
   onEditMemory?: (memory: MemoryItem) => void;
+  className?: string;
 }
 
 export const MovieCard: React.FC<MovieCardProps> = ({
@@ -26,6 +27,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   onToggleFavorite,
   onUnlockVault,
   onEditMemory,
+  className,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -99,7 +101,9 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   // Standard Landscape Card (16:9) — Image shown directly & clearly
   return (
     <div
-      className="group relative shrink-0 w-64 sm:w-72 md:w-80 rounded bg-[#141414] overflow-hidden shadow-lg border border-[#181818] cursor-pointer transition-all duration-300 hover:scale-105 hover:z-30 hover:border-[#808080]/60 hover:shadow-2xl"
+      className={`group relative rounded bg-[#141414] overflow-hidden shadow-lg border border-[#181818] cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:z-30 hover:border-[#808080]/60 hover:shadow-2xl ${
+        className || 'shrink-0 w-60 sm:w-72 md:w-80'
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleCardClick}
@@ -139,7 +143,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         </div>
 
         {/* Bottom Caption Bar (Leaves image clear and unobstructed) */}
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#000000]/95 via-[#000000]/65 to-transparent flex flex-col justify-end p-3 pt-8">
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#000000]/95 via-[#000000]/65 to-transparent flex flex-col justify-end p-2.5 sm:p-3 pt-8">
           <div className="flex items-center justify-between">
             <h4 className="font-bebas font-bold text-[#FFFFFF] text-base sm:text-lg tracking-wider uppercase line-clamp-1 drop-shadow">
               {memory.title}
@@ -149,9 +153,9 @@ export const MovieCard: React.FC<MovieCardProps> = ({
             <p className="text-[11px] text-[#B3B3B3] line-clamp-1">{memory.subtitle}</p>
           )}
 
-          {/* Quick Buttons on Hover */}
+          {/* Quick Buttons on Hover / Touch */}
           <div
-            className={`flex items-center justify-between pt-2 transition-opacity duration-200 ${
+            className={`flex items-center justify-between pt-1.5 sm:pt-2 transition-opacity duration-200 ${
               isHovered ? 'opacity-100' : 'opacity-90'
             }`}
           >
@@ -163,7 +167,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                     e.stopPropagation();
                     onPlay(memory);
                   }}
-                  className="w-7 h-7 rounded-full bg-[#FFFFFF] hover:bg-[#B3B3B3] text-[#000000] flex items-center justify-center shadow transition-transform active:scale-90 cursor-pointer"
+                  className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#FFFFFF] hover:bg-[#B3B3B3] text-[#000000] flex items-center justify-center shadow transition-transform active:scale-90 cursor-pointer shrink-0"
                   title="Play Video"
                   aria-label="Play Video"
                 >
@@ -175,7 +179,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                     e.stopPropagation();
                     handleCardClick();
                   }}
-                  className="w-7 h-7 rounded-full bg-[#FFFFFF] hover:bg-[#B3B3B3] text-[#000000] flex items-center justify-center shadow transition-transform active:scale-90 cursor-pointer"
+                  className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#FFFFFF] hover:bg-[#B3B3B3] text-[#000000] flex items-center justify-center shadow transition-transform active:scale-90 cursor-pointer shrink-0"
                   title="Read Letter"
                   aria-label="Read Letter"
                 >
@@ -187,7 +191,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                     e.stopPropagation();
                     onOpenInfo(memory);
                   }}
-                  className="w-7 h-7 rounded-full bg-[#FFFFFF] hover:bg-[#B3B3B3] text-[#000000] flex items-center justify-center shadow transition-transform active:scale-90 cursor-pointer"
+                  className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#FFFFFF] hover:bg-[#B3B3B3] text-[#000000] flex items-center justify-center shadow transition-transform active:scale-90 cursor-pointer shrink-0"
                   title="Read Story & Details"
                   aria-label="Read Story & Details"
                 >
@@ -200,7 +204,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                   e.stopPropagation();
                   onToggleWatchlist(memory.id);
                 }}
-                className="w-7 h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer"
+                className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer shrink-0"
                 title={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
               >
                 {memory.isInWatchlist ? (
@@ -216,7 +220,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                     e.stopPropagation();
                     onToggleFavorite(memory.id);
                   }}
-                  className="w-7 h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer"
+                  className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer shrink-0"
                   title="Favorite"
                 >
                   <Heart
@@ -234,7 +238,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                     e.stopPropagation();
                     onEditMemory(memory);
                   }}
-                  className="w-7 h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer"
+                  className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer shrink-0"
                   title="Admin only: Change / Upload Image & Edit"
                 >
                   <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
@@ -247,7 +251,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                 e.stopPropagation();
                 handleCardClick();
               }}
-              className="w-7 h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer"
+              className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer shrink-0"
               title={isLetter ? 'Open Letter' : 'Story Details'}
             >
               <ChevronDown className="w-4 h-4 text-[#FFFFFF]" />

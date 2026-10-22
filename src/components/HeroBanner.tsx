@@ -51,7 +51,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   const hasHeroVideo = hasValidVideo(memory) || isVideoUrl(customBackdropUrl);
 
   return (
-    <div className="relative w-full h-[85vh] min-h-[580px] max-h-[880px] overflow-hidden select-none bg-[#000000]">
+    <div className="relative w-full h-[78vh] sm:h-[85vh] min-h-[480px] sm:min-h-[580px] max-h-[880px] overflow-hidden select-none bg-[#000000]">
       {/* Background Media with subtle Ken Burns cinematic movement */}
       <div className="absolute inset-0 w-full h-full animate-ken-burns">
         <VisualArt
@@ -69,15 +69,15 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
       <div className="absolute inset-0 hero-netflix-scrim" />
 
       {/* Hero Content Container */}
-      <div className="relative z-10 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-24 sm:pb-28">
-        <div className="max-w-2xl space-y-4">
+      <div className="relative z-10 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-16 sm:pb-24 lg:pb-28">
+        <div className="max-w-2xl space-y-3 sm:space-y-4">
           {/* Top Series & Milestone Badge */}
-          <div className="inline-flex items-center gap-2 text-xs font-bold tracking-wider text-[#FFFFFF]">
-            <span className="bg-[#E50914] text-[#FFFFFF] font-black px-1.5 py-0.5 rounded text-[11px] uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 text-xs font-bold tracking-wider text-[#FFFFFF] flex-wrap">
+            <span className="bg-[#E50914] text-[#FFFFFF] font-black px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] uppercase tracking-widest">
               {displaySeriesTag}
             </span>
             <span className="text-[#808080]">·</span>
-            <span className="uppercase text-[11px] text-[#B3B3B3] font-semibold">
+            <span className="uppercase text-[10px] sm:text-[11px] text-[#B3B3B3] font-semibold">
               {displayBadge}
             </span>
             <span className="text-[#808080] hidden sm:inline">·</span>
@@ -87,12 +87,12 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           </div>
 
           {/* Cinematic Title */}
-          <h1 className="font-bebas text-5xl sm:text-7xl lg:text-8xl tracking-wider text-[#FFFFFF] font-black leading-none uppercase drop-shadow-2xl">
+          <h1 className="font-bebas text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-wider text-[#FFFFFF] font-black leading-none uppercase drop-shadow-2xl break-words">
             {displayTitle}
           </h1>
 
           {/* Clean Netflix Metadata */}
-          <div className="flex flex-wrap items-center gap-2.5 text-xs text-[#B3B3B3] font-medium">
+          <div className="flex flex-wrap items-center gap-2 text-[11px] sm:text-xs text-[#B3B3B3] font-medium">
             <span className="text-[#FFFFFF] font-bold">{memory.matchScore || 99}% Match</span>
             <span aria-hidden="true" className="text-[#808080]">·</span>
             <span>{memory.year || '2024'}</span>
@@ -102,33 +102,33 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             </span>
             <span aria-hidden="true" className="text-[#808080]">·</span>
             <span>{memory.duration || 'Forever'}</span>
-            <span aria-hidden="true" className="text-[#808080]">·</span>
-            <span className="border border-[#808080]/60 px-1.5 py-0.2 rounded text-[10px] font-bold text-[#FFFFFF]">
+            <span aria-hidden="true" className="text-[#808080] hidden xs:inline">·</span>
+            <span className="border border-[#808080]/60 px-1.5 py-0.2 rounded text-[10px] font-bold text-[#FFFFFF] hidden xs:inline">
               Ultra HD 4K
             </span>
           </div>
 
           {/* Readable Description */}
-          <p className="text-sm sm:text-base text-[#B3B3B3] leading-relaxed font-normal line-clamp-3 max-w-xl text-balance drop-shadow-md">
+          <p className="text-xs sm:text-sm md:text-base text-[#B3B3B3] leading-relaxed font-normal line-clamp-3 sm:line-clamp-4 max-w-xl text-balance drop-shadow-md">
             {displaySynopsis}
           </p>
 
           {/* Strict Netflix Buttons */}
-          <div className="flex flex-wrap items-center gap-3 pt-3">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2 sm:pt-3">
             {hasHeroVideo ? (
               <button
                 onClick={() => onPlay(memory)}
-                className="flex items-center gap-2 px-7 py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-sm sm:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap"
+                className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs sm:text-sm md:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
               >
-                <Play className="w-5 h-5 fill-white text-white" />
+                <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-white text-white" />
                 <span>Play Video</span>
               </button>
             ) : (
               <button
                 onClick={() => onOpenInfo(memory)}
-                className="flex items-center gap-2 px-7 py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-sm sm:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap"
+                className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs sm:text-sm md:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
               >
-                <BookOpen className="w-5 h-5 text-white" />
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 <span>Read Our Story</span>
               </button>
             )}
@@ -136,16 +136,16 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             {/* Dark Grey Secondary Button with White Text */}
             <button
               onClick={() => onOpenInfo(memory)}
-              className="flex items-center gap-2 px-6 py-3 bg-[#181818]/90 hover:bg-white/10 text-[#FFFFFF] font-semibold text-sm sm:text-base rounded border border-[#808080]/40 transition-all active:scale-95 cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#181818]/90 hover:bg-white/10 text-[#FFFFFF] font-semibold text-xs sm:text-sm md:text-base rounded border border-[#808080]/40 transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
             >
-              <Info className="w-5 h-5 text-[#FFFFFF]" />
+              <Info className="w-4 h-4 sm:w-5 sm:h-5 text-[#FFFFFF]" />
               <span>More Info</span>
             </button>
 
             {/* My List Quick Toggle */}
             <button
               onClick={() => onToggleWatchlist(memory.id)}
-              className="p-3 rounded bg-[#181818]/90 hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-all cursor-pointer active:scale-95"
+              className="w-11 h-11 rounded bg-[#181818]/90 hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-all cursor-pointer active:scale-95 flex items-center justify-center min-h-[44px] min-w-[44px]"
               title={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
               aria-label="Toggle My List"
             >
@@ -160,21 +160,22 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             {isAdmin && onEditHero && (
               <button
                 onClick={onEditHero}
-                className="flex items-center gap-1.5 px-3.5 py-2.5 bg-[#181818] hover:bg-white/10 text-[#FFFFFF] font-medium text-xs rounded border border-[#808080]/40 transition-all active:scale-95 cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-2 bg-[#181818] hover:bg-white/10 text-[#FFFFFF] font-medium text-xs rounded border border-[#808080]/40 transition-all active:scale-95 cursor-pointer min-h-[44px]"
                 title="Admin only: Change hero image & text"
               >
                 <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
-                <span>Change Hero Image & Text</span>
+                <span className="hidden sm:inline">Change Hero Content</span>
+                <span className="sm:hidden">Edit</span>
               </button>
             )}
           </div>
         </div>
 
         {/* Right Volume & Rating Pill */}
-        <div className="absolute right-4 sm:right-8 bottom-24 sm:bottom-28 flex items-center gap-3">
+        <div className="absolute right-3 sm:right-8 bottom-4 sm:bottom-28 flex items-center gap-2 sm:gap-3 z-20">
           <button
             onClick={onToggleAudio}
-            className="p-2.5 rounded-full border border-[#808080]/40 bg-[#000000]/70 text-[#FFFFFF] hover:bg-[#181818] transition-all cursor-pointer"
+            className="w-10 h-10 rounded-full border border-[#808080]/40 bg-[#000000]/70 text-[#FFFFFF] hover:bg-[#181818] transition-all cursor-pointer flex items-center justify-center"
             title="Toggle soundtrack"
             aria-label="Soundtrack audio"
           >

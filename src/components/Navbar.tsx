@@ -106,13 +106,13 @@ export const Navbar: React.FC<NavbarProps> = ({
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
         {/* ZONE 1: NETFLIX-STYLE BRAND LOGO */}
-        <div className="flex items-center gap-6 lg:gap-8 shrink-0">
+        <div className="flex items-center gap-4 lg:gap-8 shrink-0">
           <button
             onClick={() => setActiveTab('home')}
-            className="flex items-center gap-2 group text-left cursor-pointer transition-transform duration-200 active:scale-95"
+            className="flex items-center gap-2 group text-left cursor-pointer transition-transform duration-200 active:scale-95 min-h-[44px]"
             aria-label="Our Universe Home"
           >
-            <span className="font-bebas text-2xl sm:text-3xl tracking-widest text-[#E50914] font-black uppercase drop-shadow-md select-none">
+            <span className="font-bebas text-xl sm:text-2xl lg:text-3xl tracking-wider sm:tracking-widest text-[#E50914] font-black uppercase drop-shadow-md select-none">
               OUR UNIVERSE
             </span>
           </button>
@@ -194,23 +194,23 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* ZONE 3: ACTIONS & UTILITIES */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {/* Expanding Search Bar */}
           <div className="relative flex items-center">
             {isSearchOpen ? (
-              <div className="flex items-center bg-[#141414] border border-[#808080] rounded px-3 py-1.5 shadow-inner transition-all w-44 sm:w-60">
+              <div className="flex items-center bg-[#141414] border border-[#808080] rounded px-2.5 py-1.5 shadow-inner transition-all w-32 sm:w-48 md:w-60">
                 <Search className="w-3.5 h-3.5 text-[#B3B3B3] shrink-0" />
                 <input
                   ref={searchInputRef}
                   type="text"
-                  placeholder="Titles, episodes, memories..."
+                  placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-transparent border-none text-xs text-[#FFFFFF] placeholder-[#808080] focus:outline-none px-2 w-full"
+                  className="bg-transparent border-none text-xs text-[#FFFFFF] placeholder-[#808080] focus:outline-none px-1.5 w-full"
                 />
                 <button
                   onClick={toggleSearch}
-                  className="text-[#808080] hover:text-[#FFFFFF] p-0.5 cursor-pointer"
+                  className="text-[#808080] hover:text-[#FFFFFF] p-1 cursor-pointer min-h-[32px] min-w-[32px] flex items-center justify-center"
                   aria-label="Close search"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -219,7 +219,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             ) : (
               <button
                 onClick={toggleSearch}
-                className="p-2 text-[#FFFFFF] hover:text-[#B3B3B3] transition-colors rounded-full hover:bg-[#181818] cursor-pointer"
+                className="w-10 h-10 text-[#FFFFFF] hover:text-[#B3B3B3] transition-colors rounded-full hover:bg-[#181818] cursor-pointer flex items-center justify-center"
                 aria-label="Search memories"
               >
                 <Search className="w-4 h-4" />
@@ -230,7 +230,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Music Soundtrack Toggle Button */}
           <button
             onClick={toggleAudio}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-all relative text-xs font-medium cursor-pointer ${
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded transition-all relative text-xs font-medium cursor-pointer min-h-[40px] ${
               isAudioPlaying
                 ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
                 : 'bg-[#181818] text-[#FFFFFF] hover:bg-white/10 border border-[#808080]/30'
@@ -255,12 +255,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="relative">
             <button
               onClick={() => setIsNotificationsOpen((prev) => !prev)}
-              className="p-2 text-[#FFFFFF] hover:text-[#B3B3B3] transition-colors rounded hover:bg-[#181818] relative cursor-pointer"
+              className="w-10 h-10 text-[#FFFFFF] hover:text-[#B3B3B3] transition-colors rounded-full hover:bg-[#181818] relative cursor-pointer flex items-center justify-center"
               aria-label="Notifications"
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 w-2 h-2 bg-[#E50914] rounded-full ring-2 ring-[#000000]" />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-[#E50914] rounded-full ring-2 ring-[#000000]" />
               )}
             </button>
 
@@ -411,59 +411,73 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* Mobile Navigation Strip */}
-      <div className="md:hidden flex items-center justify-around px-2 pt-2.5 border-t border-[#181818] text-[11px] font-medium text-[#B3B3B3] overflow-x-auto no-scrollbar bg-[#000000]">
+      <div className="md:hidden flex items-center gap-1 px-2.5 py-1.5 border-t border-[#181818] text-xs font-medium text-[#B3B3B3] overflow-x-auto no-scrollbar bg-[#000000] scroll-smooth">
         <button
           onClick={() => setActiveTab('home')}
-          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
-            activeTab === 'home' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+            activeTab === 'home'
+              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
+              : 'hover:text-[#FFFFFF]'
           }`}
         >
           Home
         </button>
         <button
           onClick={() => setActiveTab('our-story')}
-          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
-            activeTab === 'our-story' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+            activeTab === 'our-story'
+              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
+              : 'hover:text-[#FFFFFF]'
           }`}
         >
           Series
         </button>
         <button
           onClick={() => setActiveTab('memories')}
-          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
-            activeTab === 'memories' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+            activeTab === 'memories'
+              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
+              : 'hover:text-[#FFFFFF]'
           }`}
         >
           Movies
         </button>
         <button
           onClick={() => setActiveTab('scrapbook')}
-          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
-            activeTab === 'scrapbook' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+            activeTab === 'scrapbook'
+              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
+              : 'hover:text-[#FFFFFF]'
           }`}
         >
           Scrapbook
         </button>
         <button
           onClick={() => setActiveTab('little-things')}
-          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
-            activeTab === 'little-things' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+            activeTab === 'little-things'
+              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
+              : 'hover:text-[#FFFFFF]'
           }`}
         >
           Quirks
         </button>
         <button
           onClick={() => setActiveTab('places-list')}
-          className={`py-1 px-2 whitespace-nowrap cursor-pointer ${
-            activeTab === 'places-list' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          className={`py-1.5 px-3 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[36px] flex items-center shrink-0 ${
+            activeTab === 'places-list'
+              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
+              : 'hover:text-[#FFFFFF]'
           }`}
         >
           My List
         </button>
         <button
           onClick={() => setActiveTab('secret-vault')}
-          className={`py-1 px-2 whitespace-nowrap text-[#B3B3B3] flex items-center gap-1 cursor-pointer ${
-            activeTab === 'secret-vault' ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]' : ''
+          className={`py-1.5 px-3 rounded whitespace-nowrap text-[#B3B3B3] flex items-center gap-1 cursor-pointer transition-colors min-h-[36px] shrink-0 ${
+            activeTab === 'secret-vault'
+              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
+              : 'hover:text-[#FFFFFF]'
           }`}
         >
           <Lock className="w-3 h-3 text-[#E50914]" />
