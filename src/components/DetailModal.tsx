@@ -93,6 +93,9 @@ export const DetailModal: React.FC<DetailModalProps> = ({
     >
       {/* Netflix Modal Card */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${memory.title} details`}
         className="relative w-full max-w-4xl bg-[#181818] rounded-none sm:rounded-lg overflow-hidden shadow-2xl border border-[#808080]/30 my-auto text-[#FFFFFF]"
         onClick={(e) => e.stopPropagation()}
       >
