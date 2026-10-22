@@ -298,12 +298,9 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
           return (
             <div
               key={ch.id}
-              draggable={isReorderMode}
-              onDragStart={(e) => handleDragStart(e, idx)}
               onDragOver={(e) => handleDragOver(e, idx)}
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, idx)}
-              onDragEnd={handleDragEnd}
               onClick={() => {
                 if (!isReorderMode) {
                   onSelectStory(ch);
@@ -371,8 +368,16 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
 
                     {/* Dedicated Grip Handle Icon */}
                     <div
+                      draggable={isReorderMode}
+                      onDragStart={(e) => {
+                        e.stopPropagation();
+                        handleDragStart(e, idx);
+                      }}
+                      onDragEnd={handleDragEnd}
+                      onClick={(e) => e.stopPropagation()}
                       className="w-8 h-8 flex items-center justify-center text-red-500 hover:text-white cursor-grab active:cursor-grabbing border-l border-white/10 pl-1"
-                      title="Drag to reorder"
+                      title="Grab this handle and drag the chapter to any position"
+                      aria-label={`Drag Episode ${idx + 1} to reorder`}
                     >
                       <GripVertical className="w-4 h-4" />
                     </div>
