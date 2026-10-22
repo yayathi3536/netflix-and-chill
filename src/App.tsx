@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Heart,
-  Sparkles,
   Download,
   RotateCcw,
   Film,
-  Compass,
   Database,
   Lock,
   Shield,
   AlertCircle,
-  CheckCircle2,
   Loader2,
   Info,
 } from 'lucide-react';
