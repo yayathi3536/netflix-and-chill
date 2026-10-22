@@ -227,8 +227,12 @@ export default function ProfileSelect({
 
         {/* Profile Cards Grid */}
         <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-10 md:gap-12 lg:gap-14 w-full">
-          {profiles.map((profile) => {
-            const avatarSrc = getProfileAvatarUrl(profile);
+          {profiles.map((profile, profileIndex) => {
+            // Netflix-style profile tiles: bold solid colours and a clean initial,
+            // while keeping the chosen photo/avatar available in the profile editor.
+            const tileColors = ['#E50914', '#176B87', '#6B3FA0', '#237A57', '#B85C24', '#2855A6'];
+            const tileColor = tileColors[profileIndex % tileColors.length];
+            const profileInitial = profile.name.trim().charAt(0).toUpperCase() || '♥';
 
             return (
               <div
@@ -252,18 +256,19 @@ export default function ProfileSelect({
                         : `Select profile ${profile.name}`
                     }
                   >
-                    {/* Illustrated Artwork */}
-                    <img
-                      src={avatarSrc}
-                      alt={profile.name}
-                      className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105 select-none"
-                    />
-
-                    {/* Subtle cinematic glass/rim overlay */}
+                    {/* Clean Netflix-inspired colour tile (custom avatar remains editable) */}
                     <div
-                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-white/10 opacity-70 group-hover:opacity-40 transition-opacity duration-300"
+                      className="absolute inset-0 flex items-center justify-center overflow-hidden transition-transform duration-300 ease-out group-hover:scale-105"
+                      style={{ backgroundColor: tileColor }}
                       aria-hidden="true"
-                    />
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/35" />
+                      <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full border-[18px] border-white/10" />
+                      <div className="absolute -bottom-10 -left-8 h-32 w-32 rounded-full border-[20px] border-black/10" />
+                      <span className="relative z-10 font-bebas text-7xl sm:text-8xl md:text-9xl leading-none tracking-tight text-white drop-shadow-[0_4px_14px_rgba(0,0,0,0.3)] select-none">
+                        {profileInitial}
+                      </span>
+                    </div>
 
                     {/* Manage Mode Pencil Overlay */}
                     {isManageMode && (
