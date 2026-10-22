@@ -825,8 +825,8 @@ export default function App() {
                   {/* ROW 5: MY LIST: PLACES & EXPERIENCES TOGETHER */}
                   {bucketListItems.length > 0 && (
                     <CarouselRow
-                      title={siteContent.section_places_title || "Our Bucket List"}
-                      subtitle={siteContent.section_places_sub || "Dreams and adventures we still want to experience together."}
+                      title="Our Bucket List"
+                      subtitle="Dreams and adventures we still want to experience together."
                       items={bucketListItems}
                       onPlay={(m) => handlePlayMemory(m)}
                       onOpenInfo={(m) => handleOpenItem(m)}
