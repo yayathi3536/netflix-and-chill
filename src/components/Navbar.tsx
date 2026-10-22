@@ -16,7 +16,16 @@ import {
 } from 'lucide-react';
 import { UserProfile, NotificationItem } from '../types';
 import { User } from '@supabase/supabase-js';
-import { getProfileAvatarUrl } from '../data/builtInAvatars';
+
+const PROFILE_TILE_COLORS = ['#E50914', '#176B87', '#6B3FA0', '#237A57', '#B85C24', '#2855A6'];
+
+const getProfileTileStyle = (profile: UserProfile): React.CSSProperties => {
+  const key = profile.id || profile.name;
+  const index = Array.from(key).reduce((sum, character) => sum + character.charCodeAt(0), 0);
+  return { backgroundColor: PROFILE_TILE_COLORS[index % PROFILE_TILE_COLORS.length] };
+};
+
+const getProfileInitial = (profile: UserProfile) => profile.name.trim().charAt(0).toUpperCase() || '♥';
 
 interface NavbarProps {
   activeTab: string;
@@ -221,6 +230,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={toggleSearch}
                 className="w-10 h-10 text-[#FFFFFF] hover:text-[#B3B3B3] transition-colors rounded-full hover:bg-[#181818] cursor-pointer flex items-center justify-center"
                 aria-label="Search memories"
+                aria-expanded={isSearchOpen}
               >
                 <Search className="w-4 h-4" />
               </button>
@@ -257,6 +267,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setIsNotificationsOpen((prev) => !prev)}
               className="w-10 h-10 text-[#FFFFFF] hover:text-[#B3B3B3] transition-colors rounded-full hover:bg-[#181818] relative cursor-pointer flex items-center justify-center"
               aria-label="Notifications"
+              aria-expanded={isNotificationsOpen}
+              aria-haspopup="dialog"
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
@@ -275,7 +287,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                   )}
                 </div>
                 <div className="max-h-64 overflow-y-auto divide-y divide-[#181818]">
-                  {notifications.map((n) => (
+                  {notifications.length === 0 ? (
+                    <div className="px-4 py-8 text-center">
+                      <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+                        <Bell className="h-4 w-4 text-[#808080]" />
+                      </div>
+                      <p className="font-medium text-[#FFFFFF]">You're all caught up</p>
+                      <p className="mt-1 text-[11px] text-[#808080]">New universe updates will appear here.</p>
+                    </div>
+                  ) : notifications.map((n) => (
                     <div
                       key={n.id}
                       onClick={() => {
@@ -304,15 +324,15 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setIsProfileMenuOpen((prev) => !prev)}
               className="flex items-center gap-1.5 p-1 rounded hover:bg-[#181818] transition-colors cursor-pointer"
               aria-label="User Profile"
+              aria-expanded={isProfileMenuOpen}
+              aria-haspopup="menu"
             >
               <div
-                className="w-8 h-8 rounded-lg bg-[#E50914] overflow-hidden flex items-center justify-center text-sm font-bold text-[#FFFFFF] shadow ring-1 ring-white/20"
+                className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center text-lg font-bold text-white shadow ring-1 ring-white/20"
+                style={getProfileTileStyle(activeProfile)}
+                aria-label={activeProfile.name}
               >
-                <img
-                  src={getProfileAvatarUrl(activeProfile)}
-                  alt={activeProfile.name}
-                  className="w-full h-full object-cover"
-                />
+                <span aria-hidden="true" className="font-bebas leading-none">{getProfileInitial(activeProfile)}</span>
               </div>
               <ChevronDown className="w-3.5 h-3.5 text-[#B3B3B3]" />
             </button>
@@ -336,13 +356,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                     >
                       <div className="flex items-center gap-2.5">
                         <div
-                          className="w-7 h-7 rounded-md bg-[#E50914] overflow-hidden flex items-center justify-center text-xs text-[#FFFFFF] shrink-0 ring-1 ring-white/10"
+                          className="w-7 h-7 rounded-md overflow-hidden flex items-center justify-center text-sm font-bold text-white shrink-0 ring-1 ring-white/10"
+                          style={getProfileTileStyle(p)}
+                          aria-hidden="true"
                         >
-                          <img
-                            src={getProfileAvatarUrl(p)}
-                            alt={p.name}
-                            className="w-full h-full object-cover"
-                          />
+                          <span className="font-bebas leading-none">{getProfileInitial(p)}</span>
                         </div>
                         <span className="truncate">{p.name}</span>
                       </div>

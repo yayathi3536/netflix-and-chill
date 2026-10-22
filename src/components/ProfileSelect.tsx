@@ -10,6 +10,14 @@ import {
   getProfileAvatarUrl,
 } from '../data/builtInAvatars';
 
+const PROFILE_TILE_COLORS = ['#E50914', '#176B87', '#6B3FA0', '#237A57', '#B85C24', '#2855A6'];
+
+const getProfileTileColor = (profile: UserProfile) => {
+  const key = profile.id || profile.name;
+  const index = Array.from(key).reduce((sum, character) => sum + character.charCodeAt(0), 0);
+  return PROFILE_TILE_COLORS[index % PROFILE_TILE_COLORS.length];
+};
+
 export default function ProfileSelect({
   profiles,
   onSelect,
@@ -228,7 +236,10 @@ export default function ProfileSelect({
         {/* Profile Cards Grid */}
         <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-10 md:gap-12 lg:gap-14 w-full">
           {profiles.map((profile) => {
-            const avatarSrc = getProfileAvatarUrl(profile);
+            // Netflix-style profile tiles: bold solid colours and a clean initial,
+            // while keeping the chosen photo/avatar available in the profile editor.
+            const tileColor = getProfileTileColor(profile);
+            const profileInitial = profile.name.trim().charAt(0).toUpperCase() || '♥';
 
             return (
               <div
@@ -245,25 +256,26 @@ export default function ProfileSelect({
                         onSelect(profile);
                       }
                     }}
-                    className={`w-full h-full rounded-2xl overflow-hidden relative cursor-pointer border-2 border-white/10 group-hover:border-[#E50914] focus-visible:border-white shadow-[0_14px_45px_rgba(0,0,0,0.9)] group-hover:shadow-[0_20px_60px_rgba(229,9,20,0.45),0_0_35px_rgba(229,9,20,0.3)] transition-all duration-300 ease-out group-hover:scale-105 group-hover:-translate-y-2 focus:outline-none bg-[#101014]`}
+                    className={`w-full h-full rounded-lg overflow-hidden relative cursor-pointer border-2 border-white/10 group-hover:border-[#E50914] focus-visible:border-white shadow-[0_14px_45px_rgba(0,0,0,0.9)] group-hover:shadow-[0_20px_60px_rgba(229,9,20,0.45),0_0_35px_rgba(229,9,20,0.3)] transition-all duration-300 ease-out group-hover:scale-105 group-hover:-translate-y-2 focus:outline-none bg-[#101014]`}
                     aria-label={
                       isManageMode
                         ? `Edit profile and avatar for ${profile.name}`
                         : `Select profile ${profile.name}`
                     }
                   >
-                    {/* Illustrated Artwork */}
-                    <img
-                      src={avatarSrc}
-                      alt={profile.name}
-                      className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105 select-none"
-                    />
-
-                    {/* Subtle cinematic glass/rim overlay */}
+                    {/* Clean Netflix-inspired colour tile (custom avatar remains editable) */}
                     <div
-                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-white/10 opacity-70 group-hover:opacity-40 transition-opacity duration-300"
+                      className="absolute inset-0 flex items-center justify-center overflow-hidden transition-transform duration-300 ease-out"
+                      style={{ backgroundColor: tileColor }}
                       aria-hidden="true"
-                    />
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/35" />
+                      <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full border-[18px] border-white/10" />
+                      <div className="absolute -bottom-10 -left-8 h-32 w-32 rounded-full border-[20px] border-black/10" />
+                      <span className="relative z-10 font-bebas text-7xl sm:text-8xl md:text-9xl leading-none tracking-tight text-white drop-shadow-[0_4px_14px_rgba(0,0,0,0.3)] select-none">
+                        {profileInitial}
+                      </span>
+                    </div>
 
                     {/* Manage Mode Pencil Overlay */}
                     {isManageMode && (

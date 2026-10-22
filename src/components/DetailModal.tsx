@@ -74,15 +74,20 @@ export const DetailModal: React.FC<DetailModalProps> = ({
   }, [primaryImageUrl, additionalPhotos, memory?.title, memory?.subtitle]);
 
   useEffect(() => {
-    if (lightboxIndex === null) return;
+    if (!memory) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setLightboxIndex(null);
+      if (e.key === 'Escape') {
+        if (lightboxIndex !== null) setLightboxIndex(null);
+        else onClose();
+        return;
+      }
+      if (lightboxIndex === null) return;
       if (e.key === 'ArrowRight') setLightboxIndex((prev) => (prev !== null && prev < allPhotos.length - 1 ? prev + 1 : 0));
       if (e.key === 'ArrowLeft') setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : allPhotos.length - 1));
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxIndex, allPhotos.length]);
+  }, [memory, lightboxIndex, allPhotos.length, onClose]);
 
   if (!memory) return null;
 
@@ -93,6 +98,9 @@ export const DetailModal: React.FC<DetailModalProps> = ({
     >
       {/* Netflix Modal Card */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={`memory-title-${memory.id}`}
         className="relative w-full max-w-4xl bg-[#181818] rounded-none sm:rounded-lg overflow-hidden shadow-2xl border border-[#808080]/30 my-auto text-[#FFFFFF]"
         onClick={(e) => e.stopPropagation()}
       >
@@ -137,7 +145,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
           {/* Floating Title & Actions on Bottom Edge */}
           <div className="absolute bottom-3 sm:bottom-5 left-3 sm:left-6 right-3 sm:right-6 flex items-end justify-between gap-4">
             <div className="space-y-1.5 sm:space-y-2.5 max-w-2xl w-full">
-              <h2 className="font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#FFFFFF] font-black tracking-wider leading-none drop-shadow-lg uppercase break-words">
+              <h2 id={`memory-title-${memory.id}`} className="font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#FFFFFF] font-black tracking-wider leading-none drop-shadow-lg uppercase break-words">
                 {memory.title}
               </h2>
               {memory.subtitle && (
