@@ -421,21 +421,22 @@ export default function App() {
 
   const handleReorderStoryline = async (newOrderedStories: MemoryItem[]) => {
     const orderedIds = newOrderedStories.map((s) => s.id);
-    const updatedMemories = memories.map((m) => {
-      const idx = orderedIds.indexOf(m.id);
-      if (idx !== -1) {
-        return { ...m, isTop10: idx + 1, sortOrder: idx + 1 };
-      }
-      return m;
-    });
-    setMemories(updatedMemories);
+    const result = await storageService.saveStorylineOrder(newOrderedStories);
 
-    setSiteContent((prev) => ({
-      ...prev,
-      storyline_custom_order: JSON.stringify(orderedIds),
-    }));
+    if (result.success) {
+      setMemories((current) =>
+        current.map((m) => {
+          const idx = orderedIds.indexOf(m.id);
+          return idx !== -1 ? { ...m, isTop10: idx + 1, sortOrder: idx + 1 } : m;
+        })
+      );
+      setSiteContent((prev) => ({
+        ...prev,
+        storyline_custom_order: JSON.stringify(orderedIds),
+      }));
+    }
 
-    return await storageService.saveStorylineOrder(newOrderedStories);
+    return result;
   };
 
   const littleThingsCollection = useMemo(() => {

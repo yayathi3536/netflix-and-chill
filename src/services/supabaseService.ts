@@ -404,50 +404,60 @@ class SupabaseService {
     }
 
     try {
-      // 1. Update each memory row with its new 1-based index in is_top_10
+      // Save the canonical order first. If the current account is not allowed to
+      // edit site content, stop here instead of reporting a false success.
+      const orderJson = JSON.stringify(orderedIds);
+      const contentResult = await this.updateSiteContent('storyline_custom_order', orderJson, 'sections');
+      if (!contentResult.success) {
+        throw contentResult.error || new Error('Could not save Storyline order to site_content.');
+      }
+
+      // Keep the numeric rank in sync as a fallback for older clients.
       for (let i = 0; i < orderedIds.length; i++) {
         const id = orderedIds[i];
         const newRank = i + 1;
-
-        const { data, error } = await supabase!
+        const { data, error } = await supabase
           .from('memories')
           .update({ is_top_10: newRank })
           .eq('id', id)
           .select('id');
 
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
 
-        // If 0 rows were updated, this story row is not yet in Supabase.
-        // Insert it now so that its content and new rank are permanently stored!
         if (!data || data.length === 0) {
-          const storyItem = orderedStories?.find((s) => s.id === id);
-          if (storyItem) {
-            await this.createMemory({
-              ...storyItem,
-              isTop10: newRank,
-              sortOrder: newRank,
-            });
-          }
-        }
-      }
+          // Distinguish a missing local-only story from a row blocked by RLS.
+          const { data: existing, error: lookupError } = await supabase
+            .from('memories')
+            .select('id')
+            .eq('id', id)
+            .maybeSingle();
+          if (lookupError) throw lookupError;
 
-      // 2. Persist storyline_custom_order into site_content table if it exists
-      try {
-        const jsonValue = JSON.stringify(orderedIds);
-        await this.updateSiteContent('storyline_custom_order', jsonValue, 'sections');
-      } catch (siteErr) {
-        console.info('Notice: site_content table not available, using memories.is_top_10 as primary rank.');
+          if (existing) {
+            throw new Error('Storyline order was not saved: this account does not have permission to update the story records. Sign in with the OUR UNIVERSE admin account and try again.');
+          }
+
+          const storyItem = orderedStories?.find((s) => s.id === id);
+          if (!storyItem) {
+            throw new Error(`Storyline item "${id}" is missing from Supabase and could not be restored.`);
+          }
+
+          const created = await this.createMemory({
+            ...storyItem,
+            isTop10: newRank,
+            sortOrder: newRank,
+          });
+          if (created.error) throw created.error;
+        }
       }
 
       return { success: true, error: null };
     } catch (e) {
-      console.warn('Could not save storyline order to Supabase:', (e as Error).message || e);
-      return { success: false, error: e as Error };
+      const error = e instanceof Error ? e : new Error(String(e));
+      console.warn('Could not save storyline order to Supabase:', error.message);
+      return { success: false, error };
     }
   }
-
 
   // MY LIST: shared Bucket List additions, activities, and watchlist entries.
   public async fetchMyListItems(): Promise<MyListItem[]> {
