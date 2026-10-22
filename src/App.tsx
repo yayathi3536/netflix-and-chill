@@ -6,8 +6,6 @@ import {
   RotateCcw,
   Film,
   Compass,
-  CheckCircle,
-  Clock,
   Database,
   Lock,
   Shield,
