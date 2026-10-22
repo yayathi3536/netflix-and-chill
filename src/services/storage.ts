@@ -207,7 +207,7 @@ class UnifiedStorageService {
 
     // 4. Sync to Supabase if configured
     if (isSupabaseConfigured()) {
-      const { success, error } = await supabaseService.saveStorylineOrder(orderedIds);
+      const { success, error } = await supabaseService.saveStorylineOrder(orderedIds, orderedStories);
       if (!success) {
         return {
           success: false,

@@ -92,14 +92,25 @@ create table if not exists public.love_notes (
   created_at timestamptz default timezone('utc'::text, now()) not null
 );
 
+create table if not exists public.site_content (
+  key text primary key,
+  value text not null,
+  section text default 'general',
+  updated_at timestamptz default timezone('utc'::text, now()) not null
+);
+
 -- Enable RLS
 alter table public.memories enable row level security;
 alter table public.story_chapters enable row level security;
 alter table public.love_notes enable row level security;
+alter table public.site_content enable row level security;
 
 -- Public read, Admin write
 create policy "Public can read memories" on public.memories for select using (true);
 create policy "Authenticated can modify memories" on public.memories for all to authenticated using (auth.role() = 'authenticated');
+
+create policy "Public can read site content" on public.site_content for select using (true);
+create policy "Authenticated can modify site content" on public.site_content for all to authenticated using (auth.role() = 'authenticated');
 
 -- Storage Bucket for photos
 insert into storage.buckets (id, name, public) values ('memory-photos', 'memory-photos', true) on conflict do nothing;

@@ -208,6 +208,7 @@ class SupabaseService {
       fallbackGradient: row.fallback_gradient,
       progress: row.progress !== null ? row.progress : undefined,
       isTop10: row.is_top_10 !== null ? row.is_top_10 : undefined,
+      sortOrder: row.is_top_10 !== null ? row.is_top_10 : undefined,
       isFavorite: row.is_favorite,
       isInWatchlist: row.is_in_watchlist,
       isSecret: row.is_secret,
@@ -366,29 +367,51 @@ class SupabaseService {
   }
 
   // 4b. SAVE STORYLINE ORDER (MANUAL ORDERING)
-  public async saveStorylineOrder(orderedIds: string[]): Promise<{ success: boolean; error: Error | null }> {
+  public async saveStorylineOrder(
+    orderedIds: string[],
+    orderedStories?: MemoryItem[]
+  ): Promise<{ success: boolean; error: Error | null }> {
     if (!supabase || !isSupabaseConfigured()) {
       return { success: false, error: new Error('Supabase client is not configured.') };
     }
 
     try {
-      // 1. Update each memory row with its new 1-based index (is_top_10)
-      const updates = orderedIds.map((id, index) =>
-        supabase!
-          .from('memories')
-          .update({ is_top_10: index + 1 })
-          .eq('id', id)
-      );
+      // 1. Update each memory row with its new 1-based index in is_top_10
+      for (let i = 0; i < orderedIds.length; i++) {
+        const id = orderedIds[i];
+        const newRank = i + 1;
 
-      const results = await Promise.all(updates);
-      const failed = results.find((r) => r.error);
-      if (failed && failed.error) {
-        throw failed.error;
+        const { data, error } = await supabase!
+          .from('memories')
+          .update({ is_top_10: newRank })
+          .eq('id', id)
+          .select('id');
+
+        if (error) {
+          throw error;
+        }
+
+        // If 0 rows were updated, this story row is not yet in Supabase.
+        // Insert it now so that its content and new rank are permanently stored!
+        if (!data || data.length === 0) {
+          const storyItem = orderedStories?.find((s) => s.id === id);
+          if (storyItem) {
+            await this.createMemory({
+              ...storyItem,
+              isTop10: newRank,
+              sortOrder: newRank,
+            });
+          }
+        }
       }
 
-      // 2. Persist storyline_custom_order into site_content
-      const jsonValue = JSON.stringify(orderedIds);
-      await this.updateSiteContent('storyline_custom_order', jsonValue, 'sections');
+      // 2. Persist storyline_custom_order into site_content table if it exists
+      try {
+        const jsonValue = JSON.stringify(orderedIds);
+        await this.updateSiteContent('storyline_custom_order', jsonValue, 'sections');
+      } catch (siteErr) {
+        console.info('Notice: site_content table not available, using memories.is_top_10 as primary rank.');
+      }
 
       return { success: true, error: null };
     } catch (e) {
