@@ -221,6 +221,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={toggleSearch}
                 className="w-10 h-10 text-[#FFFFFF] hover:text-[#B3B3B3] transition-colors rounded-full hover:bg-[#181818] cursor-pointer flex items-center justify-center"
                 aria-label="Search memories"
+                aria-expanded={isSearchOpen}
               >
                 <Search className="w-4 h-4" />
               </button>
@@ -257,6 +258,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setIsNotificationsOpen((prev) => !prev)}
               className="w-10 h-10 text-[#FFFFFF] hover:text-[#B3B3B3] transition-colors rounded-full hover:bg-[#181818] relative cursor-pointer flex items-center justify-center"
               aria-label="Notifications"
+              aria-expanded={isNotificationsOpen}
+              aria-haspopup="dialog"
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
@@ -275,7 +278,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                   )}
                 </div>
                 <div className="max-h-64 overflow-y-auto divide-y divide-[#181818]">
-                  {notifications.map((n) => (
+                  {notifications.length === 0 ? (
+                    <div className="px-4 py-8 text-center">
+                      <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+                        <Bell className="h-4 w-4 text-[#808080]" />
+                      </div>
+                      <p className="font-medium text-[#FFFFFF]">You're all caught up</p>
+                      <p className="mt-1 text-[11px] text-[#808080]">New universe updates will appear here.</p>
+                    </div>
+                  ) : notifications.map((n) => (
                     <div
                       key={n.id}
                       onClick={() => {
@@ -304,6 +315,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setIsProfileMenuOpen((prev) => !prev)}
               className="flex items-center gap-1.5 p-1 rounded hover:bg-[#181818] transition-colors cursor-pointer"
               aria-label="User Profile"
+              aria-expanded={isProfileMenuOpen}
+              aria-haspopup="menu"
             >
               <div
                 className="w-8 h-8 rounded-lg bg-[#E50914] overflow-hidden flex items-center justify-center text-sm font-bold text-[#FFFFFF] shadow ring-1 ring-white/20"
