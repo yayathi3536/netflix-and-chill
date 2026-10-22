@@ -1,18 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Heart,
-  Sparkles,
   Download,
   RotateCcw,
   Film,
-  Compass,
-  CheckCircle,
-  Clock,
   Database,
   Lock,
   Shield,
   AlertCircle,
-  CheckCircle2,
   Loader2,
   Info,
 } from 'lucide-react';
@@ -42,6 +37,7 @@ import { SurpriseModal } from './components/SurpriseModal';
 import { ConstellationSection } from './components/ConstellationSection';
 import { AuthScreen } from './components/AuthScreen';
 import ProfileSelect from './components/ProfileSelect';
+import { MyListView } from './components/MyListView';
 import { TRACKS } from './data/tracks';
 import { romanticAudio } from './utils/romanticAudio';
 import { hasValidVideo, isLetterItem } from './utils/mediaHelpers';
@@ -89,9 +85,6 @@ export default function App() {
   const authorizedProfiles = useMemo(() => {
     return storageService.getAuthorizedProfiles(currentUser?.id, currentUser?.email, isAdmin);
   }, [profiles, currentUser, isAdmin]);
-
-  // Places filter tab state
-  const [placesFilter, setPlacesFilter] = useState<'all' | 'visited' | 'bucket-list'>('all');
 
   useEffect(() => {
     // 1. Load initial profiles and notifications
@@ -449,11 +442,10 @@ export default function App() {
     return memories.filter((m) => m.category === 'little-things');
   }, [memories]);
 
-  const placesListItems = useMemo(() => {
-    const base = memories.filter((m) => m.category === 'places-list');
-    if (placesFilter === 'all') return base;
-    return base.filter((p) => p.listStatus === placesFilter);
-  }, [memories, placesFilter]);
+  // Only legacy Bucket List entries are visible here; Visited records remain stored untouched.
+  const bucketListItems = useMemo(() => {
+    return memories.filter((m) => m.category === 'places-list' && m.listStatus === 'bucket-list');
+  }, [memories]);
 
   const secretVaultItems = useMemo(() => {
     return memories.filter((m) => m.category === 'secret-vault' || m.isSecret);
@@ -826,11 +818,11 @@ export default function App() {
                   )}
 
                   {/* ROW 5: MY LIST: PLACES & EXPERIENCES TOGETHER */}
-                  {placesListItems.length > 0 && (
+                  {bucketListItems.length > 0 && (
                     <CarouselRow
-                      title={siteContent.section_places_title || "Memories Worth Rewatching: Places & Adventures"}
-                      subtitle={siteContent.section_places_sub || "Our travel passport & dream bucket list"}
-                      items={placesListItems}
+                      title="Our Bucket List"
+                      subtitle="Dreams and adventures we still want to experience together."
+                      items={bucketListItems}
                       onPlay={(m) => handlePlayMemory(m)}
                       onOpenInfo={(m) => handleOpenItem(m)}
                       onToggleWatchlist={handleToggleWatchlist}
@@ -987,75 +979,18 @@ export default function App() {
               </div>
             )}
 
-            {/* TAB: PLACES & LIST (Interactive Travel Board) */}
+            {/* TAB: MY LIST — Bucket List, Things to Do Together, and Our Watchlist */}
             {activeTab === 'places-list' && (
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                  <div>
-                    <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
-                      <Compass className="w-3.5 h-3.5" />
-                      <span>MY LIST & EXPEDITIONS</span>
-                    </div>
-                    <h1 className="font-bebas text-4xl sm:text-6xl text-[#FFFFFF] font-black tracking-wider uppercase">
-                      Places & Experiences Together
-                    </h1>
-                    <p className="text-xs sm:text-sm text-[#B3B3B3] max-w-2xl mt-1.5">
-                      Our favorite shared adventures and future dream destinations.
-                    </p>
-                  </div>
-
-                  {/* Filter Controls */}
-                  <div className="flex items-center gap-1 p-1 bg-[#141414] rounded border border-[#808080]/30 shrink-0">
-                    <button
-                      onClick={() => setPlacesFilter('all')}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors cursor-pointer ${
-                        placesFilter === 'all'
-                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
-                          : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
-                      }`}
-                    >
-                      All Places ({memories.filter((m) => m.category === 'places-list').length})
-                    </button>
-                    <button
-                      onClick={() => setPlacesFilter('visited')}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors flex items-center gap-1 cursor-pointer ${
-                        placesFilter === 'visited'
-                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
-                          : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
-                      }`}
-                    >
-                      <CheckCircle className="w-3 h-3 text-[#FFFFFF]" />
-                      <span>Visited</span>
-                    </button>
-                    <button
-                      onClick={() => setPlacesFilter('bucket-list')}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors flex items-center gap-1 cursor-pointer ${
-                        placesFilter === 'bucket-list'
-                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
-                          : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
-                      }`}
-                    >
-                      <Clock className="w-3 h-3 text-[#FFFFFF]" />
-                      <span>Bucket List</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {placesListItems.map((p) => (
-                    <MovieCard
-                      key={p.id}
-                      memory={p}
-                      onPlay={(mem) => handlePlayMemory(mem)}
-                      onOpenInfo={(mem) => handleOpenItem(mem)}
-                      onToggleWatchlist={handleToggleWatchlist}
-                      onToggleFavorite={handleToggleFavorite}
-                      onUnlockVault={(mem) => setSecretVaultMemory(mem)}
-                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
-                    />
-                  ))}
-                </div>
-              </div>
+              <MyListView
+                memories={bucketListItems}
+                isAdmin={isAdmin}
+                onEditMemory={handleOpenEditMemoryModal}
+                onPlayMemory={handlePlayMemory}
+                onOpenInfo={handleOpenItem}
+                onToggleWatchlist={handleToggleWatchlist}
+                onToggleFavorite={handleToggleFavorite}
+                onUnlockVault={(mem) => setSecretVaultMemory(mem)}
+              />
             )}
 
             {/* TAB: SECRET VAULT */}

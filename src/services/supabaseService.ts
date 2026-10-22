@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from './supabaseClient';
-import { MemoryItem, Episode, CouponItem, SiteContentMap } from '../types';
+import { MemoryItem, Episode, CouponItem, SiteContentMap, MyListItem, MyListItemInput, MyListCollection, MyListMediaType } from '../types';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 
 // DATABASE ROW TYPE MAPPING
@@ -58,6 +58,34 @@ interface SiteContentRow {
   section?: string;
   updated_at?: string;
 }
+
+interface MyListDbRow {
+  id: string;
+  collection: MyListCollection;
+  title: string;
+  description: string | null;
+  notes: string | null;
+  target_date: string | null;
+  status: string;
+  media_type: MyListMediaType | null;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+const mapMyListRow = (row: MyListDbRow): MyListItem => ({
+  id: row.id,
+  collection: row.collection,
+  title: row.title,
+  description: row.description,
+  notes: row.notes,
+  targetDate: row.target_date,
+  status: row.status,
+  mediaType: row.media_type,
+  sortOrder: row.sort_order ?? 0,
+  createdAt: row.created_at,
+  updatedAt: row.updated_at,
+});
 
 export class SupabaseSchemaMissingError extends Error {
   public code = 'PGRST205';
@@ -418,6 +446,60 @@ class SupabaseService {
       console.warn('Could not save storyline order to Supabase:', (e as Error).message || e);
       return { success: false, error: e as Error };
     }
+  }
+
+
+  // MY LIST: shared Bucket List additions, activities, and watchlist entries.
+  public async fetchMyListItems(): Promise<MyListItem[]> {
+    if (!supabase || !isSupabaseConfigured()) {
+      throw new Error('Supabase is not configured. My List requires a cloud connection.');
+    }
+    const { data, error } = await supabase
+      .from('my_list_items')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true });
+    if (error) throw error;
+    return ((data || []) as unknown as MyListDbRow[]).map(mapMyListRow);
+  }
+
+  public async createMyListItem(input: MyListItemInput): Promise<MyListItem> {
+    if (!supabase || !isSupabaseConfigured()) throw new Error('Supabase is not configured.');
+    const { data, error } = await supabase.from('my_list_items').insert({
+      collection: input.collection,
+      title: input.title.trim(),
+      description: input.description || null,
+      notes: input.notes || null,
+      target_date: input.targetDate || null,
+      status: input.status,
+      media_type: input.mediaType || null,
+      sort_order: input.sortOrder ?? 0,
+    }).select('*').single();
+    if (error) throw error;
+    return mapMyListRow(data as unknown as MyListDbRow);
+  }
+
+  public async updateMyListItem(id: string, updates: Partial<MyListItemInput>): Promise<MyListItem> {
+    if (!supabase || !isSupabaseConfigured()) throw new Error('Supabase is not configured.');
+    const dbUpdates: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    if (updates.collection !== undefined) dbUpdates.collection = updates.collection;
+    if (updates.title !== undefined) dbUpdates.title = updates.title.trim();
+    if (updates.description !== undefined) dbUpdates.description = updates.description || null;
+    if (updates.notes !== undefined) dbUpdates.notes = updates.notes || null;
+    if (updates.targetDate !== undefined) dbUpdates.target_date = updates.targetDate || null;
+    if (updates.status !== undefined) dbUpdates.status = updates.status;
+    if (updates.mediaType !== undefined) dbUpdates.media_type = updates.mediaType || null;
+    if (updates.sortOrder !== undefined) dbUpdates.sort_order = updates.sortOrder;
+    const { data, error } = await supabase.from('my_list_items').update(dbUpdates).eq('id', id).select('*').single();
+    if (error) throw error;
+    return mapMyListRow(data as unknown as MyListDbRow);
+  }
+
+  public async deleteMyListItem(id: string): Promise<void> {
+    if (!supabase || !isSupabaseConfigured()) throw new Error('Supabase is not configured.');
+    const { data, error } = await supabase.from('my_list_items').delete().eq('id', id).select('id').single();
+    if (error) throw error;
+    if (!data) throw new Error('No My List item was deleted. It may no longer exist or you may not have permission.');
   }
 
   /**
