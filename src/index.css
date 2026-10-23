@@ -218,9 +218,9 @@ button, input, .card, [class*="rounded"] {
   --c-accent: #E50914;
 }
 
-.text-\\[\\#B3B3B3\\] { color: #a3a3a3 !important; }
-.text-\\[\\#808080\\] { color: #737373 !important; }
-.bg-\\[\\#181818\\]  { background: #141414 !important; }
-.bg-\\[\\#141414\\]  { background: #141414 !important; }
-.border-\\[\\#181818\\] { border-color: rgba(255,255,255,0.08) !important; }
-.border-\\[\\#808080\\]\\/30 { border-color: rgba(255,255,255,0.1) !important; }
+.text-\[\#B3B3B3\] { color: #a3a3a3 !important; }
+.text-\[\#808080\] { color: #737373 !important; }
+.bg-\[\#181818\]  { background: #141414 !important; }
+.bg-\[\#141414\]  { background: #141414 !important; }
+.border-\[\#181818\] { border-color: rgba(255,255,255,0.08) !important; }
+.border-\[\#808080\]\/30 { border-color: rgba(255,255,255,0.1) !important; }
