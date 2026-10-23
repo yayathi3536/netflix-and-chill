@@ -54,7 +54,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
     : memory;
 
   return (
-    <div className="relative w-full h-[78vh] sm:h-[85vh] min-h-[480px] sm:min-h-[580px] max-h-[880px] overflow-hidden select-none bg-[#000000]">
+    <div className="relative w-full h-[60vh] sm:h-[70vh] min-h-[420px] max-h-[720px] overflow-hidden select-none bg-[#000000]">
       {/* Background Media with subtle Ken Burns cinematic movement */}
       <div className="absolute inset-0 w-full h-full animate-ken-burns">
         <VisualArt
@@ -92,14 +92,12 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           </div>
 
           {/* Cinematic Title */}
-          <h1 className="font-bebas text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-wider text-[#FFFFFF] font-black leading-none uppercase drop-shadow-2xl break-words">
+          <h1 className="font-bebas text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-wider text-[#FFFFFF] font-black leading-none uppercase drop-shadow-2xl break-words line-clamp-2">
             {displayTitle}
           </h1>
 
           {/* Clean Netflix Metadata */}
           <div className="flex flex-wrap items-center gap-2 text-[11px] sm:text-xs text-[#B3B3B3] font-medium">
-            <span className="text-[#FFFFFF] font-bold">{memory.matchScore || 99}% Match</span>
-            <span aria-hidden="true" className="text-[#808080]">·</span>
             <span>{memory.year || '2024'}</span>
             <span aria-hidden="true" className="text-[#808080]">·</span>
             <span className="border border-[#808080]/60 px-1.5 py-0.2 rounded text-[10px] text-[#FFFFFF]">
@@ -107,10 +105,6 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             </span>
             <span aria-hidden="true" className="text-[#808080]">·</span>
             <span>{memory.duration || 'Forever'}</span>
-            <span aria-hidden="true" className="text-[#808080] hidden xs:inline">·</span>
-            <span className="border border-[#808080]/60 px-1.5 py-0.2 rounded text-[10px] font-bold text-[#FFFFFF] hidden xs:inline">
-              Ultra HD 4K
-            </span>
           </div>
 
           {/* Readable Description */}
@@ -147,32 +141,6 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               <span>More Info</span>
             </button>
 
-            {/* My List Quick Toggle */}
-            <button
-              onClick={() => onToggleWatchlist(memory.id)}
-              className="w-11 h-11 rounded-md bg-[#181818]/90 hover:bg-white/10 border border-white/20 text-[#FFFFFF] transition-all cursor-pointer active:scale-95 flex items-center justify-center min-h-[44px] min-w-[44px]"
-              title={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
-              aria-label="Toggle My List"
-            >
-              {memory.isInWatchlist ? (
-                <Check className="w-5 h-5 text-[#E50914]" />
-              ) : (
-                <Plus className="w-5 h-5 text-[#FFFFFF]" />
-              )}
-            </button>
-
-            {/* Admin-Only Edit & Image Upload Trigger */}
-            {isAdmin && onEditHero && (
-              <button
-                onClick={onEditHero}
-                className="flex items-center gap-1.5 px-3 py-2 bg-[#181818] hover:bg-white/10 text-[#FFFFFF] font-medium text-xs rounded-md border border-white/20 transition-all active:scale-95 cursor-pointer min-h-[44px]"
-                title="Admin only: Change hero image & text"
-              >
-                <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
-                <span className="hidden sm:inline">Change Hero Content</span>
-                <span className="sm:hidden">Edit</span>
-              </button>
-            )}
           </div>
         </div>
 
