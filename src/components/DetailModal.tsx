@@ -107,7 +107,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
         </button>
 
         {/* Direct, Full-Clarity Image Display at Top */}
-        <div className="relative aspect-video min-h-[220px] sm:min-h-0 w-full overflow-hidden bg-[#000000] group">
+        <div className="relative aspect-[21/9] w-full overflow-hidden bg-black">
           <VisualArt
             id={memory.id}
             category={memory.category}
@@ -139,7 +139,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
           {/* Floating Title & Actions on Bottom Edge */}
           <div className="absolute bottom-3 sm:bottom-5 left-3 sm:left-6 right-3 sm:right-6 flex items-end justify-between gap-4">
             <div className="space-y-1.5 sm:space-y-2.5 max-w-2xl w-full">
-              <h2 className="text-3xl font-bold tracking-tight text-[#FFFFFF] leading-tight drop-shadow-lg break-words">
+              <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight leading-tight drop-shadow-lg">
                 {memory.title}
               </h2>
               {memory.subtitle && (
@@ -172,47 +172,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                   </button>
                 )}
 
-                {/* My List Button */}
-                <button
-                  onClick={() => onToggleWatchlist(memory.id)}
-                  className="w-11 h-11 rounded-full bg-[#141414]/90 hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-colors active:scale-90 cursor-pointer flex items-center justify-center min-h-[44px] min-w-[44px]"
-                  title={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
-                >
-                  {memory.isInWatchlist ? (
-                    <Check className="w-4 h-4 text-[#E50914] stroke-[2.5]" />
-                  ) : (
-                    <Plus className="w-4 h-4 stroke-[2.5] text-[#FFFFFF]" />
-                  )}
-                </button>
-
-                {onToggleFavorite && (
-                  <button
-                    onClick={() => onToggleFavorite(memory.id)}
-                    className="p-2.5 rounded-full bg-[#141414]/90 hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-colors active:scale-90 cursor-pointer"
-                    title="Favorite"
-                  >
-                    <Heart
-                      className={`w-4 h-4 ${
-                        memory.isFavorite ? 'text-[#E50914] fill-[#E50914]' : 'text-[#FFFFFF]'
-                      }`}
-                    />
-                  </button>
-                )}
-
-                {/* STRICTLY ADMIN-ONLY: Change / Upload Image & Edit Details */}
-                {currentUser && onEditMemory && (
-                  <button
-                    onClick={() => {
-                      onEditMemory(memory);
-                      onClose();
-                    }}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] text-xs font-bold rounded shadow transition-colors cursor-pointer active:scale-95"
-                    title="Admin only: Change or upload image & edit details"
-                  >
-                    <UploadCloud className="w-3.5 h-3.5 text-[#FFFFFF]" />
-                    <span>Change / Upload Image</span>
-                  </button>
-                )}
+                {/* Admin edit controls remain in the metadata panel below. */}
               </div>
             </div>
           </div>
