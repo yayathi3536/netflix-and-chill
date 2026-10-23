@@ -1,244 +1,108 @@
 @import "tailwindcss";
 
-@theme {
-  --spacing-1: 4px;
-  --spacing-2: 8px;
-  --spacing-3: 12px;
-  --spacing-4: 16px;
-  --spacing-6: 24px;
-  --spacing-8: 32px;
-  --spacing-12: 48px;
-  --spacing-16: 64px;
-}
-
 @layer base {
   :root {
-    --space-1: 4px;
-    --space-2: 8px;
-    --space-3: 12px;
-    --space-4: 16px;
-    --space-6: 24px;
-    --space-8: 32px;
-    --space-12: 48px;
-    --space-16: 64px;
-    --netflix-red: #E50914;
-    --netflix-red-hover: #b80710;
-    --netflix-black: #000000;
-    --netflix-dark-canvas: #0a0a0a;
-    --netflix-surface-1: #141414;
-    --netflix-surface-2: #181818;
-    --netflix-surface-3: #222222;
-    --netflix-border-subtle: rgba(255, 255, 255, 0.08);
-    --netflix-border-hover: rgba(255, 255, 255, 0.22);
-    --netflix-mid-gray: #808080;
-    --netflix-light-gray: #B3B3B3;
-    --netflix-white: #FFFFFF;
+    /* Netflix exact tokens */
+    --nf-bg: #000000;
+    --nf-surface: #141414;
+    --nf-surface-2: #181818;
+    --nf-surface-3: #232323;
+    --nf-red: #E50914;
+    --nf-red-hover: #f6121d;
+    --nf-white: #ffffff;
+    --nf-gray-1: #b3b3b3;
+    --nf-gray-2: #808080;
+    --nf-gray-3: #404040;
+    --nf-border: rgba(255, 255, 255, 0.1);
+    --nf-border-hover: rgba(255, 255, 255, 0.3);
+    --nf-radius: 4px;
+    --nf-transition: 200ms ease;
+  }
+
+  html {
+    background: var(--nf-bg);
+    scroll-behavior: smooth;
   }
 
   body {
-    background-color: #000000;
-    color: #FFFFFF;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--nf-bg);
+    color: var(--nf-white);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
-}
 
-.font-bebas {
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 0.05em;
-}
-
-.font-serif-romantic {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-}
-
-/* Custom Scrollbars - Strict Netflix Dark Style */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.dark-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-.dark-scrollbar::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-.dark-scrollbar::-webkit-scrollbar-thumb {
-  background: #333333;
-  border-radius: 9999px;
-}
-.dark-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555555;
-}
-
-/* Pure Netflix Cinematic Overlays */
-.hero-netflix-overlay {
-  background: linear-gradient(
-    77deg,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.78) 38%,
-    rgba(0, 0, 0, 0.35) 70%,
-    transparent 100%
-  );
-}
-
-.hero-netflix-scrim {
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.15) 35%,
-    rgba(0, 0, 0, 0.75) 75%,
-    #000000 100%
-  );
-}
-
-/* Netflix Card Elevation & Hover */
-.netflix-card-shadow {
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.75), 0 2px 6px -1px rgba(0, 0, 0, 0.5);
-}
-
-.netflix-card-hover {
-  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.85), 0 0 20px rgba(229, 9, 20, 0.15);
-}
-
-.netflix-modal-shadow {
-  box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.95), 0 0 1px 1px rgba(255, 255, 255, 0.1);
-}
-
-/* Shimmer Skeleton for Cinematic Loading */
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-.skeleton-shimmer {
-  position: relative;
-  overflow: hidden;
-  background-color: #181818;
-}
-
-.skeleton-shimmer::after {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  transform: translateX(-100%);
-  background-image: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0,
-    rgba(255, 255, 255, 0.04) 20%,
-    rgba(255, 255, 255, 0.08) 60%,
-    rgba(255, 255, 255, 0)
-  );
-  animation: shimmer 2s infinite;
-  content: '';
-}
-
-/* Ken Burns subtle cinematic zoom */
-@keyframes kenburns {
-  0% { transform: scale(1) translate(0, 0); }
-  50% { transform: scale(1.04) translate(-0.4%, -0.4%); }
-  100% { transform: scale(1) translate(0, 0); }
-}
-
-.animate-ken-burns {
-  animation: kenburns 26s ease-in-out infinite alternate;
-}
-
-
-/* Cohesive streaming-service polish */
-@layer base {
-  html {
-    background: #000;
-    scroll-behavior: smooth;
+  * {
+    border-radius: var(--nf-radius);
   }
 
   ::selection {
-    background: rgba(229, 9, 20, 0.85);
+    background: var(--nf-red);
     color: #fff;
   }
 
-  button,
-  a,
-  input {
+  button, a, input {
     -webkit-tap-highlight-color: transparent;
+    transition: background-color var(--nf-transition),
+                color var(--nf-transition),
+                border-color var(--nf-transition),
+                opacity var(--nf-transition),
+                transform var(--nf-transition);
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-
-/* Step 9: calmer global typography and radius */
-/* Kill over-aggressive caps globally */
+/* Logo only */
 .font-bebas {
   font-family: 'Bebas Neue', sans-serif;
   letter-spacing: 0.05em;
 }
 
-/* Sentence-case headings feel premium */
-h1, h2, h3, h4 {
-  text-transform: none;
-  letter-spacing: -0.01em;
+/* Scrollbars */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Netflix card */
+.nf-card {
+  transition: transform var(--nf-transition), box-shadow var(--nf-transition);
+}
+.nf-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+  z-index: 10;
 }
 
-/* One consistent rounded radius */
-button, input, .card, [class*="rounded"] {
-  border-radius: 6px !important;
+/* Ken Burns */
+@keyframes kenburns {
+  0%   { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.06) translate(-1%, -1%); }
+}
+.animate-ken-burns {
+  animation: kenburns 30s ease-in-out infinite alternate;
 }
 
-/* Unify neutral grays used across components */
-:root {
-  --c-bg: #000000;
-  --c-surface: #141414;
-  --c-border: rgba(255, 255, 255, 0.1);
-  --c-text: #ffffff;
-  --c-text-2: #a3a3a3;
-  --c-text-3: #737373;
-  --c-accent: #E50914;
+/* Shimmer */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #141414 0%, #232323 50%, #141414 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
 }
 
-.text-\[\#B3B3B3\] { color: #a3a3a3 !important; }
-.text-\[\#808080\] { color: #737373 !important; }
-.bg-\[\#181818\]  { background: #141414 !important; }
-.bg-\[\#141414\]  { background: #141414 !important; }
-.border-\[\#181818\] { border-color: rgba(255,255,255,0.08) !important; }
-.border-\[\#808080\]\/30 { border-color: rgba(255,255,255,0.1) !important; }
-
-/* Fix 6: universal media and overlay containment safety net */
-/* Guarantee image containers clip their content */
+/* Force-fix overlap + clip */
 [class*="aspect-"] {
   position: relative;
   overflow: hidden;
 }
 
-/* Guarantee overlay text sits above images */
-[class*="absolute"][class*="bottom-0"] {
-  z-index: 10;
-}
-
-/* Guarantee card images never escape their card */
-.netflix-card-shadow {
-  position: relative;
-  overflow: hidden;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
