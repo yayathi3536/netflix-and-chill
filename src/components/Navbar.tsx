@@ -123,8 +123,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setActiveTab('home')}
               className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'home'
-                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
-                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                  ? 'text-white font-medium'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               Home
@@ -133,8 +133,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setActiveTab('our-story')}
               className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'our-story'
-                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
-                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                  ? 'text-white font-medium'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               Series
@@ -143,8 +143,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setActiveTab('memories')}
               className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'memories'
-                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
-                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                  ? 'text-white font-medium'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               Movies
@@ -153,8 +153,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setActiveTab('scrapbook')}
               className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'scrapbook'
-                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
-                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                  ? 'text-white font-medium'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               Scrapbook
@@ -163,8 +163,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setActiveTab('little-things')}
               className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'little-things'
-                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
-                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                  ? 'text-white font-medium'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               Quirks
@@ -173,8 +173,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setActiveTab('places-list')}
               className={`whitespace-nowrap transition-colors py-1 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'places-list'
-                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
-                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                  ? 'text-white font-medium'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               My List
@@ -183,8 +183,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setActiveTab('secret-vault')}
               className={`whitespace-nowrap transition-colors py-1 flex items-center gap-1.5 cursor-pointer text-xs lg:text-sm ${
                 activeTab === 'secret-vault'
-                  ? 'text-[#FFFFFF] font-bold border-b-2 border-[#E50914]'
-                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                  ? 'text-white font-medium'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               <Lock className="w-3.5 h-3.5 text-[#E50914]" />
@@ -411,78 +411,26 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* Mobile Navigation Strip */}
-      <div className="md:hidden flex items-center gap-1.5 px-3 py-1.5 border-t border-white/10 text-xs font-medium text-[#B3B3B3] overflow-x-auto no-scrollbar bg-[#000000]/95 backdrop-blur-md scroll-smooth">
-        <button
-          onClick={() => setActiveTab('home')}
-          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
-            activeTab === 'home'
-              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF] hover:bg-white/5'
-          }`}
-        >
-          Home
-        </button>
-        <button
-          onClick={() => setActiveTab('our-story')}
-          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
-            activeTab === 'our-story'
-              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF] hover:bg-white/5'
-          }`}
-        >
-          Series
-        </button>
-        <button
-          onClick={() => setActiveTab('memories')}
-          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
-            activeTab === 'memories'
-              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF] hover:bg-white/5'
-          }`}
-        >
-          Movies
-        </button>
-        <button
-          onClick={() => setActiveTab('scrapbook')}
-          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
-            activeTab === 'scrapbook'
-              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF] hover:bg-white/5'
-          }`}
-        >
-          Scrapbook
-        </button>
-        <button
-          onClick={() => setActiveTab('little-things')}
-          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
-            activeTab === 'little-things'
-              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF] hover:bg-white/5'
-          }`}
-        >
-          Quirks
-        </button>
-        <button
-          onClick={() => setActiveTab('places-list')}
-          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
-            activeTab === 'places-list'
-              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF] hover:bg-white/5'
-          }`}
-        >
-          My List
-        </button>
-        <button
-          onClick={() => setActiveTab('secret-vault')}
-          className={`py-2 px-3.5 rounded-md whitespace-nowrap text-[#B3B3B3] flex items-center gap-1.5 cursor-pointer transition-colors min-h-[44px] shrink-0 ${
-            activeTab === 'secret-vault'
-              ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF] hover:bg-white/5'
-          }`}
-        >
-          <Lock className="w-3.5 h-3.5 text-[#E50914]" />
-          <span>Vault</span>
-        </button>
+      <div className="md:hidden flex items-center gap-1 px-3 py-2 border-t border-white/10 text-xs font-medium overflow-x-auto no-scrollbar bg-black">
+        {[
+          { id: 'home', label: 'Home' },
+          { id: 'our-story', label: 'Series' },
+          { id: 'memories', label: 'Movies' },
+          { id: 'scrapbook', label: 'Scrapbook' },
+          { id: 'secret-vault', label: 'Vault' },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`py-2 px-3 rounded whitespace-nowrap shrink-0 transition-colors ${
+              activeTab === tab.id
+                ? 'text-white bg-white/10'
+                : 'text-neutral-400 hover:text-white'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
     </header>
   );
