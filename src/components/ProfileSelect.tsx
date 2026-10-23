@@ -256,7 +256,7 @@ export default function ProfileSelect({
                         onSelect(profile);
                       }
                     }}
-                    className={`w-full h-full rounded-lg overflow-hidden relative cursor-pointer border-2 border-white/10 group-hover:border-[#E50914] focus-visible:border-white shadow-[0_14px_45px_rgba(0,0,0,0.9)] group-hover:shadow-[0_20px_60px_rgba(229,9,20,0.45),0_0_35px_rgba(229,9,20,0.3)] transition-all duration-300 ease-out group-hover:-translate-y-2 focus:outline-none bg-[#101014]`}
+                    className={`w-full h-full rounded-lg overflow-hidden relative cursor-pointer border-2 border-white/10 group-hover:border-[#E50914] focus-visible:border-white shadow-[0_14px_45px_rgba(0,0,0,0.9)] group-hover:shadow-[0_20px_60px_rgba(229,9,20,0.45),0_0_35px_rgba(229,9,20,0.3)] transition-all duration-300 ease-out group-hover:scale-105 group-hover:-translate-y-2 focus:outline-none bg-[#101014]`}
                     aria-label={
                       isManageMode
                         ? `Edit profile and avatar for ${profile.name}`
@@ -405,7 +405,7 @@ export default function ProfileSelect({
                     <img
                       src={draftAvatarUrl || getProfileAvatarUrl(editingProfile)}
                       alt={draftName || 'Selected avatar preview'}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover"
                     />
                     {isUploadingAvatar && (
                       <div className="absolute inset-0 bg-black/75 flex flex-col items-center justify-center gap-1.5 backdrop-blur-xs">
@@ -428,7 +428,7 @@ export default function ProfileSelect({
                         </>
                       ) : (
                         <>
-                          <UploadCloud className="w-3.5 h-3.5 text-[#E50914] transition-transform" />
+                          <UploadCloud className="w-3.5 h-3.5 text-[#E50914] group-hover:scale-110 transition-transform" />
                           <span className="text-[11px]">Upload Photo</span>
                         </>
                       )}
@@ -564,7 +564,7 @@ export default function ProfileSelect({
                             src={avatar.url}
                             alt={avatar.name}
                             loading="lazy"
-                            className="w-full h-full object-contain select-none"
+                            className="w-full h-full object-cover select-none"
                           />
                           {isSelected && (
                             <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#E50914] text-white flex items-center justify-center shadow-lg">
