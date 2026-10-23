@@ -421,10 +421,10 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                   category={ch.category}
                   title={ch.title}
                   imageUrl={ch.backdropUrl || ch.posterUrl}
-                  fit="contain"
+                  fit="cover"
                   aspectRatio="16/9"
                   fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                  className="w-full h-full"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
 
