@@ -8,7 +8,7 @@ interface VisualArtProps {
   title: string;
   className?: string;
   imageUrl?: string;
-  fit?: 'cover' | 'contain' | 'scale-down';
+  fit?: 'cover' | 'contain' | 'scale-down' | 'auto';
   aspectRatio?: '16/9' | '3/4' | '1/1' | 'auto';
   onClick?: () => void;
 }
@@ -24,13 +24,25 @@ export const VisualArt: React.FC<VisualArtProps> = ({
   onClick,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
+  const [autoFit, setAutoFit] = useState<'cover' | 'contain'>('cover');
 
   const fitClass =
     fit === 'contain'
       ? 'object-contain'
       : fit === 'scale-down'
       ? 'object-scale-down'
+      : fit === 'auto'
+      ? (autoFit === 'contain' ? 'object-contain' : 'object-cover')
       : 'object-cover';
+
+  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
+    if (fit !== 'auto') return;
+    const image = event.currentTarget;
+    const ratio = image.naturalWidth / image.naturalHeight;
+    // Keep portrait and near-square photos complete inside landscape cards.
+    // Wide artwork retains the cinematic cover crop used by the homepage.
+    setAutoFit(ratio < 1.5 ? 'contain' : 'cover');
+  };
 
   const ratioClass =
     aspectRatio === '16/9'
@@ -63,6 +75,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
         referrerPolicy="no-referrer"
         loading="lazy"
         onError={() => setImageFailed(true)}
+        onLoad={handleImageLoad}
         onClick={onClick}
         className={`${fitClass} ${ratioClass} ${className}`.trim()}
       />
