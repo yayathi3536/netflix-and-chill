@@ -127,14 +127,6 @@ export default function ProfileSelect({
         <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-transparent to-[#000000]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(229,9,20,0.12)_0%,transparent_60%)]" />
 
-        {/* 2. SUBTLE DARK CRIMSON AMBIENT LIGHTING BEHIND PROFILE CARDS */}
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] max-w-[96vw] h-[480px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(229,9,20,0.22)_0%,rgba(180,10,25,0.10)_42%,transparent_72%)] blur-3xl opacity-90"
-        />
-        {/* Secondary softer deep crimson bloom */}
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] max-w-[80vw] h-[300px] rounded-full bg-[radial-gradient(circle,rgba(229,9,20,0.18)_0%,transparent_70%)] blur-2xl"
-        />
       </div>
 
       {/* Top Header Bar */}
@@ -197,7 +189,7 @@ export default function ProfileSelect({
                         onSelect(profile);
                       }
                     }}
-                    className={`w-full h-full rounded-2xl overflow-hidden relative cursor-pointer border-2 border-white/10 group-hover:border-[#E50914] focus-visible:border-white shadow-[0_14px_45px_rgba(0,0,0,0.9)] group-hover:shadow-[0_20px_60px_rgba(229,9,20,0.45),0_0_35px_rgba(229,9,20,0.3)] transition-all duration-300 ease-out group-hover:scale-105 group-hover:-translate-y-2 focus:outline-none bg-[#101014]`}
+                    className={`w-full h-full rounded-md overflow-hidden relative cursor-pointer border border-white/10 group-hover:border-white/40 shadow-lg transition-all duration-200 group-hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-white bg-[#141414]`}
                     aria-label={
                       isManageMode
                         ? `Edit profile and avatar for ${profile.name}`
@@ -237,7 +229,7 @@ export default function ProfileSelect({
                       }}
                       title={`Customize avatar for ${profile.name}`}
                       aria-label={`Customize avatar for ${profile.name}`}
-                      className="opacity-70 sm:opacity-0 group-hover:opacity-100 focus:opacity-100 absolute top-2 right-2 z-20 w-8 h-8 rounded-full bg-black/85 hover:bg-[#E50914] text-white border border-white/30 flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg hover:scale-110"
+                      className="opacity-0 group-hover:opacity-100 focus:opacity-100 absolute top-2 right-2 z-20 w-8 h-8 rounded-full bg-black/85 hover:bg-[#E50914] text-white border border-white/30 flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg hover:scale-110"
                     >
                       <Pencil className="w-3.5 h-3.5" />
                     </button>
@@ -246,14 +238,9 @@ export default function ProfileSelect({
 
                 {/* Profile Name & Tagline */}
                 <div className="w-full text-center mt-3 space-y-0.5 px-1">
-                  <span className="block text-sm sm:text-lg md:text-xl font-medium text-[#B3B3B3] group-hover:text-white transition-colors duration-200 truncate tracking-wide">
+                  <span className="block text-sm sm:text-base font-medium text-neutral-400 group-hover:text-white transition-colors truncate">
                     {profile.name}
                   </span>
-                  {profile.favoriteSeason && (
-                    <span className="block text-[11px] sm:text-xs text-[#737373] group-hover:text-[#a3a3a3] transition-colors duration-200 line-clamp-1 font-light">
-                      {profile.favoriteSeason}
-                    </span>
-                  )}
                 </div>
               </div>
             );
