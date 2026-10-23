@@ -806,9 +806,13 @@ class SupabaseService {
       }
 
       const map: SiteContentMap = {};
-      (data as SiteContentRow[] || []).forEach((row) => {
-        map[row.key] = row.value;
-      });
+      for (const row of (data as SiteContentRow[]) || []) {
+        if (row.key === 'hero_backdrop_url') {
+          map[row.key] = (await this.resolvePhotoUrl(row.value)) ?? row.value;
+        } else {
+          map[row.key] = row.value;
+        }
+      }
       return map;
     } catch (e) {
       console.warn('Error reading site_content:', e);
