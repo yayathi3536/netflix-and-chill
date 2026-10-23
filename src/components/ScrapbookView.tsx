@@ -96,7 +96,7 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
       </div>
 
       {/* Direct Full-Clarity Stills Grid (Images shown directly without asking to open) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6 pt-2">
         {filteredMemories.map((mem) => {
           const isVideo = hasValidVideo(mem);
 
@@ -104,10 +104,10 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
             <div
               key={mem.id}
               onClick={() => onOpenInfo(mem)}
-              className="group relative bg-[#141414] text-[#FFFFFF] rounded-xl overflow-hidden netflix-card-shadow border border-white/10 hover:border-white/30 transition-all duration-300 flex flex-col justify-between cursor-pointer select-none"
+              className="group relative bg-[#141414] text-[#FFFFFF] rounded-xl overflow-hidden shadow-lg shadow-black/30 border border-white/10 hover:border-[#E50914]/60 hover:shadow-xl hover:shadow-[#E50914]/10 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer select-none"
             >
               {/* Photo Area — Shown Directly with Full Photo Visibility */}
-              <div className="relative aspect-[16/10] sm:aspect-video w-full overflow-hidden bg-[#000000]">
+              <div className="relative aspect-[4/3] sm:aspect-video w-full overflow-hidden bg-[#080808]">
                 <VisualArt
                   id={mem.id}
                   category={mem.category}
@@ -115,9 +115,9 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
                   imageUrl={mem.posterUrl || mem.backdropUrl}
                   variant="episode"
                   focalPosition="top"
-                  fit="auto"
+                  fit="cover"
                   fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                  className="w-full h-full"
+                  className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-[1.04]"
                 />
 
                 {/* Top Badge & Admin-Only Image Upload/Change Control */}
@@ -143,7 +143,7 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
               </div>
 
               {/* Direct Caption, Date, Location & Story */}
-              <div className="p-4 space-y-2 bg-[#141414] flex-1 flex flex-col justify-between">
+              <div className="p-4 sm:p-5 space-y-2 bg-gradient-to-b from-[#171717] to-[#101010] flex-1 flex flex-col justify-between">
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-[11px] text-[#808080]">
                     <span className="flex items-center gap-1">
