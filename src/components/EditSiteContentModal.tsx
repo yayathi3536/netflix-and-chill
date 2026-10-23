@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  X,
   Save,
   CheckCircle2,
   AlertCircle,
@@ -21,6 +20,7 @@ import { storageService } from '../services/storage';
 import { supabaseService } from '../services/supabaseService';
 import { DEFAULT_SITE_CONTENT_LIST, DEFAULT_SITE_CONTENT_MAP } from '../data/defaultSiteContent';
 import { isVideoUrl } from '../utils/mediaHelpers';
+import { Drawer } from './Drawer';
 
 interface EditSiteContentModalProps {
   isOpen: boolean;
@@ -119,16 +119,14 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 overflow-y-auto dark-scrollbar bg-black/85 backdrop-blur-md flex justify-center p-3 sm:p-6 animate-in fade-in duration-200"
-      onClick={onClose}
+    <Drawer
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Admin Content & Letter Studio"
+      subtitle="Customize site content, letters, media, and sections"
+      width="lg"
     >
-      <div
-        className="relative w-full max-w-4xl bg-[#181818] rounded-xl overflow-hidden shadow-2xl border border-white/10 my-auto text-white flex flex-col max-h-[90vh]"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Modal Header */}
-        <div className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between shrink-0 bg-[#141414]">
+      <div className="flex min-h-0 flex-1 flex-col text-white">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-[#E50914] flex items-center justify-center shadow-lg shadow-[#E50914]/30">
               <Sparkles className="w-5 h-5 text-white" />
@@ -150,7 +148,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
           >
             <X className="w-5 h-5" />
           </button>
-        </div>
+
 
         {/* Section Navigation Tabs */}
         <div className="flex items-center gap-1 px-4 sm:px-6 pt-3 border-b border-white/10 bg-[#141414] overflow-x-auto dark-scrollbar shrink-0">
@@ -720,6 +718,6 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
           </div>
         </form>
       </div>
-    </div>
+    </Drawer>
   );
 };
