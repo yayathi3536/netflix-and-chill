@@ -113,7 +113,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
             category={memory.category}
             title={memory.title}
             imageUrl={primaryImageUrl}
-            variant="episode"
+            variant="landscape"
             focalPosition="top"
             fit="auto"
             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
@@ -134,10 +134,10 @@ export const DetailModal: React.FC<DetailModalProps> = ({
           )}
 
           {/* Gradient covering lower half on desktop, 70% on mobile */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-4/5 sm:h-1/2 bg-gradient-to-t from-[#181818] via-[#181818]/60 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-4/5 sm:h-1/2 bg-gradient-to-t from-[#181818] via-[#181818]/60 to-transparent z-10" />
 
           {/* Floating Title & Actions on Bottom Edge */}
-          <div className="absolute bottom-3 sm:bottom-5 left-3 sm:left-6 right-3 sm:right-6 flex items-end justify-between gap-4">
+          <div className="absolute bottom-3 sm:bottom-5 left-3 sm:left-6 right-3 sm:right-6 z-20 flex items-end justify-between gap-4">
             <div className="space-y-1.5 sm:space-y-2.5 max-w-2xl w-full">
               <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight leading-tight drop-shadow-lg">
                 {memory.title}
