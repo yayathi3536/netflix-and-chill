@@ -139,7 +139,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
           {/* Floating Title & Actions on Bottom Edge */}
           <div className="absolute bottom-3 sm:bottom-5 left-3 sm:left-6 right-3 sm:right-6 flex items-end justify-between gap-4">
             <div className="space-y-1.5 sm:space-y-2.5 max-w-2xl w-full">
-              <h2 className="font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#FFFFFF] font-black tracking-wider leading-none drop-shadow-lg uppercase break-words">
+              <h2 className="text-3xl font-bold tracking-tight text-[#FFFFFF] leading-tight drop-shadow-lg break-words">
                 {memory.title}
               </h2>
               {memory.subtitle && (
