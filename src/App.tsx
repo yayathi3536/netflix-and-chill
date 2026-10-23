@@ -809,63 +809,6 @@ export default function App() {
                     }}
                   />
 
-                  {/* ROW 4: COLLECTION: LITTLE THINGS I LOVE ABOUT YOU */}
-                  {littleThingsCollection.length > 0 && (
-                    <CarouselRow
-                      title={siteContent.section_little_things_title || "Little Things I Love About You"}
-                      subtitle={siteContent.section_little_things_sub || "Micro-moments that steal my heart every single day"}
-                      items={littleThingsCollection}
-                      onPlay={(m) => handlePlayMemory(m)}
-                      onOpenInfo={(m) => handleOpenItem(m)}
-                      onToggleWatchlist={handleToggleWatchlist}
-                      onToggleFavorite={handleToggleFavorite}
-                      onUnlockVault={(m) => setSecretVaultMemory(m)}
-                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
-                      onEditSection={isAdmin ? () => {
-                        setEditSiteContentInitialTab('sections');
-                        setIsEditSiteContentOpen(true);
-                      } : undefined}
-                    />
-                  )}
-
-                  {/* ROW 5: MY LIST: PLACES & EXPERIENCES TOGETHER */}
-                  {placesListItems.length > 0 && (
-                    <CarouselRow
-                      title={siteContent.section_places_title || "Memories Worth Rewatching: Places & Adventures"}
-                      subtitle={siteContent.section_places_sub || "Our travel passport & dream bucket list"}
-                      items={placesListItems}
-                      onPlay={(m) => handlePlayMemory(m)}
-                      onOpenInfo={(m) => handleOpenItem(m)}
-                      onToggleWatchlist={handleToggleWatchlist}
-                      onToggleFavorite={handleToggleFavorite}
-                      onUnlockVault={(m) => setSecretVaultMemory(m)}
-                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
-                      onEditSection={isAdmin ? () => {
-                        setEditSiteContentInitialTab('sections');
-                        setIsEditSiteContentOpen(true);
-                      } : undefined}
-                    />
-                  )}
-
-                  {/* ROW 6: HIDDEN EPISODES: PERSONAL SURPRISES & LETTERS */}
-                  {secretVaultItems.length > 0 && (
-                    <CarouselRow
-                      title={siteContent.section_vault_title || "Hidden Episodes: Secret Vault & Letters"}
-                      subtitle={siteContent.section_vault_sub || "Locked confidential notes for your eyes only"}
-                      items={secretVaultItems}
-                      onPlay={(m) => handlePlayMemory(m)}
-                      onOpenInfo={(m) => handleOpenItem(m)}
-                      onToggleWatchlist={handleToggleWatchlist}
-                      onToggleFavorite={handleToggleFavorite}
-                      onUnlockVault={(m) => setSecretVaultMemory(m)}
-                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
-                      onEditSection={isAdmin ? () => {
-                        setEditSiteContentInitialTab('sections');
-                        setIsEditSiteContentOpen(true);
-                      } : undefined}
-                    />
-                  )}
-
                   {/* CELESTIAL CONSTELLATION MAP SECTION */}
                   <ConstellationSection
                     milestones={ourStorySeries}
