@@ -27,16 +27,27 @@ export const OpeningSplash: React.FC<OpeningSplashProps> = ({
   useEffect(() => {
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
     setPrefersReducedMotion(reduced);
-    if (reduced) return;
-
-    // Do not fail over just because GitHub Pages is slow to start the MP4.
-    // The CSS animation is used only when the browser reports a real video error.
   }, []);
 
+  // Explicitly request playback. If the browser blocks playback, show the
+  // built-in CSS animation instead of leaving a black overlay on screen.
   useEffect(() => {
-    // Reduced-motion users skip the animated intro; on video failure, continue quickly.
-    const fallbackDuration = prefersReducedMotion ? 0 : videoFailed ? 500 : durationMs;
-    const timer = window.setTimeout(handleFinish, fallbackDuration);
+    if (prefersReducedMotion || videoFailed) return;
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    const playPromise = video.play();
+    playPromise?.catch(() => {
+      setVideoFailed(true);
+    });
+  }, [prefersReducedMotion, videoFailed]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(
+      handleFinish,
+      prefersReducedMotion ? 0 : durationMs,
+    );
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape' || event.key === ' ' || event.key === 'Enter') {
@@ -50,7 +61,7 @@ export const OpeningSplash: React.FC<OpeningSplashProps> = ({
       window.clearTimeout(timer);
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [durationMs, handleFinish, prefersReducedMotion, videoFailed]);
+  }, [durationMs, handleFinish, prefersReducedMotion]);
 
   useEffect(() => {
     if (prefersReducedMotion || videoFailed) {
@@ -88,6 +99,22 @@ export const OpeningSplash: React.FC<OpeningSplashProps> = ({
             setVideoFailed(true);
           }}
         />
+      )}
+
+      {(!showVideo || !videoReady) && (
+        <div className="opening-splash-css-fallback" aria-hidden="true">
+          <div className="splash-panels-container">
+            {Array.from({ length: 11 }, (_, index) => (
+              <div key={index} className={`splash-panel splash-panel-${index + 1}`} />
+            ))}
+          </div>
+          <div className="splash-core-glow" />
+          <div className="splash-wordmark-container">
+            <h1 className="splash-title">OUR UNIVERSE</h1>
+            <p className="splash-kicker">Every moment, our story</p>
+          </div>
+          <div className="opening-splash-vignette" />
+        </div>
       )}
 
       <div className="splash-skip-hint">Tap or press Escape to skip</div>
