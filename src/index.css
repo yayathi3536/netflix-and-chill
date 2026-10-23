@@ -52,6 +52,70 @@
   }
 }
 
+/* ==========================================================================
+   NETFLIX BUTTON SYSTEM — the only 3 buttons Netflix has
+   ========================================================================== */
+
+/* Primary: white, black text — "Play" */
+.btn-nf-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 0.625rem 1.5rem;
+  border-radius: var(--nf-radius);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 40px;
+}
+.btn-nf-primary:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Secondary: translucent grey — "More Info" */
+.btn-nf-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(109, 109, 110, 0.7);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 0.625rem 1.5rem;
+  border-radius: var(--nf-radius);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 40px;
+}
+.btn-nf-secondary:hover {
+  background: rgba(109, 109, 110, 0.5);
+}
+
+/* Icon: circular — card hover actions */
+.btn-nf-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: rgba(42, 42, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  cursor: pointer;
+}
+.btn-nf-icon:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+}
+
 /* Logo only */
 .font-bebas {
   font-family: 'Bebas Neue', sans-serif;
