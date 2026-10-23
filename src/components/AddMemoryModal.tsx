@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  X,
-  Plus,
   Image as ImageIcon,
   MapPin,
   Calendar,
@@ -20,6 +18,7 @@ import { MemoryItem, MemoryCategory } from '../types';
 import { supabaseService, checkIsAdmin } from '../services/supabaseService';
 import { isSupabaseConfigured } from '../services/supabaseClient';
 import { User } from '@supabase/supabase-js';
+import { Drawer } from './Drawer';
 
 interface AddMemoryModalProps {
   isOpen: boolean;
@@ -308,25 +307,14 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
   const isSupabaseReady = isSupabaseConfigured();
 
   return (
-    <div
-      className="fixed inset-0 z-50 overflow-y-auto dark-scrollbar bg-black/85 backdrop-blur-md flex justify-center p-3 sm:p-6 animate-in fade-in duration-200"
-      onClick={onClose}
+    <Drawer
+      isOpen={isOpen}
+      onClose={onClose}
+      title={memoryToEdit ? 'Edit Memory' : 'Add Memory'}
+      subtitle={isSupabaseReady ? 'Syncs to Supabase' : 'Local storage'}
+      width="lg"
     >
-      <div
-        className="relative w-full max-w-2xl bg-[#181818] rounded-xl overflow-hidden shadow-2xl border border-white/10 my-auto text-white p-4 sm:p-8 max-h-[92vh] overflow-y-auto dark-scrollbar"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-11 h-11 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20 min-h-[44px] min-w-[44px]"
-          aria-label="Close modal"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        {/* Modal Header */}
-        <div className="flex items-center justify-between mb-6">
+      <div className="p-5 sm:p-6 text-white">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-[#E50914] flex items-center justify-center shadow-lg shadow-[#E50914]/30">
               <Plus className="w-5 h-5 text-white" />
@@ -354,7 +342,19 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
               <span className="hidden sm:inline">Delete</span>
             </button>
           )}
-        </div>
+        {memoryToEdit && onDeleteMemory && (
+          <div className="flex justify-end mb-4">
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="p-2 text-[#E50914] hover:text-white hover:bg-[#E50914]/20 rounded transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
+              title="Delete this memory"
+            >
+              <Trash2 className="w-4 h-4" />
+              <span>Delete</span>
+            </button>
+          </div>
+        )}
 
         {/* Admin notice if Supabase is connected but user is guest */}
         {isSupabaseReady && !currentUser && (
@@ -846,6 +846,6 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
           </div>
         </form>
       </div>
-    </div>
+    </Drawer>
   );
 };
