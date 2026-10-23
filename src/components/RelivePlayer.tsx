@@ -166,7 +166,7 @@ export const RelivePlayer: React.FC<RelivePlayerProps> = ({
               title={memory.title}
               imageUrl={memory.backdropUrl}
               fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-cover"
             />
           </div>
         )}
