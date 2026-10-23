@@ -59,7 +59,7 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
       {/* Netflix Row Header */}
       <div className="flex items-baseline justify-between mb-2 sm:mb-3">
         <div className="flex items-baseline gap-2.5 sm:gap-3 flex-wrap">
-          <h2 className="font-bebas text-xl sm:text-2xl lg:text-3xl tracking-wide text-[#FFFFFF] font-black uppercase hover:text-[#B3B3B3] transition-colors">
+          <h2 className="text-xl font-semibold tracking-tight text-white hover:text-[#B3B3B3] transition-colors">
             {title}
           </h2>
           {subtitle && (
