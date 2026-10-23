@@ -10,6 +10,7 @@ import {
   AlertCircle,
   Loader2,
   Trash2,
+  Plus,
   Shield,
   Video,
   Film,
@@ -331,17 +332,6 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             </div>
           </div>
 
-          {memoryToEdit && onDeleteMemory && (
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="p-2 text-[#E50914] hover:text-white hover:bg-[#E50914]/20 rounded transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
-              title="Delete this memory"
-            >
-              <Trash2 className="w-4 h-4" />
-              <span className="hidden sm:inline">Delete</span>
-            </button>
-          )}
         {memoryToEdit && onDeleteMemory && (
           <div className="flex justify-end mb-4">
             <button
