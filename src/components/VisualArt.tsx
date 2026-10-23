@@ -10,6 +10,8 @@ interface VisualArtProps {
   imageUrl?: string;
   fit?: 'cover' | 'contain' | 'scale-down' | 'auto';
   aspectRatio?: '16/9' | '3/4' | '1/1' | 'auto';
+  loading?: 'eager' | 'lazy';
+  fetchPriority?: 'high' | 'low' | 'auto';
   onClick?: () => void;
 }
 
@@ -21,6 +23,8 @@ export const VisualArt: React.FC<VisualArtProps> = ({
   className = 'w-full h-full',
   fit = 'cover',
   aspectRatio,
+  loading = 'lazy',
+  fetchPriority = 'auto',
   onClick,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
@@ -73,7 +77,8 @@ export const VisualArt: React.FC<VisualArtProps> = ({
         src={imageUrl}
         alt={title}
         referrerPolicy="no-referrer"
-        loading="lazy"
+        loading={loading}
+        fetchPriority={fetchPriority}
         onError={() => setImageFailed(true)}
         onLoad={handleImageLoad}
         onClick={onClick}
