@@ -963,7 +963,7 @@ export default function App() {
                       className="p-5 rounded-xl bg-[#141414] border border-white/10 hover:border-white/30 netflix-card-shadow transition-all duration-300 cursor-pointer hover:scale-[1.02] space-y-3.5 flex flex-col justify-between group select-none"
                     >
                       {Boolean(getMemoryImageUrl(item, 'landscape')) && (
-                        <div className="relative aspect-video w-full rounded-lg overflow-hidden bg-[#000000] -mt-1 mb-2">
+                        <div className="relative block aspect-video w-full shrink-0 rounded-lg overflow-hidden bg-[#000000] -mt-1 mb-4">
                           <VisualArt
                             id={item.id}
                             category={item.category}
@@ -972,9 +972,9 @@ export default function App() {
                             variant="landscape"
                             aspectRatio="16/9"
                             focalPosition="center"
-                            fit="auto"
+                            fit="cover"
                             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                            className="w-full h-full"
+                            className="block w-full h-full"
                           />
                         </div>
                       )}
