@@ -63,6 +63,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
           onError={() => setImageFailed(true)}
           onClick={onClick}
           className={`${fitClass} ${ratioClass} ${className}`.trim()}
+          style={{ objectFit: fit === 'cover' ? 'cover' : fit === 'scale-down' ? 'scale-down' : 'contain' }}
         />
       );
     }
@@ -76,6 +77,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
         onLoad={handleImageLoad}
         onClick={onClick}
         className={`${fitClass} ${ratioClass} ${className}`.trim()}
+        style={{ objectFit: fit === 'cover' ? 'cover' : fit === 'scale-down' ? 'scale-down' : 'contain' }}
       />
     );
   }
