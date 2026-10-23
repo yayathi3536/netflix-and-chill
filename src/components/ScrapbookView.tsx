@@ -114,7 +114,7 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
                   title={mem.title}
                   imageUrl={mem.backdropUrl || mem.posterUrl}
                   fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-contain transition-transform duration-500"
                 />
 
                 {/* Top Badge & Admin-Only Image Upload/Change Control */}
