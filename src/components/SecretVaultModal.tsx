@@ -139,7 +139,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
                     setErrorMsg('');
                   }}
                   placeholder="Enter Vault Passcode"
-                  className="w-full text-center text-lg tracking-widest font-mono bg-[#000000] border border-[#808080]/40 focus:border-[#E50914] rounded py-3 px-4 text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-colors"
+                  className="w-full text-center text-lg tracking-[0.5em] font-mono bg-neutral-900 border border-white/10 focus:border-white/40 rounded-md py-3 px-4 text-white placeholder-neutral-600 focus:outline-none transition-colors"
                 />
               </div>
 
@@ -147,7 +147,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-sm rounded shadow transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider min-h-[44px]"
+                className="w-full py-3 bg-[#E50914] hover:bg-[#f6121d] text-white font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
               >
                 <KeyRound className="w-4 h-4" />
                 <span>Unlock Confidential Vault</span>
