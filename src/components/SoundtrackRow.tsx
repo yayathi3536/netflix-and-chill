@@ -75,8 +75,8 @@ export const SoundtrackRow: React.FC<SoundtrackRowProps> = ({
                       src={track.coverUrl}
                       alt={track.title}
                       referrerPolicy="no-referrer"
-                      className={`w-full h-full object-contain transition-transform duration-500 ${
-                        isCurrentPlaying ? 'scale-105' : ''
+                      className={`w-full h-full object-cover transition-transform duration-500 ${
+                        isCurrentPlaying ? 'scale-105' : 'group-hover:scale-105'
                       }`}
                     />
                   ) : (

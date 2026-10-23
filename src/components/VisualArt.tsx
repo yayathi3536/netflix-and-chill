@@ -8,7 +8,7 @@ interface VisualArtProps {
   title: string;
   className?: string;
   imageUrl?: string;
-  fit?: 'cover' | 'contain' | 'scale-down' | 'auto';
+  fit?: 'cover' | 'contain' | 'scale-down';
   aspectRatio?: '16/9' | '3/4' | '1/1' | 'auto';
   onClick?: () => void;
 }
@@ -19,28 +19,18 @@ export const VisualArt: React.FC<VisualArtProps> = ({
   title,
   fallbackGradient = 'from-[#141414] via-[#181818] to-[#000000]',
   className = 'w-full h-full',
-  fit = 'contain',
+  fit = 'cover',
   aspectRatio,
   onClick,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
-  const [autoFit, setAutoFit] = useState<'cover' | 'contain'>('contain');
 
   const fitClass =
     fit === 'contain'
       ? 'object-contain'
       : fit === 'scale-down'
       ? 'object-scale-down'
-      : fit === 'auto'
-      ? (autoFit === 'contain' ? 'object-contain' : 'object-contain')
-      : 'object-contain';
-
-  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
-    if (fit !== 'auto') return;
-    const image = event.currentTarget;
-    // Preserve the complete uploaded image regardless of its aspect ratio.
-    setAutoFit('contain');
-  };
+      : 'object-cover';
 
   const ratioClass =
     aspectRatio === '16/9'
@@ -63,7 +53,6 @@ export const VisualArt: React.FC<VisualArtProps> = ({
           onError={() => setImageFailed(true)}
           onClick={onClick}
           className={`${fitClass} ${ratioClass} ${className}`.trim()}
-          style={{ objectFit: fit === 'cover' ? 'cover' : fit === 'scale-down' ? 'scale-down' : 'contain' }}
         />
       );
     }
@@ -74,10 +63,8 @@ export const VisualArt: React.FC<VisualArtProps> = ({
         referrerPolicy="no-referrer"
         loading="lazy"
         onError={() => setImageFailed(true)}
-        onLoad={handleImageLoad}
         onClick={onClick}
         className={`${fitClass} ${ratioClass} ${className}`.trim()}
-        style={{ objectFit: fit === 'cover' ? 'cover' : fit === 'scale-down' ? 'scale-down' : 'contain' }}
       />
     );
   }
@@ -94,7 +81,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
       {id.includes('story') || id.includes('featured') ? (
         <svg
           viewBox="0 0 600 350"
-          className="absolute inset-0 w-full h-full object-contain opacity-85 pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover opacity-85 pointer-events-none"
           preserveAspectRatio="xMidYMid slice"
         >
           <defs>
@@ -131,7 +118,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
       ) : id.includes('vault') ? (
         <svg
           viewBox="0 0 600 350"
-          className="absolute inset-0 w-full h-full object-contain opacity-85 pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover opacity-85 pointer-events-none"
           preserveAspectRatio="xMidYMid slice"
         >
           <g transform="translate(240, 110) scale(1.1)" opacity="0.9">
@@ -144,7 +131,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
       ) : (
         <svg
           viewBox="0 0 600 350"
-          className="absolute inset-0 w-full h-full object-contain opacity-80 pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover opacity-80 pointer-events-none"
           preserveAspectRatio="xMidYMid slice"
         >
           {/* Minimal constellation in white and red */}

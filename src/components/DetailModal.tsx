@@ -120,10 +120,10 @@ export const DetailModal: React.FC<DetailModalProps> = ({
             category={memory.category}
             title={memory.title}
             imageUrl={primaryImageUrl}
-            fit="contain"
+            fit="cover"
             aspectRatio="16/9"
             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-            className="w-full h-full object-contain cursor-pointer"
+            className="w-full h-full object-cover cursor-pointer"
             onClick={() => primaryImageUrl && setLightboxIndex(0)}
           />
 
@@ -345,10 +345,10 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                           category={memory.category}
                           title={photo.caption || 'Memory Photo'}
                           imageUrl={photo.url}
-                          fit="contain"
+                          fit="cover"
                           aspectRatio="16/9"
                           fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                          className="w-full h-full object-contain transition-transform duration-500"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                         <div className="absolute inset-0 bg-[#000000]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                           <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#000000]/80 text-[#FFFFFF] text-xs font-semibold border border-white/20 shadow-lg">
@@ -414,14 +414,14 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                               title={ep.title}
                               imageUrl={ep.thumbnailUrl}
                               fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                              className="w-full h-full object-contain"
+                              className="w-full h-full object-cover"
                             />
                           ) : (
                             <div className="w-full h-full bg-[#141414] flex items-center justify-center">
                               {epIsVideo ? (
                                 <Play className="w-5 h-5 text-[#FFFFFF] group-hover:text-[#E50914] group-hover:scale-125 transition-all" />
                               ) : (
-                                <BookOpen className="w-5 h-5 text-[#B3B3B3] group-hover:text-[#E50914] transition-all" />
+                                <BookOpen className="w-5 h-5 text-[#B3B3B3] group-hover:text-[#E50914] group-hover:scale-110 transition-all" />
                               )}
                             </div>
                           )}
@@ -466,7 +466,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                   <div
                     key={item.id}
                     onClick={() => onSelectRelated && onSelectRelated(item)}
-                    className="bg-[#141414] rounded overflow-hidden cursor-pointer hover:transition-transform border border-[#808080]/20 hover:border-[#808080]/60"
+                    className="bg-[#141414] rounded overflow-hidden cursor-pointer hover:scale-105 transition-transform border border-[#808080]/20 hover:border-[#808080]/60"
                   >
                     <div className="aspect-video relative overflow-hidden bg-[#000000]">
                       <VisualArt
@@ -475,7 +475,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                         title={item.title}
                         imageUrl={item.backdropUrl || item.posterUrl}
                         fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                     <div className="p-2.5">
@@ -557,7 +557,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
               className={`max-h-[82vh] max-w-[94vw] rounded-md transition-all duration-300 ${
                 lightboxFit === 'contain'
                   ? 'object-contain max-h-[82vh] max-w-[94vw]'
-                  : 'object-contain w-full h-full'
+                  : 'object-cover w-full h-full'
               }`}
               style={{ margin: 'auto' }}
             />

@@ -376,7 +376,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                           src={formData.hero_backdrop_url}
                           alt="Hero Preview"
                           className={`max-h-full max-w-full ${
-                            heroFit === 'contain' ? 'object-contain' : 'w-full h-full object-contain'
+                            heroFit === 'contain' ? 'object-contain' : 'w-full h-full object-cover'
                           }`}
                         />
                       )}
