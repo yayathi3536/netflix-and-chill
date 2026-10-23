@@ -113,7 +113,6 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
                   category={mem.category}
                   title={mem.title}
                   imageUrl={mem.posterUrl || mem.backdropUrl}
-                  variant="episode"
                   focalPosition="top"
                   fit="cover"
                   fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
