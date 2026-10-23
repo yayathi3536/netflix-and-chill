@@ -92,7 +92,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           </div>
 
           {/* Cinematic Title */}
-          <h1 className="font-bebas text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-wider text-[#FFFFFF] font-black leading-none uppercase drop-shadow-2xl break-words line-clamp-2">
+          <h1 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#FFFFFF] font-bold leading-tight drop-shadow-2xl break-words line-clamp-2">
             {displayTitle}
           </h1>
 
@@ -108,7 +108,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           </div>
 
           {/* Readable Description */}
-          <p className="text-xs sm:text-sm md:text-base text-[#B3B3B3] leading-relaxed font-normal line-clamp-3 sm:line-clamp-4 max-w-xl text-balance drop-shadow-md">
+          <p className="text-xs sm:text-sm md:text-base text-[#B3B3B3] leading-relaxed font-normal line-clamp-2 max-w-xl text-balance drop-shadow-md">
             {displaySynopsis}
           </p>
 
@@ -158,9 +158,6 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               <VolumeX className="w-4 h-4 text-[#808080]" />
             )}
           </button>
-          <div className="hidden sm:flex items-center px-3 py-1 bg-[#141414]/90 rounded-md border-l-2 border-[#E50914] text-xs text-[#B3B3B3] font-semibold border border-white/10 shadow-sm">
-            <span>{memory.rating || 'PG-13'}</span>
-          </div>
         </div>
       </div>
     </div>
