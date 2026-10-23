@@ -59,14 +59,9 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
       {/* Netflix Row Header */}
       <div className="flex items-baseline justify-between mb-2 sm:mb-3">
         <div className="flex items-baseline gap-2.5 sm:gap-3 flex-wrap">
-          <h2 className="text-xl font-semibold tracking-tight text-white hover:text-[#B3B3B3] transition-colors">
+          <h2 className="text-lg sm:text-xl font-semibold text-white tracking-tight hover:text-neutral-300 transition-colors">
             {title}
           </h2>
-          {subtitle && (
-            <span className="text-xs text-[#B3B3B3] font-normal hidden sm:inline tracking-normal">
-              {subtitle}
-            </span>
-          )}
           {onEditSection && (
             <button
               onClick={onEditSection}
