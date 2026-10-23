@@ -38,7 +38,6 @@ export const VisualArt: React.FC<VisualArtProps> = ({
   const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
     if (fit !== 'auto') return;
     const image = event.currentTarget;
-    const ratio = image.naturalWidth / image.naturalHeight;
     // Preserve the complete uploaded image regardless of its aspect ratio.
     setAutoFit('contain');
   };
