@@ -153,7 +153,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
 
     return (
       <div
-        className={`relative w-full h-full overflow-hidden flex items-center justify-center ${ratioClass}`}
+        className={`absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center ${ratioClass}`}
         onClick={onClick}
       >
         {/* Ambient blurred backdrop when photo is contained to eliminate narrow empty side voids */}
