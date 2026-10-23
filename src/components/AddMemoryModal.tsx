@@ -505,7 +505,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                   </>
                 ) : (
                   <>
-                    <UploadCloud className="w-4 h-4 text-[#E50914] group-hover:scale-110 transition-transform" />
+                    <UploadCloud className="w-4 h-4 text-[#E50914] transition-transform" />
                     <span className="font-semibold text-xs text-white">Upload from Device</span>
                   </>
                 )}
@@ -674,7 +674,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                       setImageMeta({ width: w, height: h, ratioStr });
                     }}
                     className={`max-h-full max-w-full ${
-                      previewFit === 'contain' ? 'object-contain' : 'w-full h-full object-cover'
+                      previewFit === 'contain' ? 'object-contain' : 'w-full h-full object-contain'
                     }`}
                   />
                   <div className="pointer-events-none absolute bottom-1 right-1 bg-black/75 px-1.5 py-0.5 rounded text-[9px] text-white/70">
@@ -716,7 +716,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                   </>
                 ) : (
                   <>
-                    <UploadCloud className="w-4 h-4 text-[#E50914] group-hover:scale-110 transition-transform" />
+                    <UploadCloud className="w-4 h-4 text-[#E50914] transition-transform" />
                     <span className="font-semibold text-xs text-white">Upload Video from Device</span>
                   </>
                 )}
