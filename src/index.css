@@ -224,3 +224,21 @@ button, input, .card, [class*="rounded"] {
 .bg-\[\#141414\]  { background: #141414 !important; }
 .border-\[\#181818\] { border-color: rgba(255,255,255,0.08) !important; }
 .border-\[\#808080\]\/30 { border-color: rgba(255,255,255,0.1) !important; }
+
+/* Fix 6: universal media and overlay containment safety net */
+/* Guarantee image containers clip their content */
+[class*="aspect-"] {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Guarantee overlay text sits above images */
+[class*="absolute"][class*="bottom-0"] {
+  z-index: 10;
+}
+
+/* Guarantee card images never escape their card */
+.netflix-card-shadow {
+  position: relative;
+  overflow: hidden;
+}
