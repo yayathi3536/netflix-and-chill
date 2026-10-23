@@ -107,7 +107,7 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
               className="group relative bg-[#141414] text-[#FFFFFF] rounded-xl overflow-hidden shadow-lg shadow-black/30 border border-white/10 hover:border-[#E50914]/60 hover:shadow-xl hover:shadow-[#E50914]/10 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer select-none"
             >
               {/* Photo Area — Shown Directly with Full Photo Visibility */}
-              <div className="relative aspect-[4/3] sm:aspect-video w-full overflow-hidden bg-[#080808]">
+              <div className="relative isolate shrink-0 aspect-[4/3] sm:aspect-video w-full overflow-hidden bg-[#080808]">
                 <VisualArt
                   id={mem.id}
                   category={mem.category}
@@ -143,7 +143,7 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
               </div>
 
               {/* Direct Caption, Date, Location & Story */}
-              <div className="p-4 sm:p-5 space-y-2 bg-gradient-to-b from-[#171717] to-[#101010] flex-1 flex flex-col justify-between">
+              <div className="relative z-10 min-w-0 p-4 sm:p-5 space-y-2 bg-gradient-to-b from-[#171717] to-[#101010] flex-1 flex flex-col justify-between">
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-[11px] text-[#808080]">
                     <span className="flex items-center gap-1">
@@ -158,11 +158,11 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
                     )}
                   </div>
 
-                  <h3 className="font-bebas text-xl text-[#FFFFFF] font-bold uppercase tracking-wide">
+                  <h3 className="min-w-0 break-words font-bebas text-xl text-[#FFFFFF] font-bold uppercase tracking-wide">
                     {mem.title}
                   </h3>
 
-                  <p className="text-xs text-[#B3B3B3] leading-relaxed">
+                  <p className="min-w-0 break-words whitespace-pre-wrap text-xs text-[#B3B3B3] leading-relaxed">
                     {mem.synopsis}
                   </p>
                 </div>
