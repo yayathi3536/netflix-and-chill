@@ -12,9 +12,9 @@ import {
   Plus,
   Search,
   ShieldCheck,
-  X,
 } from 'lucide-react';
 import { MemoryItem, MemoryCategory } from '../types';
+import { Drawer } from './Drawer';
 
 interface AdminStudioModalProps {
   memories: MemoryItem[];
@@ -77,35 +77,24 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-[90] flex items-start justify-center overflow-y-auto bg-black/85 p-3 backdrop-blur-md sm:p-6"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="admin-studio-title"
+    <Drawer
+      isOpen={true}
+      onClose={onClose}
+      title="OUR UNIVERSE STUDIO"
+      subtitle="Private admin workspace · Manage your saved memories"
+      width="lg"
     >
-      <div className="my-auto w-full max-w-6xl overflow-hidden rounded-2xl border border-white/10 bg-[#090909] text-white shadow-[0_30px_120px_rgba(0,0,0,0.75)]">
-        <header className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#241014] via-[#111111] to-[#090909] px-5 py-6 sm:px-8 sm:py-8">
+      <div className="min-h-0 text-white">
+        <header className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#241014] via-[#111111] to-[#090909] px-5 py-6 sm:px-6 sm:py-7">
           <div className="pointer-events-none absolute -right-10 -top-24 h-64 w-64 rounded-full bg-[#E50914]/20 blur-3xl" />
-          <div className="relative flex items-start justify-between gap-4">
-            <div>
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#E50914]/40 bg-[#E50914]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-red-200">
-                <ShieldCheck className="h-3.5 w-3.5" />
-                Private admin workspace
-              </div>
-              <h2 id="admin-studio-title" className="text-3xl font-black tracking-tight sm:text-4xl">
-                OUR UNIVERSE <span className="text-[#E50914]">STUDIO</span>
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-white/60">
-                Your real saved memories, organized in one cinematic control room. Changes open the existing editor and save through the connected app storage.
-              </p>
+          <div className="relative">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#E50914]/40 bg-[#E50914]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-red-200">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              Private admin workspace
             </div>
-            <button
-              onClick={onClose}
-              className="rounded-full border border-white/10 bg-black/30 w-11 h-11 flex items-center justify-center text-white/70 transition hover:border-white/30 hover:bg-white/10 hover:text-white min-h-[44px] min-w-[44px] shrink-0"
-              aria-label="Close Admin Studio"
-            >
-              <X className="h-5 w-5" />
-            </button>
+            <p className="max-w-2xl text-sm leading-6 text-white/60">
+              Your real saved memories, organized in one cinematic control room. Changes open the existing editor and save through the connected app storage.
+            </p>
           </div>
           <div className="relative mt-6 flex flex-wrap items-center gap-3">
             <button
@@ -233,7 +222,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
           </footer>
         </main>
       </div>
-    </div>
+    </Drawer>
   );
 };
 
