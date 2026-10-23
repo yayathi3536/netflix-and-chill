@@ -59,7 +59,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         )}
 
         {/* Poster Card */}
-        <div className={`relative ${rankNumber !== undefined ? 'w-32 xs:w-36 sm:w-44' : 'w-36 xs:w-40 sm:w-48'} aspect-[2/3] rounded-md overflow-hidden bg-[#141414] netflix-card-shadow border border-white/10 z-10 group-hover:border-[#E50914] group-hover:shadow-[0_12px_32px_rgba(229,9,20,0.3)] transition-all duration-300`}>
+        <div className={`relative ${rankNumber !== undefined ? 'w-32 xs:w-36 sm:w-44' : 'w-36 xs:w-40 sm:w-48'} aspect-[2/3] rounded-md overflow-hidden bg-[#141414] netflix-card-shadow border border-white/10 z-10 group-hover:border-white/20 group-hover:shadow-[0_12px_32px_rgba(0,0,0,0.3)] transition-all duration-300`}>
           <VisualArt
             id={memory.id}
             category={memory.category}
@@ -131,153 +131,35 @@ export const MovieCard: React.FC<MovieCardProps> = ({
           className="w-full h-full"
         />
 
-        {/* Top Indicators */}
-        <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between z-20">
-          <span className="w-5 h-5 rounded bg-[#E50914] flex items-center justify-center text-xs font-bold text-[#FFFFFF] shadow">
-            N
-          </span>
-          {memory.isSecret ? (
-            <span className="flex items-center gap-1 text-[10px] font-bold bg-[#E50914] text-[#FFFFFF] px-2 py-0.5 rounded shadow">
-              <Lock className="w-2.5 h-2.5" />
-              <span>Locked Letter</span>
-            </span>
-          ) : isLetter ? (
-            <span className="flex items-center gap-1 text-[10px] font-bold bg-[#181818]/90 text-[#FFFFFF] px-2 py-0.5 rounded border border-[#808080]/40">
-              <Mail className="w-2.5 h-2.5 text-[#E50914]" />
-              <span>Love Letter</span>
-            </span>
-          ) : memory.location ? (
-            <span className="flex items-center gap-1 text-[10px] text-[#B3B3B3] bg-[#000000]/80 px-2 py-0.5 rounded border border-[#808080]/30">
-              <MapPin className="w-2.5 h-2.5 text-[#E50914]" />
-              <span className="truncate max-w-[120px]">{memory.location}</span>
-            </span>
-          ) : null}
-        </div>
+        {/* Bottom Caption Bar */}
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/60 to-transparent p-3 pt-10">
+          <h4 className="text-sm font-semibold text-white line-clamp-1">{memory.title}</h4>
 
-        {/* Bottom Caption Bar (Leaves image clear and unobstructed) */}
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#000000]/95 via-[#000000]/65 to-transparent flex flex-col justify-end p-2.5 sm:p-3 pt-8">
-          <div className="flex items-center justify-between">
-            <h4 className="text-sm font-semibold text-[#FFFFFF] line-clamp-1 drop-shadow">
-              {memory.title}
-            </h4>
-          </div>
-          {memory.subtitle && (
-            <p className="text-[11px] text-[#B3B3B3] line-clamp-1">{memory.subtitle}</p>
-          )}
-
-          {/* Quick Buttons on Hover / Touch */}
-          <div
-            className={`flex items-center justify-between pt-1.5 sm:pt-2 transition-opacity duration-200 ${
-              isHovered ? 'opacity-100' : 'opacity-90'
-            }`}
-          >
-            <div className="flex items-center gap-1.5">
-              {/* Show Play button ONLY for genuine video content */}
-              {isVideo ? (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onPlay(memory);
-                  }}
-                  className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#FFFFFF] hover:bg-[#B3B3B3] text-[#000000] flex items-center justify-center shadow transition-transform active:scale-90 cursor-pointer shrink-0"
-                  title="Play Video"
-                  aria-label="Play Video"
-                >
-                  <Play className="w-3.5 h-3.5 fill-[#000000] ml-0.5" />
-                </button>
-              ) : isLetter ? (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCardClick();
-                  }}
-                  className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#FFFFFF] hover:bg-[#B3B3B3] text-[#000000] flex items-center justify-center shadow transition-transform active:scale-90 cursor-pointer shrink-0"
-                  title="Read Letter"
-                  aria-label="Read Letter"
-                >
-                  <Mail className="w-3.5 h-3.5 text-[#000000]" />
-                </button>
-              ) : (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onOpenInfo(memory);
-                  }}
-                  className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#FFFFFF] hover:bg-[#B3B3B3] text-[#000000] flex items-center justify-center shadow transition-transform active:scale-90 cursor-pointer shrink-0"
-                  title="Read Story & Details"
-                  aria-label="Read Story & Details"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-[#000000]" />
-                </button>
-              )}
-
+          {isHovered && (
+            <div className="flex items-center gap-2 pt-2">
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onToggleWatchlist(memory.id);
-                }}
-                className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer shrink-0"
-                title={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
+                onClick={(e) => { e.stopPropagation(); isVideo ? onPlay(memory) : onOpenInfo(memory); }}
+                className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center hover:bg-neutral-200"
+                aria-label={isVideo ? 'Play' : 'Open details'}
               >
-                {memory.isInWatchlist ? (
-                  <Check className="w-3.5 h-3.5 text-[#E50914] stroke-[2.5]" />
-                ) : (
-                  <Plus className="w-3.5 h-3.5 text-[#FFFFFF]" />
-                )}
+                <Play className="w-4 h-4 fill-black ml-0.5" />
               </button>
-
-              {onToggleFavorite && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onToggleFavorite(memory.id);
-                  }}
-                  className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer shrink-0"
-                  title="Favorite"
-                >
-                  <Heart
-                    className={`w-3.5 h-3.5 ${
-                      memory.isFavorite ? 'text-[#E50914] fill-[#E50914]' : 'text-[#FFFFFF]'
-                    }`}
-                  />
-                </button>
-              )}
-
-              {/* Admin-Only Change / Upload Image & Edit Button */}
-              {onEditMemory && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onEditMemory(memory);
-                  }}
-                  className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer shrink-0"
-                  title="Admin only: Change / Upload Image & Edit"
-                >
-                  <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
-                </button>
-              )}
+              <button
+                onClick={(e) => { e.stopPropagation(); onToggleWatchlist(memory.id); }}
+                className="w-8 h-8 rounded-full bg-neutral-800/80 border border-white/30 text-white flex items-center justify-center hover:bg-neutral-700"
+                aria-label={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
+              >
+                {memory.isInWatchlist ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); onOpenInfo(memory); }}
+                className="w-8 h-8 rounded-full bg-neutral-800/80 border border-white/30 text-white flex items-center justify-center hover:bg-neutral-700"
+                aria-label="More info"
+              >
+                <ChevronDown className="w-4 h-4" />
+              </button>
             </div>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleCardClick();
-              }}
-              className="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-[#181818] hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors active:scale-90 cursor-pointer shrink-0"
-              title={isLetter ? 'Open Letter' : 'Story Details'}
-            >
-              <ChevronDown className="w-4 h-4 text-[#FFFFFF]" />
-            </button>
-          </div>
-
-          {/* Clean Netflix Metadata in card */}
-          <div className="flex items-center gap-2 text-[11px] text-[#B3B3B3] font-medium pt-1.5">
-            <span className="text-[#FFFFFF] font-bold">{memory.matchScore || 98}% Match</span>
-            <span aria-hidden="true" className="text-[#808080]">·</span>
-            <span>{memory.year || '2024'}</span>
-            <span aria-hidden="true" className="text-[#808080]">·</span>
-            <span className="truncate">{memory.duration || 'Feature'}</span>
-          </div>
+          )}
         </div>
 
         {/* Netflix Red Progress Bar (For "Continue Watching") */}
