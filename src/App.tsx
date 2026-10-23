@@ -42,14 +42,12 @@ import { SurpriseModal } from './components/SurpriseModal';
 import { ConstellationSection } from './components/ConstellationSection';
 import { AuthScreen } from './components/AuthScreen';
 import ProfileSelect from './components/ProfileSelect';
-import { OpeningSplash } from './components/OpeningSplash';
 import { TRACKS } from './data/tracks';
 import { romanticAudio } from './utils/romanticAudio';
 import { hasValidVideo, isLetterItem, getMemoryImageUrl } from './utils/mediaHelpers';
 import { User } from '@supabase/supabase-js';
 
 export default function App() {
-  const [showSplash, setShowSplash] = useState(true);
   const [memories, setMemories] = useState<MemoryItem[]>(storageService.getInitialMemories());
   const [siteContent, setSiteContent] = useState<SiteContentMap>(storageService.getInitialSiteContent());
   const [activeTab, setActiveTab] = useState('home');
@@ -1377,9 +1375,6 @@ export default function App() {
 
   return (
     <>
-      {showSplash && (
-        <OpeningSplash onComplete={() => setShowSplash(false)} />
-      )}
       {renderAppContent()}
     </>
   );
