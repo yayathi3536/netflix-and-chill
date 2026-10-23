@@ -46,7 +46,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   if (isPortrait) {
     return (
       <div
-        className="group relative flex items-center shrink-0 cursor-pointer transition-transform duration-300 hover:scale-105 z-10 select-none"
+        className="group relative flex items-center shrink-0 cursor-pointer transition-transform duration-300 hover:scale-[1.04] z-10 select-none"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleCardClick}
@@ -59,7 +59,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         )}
 
         {/* Poster Card */}
-        <div className={`relative ${rankNumber !== undefined ? 'w-32 xs:w-36 sm:w-44' : 'w-36 xs:w-40 sm:w-48'} aspect-[3/4] rounded-lg overflow-hidden bg-[#141414] netflix-card-shadow border border-white/10 z-10 group-hover:border-[#E50914] group-hover:shadow-[0_12px_32px_rgba(229,9,20,0.3)] transition-all duration-300`}>
+        <div className={`relative ${rankNumber !== undefined ? 'w-32 xs:w-36 sm:w-44' : 'w-36 xs:w-40 sm:w-48'} aspect-[2/3] rounded-md overflow-hidden bg-[#141414] netflix-card-shadow border border-white/10 z-10 group-hover:border-[#E50914] group-hover:shadow-[0_12px_32px_rgba(229,9,20,0.3)] transition-all duration-300`}>
           <VisualArt
             id={memory.id}
             category={memory.category}
@@ -110,7 +110,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   // Standard Landscape Card (16:9 / 16:10) — Full Image Display with Ambient Glow
   return (
     <div
-      className={`group relative rounded-lg bg-[#141414] overflow-hidden netflix-card-shadow border border-white/10 cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:z-30 hover:border-white/30 hover:shadow-[0_16px_36px_rgba(0,0,0,0.9)] select-none ${
+      className={`group relative rounded-md bg-[#141414] overflow-hidden netflix-card-shadow border border-white/10 cursor-pointer transition-all duration-300 hover:scale-[1.035] hover:z-30 hover:border-white/30 hover:shadow-[0_16px_36px_rgba(0,0,0,0.9)] select-none ${
         className || 'shrink-0 w-60 sm:w-72 md:w-80'
       }`}
       onMouseEnter={() => setIsHovered(true)}
