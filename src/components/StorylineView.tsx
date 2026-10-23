@@ -424,7 +424,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                   fit="auto"
                   aspectRatio="16/9"
                   fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-contain transition-transform duration-500"
                 />
               </div>
 

@@ -19,12 +19,12 @@ export const VisualArt: React.FC<VisualArtProps> = ({
   title,
   fallbackGradient = 'from-[#141414] via-[#181818] to-[#000000]',
   className = 'w-full h-full',
-  fit = 'cover',
+  fit = 'contain',
   aspectRatio,
   onClick,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
-  const [autoFit, setAutoFit] = useState<'cover' | 'contain'>('cover');
+  const [autoFit, setAutoFit] = useState<'cover' | 'contain'>('contain');
 
   const fitClass =
     fit === 'contain'
@@ -32,16 +32,14 @@ export const VisualArt: React.FC<VisualArtProps> = ({
       : fit === 'scale-down'
       ? 'object-scale-down'
       : fit === 'auto'
-      ? (autoFit === 'contain' ? 'object-contain' : 'object-cover')
-      : 'object-cover';
+      ? (autoFit === 'contain' ? 'object-contain' : 'object-contain')
+      : 'object-contain';
 
   const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
     if (fit !== 'auto') return;
     const image = event.currentTarget;
-    const ratio = image.naturalWidth / image.naturalHeight;
-    // Keep portrait and near-square chapter photos fully visible in landscape cards.
-    // Wide artwork retains the existing cinematic cover treatment.
-    setAutoFit(ratio < 1.5 ? 'contain' : 'cover');
+    // Preserve the complete uploaded image regardless of its aspect ratio.
+    setAutoFit('contain');
   };
 
   const ratioClass =
@@ -94,7 +92,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
       {id.includes('story') || id.includes('featured') ? (
         <svg
           viewBox="0 0 600 350"
-          className="absolute inset-0 w-full h-full object-cover opacity-85 pointer-events-none"
+          className="absolute inset-0 w-full h-full object-contain opacity-85 pointer-events-none"
           preserveAspectRatio="xMidYMid slice"
         >
           <defs>
@@ -131,7 +129,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
       ) : id.includes('vault') ? (
         <svg
           viewBox="0 0 600 350"
-          className="absolute inset-0 w-full h-full object-cover opacity-85 pointer-events-none"
+          className="absolute inset-0 w-full h-full object-contain opacity-85 pointer-events-none"
           preserveAspectRatio="xMidYMid slice"
         >
           <g transform="translate(240, 110) scale(1.1)" opacity="0.9">
@@ -144,7 +142,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
       ) : (
         <svg
           viewBox="0 0 600 350"
-          className="absolute inset-0 w-full h-full object-cover opacity-80 pointer-events-none"
+          className="absolute inset-0 w-full h-full object-contain opacity-80 pointer-events-none"
           preserveAspectRatio="xMidYMid slice"
         >
           {/* Minimal constellation in white and red */}

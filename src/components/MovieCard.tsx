@@ -49,7 +49,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         role="button"
         tabIndex={0}
         aria-label={`Open ${memory.title}`}
-        className="group relative flex items-center shrink-0 cursor-pointer transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E50914] focus-visible:ring-offset-2 focus-visible:ring-offset-black z-10"
+        className="group relative flex items-center shrink-0 cursor-pointer transition-transform duration-300 hover:focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E50914] focus-visible:ring-offset-2 focus-visible:ring-offset-black z-10"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleCardClick}
@@ -72,10 +72,10 @@ export const MovieCard: React.FC<MovieCardProps> = ({
             category={memory.category}
             title={memory.title}
             imageUrl={memory.posterUrl || memory.backdropUrl}
-            fit="cover"
+            fit="contain"
             aspectRatio="3/4"
             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-            className="w-full h-full group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full transition-transform duration-500"
           />
 
           {/* Top Netflix badge & Admin Edit */}
@@ -135,10 +135,10 @@ export const MovieCard: React.FC<MovieCardProps> = ({
           category={memory.category}
           title={memory.title}
           imageUrl={memory.backdropUrl || memory.posterUrl}
-          fit="cover"
+          fit="contain"
           aspectRatio="16/9"
           fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-          className="w-full h-full group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full transition-transform duration-500"
         />
 
         {/* Top Indicators */}

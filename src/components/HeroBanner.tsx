@@ -66,7 +66,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           title={displayTitle}
           imageUrl={displayBackdrop}
           fallbackGradient="from-[#141414] via-[#000000] to-[#000000]"
-          className="w-full h-full object-cover scale-105"
+          className="w-full h-full object-contain "
         />
       </div>
 
