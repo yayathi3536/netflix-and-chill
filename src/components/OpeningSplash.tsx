@@ -29,13 +29,8 @@ export const OpeningSplash: React.FC<OpeningSplashProps> = ({
     setPrefersReducedMotion(reduced);
     if (reduced) return;
 
-    // If the asset is missing or cannot decode, fall back to the CSS animation.
-    const assetCheck = window.setTimeout(() => {
-      if (!videoRef.current || videoRef.current.readyState < 2) {
-        setVideoFailed(true);
-      }
-    }, 1400);
-    return () => window.clearTimeout(assetCheck);
+    // Do not fail over just because GitHub Pages is slow to start the MP4.
+    // The CSS animation is used only when the browser reports a real video error.
   }, []);
 
   useEffect(() => {
@@ -78,15 +73,19 @@ export const OpeningSplash: React.FC<OpeningSplashProps> = ({
         <video
           ref={videoRef}
           className={`opening-splash-video${videoReady ? ' is-ready' : ''}`}
-          src={`${import.meta.env.BASE_URL}our-universe-intro.mp4`}
+          src={`${import.meta.env.BASE_URL}our-universe-intro.mp4?v=2`}
           autoPlay
           muted
           playsInline
           preload="auto"
           aria-hidden="true"
+          onLoadedData={() => setVideoReady(true)}
           onCanPlay={() => setVideoReady(true)}
           onEnded={handleFinish}
-          onError={() => setVideoFailed(true)}
+          onError={() => {
+            setVideoReady(false);
+            setVideoFailed(true);
+          }}
         />
       )}
 
