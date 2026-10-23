@@ -34,7 +34,8 @@ export const OpeningSplash: React.FC<OpeningSplashProps> = ({
   }, []);
 
   useEffect(() => {
-    const fallbackDuration = prefersReducedMotion ? 450 : videoFailed ? 2600 : durationMs;
+    // Reduced-motion users skip the animated intro; on video failure, continue quickly.
+    const fallbackDuration = prefersReducedMotion ? 0 : videoFailed ? 500 : durationMs;
     const timer = window.setTimeout(handleFinish, fallbackDuration);
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -88,25 +89,6 @@ export const OpeningSplash: React.FC<OpeningSplashProps> = ({
           }}
         />
       )}
-
-      {/* CSS fallback is retained so a missing video never blocks the site. */}
-      <div className={`opening-splash-css-fallback${videoReady && showVideo ? ' is-hidden' : ''}`} aria-hidden="true">
-        <div className="opening-splash-vignette" />
-        <div className="splash-core-glow" />
-        <div className="splash-panels-container">
-          {Array.from({ length: 11 }, (_, index) => (
-            <div key={index} className={`splash-panel splash-panel-${index + 1}`} />
-          ))}
-        </div>
-        <div className="splash-wordmark-container">
-          <h1 className="splash-title">OUR UNIVERSE</h1>
-          <div className="splash-kicker">
-            <span>ORIGINAL MEMORIES</span>
-            <span className="splash-kicker-dot">&bull;</span>
-            <span>A STREAMING LOVE STORY</span>
-          </div>
-        </div>
-      </div>
 
       <div className="splash-skip-hint">Tap or press Escape to skip</div>
     </div>
