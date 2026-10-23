@@ -41,6 +41,7 @@
 
 .opening-splash-css-fallback {
   position: absolute;
+  z-index: 7;
   inset: 0;
   display: flex;
   align-items: center;
