@@ -307,7 +307,7 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
                 src={currentTrack.coverUrl}
                 alt={currentTrack.title}
                 referrerPolicy="no-referrer"
-                className={`w-full h-full object-contain ${
+                className={`w-full h-full object-cover ${
                   isPlaying ? 'animate-spin [animation-duration:8s]' : ''
                 }`}
               />
@@ -435,7 +435,7 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
                       src={currentTrack.coverUrl}
                       alt={currentTrack.title}
                       referrerPolicy="no-referrer"
-                      className="w-full h-full object-contain transition-transform duration-700 "
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
                     <div className="w-full h-full bg-[#181818] flex items-center justify-center">
@@ -618,7 +618,7 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
                                 src={track.coverUrl}
                                 alt={track.title}
                                 referrerPolicy="no-referrer"
-                                className="w-full h-full object-contain"
+                                className="w-full h-full object-cover"
                               />
                             ) : (
                               <div className="w-full h-full bg-[#181818] flex items-center justify-center">
