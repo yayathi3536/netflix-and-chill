@@ -240,7 +240,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
 
       {/* Main Centered Netflix Auth Card */}
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-8 sm:py-12">
-        <div className="w-full max-w-[450px] bg-[#000000]/80 sm:bg-[#000000]/85 border border-[#FFFFFF]/10 rounded-[4px] shadow-[0_15px_50px_rgba(0,0,0,0.9)] px-6 sm:px-14 py-10 sm:py-12 space-y-6 backdrop-blur-md">
+        <div className="w-full max-w-[420px] bg-black/70 border border-white/10 rounded-lg shadow-2xl px-6 sm:px-10 py-8 sm:py-10 space-y-5 backdrop-blur-xl">
           {/* Card Header */}
           <div className="space-y-2">
             {mode === 'reset' && (
@@ -321,7 +321,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email address"
-                    className="w-full bg-[#161616]/90 border border-[#808080]/60 focus:border-[#FFFFFF] focus:ring-1 focus:ring-[#FFFFFF] rounded-[4px] py-3.5 pl-11 pr-4 text-sm text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-all"
+                    className="w-full bg-neutral-900 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/20 rounded-md py-3 pl-11 pr-4 text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -356,7 +356,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[#E50914] hover:bg-[#c11119] disabled:opacity-60 text-[#FFFFFF] font-semibold text-base rounded-[4px] shadow-lg transition-all duration-150 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer mt-2"
+                className="w-full py-3 bg-[#E50914] hover:bg-[#f6121d] disabled:opacity-50 text-white font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
               >
                 {isLoading ? (
                   <>
@@ -415,7 +415,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="Display name (optional)"
-                    className="w-full bg-[#161616]/90 border border-[#808080]/60 focus:border-[#FFFFFF] focus:ring-1 focus:ring-[#FFFFFF] rounded-[4px] py-3.5 pl-11 pr-4 text-sm text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-all"
+                    className="w-full bg-neutral-900 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/20 rounded-md py-3 pl-11 pr-4 text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -434,7 +434,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email address"
-                    className="w-full bg-[#161616]/90 border border-[#808080]/60 focus:border-[#FFFFFF] focus:ring-1 focus:ring-[#FFFFFF] rounded-[4px] py-3.5 pl-11 pr-4 text-sm text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-all"
+                    className="w-full bg-neutral-900 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/20 rounded-md py-3 pl-11 pr-4 text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -480,7 +480,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm password"
-                    className="w-full bg-[#161616]/90 border border-[#808080]/60 focus:border-[#FFFFFF] focus:ring-1 focus:ring-[#FFFFFF] rounded-[4px] py-3.5 pl-11 pr-4 text-sm text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-all"
+                    className="w-full bg-neutral-900 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/20 rounded-md py-3 pl-11 pr-4 text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -488,7 +488,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[#E50914] hover:bg-[#c11119] disabled:opacity-60 text-[#FFFFFF] font-semibold text-base rounded-[4px] shadow-lg transition-all duration-150 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer mt-2"
+                className="w-full py-3 bg-[#E50914] hover:bg-[#f6121d] disabled:opacity-50 text-white font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
               >
                 {isLoading ? (
                   <>
@@ -530,7 +530,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@example.com"
-                    className="w-full bg-[#161616]/90 border border-[#808080]/60 focus:border-[#FFFFFF] focus:ring-1 focus:ring-[#FFFFFF] rounded-[4px] py-3.5 pl-11 pr-4 text-sm text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-all"
+                    className="w-full bg-neutral-900 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/20 rounded-md py-3 pl-11 pr-4 text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -596,7 +596,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm new password"
-                    className="w-full bg-[#161616]/90 border border-[#808080]/60 focus:border-[#FFFFFF] focus:ring-1 focus:ring-[#FFFFFF] rounded-[4px] py-3.5 pl-11 pr-4 text-sm text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-all"
+                    className="w-full bg-neutral-900 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/20 rounded-md py-3 pl-11 pr-4 text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
