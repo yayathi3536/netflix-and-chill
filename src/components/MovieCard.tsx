@@ -132,7 +132,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         />
 
         {/* Bottom Caption Bar */}
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/60 to-transparent p-3 pt-10">
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/60 to-transparent p-3 pt-10 z-10">
           <h4 className="text-sm font-semibold text-white line-clamp-1">{memory.title}</h4>
 
           {isHovered && (
