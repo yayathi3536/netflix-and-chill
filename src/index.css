@@ -187,3 +187,40 @@
     scroll-behavior: auto !important;
   }
 }
+
+
+/* Step 9: calmer global typography and radius */
+/* Kill over-aggressive caps globally */
+.font-bebas {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+/* Sentence-case headings feel premium */
+h1, h2, h3, h4 {
+  text-transform: none;
+  letter-spacing: -0.01em;
+}
+
+/* One consistent rounded radius */
+button, input, .card, [class*="rounded"] {
+  border-radius: 6px !important;
+}
+
+/* Unify neutral grays used across components */
+:root {
+  --c-bg: #000000;
+  --c-surface: #141414;
+  --c-border: rgba(255, 255, 255, 0.1);
+  --c-text: #ffffff;
+  --c-text-2: #a3a3a3;
+  --c-text-3: #737373;
+  --c-accent: #E50914;
+}
+
+.text-\\[\\#B3B3B3\\] { color: #a3a3a3 !important; }
+.text-\\[\\#808080\\] { color: #737373 !important; }
+.bg-\\[\\#181818\\]  { background: #141414 !important; }
+.bg-\\[\\#141414\\]  { background: #141414 !important; }
+.border-\\[\\#181818\\] { border-color: rgba(255,255,255,0.08) !important; }
+.border-\\[\\#808080\\]\\/30 { border-color: rgba(255,255,255,0.1) !important; }
