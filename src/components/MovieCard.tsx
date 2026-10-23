@@ -72,10 +72,10 @@ export const MovieCard: React.FC<MovieCardProps> = ({
             category={memory.category}
             title={memory.title}
             imageUrl={memory.posterUrl || memory.backdropUrl}
-            fit="cover"
+            fit="contain"
             aspectRatio="3/4"
             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-            className="w-full h-full group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full"
           />
 
           {/* Top Netflix badge & Admin Edit */}
