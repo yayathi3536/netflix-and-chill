@@ -132,22 +132,6 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
     setSaveStatus(null);
   };
 
-  // Move a chapter directly to any exact position. This works without drag-and-drop.
-  const handleMoveToPosition = (e: React.ChangeEvent<HTMLSelectElement>, fromIndex: number) => {
-    e.stopPropagation();
-    const targetIndex = Number(e.target.value) - 1;
-    if (!Number.isInteger(targetIndex) || targetIndex < 0 || targetIndex >= items.length || targetIndex === fromIndex) {
-      return;
-    }
-
-    const updated = [...items];
-    const [moved] = updated.splice(fromIndex, 1);
-    updated.splice(targetIndex, 0, moved);
-    setItems(updated);
-    setHasChanges(true);
-    setSaveStatus(null);
-  };
-
   // Save changes persistently
   const handleSaveOrder = async () => {
     setIsSaving(true);
@@ -292,7 +276,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
           <div className="flex items-center gap-2.5">
             <GripVertical className="w-4 h-4 text-[#E50914] shrink-0" />
             <span>
-              <strong>Reorder Mode Active:</strong> Drag the grip, use the arrows, or choose an exact position from each chapter's <strong>Move to position</strong> menu. Click <strong>Save Order</strong> when finished.
+              <strong>Reorder Mode Active:</strong> Drag cards using the handle icon or tap the &uarr; / &darr; arrows to move chapters earlier or later. Click <strong>Save Order</strong> when finished.
             </span>
           </div>
           {hasChanges && (
@@ -314,9 +298,12 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
           return (
             <div
               key={ch.id}
+              draggable={isReorderMode}
+              onDragStart={(e) => handleDragStart(e, idx)}
               onDragOver={(e) => handleDragOver(e, idx)}
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, idx)}
+              onDragEnd={handleDragEnd}
               onClick={() => {
                 if (!isReorderMode) {
                   onSelectStory(ch);
@@ -384,16 +371,8 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
 
                     {/* Dedicated Grip Handle Icon */}
                     <div
-                      draggable={isReorderMode}
-                      onDragStart={(e) => {
-                        e.stopPropagation();
-                        handleDragStart(e, idx);
-                      }}
-                      onDragEnd={handleDragEnd}
-                      onClick={(e) => e.stopPropagation()}
                       className="w-8 h-8 flex items-center justify-center text-red-500 hover:text-white cursor-grab active:cursor-grabbing border-l border-white/10 pl-1"
-                      title="Grab this handle and drag the chapter to any position"
-                      aria-label={`Drag Episode ${idx + 1} to reorder`}
+                      title="Drag to reorder"
                     >
                       <GripVertical className="w-4 h-4" />
                     </div>
@@ -453,28 +432,6 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                     {ch.synopsis}
                   </p>
                 </div>
-
-                {isReorderMode && (
-                  <div className="pt-3 flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                    <label htmlFor={`story-position-${ch.id}`} className="text-[10px] uppercase tracking-wider font-bold text-neutral-400 shrink-0">
-                      Move to position
-                    </label>
-                    <select
-                      id={`story-position-${ch.id}`}
-                      value={idx + 1}
-                      onChange={(e) => handleMoveToPosition(e, idx)}
-                      disabled={isSaving}
-                      className="min-w-0 flex-1 rounded-md border border-[#555] bg-[#080808] px-2 py-2 text-xs font-semibold text-white outline-none focus:border-[#E50914] disabled:opacity-50"
-                      aria-label={`Move ${ch.title} to position`}
-                    >
-                      {items.map((option, optionIndex) => (
-                        <option key={option.id} value={optionIndex + 1}>
-                          {optionIndex + 1}. {option.title}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
 
                 {/* Quick Action Footers */}
                 <div className="pt-3 border-t border-[#181818] flex items-center justify-between text-xs">

@@ -54,10 +54,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
     : memory;
 
   return (
-    <section
-      aria-label={`Featured memory: ${displayTitle}`}
-      className="relative w-full h-[76svh] sm:h-[85vh] min-h-[500px] sm:min-h-[600px] max-h-[900px] overflow-hidden select-none bg-[#000000]"
-    >
+    <div className="relative w-full h-[78vh] sm:h-[85vh] min-h-[480px] sm:min-h-[580px] max-h-[880px] overflow-hidden select-none bg-[#000000]">
       {/* Background Media with subtle Ken Burns cinematic movement */}
       <div className="absolute inset-0 w-full h-full animate-ken-burns">
         <VisualArt
@@ -75,8 +72,8 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
       <div className="absolute inset-0 hero-netflix-scrim" />
 
       {/* Hero Content Container */}
-      <div className="relative z-10 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-12 sm:pb-24 lg:pb-28">
-        <div className="max-w-2xl space-y-3 sm:space-y-4 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-700">
+      <div className="relative z-10 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-16 sm:pb-24 lg:pb-28">
+        <div className="max-w-2xl space-y-3 sm:space-y-4">
           {/* Top Series & Milestone Badge */}
           <div className="inline-flex items-center gap-2 text-xs font-bold tracking-wider text-[#FFFFFF] flex-wrap">
             <span className="bg-[#E50914] text-[#FFFFFF] font-black px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] uppercase tracking-widest">
@@ -93,7 +90,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           </div>
 
           {/* Cinematic Title */}
-          <h1 className="font-bebas text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-wider text-[#FFFFFF] font-black leading-[0.92] uppercase drop-shadow-2xl break-words text-balance">
+          <h1 className="font-bebas text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-wider text-[#FFFFFF] font-black leading-none uppercase drop-shadow-2xl break-words">
             {displayTitle}
           </h1>
 
@@ -153,8 +150,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               onClick={() => onToggleWatchlist(memory.id)}
               className="w-11 h-11 rounded bg-[#181818]/90 hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-all cursor-pointer active:scale-95 flex items-center justify-center min-h-[44px] min-w-[44px]"
               title={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
-              aria-label={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
-              aria-pressed={Boolean(memory.isInWatchlist)}
+              aria-label="Toggle My List"
             >
               {memory.isInWatchlist ? (
                 <Check className="w-5 h-5 text-[#E50914]" />
@@ -184,8 +180,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             onClick={onToggleAudio}
             className="w-10 h-10 rounded-full border border-[#808080]/40 bg-[#000000]/70 text-[#FFFFFF] hover:bg-[#181818] transition-all cursor-pointer flex items-center justify-center"
             title="Toggle soundtrack"
-            aria-label={isAudioPlaying ? 'Mute soundtrack' : 'Play soundtrack'}
-            aria-pressed={isAudioPlaying}
+            aria-label="Soundtrack audio"
           >
             {isAudioPlaying ? (
               <Volume2 className="w-4 h-4 text-[#FFFFFF]" />
@@ -198,6 +193,6 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };

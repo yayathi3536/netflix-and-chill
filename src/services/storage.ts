@@ -186,9 +186,26 @@ class UnifiedStorageService {
   ): Promise<{ success: boolean; error?: string }> {
     const orderedIds = orderedStories.map((s) => s.id);
 
-    // When cloud storage is configured, persist remotely first. Do not update the
-    // local order if the server rejects the save, otherwise a refresh can appear
-    // successful on this browser while other devices keep the old order.
+    // 1. Save locally in dedicated key immediately
+    this.saveLocalStorylineOrder(orderedIds);
+
+    // 2. Update local memories cache with new rank (isTop10 & sortOrder)
+    const list = this.getLocalMemories();
+    const updatedMemories = list.map((m) => {
+      const idx = orderedIds.indexOf(m.id);
+      if (idx !== -1) {
+        return { ...m, isTop10: idx + 1, sortOrder: idx + 1 };
+      }
+      return m;
+    });
+    this.saveLocalMemories(updatedMemories);
+
+    // 3. Update local site content
+    const siteContent = this.getLocalSiteContent();
+    siteContent['storyline_custom_order'] = JSON.stringify(orderedIds);
+    this.saveLocalSiteContent(siteContent);
+
+    // 4. Sync to Supabase if configured
     if (isSupabaseConfigured()) {
       const { success, error } = await supabaseService.saveStorylineOrder(orderedIds, orderedStories);
       if (!success) {
@@ -199,22 +216,9 @@ class UnifiedStorageService {
       }
     }
 
-    // Update the local order only after the remote save succeeds (or in local-only mode).
-    this.saveLocalStorylineOrder(orderedIds);
-
-    const list = this.getLocalMemories();
-    const updatedMemories = list.map((m) => {
-      const idx = orderedIds.indexOf(m.id);
-      return idx !== -1 ? { ...m, isTop10: idx + 1, sortOrder: idx + 1 } : m;
-    });
-    this.saveLocalMemories(updatedMemories);
-
-    const siteContent = this.getLocalSiteContent();
-    siteContent['storyline_custom_order'] = JSON.stringify(orderedIds);
-    this.saveLocalSiteContent(siteContent);
-
     return { success: true };
   }
+
   // 4. TOGGLE WATCHLIST
   public async toggleWatchlist(id: string): Promise<boolean> {
     const list = this.getLocalMemories();

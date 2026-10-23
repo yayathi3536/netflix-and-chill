@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from './supabaseClient';
-import { MemoryItem, Episode, CouponItem, SiteContentMap, MyListItem, MyListItemInput, MyListCollection, MyListMediaType } from '../types';
+import { MemoryItem, Episode, CouponItem, SiteContentMap } from '../types';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 
 // DATABASE ROW TYPE MAPPING
@@ -58,34 +58,6 @@ interface SiteContentRow {
   section?: string;
   updated_at?: string;
 }
-
-interface MyListDbRow {
-  id: string;
-  collection: MyListCollection;
-  title: string;
-  description: string | null;
-  notes: string | null;
-  target_date: string | null;
-  status: string;
-  media_type: MyListMediaType | null;
-  sort_order: number;
-  created_at: string;
-  updated_at: string;
-}
-
-const mapMyListRow = (row: MyListDbRow): MyListItem => ({
-  id: row.id,
-  collection: row.collection,
-  title: row.title,
-  description: row.description,
-  notes: row.notes,
-  targetDate: row.target_date,
-  status: row.status,
-  mediaType: row.media_type,
-  sortOrder: row.sort_order ?? 0,
-  createdAt: row.created_at,
-  updatedAt: row.updated_at,
-});
 
 export class SupabaseSchemaMissingError extends Error {
   public code = 'PGRST205';
@@ -404,112 +376,48 @@ class SupabaseService {
     }
 
     try {
-      // Save the canonical order first. If the current account is not allowed to
-      // edit site content, stop here instead of reporting a false success.
-      const orderJson = JSON.stringify(orderedIds);
-      const contentResult = await this.updateSiteContent('storyline_custom_order', orderJson, 'sections');
-      if (!contentResult.success) {
-        throw contentResult.error || new Error('Could not save Storyline order to site_content.');
-      }
-
-      // Keep the numeric rank in sync as a fallback for older clients.
+      // 1. Update each memory row with its new 1-based index in is_top_10
       for (let i = 0; i < orderedIds.length; i++) {
         const id = orderedIds[i];
         const newRank = i + 1;
-        const { data, error } = await supabase
+
+        const { data, error } = await supabase!
           .from('memories')
           .update({ is_top_10: newRank })
           .eq('id', id)
           .select('id');
 
-        if (error) throw error;
-
-        if (!data || data.length === 0) {
-          // Distinguish a missing local-only story from a row blocked by RLS.
-          const { data: existing, error: lookupError } = await supabase
-            .from('memories')
-            .select('id')
-            .eq('id', id)
-            .maybeSingle();
-          if (lookupError) throw lookupError;
-
-          if (existing) {
-            throw new Error('Storyline order was not saved: this account does not have permission to update the story records. Sign in with the OUR UNIVERSE admin account and try again.');
-          }
-
-          const storyItem = orderedStories?.find((s) => s.id === id);
-          if (!storyItem) {
-            throw new Error(`Storyline item "${id}" is missing from Supabase and could not be restored.`);
-          }
-
-          const created = await this.createMemory({
-            ...storyItem,
-            isTop10: newRank,
-            sortOrder: newRank,
-          });
-          if (created.error) throw created.error;
+        if (error) {
+          throw error;
         }
+
+        // If 0 rows were updated, this story row is not yet in Supabase.
+        // Insert it now so that its content and new rank are permanently stored!
+        if (!data || data.length === 0) {
+          const storyItem = orderedStories?.find((s) => s.id === id);
+          if (storyItem) {
+            await this.createMemory({
+              ...storyItem,
+              isTop10: newRank,
+              sortOrder: newRank,
+            });
+          }
+        }
+      }
+
+      // 2. Persist storyline_custom_order into site_content table if it exists
+      try {
+        const jsonValue = JSON.stringify(orderedIds);
+        await this.updateSiteContent('storyline_custom_order', jsonValue, 'sections');
+      } catch (siteErr) {
+        console.info('Notice: site_content table not available, using memories.is_top_10 as primary rank.');
       }
 
       return { success: true, error: null };
     } catch (e) {
-      const error = e instanceof Error ? e : new Error(String(e));
-      console.warn('Could not save storyline order to Supabase:', error.message);
-      return { success: false, error };
+      console.warn('Could not save storyline order to Supabase:', (e as Error).message || e);
+      return { success: false, error: e as Error };
     }
-  }
-
-  // MY LIST: shared Bucket List additions, activities, and watchlist entries.
-  public async fetchMyListItems(): Promise<MyListItem[]> {
-    if (!supabase || !isSupabaseConfigured()) {
-      throw new Error('Supabase is not configured. My List requires a cloud connection.');
-    }
-    const { data, error } = await supabase
-      .from('my_list_items')
-      .select('*')
-      .order('sort_order', { ascending: true })
-      .order('created_at', { ascending: true });
-    if (error) throw error;
-    return ((data || []) as unknown as MyListDbRow[]).map(mapMyListRow);
-  }
-
-  public async createMyListItem(input: MyListItemInput): Promise<MyListItem> {
-    if (!supabase || !isSupabaseConfigured()) throw new Error('Supabase is not configured.');
-    const { data, error } = await supabase.from('my_list_items').insert({
-      collection: input.collection,
-      title: input.title.trim(),
-      description: input.description || null,
-      notes: input.notes || null,
-      target_date: input.targetDate || null,
-      status: input.status,
-      media_type: input.mediaType || null,
-      sort_order: input.sortOrder ?? 0,
-    }).select('*').single();
-    if (error) throw error;
-    return mapMyListRow(data as unknown as MyListDbRow);
-  }
-
-  public async updateMyListItem(id: string, updates: Partial<MyListItemInput>): Promise<MyListItem> {
-    if (!supabase || !isSupabaseConfigured()) throw new Error('Supabase is not configured.');
-    const dbUpdates: Record<string, unknown> = { updated_at: new Date().toISOString() };
-    if (updates.collection !== undefined) dbUpdates.collection = updates.collection;
-    if (updates.title !== undefined) dbUpdates.title = updates.title.trim();
-    if (updates.description !== undefined) dbUpdates.description = updates.description || null;
-    if (updates.notes !== undefined) dbUpdates.notes = updates.notes || null;
-    if (updates.targetDate !== undefined) dbUpdates.target_date = updates.targetDate || null;
-    if (updates.status !== undefined) dbUpdates.status = updates.status;
-    if (updates.mediaType !== undefined) dbUpdates.media_type = updates.mediaType || null;
-    if (updates.sortOrder !== undefined) dbUpdates.sort_order = updates.sortOrder;
-    const { data, error } = await supabase.from('my_list_items').update(dbUpdates).eq('id', id).select('*').single();
-    if (error) throw error;
-    return mapMyListRow(data as unknown as MyListDbRow);
-  }
-
-  public async deleteMyListItem(id: string): Promise<void> {
-    if (!supabase || !isSupabaseConfigured()) throw new Error('Supabase is not configured.');
-    const { data, error } = await supabase.from('my_list_items').delete().eq('id', id).select('id').single();
-    if (error) throw error;
-    if (!data) throw new Error('No My List item was deleted. It may no longer exist or you may not have permission.');
   }
 
   /**

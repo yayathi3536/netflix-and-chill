@@ -110,23 +110,3 @@ export interface StorageFileItem {
   createdAt?: string;
   url: string;
 }
-
-
-export type MyListCollection = 'bucket-list' | 'things-to-do' | 'watchlist';
-export type MyListMediaType = 'movie' | 'tv-show';
-
-export interface MyListItem {
-  id: string;
-  collection: MyListCollection;
-  title: string;
-  description: string | null;
-  notes: string | null;
-  targetDate: string | null;
-  status: string;
-  mediaType: MyListMediaType | null;
-  sortOrder: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type MyListItemInput = Omit<MyListItem, 'id' | 'createdAt' | 'updatedAt'>;

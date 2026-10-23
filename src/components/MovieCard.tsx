@@ -46,19 +46,10 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   if (isPortrait && rankNumber !== undefined) {
     return (
       <div
-        role="button"
-        tabIndex={0}
-        aria-label={`Open ${memory.title}`}
-        className="group relative flex items-center shrink-0 cursor-pointer transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E50914] focus-visible:ring-offset-2 focus-visible:ring-offset-black z-10"
+        className="group relative flex items-center shrink-0 cursor-pointer transition-transform duration-300 hover:scale-105 z-10"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleCardClick}
-        onKeyDown={(event) => {
-          if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) {
-            event.preventDefault();
-            handleCardClick();
-          }
-        }}
       >
         {/* Outlined numeral */}
         <div className="relative font-bebas text-8xl sm:text-9xl font-black select-none pointer-events-none -mr-4 sm:-mr-6 z-0 text-[#000000] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] [-webkit-text-stroke:3px_#808080] group-hover:[-webkit-text-stroke:3px_#E50914] transition-all">
@@ -72,10 +63,10 @@ export const MovieCard: React.FC<MovieCardProps> = ({
             category={memory.category}
             title={memory.title}
             imageUrl={memory.posterUrl || memory.backdropUrl}
-            fit="contain"
+            fit="cover"
             aspectRatio="3/4"
             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-            className="w-full h-full"
+            className="w-full h-full group-hover:scale-110 transition-transform duration-500"
           />
 
           {/* Top Netflix badge & Admin Edit */}
@@ -112,21 +103,12 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   // Standard Landscape Card (16:9) — Image shown directly & clearly
   return (
     <div
-      role="button"
-      tabIndex={0}
-      aria-label={`Open ${memory.title}`}
-      className={`group relative rounded bg-[#141414] overflow-hidden shadow-lg border border-[#181818] cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:z-30 hover:border-[#808080]/60 hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E50914] focus-visible:ring-offset-2 focus-visible:ring-offset-black ${ 
+      className={`group relative rounded bg-[#141414] overflow-hidden shadow-lg border border-[#181818] cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:z-30 hover:border-[#808080]/60 hover:shadow-2xl ${
         className || 'shrink-0 w-60 sm:w-72 md:w-80'
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleCardClick}
-      onKeyDown={(event) => {
-        if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) {
-          event.preventDefault();
-          handleCardClick();
-        }
-      }}
     >
       {/* Aspect Ratio Container (16:9) — Direct Image Display */}
       <div className="relative aspect-video w-full overflow-hidden bg-[#141414]">

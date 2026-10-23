@@ -57,9 +57,9 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
   return (
     <div className="relative group/row my-6 sm:my-8 px-4 sm:px-6 lg:px-8">
       {/* Netflix Row Header */}
-      <div className="flex items-baseline justify-between gap-3 mb-3">
+      <div className="flex items-baseline justify-between mb-3">
         <div className="flex items-baseline gap-3 flex-wrap">
-          <h2 className="font-bebas text-2xl sm:text-3xl lg:text-4xl tracking-wider text-[#FFFFFF] font-black uppercase hover:text-[#B3B3B3] transition-colors drop-shadow-sm">
+          <h2 className="font-bebas text-2xl sm:text-3xl lg:text-4xl tracking-wider text-[#FFFFFF] font-black uppercase hover:text-[#B3B3B3] transition-colors">
             {title}
           </h2>
           {subtitle && (
@@ -88,7 +88,7 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
         {showLeftArrow && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-gradient-to-r from-black/95 to-black/65 backdrop-blur-sm hover:from-black hover:to-black/80 text-[#FFFFFF] flex items-center justify-center opacity-100 md:opacity-0 group-hover/row:opacity-100 focus-visible:opacity-100 transition-all cursor-pointer"
+            className="absolute left-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-[#000000]/80 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all cursor-pointer"
             aria-label="Scroll left"
           >
             <ChevronLeft className="w-7 h-7 stroke-[2.5] text-[#FFFFFF]" />
@@ -99,10 +99,7 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
         <div
           ref={rowRef}
           onScroll={handleScroll}
-          role="region"
-          aria-label={`${title} carousel`}
-          tabIndex={0}
-          className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth py-3 px-1 -mx-1 focus-visible:rounded-lg"
+          className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth py-3 px-1 -mx-1"
         >
           {items.map((item, index) => (
             <MovieCard
@@ -124,7 +121,7 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
         {showRightArrow && items.length > 2 && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-gradient-to-l from-black/95 to-black/65 backdrop-blur-sm hover:from-black hover:to-black/80 text-[#FFFFFF] flex items-center justify-center opacity-100 md:opacity-0 group-hover/row:opacity-100 focus-visible:opacity-100 transition-all cursor-pointer"
+            className="absolute right-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-[#000000]/80 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all cursor-pointer"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-7 h-7 stroke-[2.5] text-[#FFFFFF]" />
