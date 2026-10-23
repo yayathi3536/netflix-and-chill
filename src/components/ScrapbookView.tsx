@@ -72,7 +72,7 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
           )}
 
           {/* Filter Tabs */}
-          <div className="flex items-center gap-1.5 p-1 bg-[#141414] rounded border border-[#808080]/30 shrink-0 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-1.5 p-1 bg-[#141414] rounded-lg border border-white/10 shrink-0 overflow-x-auto no-scrollbar">
             {[
               { id: 'all', label: 'All Stills' },
               { id: 'milestones', label: 'Milestones' },
@@ -82,10 +82,10 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
               <button
                 key={tab.id}
                 onClick={() => setSelectedTag(tab.id)}
-                className={`px-3.5 py-1.5 text-xs font-semibold rounded transition-all cursor-pointer whitespace-nowrap ${
+                className={`px-3.5 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer whitespace-nowrap ${
                   selectedTag === tab.id
-                    ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
-                    : 'text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818]'
+                    ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                    : 'text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-white/5'
                 }`}
               >
                 {tab.label}
@@ -104,17 +104,20 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
             <div
               key={mem.id}
               onClick={() => onOpenInfo(mem)}
-              className="group relative bg-[#141414] text-[#FFFFFF] rounded overflow-hidden shadow-xl border border-[#181818] hover:border-[#808080]/60 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+              className="group relative bg-[#141414] text-[#FFFFFF] rounded-xl overflow-hidden netflix-card-shadow border border-white/10 hover:border-white/30 transition-all duration-300 flex flex-col justify-between cursor-pointer select-none"
             >
-              {/* Photo Area — Shown Directly Without Dark Overlay */}
-              <div className="relative aspect-video w-full overflow-hidden bg-[#000000]">
+              {/* Photo Area — Shown Directly with Full Photo Visibility */}
+              <div className="relative aspect-[16/10] sm:aspect-video w-full overflow-hidden bg-[#000000]">
                 <VisualArt
                   id={mem.id}
                   category={mem.category}
                   title={mem.title}
-                  imageUrl={mem.backdropUrl || mem.posterUrl}
+                  imageUrl={mem.posterUrl || mem.backdropUrl}
+                  variant="episode"
+                  focalPosition="top"
+                  fit="auto"
                   fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full"
                 />
 
                 {/* Top Badge & Admin-Only Image Upload/Change Control */}

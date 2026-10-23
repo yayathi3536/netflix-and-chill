@@ -15,6 +15,8 @@ import {
   Mail,
   Edit3,
   SlidersHorizontal,
+  LayoutGrid,
+  List,
 } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
@@ -44,6 +46,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
   // Local working copy of stories
   const [items, setItems] = useState<MemoryItem[]>(stories);
   const [isReorderMode, setIsReorderMode] = useState(false);
+  const [viewMode, setViewMode] = useState<'posters' | 'episodes'>('posters');
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
@@ -190,13 +193,43 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
 
         {/* Storyline Controls */}
         <div className="flex flex-wrap items-center gap-2.5">
+          {/* View Mode Switcher: Netflix Posters (Homepage Style) vs Episode Details */}
+          <div className="flex items-center bg-[#141414] p-1 rounded-lg border border-white/10 min-h-[44px]">
+            <button
+              type="button"
+              onClick={() => setViewMode('posters')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all cursor-pointer min-h-[34px] ${
+                viewMode === 'posters'
+                  ? 'bg-[#E50914] text-white shadow-md'
+                  : 'text-[#B3B3B3] hover:text-white hover:bg-white/5'
+              }`}
+              title="View as Netflix Poster Cards (Homepage Storyline reference)"
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>Posters</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('episodes')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all cursor-pointer min-h-[34px] ${
+                viewMode === 'episodes'
+                  ? 'bg-[#E50914] text-white shadow-md'
+                  : 'text-[#B3B3B3] hover:text-white hover:bg-white/5'
+              }`}
+              title="View as Episode Cards with full synopsis"
+            >
+              <List className="w-3.5 h-3.5" />
+              <span>Episodes</span>
+            </button>
+          </div>
+
           <button
             type="button"
             onClick={() => setIsReorderMode(!isReorderMode)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer min-h-[44px] ${
               isReorderMode
                 ? 'bg-[#E50914] text-white shadow-lg shadow-red-950/40'
-                : 'bg-[#181818] text-[#FFFFFF] hover:bg-white/10 border border-[#808080]/30'
+                : 'bg-[#181818] text-[#FFFFFF] hover:bg-white/10 border border-white/10 hover:border-white/20'
             }`}
             title="Toggle drag-and-drop reordering controls"
           >
@@ -288,198 +321,374 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
       )}
 
       {/* Chapters Grid / List with Drag & Drop */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {items.map((ch, idx) => {
-          const isDragging = draggedIndex === idx;
-          const isOver = dragOverIndex === idx && draggedIndex !== idx;
-          const isVideo = hasValidVideo(ch);
-          const isLetter = isLetterItem(ch);
+      {viewMode === 'posters' ? (
+        /* POSTER CARDS VIEW (Homepage Storyline reference style with complete portrait visibility) */
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+          {items.map((ch, idx) => {
+            const isDragging = draggedIndex === idx;
+            const isOver = dragOverIndex === idx && draggedIndex !== idx;
+            const isVideo = hasValidVideo(ch);
+            const isLetter = isLetterItem(ch);
 
-          return (
-            <div
-              key={ch.id}
-              draggable={isReorderMode}
-              onDragStart={(e) => handleDragStart(e, idx)}
-              onDragOver={(e) => handleDragOver(e, idx)}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, idx)}
-              onDragEnd={handleDragEnd}
-              onClick={() => {
-                if (!isReorderMode) {
-                  onSelectStory(ch);
-                }
-              }}
-              className={`relative bg-[#141414] rounded-lg overflow-hidden border transition-all duration-200 flex flex-col justify-between shadow-xl ${
-                isDragging
-                  ? 'opacity-40 scale-[0.98] border-2 border-[#E50914] shadow-[0_0_30px_rgba(229,9,20,0.5)] cursor-grabbing z-30'
-                  : isOver
-                  ? 'border-2 border-[#E50914] scale-[1.02] shadow-[0_0_25px_rgba(229,9,20,0.4)] z-20'
-                  : 'border-[#181818] hover:border-[#808080]/60'
-              } ${isReorderMode ? 'cursor-grab select-none' : 'cursor-pointer hover:scale-[1.02]'}`}
-            >
-              {/* Drop Target Top Indicator */}
-              {isOver && (
-                <div
-                  className="absolute inset-x-0 top-0 h-1.5 bg-[#E50914] z-40 rounded-t shadow-[0_0_12px_#E50914] animate-pulse"
-                  aria-hidden="true"
-                />
-              )}
+            return (
+              <div
+                key={ch.id}
+                draggable={isReorderMode}
+                onDragStart={(e) => handleDragStart(e, idx)}
+                onDragOver={(e) => handleDragOver(e, idx)}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, idx)}
+                onDragEnd={handleDragEnd}
+                onClick={() => {
+                  if (!isReorderMode) {
+                    onSelectStory(ch);
+                  }
+                }}
+                className={`group relative rounded-lg overflow-hidden bg-[#141414] border transition-all duration-300 shadow-xl flex flex-col justify-between ${
+                  isDragging
+                    ? 'opacity-40 scale-[0.97] border-2 border-[#E50914] shadow-[0_0_30px_rgba(229,9,20,0.5)] cursor-grabbing z-30'
+                    : isOver
+                    ? 'border-2 border-[#E50914] scale-[1.03] shadow-[0_0_25px_rgba(229,9,20,0.4)] z-20'
+                    : 'border-[#181818] hover:border-[#808080]/60 hover:scale-[1.03] hover:shadow-2xl'
+                } ${isReorderMode ? 'cursor-grab select-none' : 'cursor-pointer'}`}
+              >
+                {/* Poster Media Container: aspect-[3/4] matching homepage Storyline */}
+                <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#000000]">
+                  <VisualArt
+                    id={ch.id}
+                    category={ch.category}
+                    title={ch.title}
+                    imageUrl={ch.posterUrl || ch.backdropUrl}
+                    variant="poster"
+                    aspectRatio="3/4"
+                    focalPosition="top"
+                    fit="cover"
+                    fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
+                    className="w-full h-full"
+                  />
 
-              {/* 16:9 Aspect Ratio Media Area */}
-              <div className="relative aspect-video w-full overflow-hidden bg-[#000000]">
-                {/* Episode Badge (Reflects live reordered index!) */}
-                <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5">
-                  <span className="font-bebas text-xs px-2.5 py-1 rounded bg-[#E50914] text-[#FFFFFF] font-black uppercase tracking-wider shadow">
-                    Episode {idx + 1}
-                  </span>
-                  {ch.isSecret && (
-                    <span className="p-1 rounded bg-black/70 text-white border border-white/20 shadow">
-                      <Lock className="w-3 h-3 text-[#E50914]" />
+                  {/* Top Badge: Netflix N & Episode number */}
+                  <div className="absolute top-2.5 left-2.5 z-20 flex items-center gap-1.5">
+                    <span className="w-5 h-5 rounded bg-[#E50914] flex items-center justify-center font-bebas text-xs font-black text-[#FFFFFF] shadow">
+                      N
                     </span>
-                  )}
-                </div>
+                    <span className="font-bebas text-xs px-2 py-0.5 rounded bg-black/80 text-white font-bold uppercase tracking-wider border border-white/20 shadow">
+                      EP {idx + 1}
+                    </span>
+                    {ch.isSecret && (
+                      <span className="p-1 rounded bg-black/80 text-white border border-white/20 shadow">
+                        <Lock className="w-3 h-3 text-[#E50914]" />
+                      </span>
+                    )}
+                  </div>
 
-                {/* Drag Handle & Reorder Arrow Controls (Top Right) */}
-                {isReorderMode && (
-                  <div
-                    className="absolute top-2.5 right-2.5 z-30 flex items-center gap-1 bg-[#000000]/90 backdrop-blur-sm p-1 rounded-lg border border-[#808080]/40 shadow-xl"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {/* Move Earlier / Up Button */}
-                    <button
-                      type="button"
-                      disabled={idx === 0}
-                      onClick={(e) => handleMoveUp(e, idx)}
-                      className="w-8 h-8 rounded flex items-center justify-center text-white hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-transparent transition-colors cursor-pointer min-h-[32px] min-w-[32px]"
-                      title="Move this chapter earlier in the storyline"
-                      aria-label="Move episode earlier"
-                    >
-                      <ChevronUp className="w-4 h-4 stroke-[2.5]" />
-                    </button>
-
-                    {/* Move Later / Down Button */}
-                    <button
-                      type="button"
-                      disabled={idx === items.length - 1}
-                      onClick={(e) => handleMoveDown(e, idx)}
-                      className="w-8 h-8 rounded flex items-center justify-center text-white hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-transparent transition-colors cursor-pointer min-h-[32px] min-w-[32px]"
-                      title="Move this chapter later in the storyline"
-                      aria-label="Move episode later"
-                    >
-                      <ChevronDown className="w-4 h-4 stroke-[2.5]" />
-                    </button>
-
-                    {/* Dedicated Grip Handle Icon */}
+                  {/* Reorder Controls in Poster Mode */}
+                  {isReorderMode && (
                     <div
-                      className="w-8 h-8 flex items-center justify-center text-red-500 hover:text-white cursor-grab active:cursor-grabbing border-l border-white/10 pl-1"
-                      title="Drag to reorder"
+                      className="absolute top-2.5 right-2.5 z-30 flex items-center gap-0.5 bg-[#000000]/90 backdrop-blur-sm p-1 rounded-lg border border-[#808080]/40 shadow-xl"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <GripVertical className="w-4 h-4" />
+                      <button
+                        type="button"
+                        disabled={idx === 0}
+                        onClick={(e) => handleMoveUp(e, idx)}
+                        className="w-7 h-7 rounded flex items-center justify-center text-white hover:bg-white/20 disabled:opacity-30 transition-colors cursor-pointer"
+                        title="Move earlier"
+                      >
+                        <ChevronUp className="w-3.5 h-3.5 stroke-[2.5]" />
+                      </button>
+                      <button
+                        type="button"
+                        disabled={idx === items.length - 1}
+                        onClick={(e) => handleMoveDown(e, idx)}
+                        className="w-7 h-7 rounded flex items-center justify-center text-white hover:bg-white/20 disabled:opacity-30 transition-colors cursor-pointer"
+                        title="Move later"
+                      >
+                        <ChevronDown className="w-3.5 h-3.5 stroke-[2.5]" />
+                      </button>
+                      <div className="w-7 h-7 flex items-center justify-center text-red-500 hover:text-white cursor-grab active:cursor-grabbing border-l border-white/10 pl-0.5">
+                        <GripVertical className="w-3.5 h-3.5" />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Admin Quick Edit Button when not reordering */}
+                  {!isReorderMode && isAdmin && onEditStory && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEditStory(ch);
+                      }}
+                      className="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-black/80 hover:bg-[#E50914] text-white border border-white/30 flex items-center justify-center transition-colors shadow cursor-pointer"
+                      title="Edit chapter content & artwork"
+                    >
+                      <Edit3 className="w-3 h-3" />
+                    </button>
+                  )}
+
+                  {/* Drop Target Top Indicator */}
+                  {isOver && (
+                    <div
+                      className="absolute inset-x-0 top-0 h-1.5 bg-[#E50914] z-40 rounded-t shadow-[0_0_12px_#E50914] animate-pulse"
+                      aria-hidden="true"
+                    />
+                  )}
+
+                  {/* Bottom Cinematic Scrim with Chapter Meta */}
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#000000]/95 via-[#000000]/60 to-transparent p-3 pt-10 z-20 flex flex-col justify-end">
+                    <div className="flex items-center justify-between text-[10px] text-[#B3B3B3] font-semibold mb-1">
+                      <span>{ch.date}</span>
+                      <span className="text-white font-bold">{ch.matchScore}% Match</span>
+                    </div>
+
+                    <h3 className="font-bebas text-lg sm:text-xl text-[#FFFFFF] font-bold leading-tight drop-shadow uppercase tracking-wide line-clamp-2">
+                      {ch.title}
+                    </h3>
+
+                    {ch.subtitle && (
+                      <p className="text-[10px] text-[#B3B3B3] line-clamp-1 mt-0.5">
+                        {ch.subtitle}
+                      </p>
+                    )}
+
+                    {/* Quick Action Button on Hover */}
+                    <div className="mt-2 pt-2 border-t border-white/10 flex items-center justify-between">
+                      {isVideo ? (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onPlayStory(ch);
+                          }}
+                          className="flex items-center gap-1 px-2.5 py-1 rounded bg-white text-black font-bold text-[11px] hover:bg-[#B3B3B3] transition-colors cursor-pointer"
+                        >
+                          <Play className="w-2.5 h-2.5 fill-black" />
+                          <span>Play</span>
+                        </button>
+                      ) : isLetter && onUnlockVault ? (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onUnlockVault(ch);
+                          }}
+                          className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#E50914] text-white font-bold text-[11px] hover:bg-[#b80710] transition-colors cursor-pointer"
+                        >
+                          <Mail className="w-2.5 h-2.5" />
+                          <span>Letter</span>
+                        </button>
+                      ) : (
+                        <span className="text-[10px] text-[#808080] font-semibold uppercase">
+                          {ch.duration || 'Chapter'}
+                        </span>
+                      )}
+
+                      {isReorderMode && (
+                        <span className="text-[10px] text-neutral-400 font-mono">
+                          #{idx + 1}
+                        </span>
+                      )}
                     </div>
                   </div>
-                )}
-
-                {/* Admin Quick Edit Button when not reordering */}
-                {!isReorderMode && isAdmin && onEditStory && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onEditStory(ch);
-                    }}
-                    className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-[#E50914] text-white border border-white/30 flex items-center justify-center transition-colors shadow cursor-pointer"
-                    title="Edit chapter content & artwork"
-                  >
-                    <Edit3 className="w-3.5 h-3.5" />
-                  </button>
-                )}
-
-                {/* Cover Image */}
-                <VisualArt
-                  id={ch.id}
-                  category={ch.category}
-                  title={ch.title}
-                  imageUrl={ch.backdropUrl || ch.posterUrl}
-                  fit="auto"
-                  aspectRatio="16/9"
-                  fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-
-              {/* Story Details Card Body */}
-              <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs text-[#808080] font-medium">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3 text-[#808080]" />
-                      <span>{ch.date}</span>
-                    </span>
-                    <span className="text-[#FFFFFF] font-bold">{ch.matchScore}% Match</span>
-                  </div>
-
-                  <h3 className="font-bebas text-xl text-[#FFFFFF] font-bold leading-tight uppercase tracking-wide">
-                    {ch.title}
-                  </h3>
-
-                  {ch.subtitle && (
-                    <p className="text-[11px] text-[#B3B3B3] font-medium line-clamp-1">
-                      {ch.subtitle}
-                    </p>
-                  )}
-
-                  <p className="text-xs text-[#B3B3B3] line-clamp-3 leading-relaxed pt-1">
-                    {ch.synopsis}
-                  </p>
                 </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        /* EPISODE DETAILS VIEW (Wide Cards with full synopsis and ambient photo backdrop) */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {items.map((ch, idx) => {
+            const isDragging = draggedIndex === idx;
+            const isOver = dragOverIndex === idx && draggedIndex !== idx;
+            const isVideo = hasValidVideo(ch);
+            const isLetter = isLetterItem(ch);
 
-                {/* Quick Action Footers */}
-                <div className="pt-3 border-t border-[#181818] flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2">
-                    {isVideo && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onPlayStory(ch);
-                        }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white text-black font-bold text-xs hover:bg-[#B3B3B3] transition-colors cursor-pointer min-h-[36px]"
-                      >
-                        <Play className="w-3 h-3 fill-black" />
-                        <span>Play</span>
-                      </button>
-                    )}
+            return (
+              <div
+                key={ch.id}
+                draggable={isReorderMode}
+                onDragStart={(e) => handleDragStart(e, idx)}
+                onDragOver={(e) => handleDragOver(e, idx)}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, idx)}
+                onDragEnd={handleDragEnd}
+                onClick={() => {
+                  if (!isReorderMode) {
+                    onSelectStory(ch);
+                  }
+                }}
+                className={`relative bg-[#141414] rounded-lg overflow-hidden border transition-all duration-200 flex flex-col justify-between shadow-xl ${
+                  isDragging
+                    ? 'opacity-40 scale-[0.98] border-2 border-[#E50914] shadow-[0_0_30px_rgba(229,9,20,0.5)] cursor-grabbing z-30'
+                    : isOver
+                    ? 'border-2 border-[#E50914] scale-[1.02] shadow-[0_0_25px_rgba(229,9,20,0.4)] z-20'
+                    : 'border-[#181818] hover:border-[#808080]/60'
+                } ${isReorderMode ? 'cursor-grab select-none' : 'cursor-pointer hover:scale-[1.02]'}`}
+              >
+                {/* Drop Target Top Indicator */}
+                {isOver && (
+                  <div
+                    className="absolute inset-x-0 top-0 h-1.5 bg-[#E50914] z-40 rounded-t shadow-[0_0_12px_#E50914] animate-pulse"
+                    aria-hidden="true"
+                  />
+                )}
 
-                    {isLetter && onUnlockVault && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onUnlockVault(ch);
-                        }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#E50914] text-white font-bold text-xs hover:bg-[#b80710] transition-colors cursor-pointer min-h-[36px]"
-                      >
-                        <Mail className="w-3 h-3" />
-                        <span>Read</span>
-                      </button>
-                    )}
-
-                    <span className="text-[10px] text-[#808080] uppercase tracking-wider font-semibold">
-                      {ch.duration}
+                {/* Media Area — Preserves Complete Original Photo with focal protection & ambient backdrop */}
+                <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full overflow-hidden bg-[#000000]">
+                  {/* Episode Badge (Reflects live reordered index!) */}
+                  <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5">
+                    <span className="font-bebas text-xs px-2.5 py-1 rounded bg-[#E50914] text-[#FFFFFF] font-black uppercase tracking-wider shadow">
+                      Episode {idx + 1}
                     </span>
+                    {ch.isSecret && (
+                      <span className="p-1 rounded bg-black/70 text-white border border-white/20 shadow">
+                        <Lock className="w-3 h-3 text-[#E50914]" />
+                      </span>
+                    )}
                   </div>
 
+                  {/* Drag Handle & Reorder Arrow Controls (Top Right) */}
                   {isReorderMode && (
-                    <span className="text-[10px] text-neutral-400 font-mono">
-                      #{idx + 1} of {items.length}
-                    </span>
+                    <div
+                      className="absolute top-2.5 right-2.5 z-30 flex items-center gap-1 bg-[#000000]/90 backdrop-blur-sm p-1 rounded-lg border border-[#808080]/40 shadow-xl"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        disabled={idx === 0}
+                        onClick={(e) => handleMoveUp(e, idx)}
+                        className="w-8 h-8 rounded flex items-center justify-center text-white hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-transparent transition-colors cursor-pointer min-h-[32px] min-w-[32px]"
+                        title="Move this chapter earlier in the storyline"
+                        aria-label="Move episode earlier"
+                      >
+                        <ChevronUp className="w-4 h-4 stroke-[2.5]" />
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={idx === items.length - 1}
+                        onClick={(e) => handleMoveDown(e, idx)}
+                        className="w-8 h-8 rounded flex items-center justify-center text-white hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-transparent transition-colors cursor-pointer min-h-[32px] min-w-[32px]"
+                        title="Move this chapter later in the storyline"
+                        aria-label="Move episode later"
+                      >
+                        <ChevronDown className="w-4 h-4 stroke-[2.5]" />
+                      </button>
+
+                      <div
+                        className="w-8 h-8 flex items-center justify-center text-red-500 hover:text-white cursor-grab active:cursor-grabbing border-l border-white/10 pl-1"
+                        title="Drag to reorder"
+                      >
+                        <GripVertical className="w-4 h-4" />
+                      </div>
+                    </div>
                   )}
+
+                  {/* Admin Quick Edit Button when not reordering */}
+                  {!isReorderMode && isAdmin && onEditStory && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEditStory(ch);
+                      }}
+                      className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-[#E50914] text-white border border-white/30 flex items-center justify-center transition-colors shadow cursor-pointer"
+                      title="Edit chapter content & artwork"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+
+                  {/* Cover Image using variant="episode" and focalPosition="top" to prevent face cuts */}
+                  <VisualArt
+                    id={ch.id}
+                    category={ch.category}
+                    title={ch.title}
+                    imageUrl={ch.posterUrl || ch.backdropUrl}
+                    variant="episode"
+                    focalPosition="top"
+                    fit="auto"
+                    fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
+                    className="w-full h-full"
+                  />
+                </div>
+
+                {/* Story Details Card Body */}
+                <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-xs text-[#808080] font-medium">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3 text-[#808080]" />
+                        <span>{ch.date}</span>
+                      </span>
+                      <span className="text-[#FFFFFF] font-bold">{ch.matchScore}% Match</span>
+                    </div>
+
+                    <h3 className="font-bebas text-xl text-[#FFFFFF] font-bold leading-tight uppercase tracking-wide">
+                      {ch.title}
+                    </h3>
+
+                    {ch.subtitle && (
+                      <p className="text-[11px] text-[#B3B3B3] font-medium line-clamp-1">
+                        {ch.subtitle}
+                      </p>
+                    )}
+
+                    <p className="text-xs text-[#B3B3B3] line-clamp-3 leading-relaxed pt-1">
+                      {ch.synopsis}
+                    </p>
+                  </div>
+
+                  {/* Quick Action Footers */}
+                  <div className="pt-3 border-t border-[#181818] flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      {isVideo && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onPlayStory(ch);
+                          }}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white text-black font-bold text-xs hover:bg-[#B3B3B3] transition-colors cursor-pointer min-h-[36px]"
+                        >
+                          <Play className="w-3 h-3 fill-black" />
+                          <span>Play</span>
+                        </button>
+                      )}
+
+                      {isLetter && onUnlockVault && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onUnlockVault(ch);
+                          }}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#E50914] text-white font-bold text-xs hover:bg-[#b80710] transition-colors cursor-pointer min-h-[36px]"
+                        >
+                          <Mail className="w-3 h-3" />
+                          <span>Read</span>
+                        </button>
+                      )}
+
+                      <span className="text-[10px] text-[#808080] uppercase tracking-wider font-semibold">
+                        {ch.duration}
+                      </span>
+                    </div>
+
+                    {isReorderMode && (
+                      <span className="text-[10px] text-neutral-400 font-mono">
+                        #{idx + 1} of {items.length}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

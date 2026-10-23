@@ -42,36 +42,40 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     }
   };
 
-  // Top 10 Portrait Poster Layout
-  if (isPortrait && rankNumber !== undefined) {
+  // Portrait Poster Layout (for Top 10 series with numbers, or portrait collection cards)
+  if (isPortrait) {
     return (
       <div
-        className="group relative flex items-center shrink-0 cursor-pointer transition-transform duration-300 hover:scale-105 z-10"
+        className="group relative flex items-center shrink-0 cursor-pointer transition-transform duration-300 hover:scale-105 z-10 select-none"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleCardClick}
       >
-        {/* Outlined numeral */}
-        <div className="relative font-bebas text-8xl sm:text-9xl font-black select-none pointer-events-none -mr-4 sm:-mr-6 z-0 text-[#000000] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] [-webkit-text-stroke:3px_#808080] group-hover:[-webkit-text-stroke:3px_#E50914] transition-all">
-          {rankNumber}
-        </div>
+        {/* Outlined numeral if rankNumber is defined */}
+        {rankNumber !== undefined && (
+          <div className="relative font-bebas text-8xl sm:text-9xl font-black select-none pointer-events-none -mr-4 sm:-mr-6 z-0 text-[#000000] drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)] [-webkit-text-stroke:3px_#555555] group-hover:[-webkit-text-stroke:3px_#E50914] transition-all">
+            {rankNumber}
+          </div>
+        )}
 
         {/* Poster Card */}
-        <div className="relative w-32 xs:w-36 sm:w-44 aspect-[3/4] rounded-lg overflow-hidden bg-[#141414] shadow-xl border border-[#181818] z-10 group-hover:border-[#808080]/50 transition-all">
+        <div className={`relative ${rankNumber !== undefined ? 'w-32 xs:w-36 sm:w-44' : 'w-36 xs:w-40 sm:w-48'} aspect-[3/4] rounded-lg overflow-hidden bg-[#141414] netflix-card-shadow border border-white/10 z-10 group-hover:border-[#E50914] group-hover:shadow-[0_12px_32px_rgba(229,9,20,0.3)] transition-all duration-300`}>
           <VisualArt
             id={memory.id}
             category={memory.category}
             title={memory.title}
             imageUrl={memory.posterUrl || memory.backdropUrl}
-            fit="cover"
+            variant="poster"
             aspectRatio="3/4"
+            focalPosition="top"
+            fit="cover"
             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-            className="w-full h-full group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full"
           />
 
           {/* Top Netflix badge & Admin Edit */}
           <div className="absolute top-2 left-2 right-2 flex items-center justify-between z-20">
-            <span className="w-5 h-5 rounded bg-[#E50914] flex items-center justify-center font-bebas text-xs font-black text-[#FFFFFF] shadow">
+            <span className="w-5 h-5 rounded bg-[#E50914] flex items-center justify-center font-bebas text-xs font-black text-[#FFFFFF] shadow-md">
               N
             </span>
             {onEditMemory && (
@@ -80,47 +84,51 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                   e.stopPropagation();
                   onEditMemory(memory);
                 }}
-                className="w-6 h-6 rounded-full bg-[#000000]/80 hover:bg-[#E50914] border border-[#808080]/40 text-[#FFFFFF] flex items-center justify-center transition-colors cursor-pointer"
+                className="w-7 h-7 rounded-full bg-[#000000]/85 hover:bg-[#E50914] border border-white/20 text-[#FFFFFF] flex items-center justify-center transition-colors cursor-pointer shadow-md min-h-[28px] min-w-[28px]"
                 title="Admin only: Change / Upload Image"
+                aria-label="Edit memory image"
               >
-                <Edit3 className="w-3 h-3 text-[#FFFFFF]" />
+                <Edit3 className="w-3.5 h-3.5 text-[#FFFFFF]" />
               </button>
             )}
           </div>
 
-          {/* Bottom Title & Subtle Gradient */}
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#000000]/95 via-[#000000]/50 to-transparent flex flex-col justify-end p-3 pt-8 z-20">
-            <h3 className="font-bebas text-lg sm:text-xl text-[#FFFFFF] font-bold leading-tight drop-shadow line-clamp-2 uppercase tracking-wide">
+          {/* Bottom Title & Scrim */}
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#000000]/95 via-[#000000]/60 to-transparent flex flex-col justify-end p-2.5 sm:p-3 pt-8 z-20">
+            <h3 className="font-bebas text-base sm:text-xl text-[#FFFFFF] font-bold leading-tight drop-shadow-md line-clamp-2 uppercase tracking-wide">
               {memory.title}
             </h3>
-            <span className="text-[10px] text-[#B3B3B3] mt-0.5 line-clamp-1">{memory.subtitle}</span>
+            {memory.subtitle && (
+              <span className="text-[10px] text-[#B3B3B3] mt-0.5 line-clamp-1">{memory.subtitle}</span>
+            )}
           </div>
         </div>
       </div>
     );
   }
 
-  // Standard Landscape Card (16:9) — Image shown directly & clearly
+  // Standard Landscape Card (16:9 / 16:10) — Full Image Display with Ambient Glow
   return (
     <div
-      className={`group relative rounded bg-[#141414] overflow-hidden shadow-lg border border-[#181818] cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:z-30 hover:border-[#808080]/60 hover:shadow-2xl ${
+      className={`group relative rounded-lg bg-[#141414] overflow-hidden netflix-card-shadow border border-white/10 cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:z-30 hover:border-white/30 hover:shadow-[0_16px_36px_rgba(0,0,0,0.9)] select-none ${
         className || 'shrink-0 w-60 sm:w-72 md:w-80'
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleCardClick}
     >
-      {/* Aspect Ratio Container (16:9) — Direct Image Display */}
-      <div className="relative aspect-video w-full overflow-hidden bg-[#141414]">
+      {/* Aspect Ratio Container — Direct Image Display with Full Image Visibility */}
+      <div className="relative aspect-[16/10] sm:aspect-video w-full overflow-hidden bg-[#141414]">
         <VisualArt
           id={memory.id}
           category={memory.category}
           title={memory.title}
-          imageUrl={memory.backdropUrl || memory.posterUrl}
+          imageUrl={memory.posterUrl || memory.backdropUrl}
+          variant="landscape"
+          focalPosition="top"
           fit="auto"
-          aspectRatio="16/9"
           fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-          className="w-full h-full group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full"
         />
 
         {/* Top Indicators */}

@@ -717,10 +717,12 @@ export default function App() {
                 <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 sm:-mt-8 mb-6">
                   <div
                     onClick={() => setIsSurpriseModalOpen(true)}
-                    className="group relative overflow-hidden rounded-xl bg-[#141414] border border-[#181818] hover:border-[#808080]/60 p-4 sm:p-5 shadow-2xl transition-all cursor-pointer hover:scale-[1.01] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4"
+                    className="group relative overflow-hidden rounded-xl bg-[#141414] border border-white/10 hover:border-white/30 p-4 sm:p-5 netflix-card-shadow transition-all duration-300 cursor-pointer hover:scale-[1.01] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 select-none"
                   >
-                    <div className="flex items-center gap-3.5">
-                      <div className="w-11 h-11 rounded-lg bg-[#181818] border border-[#E50914] flex items-center justify-center text-xl shadow text-[#E50914] group-hover:scale-110 transition-transform shrink-0">
+                    {/* Subtle red ambient glow behind the card */}
+                    <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-1.5 bg-[#E50914]" />
+                    <div className="flex items-center gap-3.5 pl-2 sm:pl-1">
+                      <div className="w-11 h-11 rounded-lg bg-[#181818] border border-white/10 flex items-center justify-center text-xl shadow text-[#E50914] group-hover:scale-110 group-hover:border-[#E50914] transition-all duration-300 shrink-0">
                         💌
                       </div>
                       <div className="min-w-0">
@@ -728,7 +730,7 @@ export default function App() {
                           <span className="font-bebas text-lg sm:text-xl text-[#FFFFFF] font-bold tracking-wider uppercase">
                             Open Your Surprise
                           </span>
-                          <span className="text-[10px] bg-[#E50914] text-[#FFFFFF] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+                          <span className="text-[10px] bg-[#E50914] text-[#FFFFFF] font-bold px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
                             Special
                           </span>
                         </div>
@@ -738,7 +740,7 @@ export default function App() {
                       </div>
                     </div>
 
-                    <button className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shadow cursor-pointer text-center min-h-[44px] flex items-center justify-center">
+                    <button className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shadow-md cursor-pointer text-center min-h-[44px] flex items-center justify-center hover:scale-[1.02]">
                       Reveal Letter &rarr;
                     </button>
                   </div>
@@ -957,28 +959,48 @@ export default function App() {
                     <div
                       key={item.id}
                       onClick={() => setSelectedMemory(item)}
-                      className="p-5 rounded bg-[#141414] border border-[#181818] hover:border-[#808080]/60 transition-all cursor-pointer shadow-xl hover:scale-[1.02] space-y-3.5 flex flex-col justify-between group"
+                      className="p-5 rounded-xl bg-[#141414] border border-white/10 hover:border-white/30 netflix-card-shadow transition-all duration-300 cursor-pointer hover:scale-[1.02] space-y-3.5 flex flex-col justify-between group select-none"
                     >
-                      <div className="space-y-2.5">
+                      {(item.posterUrl || item.backdropUrl) && (
+                        <div className="relative aspect-[16/10] sm:aspect-video w-full rounded-lg overflow-hidden bg-[#000000] -mt-1 mb-2">
+                          <VisualArt
+                            id={item.id}
+                            category={item.category}
+                            title={item.title}
+                            imageUrl={item.posterUrl || item.backdropUrl}
+                            variant="landscape"
+                            focalPosition="top"
+                            fit="auto"
+                            fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
+                            className="w-full h-full"
+                          />
+                        </div>
+                      )}
+                      <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-[11px] text-[#E50914] font-bold tracking-wider uppercase">
-                            {item.duration}
+                            {item.duration || 'Quirk'}
                           </span>
                           <Heart className="w-4 h-4 text-[#E50914] fill-[#E50914]/40 group-hover:fill-[#E50914] transition-colors" />
                         </div>
                         <h3 className="font-bebas text-2xl text-[#FFFFFF] font-bold leading-tight uppercase tracking-wide">
                           {item.title}
                         </h3>
-                        <p className="text-xs text-[#B3B3B3] font-medium italic">
-                          "{item.subtitle}"
-                        </p>
-                        <p className="text-xs text-[#B3B3B3] leading-relaxed font-light">
+                        {item.subtitle && (
+                          <p className="text-xs text-[#B3B3B3] font-medium italic">
+                            "{item.subtitle}"
+                          </p>
+                        )}
+                        <p className="text-xs text-[#B3B3B3] leading-relaxed font-light line-clamp-3">
                           {item.fullStory}
                         </p>
                       </div>
 
-                      <div className="pt-3 border-t border-[#181818] flex items-center justify-between text-[11px] text-[#808080]">
-                        <span className="uppercase tracking-wider font-semibold group-hover:text-[#FFFFFF] transition-colors">More Info &rarr;</span>
+                      <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-[#808080]">
+                        <span className="uppercase tracking-wider font-semibold group-hover:text-[#FFFFFF] transition-colors flex items-center gap-1">
+                          <span>More Info</span>
+                          <span>&rarr;</span>
+                        </span>
                         <span className="text-[#FFFFFF] font-bold">{item.matchScore}% Match</span>
                       </div>
                     </div>
@@ -1004,38 +1026,38 @@ export default function App() {
                     </p>
                   </div>
 
-                  {/* Filter Controls */}
-                  <div className="flex items-center gap-1 p-1 bg-[#141414] rounded border border-[#808080]/30 shrink-0">
+                  {/* Filter Controls: Sleek Segmented Control */}
+                  <div className="flex items-center gap-1 p-1 bg-[#141414] rounded-lg border border-white/10 shrink-0">
                     <button
                       onClick={() => setPlacesFilter('all')}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors cursor-pointer ${
+                      className={`px-3.5 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                         placesFilter === 'all'
-                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
-                          : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                          : 'text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-white/5'
                       }`}
                     >
                       All Places ({memories.filter((m) => m.category === 'places-list').length})
                     </button>
                     <button
                       onClick={() => setPlacesFilter('visited')}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors flex items-center gap-1 cursor-pointer ${
+                      className={`px-3.5 py-1.5 text-xs font-semibold rounded-md transition-all flex items-center gap-1.5 cursor-pointer ${
                         placesFilter === 'visited'
-                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
-                          : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                          : 'text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-white/5'
                       }`}
                     >
-                      <CheckCircle className="w-3 h-3 text-[#FFFFFF]" />
+                      <CheckCircle className="w-3.5 h-3.5 text-[#FFFFFF]" />
                       <span>Visited</span>
                     </button>
                     <button
                       onClick={() => setPlacesFilter('bucket-list')}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors flex items-center gap-1 cursor-pointer ${
+                      className={`px-3.5 py-1.5 text-xs font-semibold rounded-md transition-all flex items-center gap-1.5 cursor-pointer ${
                         placesFilter === 'bucket-list'
-                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
-                          : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                          : 'text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-white/5'
                       }`}
                     >
-                      <Clock className="w-3 h-3 text-[#FFFFFF]" />
+                      <Clock className="w-3.5 h-3.5 text-[#FFFFFF]" />
                       <span>Bucket List</span>
                     </button>
                   </div>

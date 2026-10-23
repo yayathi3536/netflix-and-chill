@@ -34,7 +34,7 @@ export const ConstellationSection: React.FC<ConstellationSectionProps> = ({
       </div>
 
       {/* Interactive Constellation Map Canvas */}
-      <div className="relative bg-[#141414] border border-[#181818] rounded p-3.5 sm:p-8 md:p-10 shadow-2xl">
+      <div className="relative bg-[#141414] border border-white/10 rounded-2xl p-3.5 sm:p-8 md:p-10 netflix-card-shadow">
         {/* SVG Connectors */}
         <div className="relative w-full h-40 sm:h-56">
           <svg className="w-full h-full" viewBox="0 0 800 220" preserveAspectRatio="none">

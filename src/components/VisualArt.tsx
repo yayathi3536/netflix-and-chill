@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { isVideoUrl } from '../utils/mediaHelpers';
 
-interface VisualArtProps {
+export interface VisualArtProps {
   id: string;
   category: string;
   fallbackGradient?: string;
@@ -9,10 +9,13 @@ interface VisualArtProps {
   className?: string;
   imageUrl?: string;
   fit?: 'cover' | 'contain' | 'scale-down' | 'auto';
-  aspectRatio?: '16/9' | '3/4' | '1/1' | 'auto';
-  loading?: 'eager' | 'lazy';
+  aspectRatio?: '16/9' | '3/4' | '2/3' | '1/1' | 'auto';
+  variant?: 'poster' | 'landscape' | 'episode' | 'full-image';
+  focalPosition?: 'center' | 'top' | 'bottom' | string;
+  loading?: 'lazy' | 'eager';
   fetchPriority?: 'high' | 'low' | 'auto';
   onClick?: () => void;
+  onRatioDetected?: (isPortrait: boolean, ratio: number) => void;
 }
 
 export const VisualArt: React.FC<VisualArtProps> = ({
@@ -21,31 +24,70 @@ export const VisualArt: React.FC<VisualArtProps> = ({
   title,
   fallbackGradient = 'from-[#141414] via-[#181818] to-[#000000]',
   className = 'w-full h-full',
-  fit = 'cover',
+  fit = 'auto',
   aspectRatio,
+  variant,
+  focalPosition,
   loading = 'lazy',
-  fetchPriority = 'auto',
+  fetchPriority,
   onClick,
+  onRatioDetected,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
-  const [autoFit, setAutoFit] = useState<'cover' | 'contain'>('cover');
+  const [detectedRatio, setDetectedRatio] = useState<number | null>(null);
+
+  // Determine effective fit based on variant and image aspect ratio
+  const isPortrait = detectedRatio !== null ? detectedRatio < 1.15 : false;
+
+  let effectiveFit = fit;
+  if (variant === 'full-image') {
+    effectiveFit = 'contain';
+  } else if (variant === 'poster') {
+    // In Netflix poster cards, cover with focal protection on faces/heads is ideal
+    effectiveFit = fit === 'auto' ? 'cover' : fit;
+  } else if (variant === 'episode' || variant === 'landscape') {
+    if (fit === 'auto') {
+      // Landscape images cover cleanly; portrait images in landscape containers preserve full photo
+      effectiveFit = isPortrait ? 'contain' : 'cover';
+    }
+  } else if (fit === 'auto') {
+    effectiveFit = isPortrait ? 'contain' : 'cover';
+  }
 
   const fitClass =
-    fit === 'contain'
+    effectiveFit === 'contain'
       ? 'object-contain'
-      : fit === 'scale-down'
+      : effectiveFit === 'scale-down'
       ? 'object-scale-down'
-      : fit === 'auto'
-      ? (autoFit === 'contain' ? 'object-contain' : 'object-cover')
       : 'object-cover';
 
+  const isContained = fitClass === 'object-contain';
+
+  // Compute focal position class (protects faces/heads from being cropped at top)
+  const positionClass =
+    focalPosition === 'top'
+      ? 'object-top'
+      : focalPosition === 'bottom'
+      ? 'object-bottom'
+      : focalPosition === 'center'
+      ? 'object-center'
+      : typeof focalPosition === 'string'
+      ? focalPosition
+      : variant === 'poster'
+      ? 'object-[center_15%]' // Default focal position for portrait cards protects heads/faces
+      : isPortrait
+      ? 'object-[center_top]'
+      : 'object-center';
+
   const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
-    if (fit !== 'auto') return;
     const image = event.currentTarget;
-    const ratio = image.naturalWidth / image.naturalHeight;
-    // Keep portrait and near-square photos complete inside landscape cards.
-    // Wide artwork retains the cinematic cover crop used by the homepage.
-    setAutoFit(ratio < 1.5 ? 'contain' : 'cover');
+    if (image.naturalWidth && image.naturalHeight) {
+      const ratio = image.naturalWidth / image.naturalHeight;
+      setDetectedRatio(ratio);
+      if (onRatioDetected) {
+        onRatioDetected(ratio < 1.15, ratio);
+      }
+    }
   };
 
   const ratioClass =
@@ -53,9 +95,17 @@ export const VisualArt: React.FC<VisualArtProps> = ({
       ? 'aspect-video'
       : aspectRatio === '3/4'
       ? 'aspect-[3/4]'
+      : aspectRatio === '2/3'
+      ? 'aspect-[2/3]'
       : aspectRatio === '1/1'
       ? 'aspect-square'
       : '';
+
+  // Clean any conflicting object-* and scale classes from passed className so fitClass & positionClass are strictly honored
+  const cleanClassName = className
+    .replace(/\bobject-(cover|contain|fill|none|scale-down)\b/g, '')
+    .replace(/\bobject-(center|top|bottom|left|right)\b/g, '')
+    .trim();
 
   if (imageUrl && !imageFailed) {
     if (isVideoUrl(imageUrl)) {
@@ -68,22 +118,44 @@ export const VisualArt: React.FC<VisualArtProps> = ({
           playsInline
           onError={() => setImageFailed(true)}
           onClick={onClick}
-          className={`${fitClass} ${ratioClass} ${className}`.trim()}
+          className={`${fitClass} ${positionClass} ${ratioClass} ${cleanClassName}`.trim()}
         />
       );
     }
+
     return (
-      <img
-        src={imageUrl}
-        alt={title}
-        referrerPolicy="no-referrer"
-        loading={loading}
-        fetchPriority={fetchPriority}
-        onError={() => setImageFailed(true)}
-        onLoad={handleImageLoad}
+      <div
+        className={`relative w-full h-full overflow-hidden flex items-center justify-center ${ratioClass}`}
         onClick={onClick}
-        className={`${fitClass} ${ratioClass} ${className}`.trim()}
-      />
+      >
+        {/* Ambient blurred backdrop when photo is contained to eliminate narrow empty side voids */}
+        {isContained && (
+          <div className="absolute inset-0 overflow-hidden pointer-events-none select-none z-0">
+            <img
+              src={imageUrl}
+              alt=""
+              aria-hidden="true"
+              className="w-full h-full object-cover blur-2xl scale-125 opacity-50 brightness-75 select-none"
+            />
+            {/* Soft Netflix subtle vignette */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#000000]/60 via-transparent to-[#000000]/60" />
+            <div className="absolute inset-0 bg-[#000000]/30" />
+          </div>
+        )}
+
+        <img
+          src={imageUrl}
+          alt={title}
+          referrerPolicy="no-referrer"
+          loading={loading}
+          fetchPriority={fetchPriority}
+          onError={() => setImageFailed(true)}
+          onLoad={handleImageLoad}
+          className={`${fitClass} ${positionClass} ${cleanClassName} ${
+            isContained ? 'relative z-10 max-h-full max-w-full drop-shadow-[0_8px_24px_rgba(0,0,0,0.8)]' : ''
+          }`.trim()}
+        />
+      </div>
     );
   }
 

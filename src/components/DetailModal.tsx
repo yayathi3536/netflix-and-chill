@@ -88,18 +88,18 @@ export const DetailModal: React.FC<DetailModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto dark-scrollbar bg-[#000000]/85 backdrop-blur-md flex justify-center p-0 sm:p-4 md:p-6 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto dark-scrollbar bg-[#000000]/90 backdrop-blur-md flex justify-center p-0 sm:p-4 md:p-6 animate-in fade-in duration-200"
       onClick={onClose}
     >
       {/* Netflix Modal Card */}
       <div
-        className="relative w-full max-w-4xl bg-[#181818] rounded-none sm:rounded-lg overflow-hidden shadow-2xl border border-[#808080]/30 my-auto text-[#FFFFFF]"
+        className="relative w-full max-w-4xl bg-[#181818] rounded-none sm:rounded-xl overflow-hidden netflix-modal-shadow border border-white/10 my-auto text-[#FFFFFF]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-11 h-11 rounded-full bg-[#141414]/90 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center transition-colors cursor-pointer border border-[#808080]/40 min-h-[44px] min-w-[44px] shadow-lg"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#141414]/90 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center transition-all cursor-pointer border border-white/20 min-h-[40px] min-w-[40px] shadow-xl hover:scale-105"
           aria-label="Close details"
         >
           <X className="w-5 h-5" />
@@ -112,10 +112,11 @@ export const DetailModal: React.FC<DetailModalProps> = ({
             category={memory.category}
             title={memory.title}
             imageUrl={primaryImageUrl}
-            fit="cover"
-            aspectRatio="16/9"
+            variant="episode"
+            focalPosition="top"
+            fit="auto"
             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-            className="w-full h-full object-cover cursor-pointer"
+            className="w-full h-full cursor-pointer"
             onClick={() => primaryImageUrl && setLightboxIndex(0)}
           />
 
@@ -337,10 +338,11 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                           category={memory.category}
                           title={photo.caption || 'Memory Photo'}
                           imageUrl={photo.url}
-                          fit="cover"
-                          aspectRatio="16/9"
+                          variant="episode"
+                          focalPosition="top"
+                          fit="auto"
                           fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full"
                         />
                         <div className="absolute inset-0 bg-[#000000]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                           <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#000000]/80 text-[#FFFFFF] text-xs font-semibold border border-white/20 shadow-lg">
@@ -405,8 +407,11 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                               category={memory.category}
                               title={ep.title}
                               imageUrl={ep.thumbnailUrl}
+                              variant="episode"
+                              focalPosition="top"
+                              fit="auto"
                               fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                              className="w-full h-full object-cover"
+                              className="w-full h-full"
                             />
                           ) : (
                             <div className="w-full h-full bg-[#141414] flex items-center justify-center">
@@ -465,9 +470,10 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                         id={item.id}
                         category={item.category}
                         title={item.title}
-                        imageUrl={item.backdropUrl || item.posterUrl}
+                        imageUrl={item.posterUrl || item.backdropUrl}
+                        fit="auto"
                         fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full"
                       />
                     </div>
                     <div className="p-2.5">

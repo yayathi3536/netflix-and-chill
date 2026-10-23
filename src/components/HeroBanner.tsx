@@ -141,7 +141,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             {/* Dark Grey Secondary Button with White Text */}
             <button
               onClick={() => onOpenInfo(memory)}
-              className="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#181818]/90 hover:bg-white/10 text-[#FFFFFF] font-semibold text-xs sm:text-sm md:text-base rounded border border-[#808080]/40 transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
+              className="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#181818]/90 hover:bg-white/10 text-[#FFFFFF] font-semibold text-xs sm:text-sm md:text-base rounded-md border border-white/20 transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
             >
               <Info className="w-4 h-4 sm:w-5 sm:h-5 text-[#FFFFFF]" />
               <span>More Info</span>
@@ -150,7 +150,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             {/* My List Quick Toggle */}
             <button
               onClick={() => onToggleWatchlist(memory.id)}
-              className="w-11 h-11 rounded bg-[#181818]/90 hover:bg-white/10 border border-[#808080]/40 text-[#FFFFFF] transition-all cursor-pointer active:scale-95 flex items-center justify-center min-h-[44px] min-w-[44px]"
+              className="w-11 h-11 rounded-md bg-[#181818]/90 hover:bg-white/10 border border-white/20 text-[#FFFFFF] transition-all cursor-pointer active:scale-95 flex items-center justify-center min-h-[44px] min-w-[44px]"
               title={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
               aria-label="Toggle My List"
             >
@@ -165,7 +165,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             {isAdmin && onEditHero && (
               <button
                 onClick={onEditHero}
-                className="flex items-center gap-1.5 px-3 py-2 bg-[#181818] hover:bg-white/10 text-[#FFFFFF] font-medium text-xs rounded border border-[#808080]/40 transition-all active:scale-95 cursor-pointer min-h-[44px]"
+                className="flex items-center gap-1.5 px-3 py-2 bg-[#181818] hover:bg-white/10 text-[#FFFFFF] font-medium text-xs rounded-md border border-white/20 transition-all active:scale-95 cursor-pointer min-h-[44px]"
                 title="Admin only: Change hero image & text"
               >
                 <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
@@ -180,7 +180,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         <div className="absolute right-3 sm:right-8 top-24 sm:top-auto sm:bottom-28 flex items-center gap-2 sm:gap-3 z-20">
           <button
             onClick={onToggleAudio}
-            className="w-10 h-10 rounded-full border border-[#808080]/40 bg-[#000000]/70 text-[#FFFFFF] hover:bg-[#181818] transition-all cursor-pointer flex items-center justify-center"
+            className="w-10 h-10 rounded-full border border-white/20 bg-[#000000]/70 text-[#FFFFFF] hover:bg-[#181818] transition-all cursor-pointer flex items-center justify-center shadow-lg hover:scale-105"
             title="Toggle soundtrack"
             aria-label="Soundtrack audio"
           >
@@ -190,7 +190,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               <VolumeX className="w-4 h-4 text-[#808080]" />
             )}
           </button>
-          <div className="hidden sm:flex items-center px-3 py-1 bg-[#141414]/80 rounded border-l-2 border-[#E50914] text-xs text-[#B3B3B3] font-semibold">
+          <div className="hidden sm:flex items-center px-3 py-1 bg-[#141414]/90 rounded-md border-l-2 border-[#E50914] text-xs text-[#B3B3B3] font-semibold border border-white/10 shadow-sm">
             <span>{memory.rating || 'PG-13'}</span>
           </div>
         </div>

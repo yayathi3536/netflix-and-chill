@@ -100,8 +100,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#000000]/95 backdrop-blur-md shadow-2xl py-3 border-b border-[#181818]'
-          : 'bg-gradient-to-b from-[#000000]/90 via-[#000000]/50 to-transparent py-4'
+          ? 'bg-[#000000]/95 backdrop-blur-md shadow-2xl py-3 border-b border-white/10'
+          : 'bg-gradient-to-b from-[#000000]/95 via-[#000000]/60 to-transparent py-3.5 sm:py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
@@ -265,16 +265,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             {isNotificationsOpen && (
-              <div className="fixed sm:absolute left-2.5 right-2.5 sm:left-auto sm:right-0 mt-3 sm:w-80 bg-[#141414] border border-[#808080]/40 rounded-xl shadow-2xl py-3 z-50 text-xs backdrop-blur-md">
-                <div className="px-4 pb-2 border-b border-[#181818] flex items-center justify-between">
+              <div className="fixed sm:absolute left-2.5 right-2.5 sm:left-auto sm:right-0 mt-3 sm:w-80 bg-[#141414]/95 border border-white/10 rounded-xl netflix-modal-shadow py-3 z-50 text-xs backdrop-blur-md">
+                <div className="px-4 pb-2 border-b border-white/10 flex items-center justify-between">
                   <span className="font-semibold text-[#FFFFFF]">Notifications</span>
                   {unreadCount > 0 && (
-                    <span className="text-[10px] bg-[#E50914] text-[#FFFFFF] px-2 py-0.5 rounded font-bold">
+                    <span className="text-[10px] bg-[#E50914] text-[#FFFFFF] px-2 py-0.5 rounded font-bold shadow-sm">
                       {unreadCount} new
                     </span>
                   )}
                 </div>
-                <div className="max-h-64 overflow-y-auto divide-y divide-[#181818]">
+                <div className="max-h-64 overflow-y-auto divide-y divide-white/5">
                   {notifications.map((n) => (
                     <div
                       key={n.id}
@@ -318,7 +318,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             {isProfileMenuOpen && (
-              <div className="fixed sm:absolute right-2 sm:right-0 mt-3 w-64 max-w-[calc(100vw-1rem)] bg-[#141414] border border-[#808080]/40 rounded-xl shadow-2xl py-2 z-50 text-xs backdrop-blur-md">
+              <div className="fixed sm:absolute right-2 sm:right-0 mt-3 w-64 max-w-[calc(100vw-1rem)] bg-[#141414]/95 border border-white/10 rounded-xl netflix-modal-shadow py-2 z-50 text-xs backdrop-blur-md">
                 <div className="px-3 py-1.5 text-[#B3B3B3] text-[11px] uppercase tracking-wider font-semibold border-b border-[#181818]">
                   Who's Watching?
                 </div>
@@ -411,73 +411,73 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* Mobile Navigation Strip */}
-      <div className="md:hidden flex items-center gap-1.5 px-3 py-1.5 border-t border-[#181818] text-xs font-medium text-[#B3B3B3] overflow-x-auto no-scrollbar bg-[#000000] scroll-smooth">
+      <div className="md:hidden flex items-center gap-1.5 px-3 py-1.5 border-t border-white/10 text-xs font-medium text-[#B3B3B3] overflow-x-auto no-scrollbar bg-[#000000]/95 backdrop-blur-md scroll-smooth">
         <button
           onClick={() => setActiveTab('home')}
-          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'home'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF]'
+              : 'hover:text-[#FFFFFF] hover:bg-white/5'
           }`}
         >
           Home
         </button>
         <button
           onClick={() => setActiveTab('our-story')}
-          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'our-story'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF]'
+              : 'hover:text-[#FFFFFF] hover:bg-white/5'
           }`}
         >
           Series
         </button>
         <button
           onClick={() => setActiveTab('memories')}
-          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'memories'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF]'
+              : 'hover:text-[#FFFFFF] hover:bg-white/5'
           }`}
         >
           Movies
         </button>
         <button
           onClick={() => setActiveTab('scrapbook')}
-          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'scrapbook'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF]'
+              : 'hover:text-[#FFFFFF] hover:bg-white/5'
           }`}
         >
           Scrapbook
         </button>
         <button
           onClick={() => setActiveTab('little-things')}
-          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'little-things'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF]'
+              : 'hover:text-[#FFFFFF] hover:bg-white/5'
           }`}
         >
           Quirks
         </button>
         <button
           onClick={() => setActiveTab('places-list')}
-          className={`py-2 px-3.5 rounded whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
+          className={`py-2 px-3.5 rounded-md whitespace-nowrap cursor-pointer transition-colors min-h-[44px] flex items-center shrink-0 ${
             activeTab === 'places-list'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF]'
+              : 'hover:text-[#FFFFFF] hover:bg-white/5'
           }`}
         >
           My List
         </button>
         <button
           onClick={() => setActiveTab('secret-vault')}
-          className={`py-2 px-3.5 rounded whitespace-nowrap text-[#B3B3B3] flex items-center gap-1.5 cursor-pointer transition-colors min-h-[44px] shrink-0 ${
+          className={`py-2 px-3.5 rounded-md whitespace-nowrap text-[#B3B3B3] flex items-center gap-1.5 cursor-pointer transition-colors min-h-[44px] shrink-0 ${
             activeTab === 'secret-vault'
               ? 'text-[#FFFFFF] font-bold bg-white/10 border-b-2 border-[#E50914]'
-              : 'hover:text-[#FFFFFF]'
+              : 'hover:text-[#FFFFFF] hover:bg-white/5'
           }`}
         >
           <Lock className="w-3.5 h-3.5 text-[#E50914]" />

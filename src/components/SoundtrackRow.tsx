@@ -61,15 +61,15 @@ export const SoundtrackRow: React.FC<SoundtrackRowProps> = ({
                   onSelectTrack(idx);
                 }
               }}
-              className={`group relative shrink-0 w-64 sm:w-72 rounded p-4 bg-[#141414] border transition-all duration-300 cursor-pointer flex flex-col justify-between ${
+              className={`group relative shrink-0 w-64 sm:w-72 rounded-xl p-4 bg-[#141414] border netflix-card-shadow transition-all duration-300 cursor-pointer flex flex-col justify-between select-none ${
                 isCurrent
-                  ? 'border-[#E50914] shadow-2xl bg-[#181818]'
-                  : 'border-[#181818] hover:border-[#808080]/60 hover:scale-[1.02]'
+                  ? 'border-[#E50914] shadow-[0_8px_30px_rgba(229,9,20,0.3)] bg-[#181818]'
+                  : 'border-white/10 hover:border-white/30 hover:scale-[1.02]'
               }`}
             >
               {/* Top album artwork and play state */}
               <div className="flex items-center gap-3.5 mb-3">
-                <div className="relative w-16 h-16 rounded overflow-hidden shadow-md shrink-0 bg-[#000000]">
+                <div className="relative w-16 h-16 rounded-lg overflow-hidden shadow-md shrink-0 bg-[#000000]">
                   {track.coverUrl ? (
                     <img
                       src={track.coverUrl}

@@ -57,13 +57,13 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
   return (
     <div className="relative group/row my-6 sm:my-8 px-4 sm:px-6 lg:px-8">
       {/* Netflix Row Header */}
-      <div className="flex items-baseline justify-between mb-3">
-        <div className="flex items-baseline gap-3 flex-wrap">
+      <div className="flex items-baseline justify-between mb-2.5 sm:mb-3">
+        <div className="flex items-baseline gap-2.5 sm:gap-3 flex-wrap">
           <h2 className="font-bebas text-2xl sm:text-3xl lg:text-4xl tracking-wider text-[#FFFFFF] font-black uppercase hover:text-[#B3B3B3] transition-colors">
             {title}
           </h2>
           {subtitle && (
-            <span className="text-xs text-[#B3B3B3] font-normal hidden sm:inline">
+            <span className="text-xs text-[#B3B3B3] font-normal hidden sm:inline tracking-normal">
               {subtitle}
             </span>
           )}
@@ -72,26 +72,29 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
               onClick={onEditSection}
               className="p-1 rounded hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer"
               title="Edit row title & subtitle"
+              aria-label="Edit row section"
             >
               <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
             </button>
           )}
         </div>
-        <span className="text-xs text-[#808080] font-semibold tracking-wider uppercase">
+        <span className="text-[11px] sm:text-xs text-[#808080] font-semibold tracking-wider uppercase">
           {items.length} {items.length === 1 ? 'Title' : 'Titles'}
         </span>
       </div>
 
-      {/* Relative Carousel Container */}
+      {/* Relative Carousel Container with Edge Fades */}
       <div className="relative">
-        {/* Left Arrow Button */}
+        {/* Left Arrow Button (Desktop hover pad with gradient blur) */}
         {showLeftArrow && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-[#000000]/80 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all cursor-pointer"
+            className="absolute left-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-gradient-to-r from-[#000000]/95 via-[#000000]/70 to-transparent text-[#FFFFFF] hidden sm:flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all duration-200 cursor-pointer hover:scale-105"
             aria-label="Scroll left"
           >
-            <ChevronLeft className="w-7 h-7 stroke-[2.5] text-[#FFFFFF]" />
+            <div className="w-9 h-9 rounded-full bg-[#141414]/80 border border-white/10 flex items-center justify-center text-white shadow-lg hover:bg-[#E50914] hover:border-transparent transition-colors">
+              <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
+            </div>
           </button>
         )}
 
@@ -117,14 +120,16 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
           ))}
         </div>
 
-        {/* Right Arrow Button */}
+        {/* Right Arrow Button (Desktop hover pad with gradient blur) */}
         {showRightArrow && items.length > 2 && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-[#000000]/80 hover:bg-[#000000] text-[#FFFFFF] flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all cursor-pointer"
+            className="absolute right-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-gradient-to-l from-[#000000]/95 via-[#000000]/70 to-transparent text-[#FFFFFF] hidden sm:flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all duration-200 cursor-pointer hover:scale-105"
             aria-label="Scroll right"
           >
-            <ChevronRight className="w-7 h-7 stroke-[2.5] text-[#FFFFFF]" />
+            <div className="w-9 h-9 rounded-full bg-[#141414]/80 border border-white/10 flex items-center justify-center text-white shadow-lg hover:bg-[#E50914] hover:border-transparent transition-colors">
+              <ChevronRight className="w-5 h-5 stroke-[2.5]" />
+            </div>
           </button>
         )}
       </div>

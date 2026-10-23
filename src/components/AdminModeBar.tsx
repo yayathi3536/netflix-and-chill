@@ -33,7 +33,7 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
       aria-label="Admin Control Bar"
       className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-3xl animate-in slide-in-from-bottom-6 duration-300 pointer-events-none"
     >
-      <div className="bg-[#141414]/95 backdrop-blur-md border border-[#E50914]/50 rounded-lg px-3 sm:px-6 py-2 sm:py-2.5 shadow-2xl flex items-center justify-between gap-2 sm:gap-3 text-[#FFFFFF] pointer-events-auto">
+      <div className="bg-[#141414]/95 backdrop-blur-md border border-[#E50914]/40 rounded-xl px-3 sm:px-6 py-2 sm:py-2.5 netflix-modal-shadow flex items-center justify-between gap-2 sm:gap-3 text-[#FFFFFF] pointer-events-auto">
         {/* Left: Admin Status & Identity */}
         <div className="flex items-center gap-2 shrink-0">
           <div className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">

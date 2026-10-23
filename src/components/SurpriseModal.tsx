@@ -119,24 +119,24 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-[#000000]/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 bg-[#000000]/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div
-        className="relative max-w-xl w-full bg-[#141414] border border-[#181818] rounded-xl shadow-2xl p-4 sm:p-8 space-y-5 sm:space-y-6 my-auto max-h-[92vh] overflow-y-auto dark-scrollbar"
+        className="relative max-w-xl w-full bg-[#141414] border border-white/10 rounded-2xl netflix-modal-shadow p-5 sm:p-8 space-y-5 sm:space-y-6 my-auto max-h-[92vh] overflow-y-auto dark-scrollbar"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 w-11 h-11 rounded-full hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer flex items-center justify-center min-h-[44px] min-w-[44px]"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 w-10 h-10 rounded-full bg-[#181818] hover:bg-black text-[#808080] hover:text-[#FFFFFF] transition-all cursor-pointer flex items-center justify-center min-h-[40px] min-w-[40px] border border-white/10 hover:border-white/20"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Header */}
-        <div className="text-center space-y-1 pt-1 pr-6 pl-6">
+        <div className="text-center space-y-1.5 pt-1 pr-6 pl-6">
           <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold uppercase tracking-widest">
             <Gift className="w-3.5 h-3.5" />
             <span>ORIGINAL SPECIAL FEATURE</span>
@@ -149,15 +149,15 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
           </p>
         </div>
 
-        {/* Tab Buttons */}
+        {/* Tab Buttons (Segmented Control) */}
         <div className="flex justify-center w-full overflow-x-auto no-scrollbar py-0.5">
-          <div className="inline-flex bg-[#181818] p-1 rounded-lg border border-[#808080]/30 text-xs shrink-0 gap-1">
+          <div className="inline-flex bg-[#181818] p-1 rounded-lg border border-white/10 text-xs shrink-0 gap-1">
             <button
               onClick={() => setActiveTab('letter')}
-              className={`px-2.5 sm:px-3.5 py-2 rounded-md font-semibold transition-all cursor-pointer flex items-center gap-1.5 min-h-[40px] text-[11px] sm:text-xs whitespace-nowrap ${
+              className={`px-3 sm:px-4 py-2 rounded-md font-semibold transition-all cursor-pointer flex items-center gap-1.5 min-h-[38px] text-[11px] sm:text-xs whitespace-nowrap ${
                 activeTab === 'letter'
-                  ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
-                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                  ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                  : 'text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-white/5'
               }`}
             >
               <Mail className="w-3.5 h-3.5" />
@@ -165,10 +165,10 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('coupons')}
-              className={`px-2.5 sm:px-3.5 py-2 rounded-md font-semibold transition-all cursor-pointer flex items-center gap-1.5 min-h-[40px] text-[11px] sm:text-xs whitespace-nowrap ${
+              className={`px-3 sm:px-4 py-2 rounded-md font-semibold transition-all cursor-pointer flex items-center gap-1.5 min-h-[38px] text-[11px] sm:text-xs whitespace-nowrap ${
                 activeTab === 'coupons'
-                  ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
-                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                  ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                  : 'text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-white/5'
               }`}
             >
               <Gift className="w-3.5 h-3.5" />
@@ -176,10 +176,10 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('counter')}
-              className={`px-2.5 sm:px-3.5 py-2 rounded-md font-semibold transition-all cursor-pointer flex items-center gap-1.5 min-h-[40px] text-[11px] sm:text-xs whitespace-nowrap ${
+              className={`px-3 sm:px-4 py-2 rounded-md font-semibold transition-all cursor-pointer flex items-center gap-1.5 min-h-[38px] text-[11px] sm:text-xs whitespace-nowrap ${
                 activeTab === 'counter'
-                  ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow'
-                  : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
+                  ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                  : 'text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-white/5'
               }`}
             >
               <Clock className="w-3.5 h-3.5" />
@@ -190,12 +190,12 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
 
         {/* TAB 1: LOVE LETTER */}
         {activeTab === 'letter' && (
-          <div className="bg-[#181818] text-[#FFFFFF] rounded p-6 shadow-inner border border-[#808080]/30 space-y-4 max-h-[380px] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-[#141414] pb-3">
+          <div className="bg-[#181818] text-[#FFFFFF] rounded-xl p-5 sm:p-6 shadow-inner border border-white/10 space-y-4 max-h-[380px] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <span className="font-bebas text-2xl text-[#E50914] font-black uppercase tracking-wider">
                 CONFIDENTIAL MEMO
               </span>
-              <span className="text-xs bg-[#E50914] text-[#FFFFFF] px-2 py-0.5 rounded font-bold uppercase tracking-widest">
+              <span className="text-xs bg-[#E50914] text-[#FFFFFF] px-2 py-0.5 rounded font-bold uppercase tracking-widest shadow-sm">
                 VERIFIED
               </span>
             </div>
@@ -208,7 +208,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
             <p className="text-xs sm:text-sm text-[#B3B3B3] leading-relaxed">
               You are my favorite plot twist, my safest sanctuary, and the only person I want to re-watch life with over and over again.
             </p>
-            <div className="pt-2 text-right border-t border-[#141414]">
+            <div className="pt-2 text-right border-t border-white/10">
               <span className="font-bebas text-xl text-[#E50914] block uppercase tracking-wider">
                 Always & Forever
               </span>
@@ -222,10 +222,10 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
             {coupons.map((c) => (
               <div
                 key={c.id}
-                className={`p-3.5 rounded border transition-all flex items-center justify-between gap-3 ${
+                className={`p-3.5 rounded-xl border transition-all flex items-center justify-between gap-3 ${
                   c.isRedeemed
-                    ? 'bg-[#181818]/40 border-[#181818] opacity-50'
-                    : 'bg-[#181818] border-[#808080]/30 shadow'
+                    ? 'bg-[#181818]/40 border-white/5 opacity-50'
+                    : 'bg-[#181818] border-white/10 hover:border-white/25 shadow-md'
                 }`}
               >
                 <div className="flex items-center gap-3 overflow-hidden">
@@ -244,10 +244,10 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
 
                 <button
                   onClick={() => handleRedeem(c.id)}
-                  className={`px-3 py-1.5 rounded text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap uppercase tracking-wider ${
+                  className={`px-3 py-1.5 rounded-md text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap uppercase tracking-wider ${
                     c.isRedeemed
-                      ? 'bg-[#141414] text-[#808080] border border-[#808080]/20'
-                      : 'bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] shadow active:scale-95'
+                      ? 'bg-[#141414] text-[#808080] border border-white/10'
+                      : 'bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] shadow-sm active:scale-95'
                   }`}
                 >
                   {c.isRedeemed ? 'Claimed ✓' : 'Redeem'}
@@ -266,7 +266,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
             </div>
 
             <div className="grid grid-cols-4 gap-1.5 sm:gap-3">
-              <div className="p-2 sm:p-4 rounded-lg bg-[#181818] border border-[#808080]/30">
+              <div className="p-2 sm:p-4 rounded-xl bg-[#181818] border border-white/10">
                 <span className="block font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#FFFFFF] font-bold tabular-nums">
                   {timeTogether.days}
                 </span>
@@ -274,7 +274,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
                   Days
                 </span>
               </div>
-              <div className="p-2 sm:p-4 rounded-lg bg-[#181818] border border-[#808080]/30">
+              <div className="p-2 sm:p-4 rounded-xl bg-[#181818] border border-white/10">
                 <span className="block font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#FFFFFF] font-bold tabular-nums">
                   {timeTogether.hours}
                 </span>
@@ -282,7 +282,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
                   Hours
                 </span>
               </div>
-              <div className="p-2 sm:p-4 rounded-lg bg-[#181818] border border-[#808080]/30">
+              <div className="p-2 sm:p-4 rounded-xl bg-[#181818] border border-white/10">
                 <span className="block font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#FFFFFF] font-bold tabular-nums">
                   {timeTogether.minutes}
                 </span>
@@ -290,7 +290,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
                   Mins
                 </span>
               </div>
-              <div className="p-2 sm:p-4 rounded-lg bg-[#181818] border border-[#808080]/30">
+              <div className="p-2 sm:p-4 rounded-xl bg-[#181818] border border-white/10">
                 <span className="block font-bebas text-2xl xs:text-3xl sm:text-5xl text-[#E50914] font-bold tabular-nums">
                   {timeTogether.seconds}
                 </span>
