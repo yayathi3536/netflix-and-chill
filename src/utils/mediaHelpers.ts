@@ -134,3 +134,41 @@ export function hasPhotos(memory?: MemoryItem | null): boolean {
   if (!memory) return false;
   return getPhotoEntries(memory).length > 0;
 }
+
+/**
+ * Resolves the most appropriate image URL for a memory item based on the target display layout.
+ * For landscape: prioritizes backdropUrl, then posterUrl, then first valid item in photos array.
+ * For poster: prioritizes posterUrl, then backdropUrl, then first valid item in photos array.
+ */
+export function getMemoryImageUrl(
+  memory?: MemoryItem | null,
+  targetLayout: 'landscape' | 'poster' = 'landscape'
+): string | undefined {
+  if (!memory) return undefined;
+
+  if (targetLayout === 'poster') {
+    if (isImageUrl(memory.posterUrl)) return memory.posterUrl!.trim();
+    if (isImageUrl(memory.backdropUrl)) return memory.backdropUrl!.trim();
+  } else {
+    if (isImageUrl(memory.backdropUrl)) return memory.backdropUrl!.trim();
+    if (isImageUrl(memory.posterUrl)) return memory.posterUrl!.trim();
+  }
+
+  // Check additional photos array
+  if (Array.isArray(memory.photos) && memory.photos.length > 0) {
+    const firstValid = memory.photos.find((p) => typeof p === 'string' && isImageUrl(p));
+    if (firstValid) return firstValid.trim();
+  }
+
+  // Direct string fallback if isImageUrl check was too strict
+  if (targetLayout === 'poster') {
+    const candidate = memory.posterUrl?.trim() || memory.backdropUrl?.trim();
+    if (candidate && !isVideoUrl(candidate)) return candidate;
+  } else {
+    const candidate = memory.backdropUrl?.trim() || memory.posterUrl?.trim();
+    if (candidate && !isVideoUrl(candidate)) return candidate;
+  }
+
+  return undefined;
+}
+

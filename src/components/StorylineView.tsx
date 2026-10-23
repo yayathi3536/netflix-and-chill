@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
-import { hasValidVideo, isLetterItem } from '../utils/mediaHelpers';
+import { hasValidVideo, isLetterItem, getMemoryImageUrl } from '../utils/mediaHelpers';
 
 interface StorylineViewProps {
   stories: MemoryItem[];
@@ -352,17 +352,17 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                     : 'border-[#181818] hover:border-[#808080]/60 hover:scale-[1.03] hover:shadow-2xl'
                 } ${isReorderMode ? 'cursor-grab select-none' : 'cursor-pointer'}`}
               >
-                {/* Poster Media Container: aspect-[3/4] matching homepage Storyline */}
-                <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#000000]">
+                {/* Poster Media Container: aspect-[2/3] matching Netflix standard poster frame */}
+                <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#000000]">
                   <VisualArt
                     id={ch.id}
                     category={ch.category}
                     title={ch.title}
-                    imageUrl={ch.posterUrl || ch.backdropUrl}
+                    imageUrl={getMemoryImageUrl(ch, 'poster')}
                     variant="poster"
-                    aspectRatio="3/4"
+                    aspectRatio="2/3"
                     focalPosition="top"
-                    fit="cover"
+                    fit="auto"
                     fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
                     className="w-full h-full"
                   />
@@ -535,8 +535,8 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                   />
                 )}
 
-                {/* Media Area — Preserves Complete Original Photo with focal protection & ambient backdrop */}
-                <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full overflow-hidden bg-[#000000]">
+                {/* Media Area — Preserves Complete Original Photo in 16:9 Cinematic Video Frame with ambient backdrop */}
+                <div className="relative aspect-video w-full overflow-hidden bg-[#000000]">
                   {/* Episode Badge (Reflects live reordered index!) */}
                   <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5">
                     <span className="font-bebas text-xs px-2.5 py-1 rounded bg-[#E50914] text-[#FFFFFF] font-black uppercase tracking-wider shadow">
@@ -601,14 +601,15 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                     </button>
                   )}
 
-                  {/* Cover Image using variant="episode" and focalPosition="top" to prevent face cuts */}
+                  {/* Cover Image using variant="episode" and focalPosition="center" */}
                   <VisualArt
                     id={ch.id}
                     category={ch.category}
                     title={ch.title}
-                    imageUrl={ch.posterUrl || ch.backdropUrl}
+                    imageUrl={getMemoryImageUrl(ch, 'landscape')}
                     variant="episode"
-                    focalPosition="top"
+                    aspectRatio="16/9"
+                    focalPosition="center"
                     fit="auto"
                     fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
                     className="w-full h-full"

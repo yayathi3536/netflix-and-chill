@@ -22,6 +22,7 @@ import {
   hasValidVideo,
   isLetterItem,
   getPhotoEntries,
+  getMemoryImageUrl,
 } from '../utils/mediaHelpers';
 
 interface DetailModalProps {
@@ -57,7 +58,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
   const isLetter = memory ? isLetterItem(memory) : false;
   const photoEntries = memory ? getPhotoEntries(memory) : [];
   // Additional photos beyond the main backdrop/poster image
-  const primaryImageUrl = memory ? (memory.backdropUrl || memory.posterUrl) : undefined;
+  const primaryImageUrl = memory ? getMemoryImageUrl(memory, 'landscape') : undefined;
   const additionalPhotos = photoEntries.filter(
     (p): p is typeof p & { url: string } => Boolean(p.url && p.url !== primaryImageUrl)
   );

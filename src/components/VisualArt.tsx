@@ -18,6 +18,9 @@ export interface VisualArtProps {
   onRatioDetected?: (isPortrait: boolean, ratio: number) => void;
 }
 
+// In-memory aspect ratio cache to eliminate layout shifts on re-renders
+const ratioCache = new Map<string, number>();
+
 export const VisualArt: React.FC<VisualArtProps> = ({
   id,
   imageUrl,
@@ -34,24 +37,47 @@ export const VisualArt: React.FC<VisualArtProps> = ({
   onRatioDetected,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
-  const [detectedRatio, setDetectedRatio] = useState<number | null>(null);
+  const cachedRatio = imageUrl ? ratioCache.get(imageUrl) : undefined;
+  const [detectedRatio, setDetectedRatio] = useState<number | null>(cachedRatio ?? null);
+  const imgRef = React.useRef<HTMLImageElement>(null);
 
-  // Determine effective fit based on variant and image aspect ratio
-  const isPortrait = detectedRatio !== null ? detectedRatio < 1.15 : false;
+  // Synchronize from cache or already-loaded DOM image
+  React.useEffect(() => {
+    if (imageUrl) {
+      const cached = ratioCache.get(imageUrl);
+      if (cached !== undefined) {
+        setDetectedRatio(cached);
+      } else if (imgRef.current && imgRef.current.naturalWidth && imgRef.current.naturalHeight) {
+        const ratio = imgRef.current.naturalWidth / imgRef.current.naturalHeight;
+        ratioCache.set(imageUrl, ratio);
+        setDetectedRatio(ratio);
+      }
+    }
+  }, [imageUrl]);
 
+  // Determine effective fit based on target container variant and image aspect ratio
   let effectiveFit = fit;
+
   if (variant === 'full-image') {
     effectiveFit = 'contain';
   } else if (variant === 'poster') {
-    // In Netflix poster cards, cover with focal protection on faces/heads is ideal
-    effectiveFit = fit === 'auto' ? 'cover' : fit;
+    if (fit === 'auto') {
+      // In a 2:3 poster frame (~0.67):
+      // If photo is horizontal/landscape (ratio > 0.95), cover crop would slice off over 50% of the photo.
+      // Contain with ambient glow shows the whole photo.
+      // If photo is portrait (ratio <= 0.95), cover crop with top/face focal protection looks best.
+      effectiveFit = detectedRatio !== null && detectedRatio > 0.95 ? 'contain' : 'cover';
+    }
   } else if (variant === 'episode' || variant === 'landscape') {
     if (fit === 'auto') {
-      // Landscape images cover cleanly; portrait images in landscape containers preserve full photo
-      effectiveFit = isPortrait ? 'contain' : 'cover';
+      // In a 16:9 cinematic landscape frame (~1.78):
+      // If photo is portrait, square, or 4:3 (ratio < 1.55), cover crop would chop off heads and faces.
+      // Contain with ambient blur derived from the image guarantees complete photo visibility.
+      // If true widescreen (ratio >= 1.55), cover crop fills the 16:9 frame seamlessly.
+      effectiveFit = detectedRatio !== null && detectedRatio < 1.55 ? 'contain' : 'cover';
     }
   } else if (fit === 'auto') {
-    effectiveFit = isPortrait ? 'contain' : 'cover';
+    effectiveFit = detectedRatio !== null && detectedRatio < 1.2 ? 'contain' : 'cover';
   }
 
   const fitClass =
@@ -63,26 +89,28 @@ export const VisualArt: React.FC<VisualArtProps> = ({
 
   const isContained = fitClass === 'object-contain';
 
-  // Compute focal position class (protects faces/heads from being cropped at top)
-  const positionClass =
-    focalPosition === 'top'
-      ? 'object-top'
-      : focalPosition === 'bottom'
-      ? 'object-bottom'
-      : focalPosition === 'center'
-      ? 'object-center'
-      : typeof focalPosition === 'string'
-      ? focalPosition
-      : variant === 'poster'
-      ? 'object-[center_15%]' // Default focal position for portrait cards protects heads/faces
-      : isPortrait
-      ? 'object-[center_top]'
-      : 'object-center';
+  // Compute focal position class
+  const positionClass = isContained
+    ? 'object-center'
+    : focalPosition === 'top'
+    ? 'object-top'
+    : focalPosition === 'bottom'
+    ? 'object-bottom'
+    : focalPosition === 'center'
+    ? 'object-center'
+    : typeof focalPosition === 'string'
+    ? focalPosition
+    : variant === 'poster'
+    ? 'object-[center_15%]' // Default focal position for portrait cards protects heads/faces
+    : 'object-center';
 
   const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
     const image = event.currentTarget;
     if (image.naturalWidth && image.naturalHeight) {
       const ratio = image.naturalWidth / image.naturalHeight;
+      if (imageUrl) {
+        ratioCache.set(imageUrl, ratio);
+      }
       setDetectedRatio(ratio);
       if (onRatioDetected) {
         onRatioDetected(ratio < 1.15, ratio);
@@ -135,15 +163,18 @@ export const VisualArt: React.FC<VisualArtProps> = ({
               src={imageUrl}
               alt=""
               aria-hidden="true"
-              className="w-full h-full object-cover blur-2xl scale-125 opacity-50 brightness-75 select-none"
+              referrerPolicy="no-referrer"
+              loading="lazy"
+              className="w-full h-full object-cover blur-2xl scale-125 opacity-40 brightness-75 select-none"
             />
             {/* Soft Netflix subtle vignette */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#000000]/60 via-transparent to-[#000000]/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-[#000000]/60" />
             <div className="absolute inset-0 bg-[#000000]/30" />
           </div>
         )}
 
         <img
+          ref={imgRef}
           src={imageUrl}
           alt={title}
           referrerPolicy="no-referrer"
@@ -151,8 +182,10 @@ export const VisualArt: React.FC<VisualArtProps> = ({
           fetchPriority={fetchPriority}
           onError={() => setImageFailed(true)}
           onLoad={handleImageLoad}
-          className={`${fitClass} ${positionClass} ${cleanClassName} ${
-            isContained ? 'relative z-10 max-h-full max-w-full drop-shadow-[0_8px_24px_rgba(0,0,0,0.8)]' : ''
+          className={`${fitClass} ${positionClass} ${
+            isContained
+              ? 'relative z-10 max-h-full max-w-full w-auto h-auto drop-shadow-[0_8px_24px_rgba(0,0,0,0.85)]'
+              : cleanClassName
           }`.trim()}
         />
       </div>

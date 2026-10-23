@@ -42,12 +42,14 @@ import { SurpriseModal } from './components/SurpriseModal';
 import { ConstellationSection } from './components/ConstellationSection';
 import { AuthScreen } from './components/AuthScreen';
 import ProfileSelect from './components/ProfileSelect';
+import { OpeningSplash } from './components/OpeningSplash';
 import { TRACKS } from './data/tracks';
 import { romanticAudio } from './utils/romanticAudio';
-import { hasValidVideo, isLetterItem } from './utils/mediaHelpers';
+import { hasValidVideo, isLetterItem, getMemoryImageUrl } from './utils/mediaHelpers';
 import { User } from '@supabase/supabase-js';
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
   const [memories, setMemories] = useState<MemoryItem[]>(storageService.getInitialMemories());
   const [siteContent, setSiteContent] = useState<SiteContentMap>(storageService.getInitialSiteContent());
   const [activeTab, setActiveTab] = useState('home');
@@ -475,8 +477,9 @@ export default function App() {
 
   const isSupabaseReady = isSupabaseConfigured();
 
-  // 1. INITIAL SESSION CHECK LOADING SCREEN
-  if (isAuthChecking) {
+  const renderAppContent = () => {
+    // 1. INITIAL SESSION CHECK LOADING SCREEN
+    if (isAuthChecking) {
     return (
       <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex flex-col items-center justify-center gap-4 selection:bg-[#E50914] selection:text-[#FFFFFF]">
         <div className="font-bebas text-4xl sm:text-5xl tracking-widest text-[#E50914] font-black uppercase animate-pulse">
@@ -961,15 +964,16 @@ export default function App() {
                       onClick={() => setSelectedMemory(item)}
                       className="p-5 rounded-xl bg-[#141414] border border-white/10 hover:border-white/30 netflix-card-shadow transition-all duration-300 cursor-pointer hover:scale-[1.02] space-y-3.5 flex flex-col justify-between group select-none"
                     >
-                      {(item.posterUrl || item.backdropUrl) && (
-                        <div className="relative aspect-[16/10] sm:aspect-video w-full rounded-lg overflow-hidden bg-[#000000] -mt-1 mb-2">
+                      {Boolean(getMemoryImageUrl(item, 'landscape')) && (
+                        <div className="relative aspect-video w-full rounded-lg overflow-hidden bg-[#000000] -mt-1 mb-2">
                           <VisualArt
                             id={item.id}
                             category={item.category}
                             title={item.title}
-                            imageUrl={item.posterUrl || item.backdropUrl}
+                            imageUrl={getMemoryImageUrl(item, 'landscape')}
                             variant="landscape"
-                            focalPosition="top"
+                            aspectRatio="16/9"
+                            focalPosition="center"
                             fit="auto"
                             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
                             className="w-full h-full"
@@ -1368,6 +1372,16 @@ export default function App() {
       {/* PERSISTENT FLOATING MUSIC PLAYER */}
       <MusicPlayer isAdmin={isAdmin} />
     </div>
+    );
+  };
+
+  return (
+    <>
+      {showSplash && (
+        <OpeningSplash onComplete={() => setShowSplash(false)} />
+      )}
+      {renderAppContent()}
+    </>
   );
 }
 

@@ -198,12 +198,12 @@ class SupabaseService {
       fullStory: row.full_story,
       location: row.location || undefined,
       tags: row.tags || [],
-      backdropUrl: await this.resolvePhotoUrl(row.backdrop_url),
-      posterUrl: await this.resolvePhotoUrl(row.poster_url),
+      backdropUrl: (await this.resolvePhotoUrl(row.backdrop_url)) || row.backdrop_url || undefined,
+      posterUrl: (await this.resolvePhotoUrl(row.poster_url)) || row.poster_url || undefined,
       videoUrl: (row as any).video_url
-        ? await this.resolvePhotoUrl((row as any).video_url)
+        ? ((await this.resolvePhotoUrl((row as any).video_url)) || (row as any).video_url || undefined)
         : (row.backdrop_url && /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(row.backdrop_url)
-            ? await this.resolvePhotoUrl(row.backdrop_url)
+            ? ((await this.resolvePhotoUrl(row.backdrop_url)) || row.backdrop_url || undefined)
             : undefined),
       fallbackGradient: row.fallback_gradient,
       progress: row.progress !== null ? row.progress : undefined,
@@ -448,13 +448,13 @@ class SupabaseService {
         .from('memory-photos')
         .createSignedUrl(path, 60 * 60);
       if (error || !data?.signedUrl) {
-        console.warn('Could not create a signed photo URL:', error?.message || 'No URL returned');
-        return undefined;
+        console.warn('Could not create a signed photo URL, using direct path/URL:', error?.message || 'No URL returned');
+        return urlOrPath;
       }
       return data.signedUrl;
     } catch (e) {
-      console.warn('Could not resolve a photo URL:', e);
-      return undefined;
+      console.warn('Could not resolve a photo URL, using direct path/URL fallback:', e);
+      return urlOrPath;
     }
   }
 
