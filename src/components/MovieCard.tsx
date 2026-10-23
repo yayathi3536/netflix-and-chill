@@ -53,7 +53,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
       >
         {/* Outlined numeral if rankNumber is defined */}
         {rankNumber !== undefined && (
-          <div className="relative font-bebas text-8xl sm:text-9xl font-black select-none pointer-events-none -mr-4 sm:-mr-6 z-0 text-[#000000] drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)] [-webkit-text-stroke:3px_#555555] group-hover:[-webkit-text-stroke:3px_#E50914] transition-all">
+          <div className="relative text-8xl sm:text-9xl font-black select-none pointer-events-none -mr-4 sm:-mr-6 z-0 text-[#000000] drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)] [-webkit-text-stroke:3px_#555555] group-hover:[-webkit-text-stroke:3px_#E50914] transition-all">
             {rankNumber}
           </div>
         )}
@@ -75,7 +75,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 
           {/* Top Netflix badge & Admin Edit */}
           <div className="absolute top-2 left-2 right-2 flex items-center justify-between z-20">
-            <span className="w-5 h-5 rounded bg-[#E50914] flex items-center justify-center font-bebas text-xs font-black text-[#FFFFFF] shadow-md">
+            <span className="w-5 h-5 rounded bg-[#E50914] flex items-center justify-center text-xs font-bold text-[#FFFFFF] shadow-md">
               N
             </span>
             {onEditMemory && (
@@ -95,7 +95,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 
           {/* Bottom Title & Scrim */}
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#000000]/95 via-[#000000]/60 to-transparent flex flex-col justify-end p-2.5 sm:p-3 pt-8 z-20">
-            <h3 className="font-bebas text-base sm:text-xl text-[#FFFFFF] font-bold leading-tight drop-shadow-md line-clamp-2 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-[#FFFFFF] leading-tight drop-shadow-md line-clamp-1">
               {memory.title}
             </h3>
             {memory.subtitle && (
@@ -133,7 +133,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 
         {/* Top Indicators */}
         <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between z-20">
-          <span className="w-5 h-5 rounded bg-[#E50914] flex items-center justify-center font-bebas text-xs font-black text-[#FFFFFF] shadow">
+          <span className="w-5 h-5 rounded bg-[#E50914] flex items-center justify-center text-xs font-bold text-[#FFFFFF] shadow">
             N
           </span>
           {memory.isSecret ? (
@@ -157,7 +157,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         {/* Bottom Caption Bar (Leaves image clear and unobstructed) */}
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#000000]/95 via-[#000000]/65 to-transparent flex flex-col justify-end p-2.5 sm:p-3 pt-8">
           <div className="flex items-center justify-between">
-            <h4 className="font-bebas font-bold text-[#FFFFFF] text-base sm:text-lg tracking-wider uppercase line-clamp-1 drop-shadow">
+            <h4 className="text-sm font-semibold text-[#FFFFFF] line-clamp-1 drop-shadow">
               {memory.title}
             </h4>
           </div>
