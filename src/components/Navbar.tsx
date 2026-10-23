@@ -104,7 +104,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           : 'bg-gradient-to-b from-[#000000]/95 via-[#000000]/60 to-transparent py-3.5 sm:py-4'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-[4%] flex items-center justify-between gap-4">
         {/* ZONE 1: NETFLIX-STYLE BRAND LOGO */}
         <div className="flex items-center gap-4 lg:gap-8 shrink-0">
           <button

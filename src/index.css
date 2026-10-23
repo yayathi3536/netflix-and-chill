@@ -133,3 +133,38 @@
 .animate-ken-burns {
   animation: kenburns 26s ease-in-out infinite alternate;
 }
+
+
+/* Cohesive streaming-service polish */
+@layer base {
+  html {
+    background: #000;
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background: rgba(229, 9, 20, 0.85);
+    color: #fff;
+  }
+
+  button,
+  a,
+  input {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
