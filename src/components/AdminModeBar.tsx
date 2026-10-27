@@ -41,14 +41,14 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
             <span className="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-[#E50914]"></span>
           </div>
           <div className="hidden sm:flex items-center gap-1.5 text-xs">
-            <ShieldCheck className="w-4 h-4 text-[#E50914]" />
+            <ShieldCheck className="w-4 h-4 text-neutral-300" />
             <span className="font-bold text-[#FFFFFF] tracking-wide uppercase font-bebas text-sm">Admin Verified</span>
             <span className="text-[#808080]">·</span>
             <span className="text-[#B3B3B3] max-w-[140px] truncate" title={currentUser.email}>
               {currentUser.email}
             </span>
           </div>
-          <div className="sm:hidden flex items-center gap-1 text-xs font-bold text-[#E50914]">
+          <div className="sm:hidden flex items-center gap-1 text-xs font-bold text-neutral-300">
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>Admin</span>
           </div>
@@ -62,7 +62,7 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
             className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 sm:py-1.5 rounded bg-[#181818] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold transition-all cursor-pointer border border-[#808080]/30 min-h-[38px]"
             title="Edit texts & letters"
           >
-            <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
+            <Edit3 className="w-3.5 h-3.5 text-neutral-300" />
             <span className="hidden md:inline">Edit Content</span>
             <span className="md:hidden">Edit</span>
           </button>
@@ -83,7 +83,7 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
             className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 sm:py-1.5 rounded bg-[#181818] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold transition-all cursor-pointer border border-[#E50914]/40 min-h-[38px]"
             title="Open live content studio"
           >
-            <LayoutDashboard className="w-3.5 h-3.5 text-[#E50914]" />
+            <LayoutDashboard className="w-3.5 h-3.5 text-neutral-300" />
             <span className="hidden md:inline">Studio</span>
           </button>
 
@@ -105,7 +105,7 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
             className="p-2 sm:px-2.5 sm:py-1 rounded text-[#808080] hover:text-[#FFFFFF] hover:bg-[#181818] text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer min-h-[38px]"
             title="Sign out of Admin Mode"
           >
-            <LogOut className="w-3.5 h-3.5 text-[#E50914]" />
+            <LogOut className="w-3.5 h-3.5 text-neutral-300" />
             <span className="hidden sm:inline">Exit</span>
           </button>
         </div>
