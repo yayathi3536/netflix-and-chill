@@ -389,7 +389,7 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
                     onClick={() => setActiveTab('nowPlaying')}
                     className={`px-2.5 sm:px-3 py-1.5 rounded font-medium transition-colors cursor-pointer min-h-[36px] ${
                       activeTab === 'nowPlaying'
-                        ? 'bg-[#E50914] text-[#FFFFFF] font-bold'
+                        ? 'bg-white text-black font-semibold'
                         : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
                     }`}
                   >
@@ -399,7 +399,7 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
                     onClick={() => setActiveTab('playlist')}
                     className={`px-2.5 sm:px-3 py-1.5 rounded font-medium transition-colors cursor-pointer min-h-[36px] ${
                       activeTab === 'playlist'
-                        ? 'bg-[#E50914] text-[#FFFFFF] font-bold'
+                        ? 'bg-white text-black font-semibold'
                         : 'text-[#B3B3B3] hover:text-[#FFFFFF]'
                     }`}
                   >
