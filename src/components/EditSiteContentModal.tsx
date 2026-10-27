@@ -323,7 +323,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                     <button
                       type="button"
                       onClick={() => handleChange('hero_backdrop_url', '')}
-                      className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-[#E50914]/20 border border-white/15 text-[#E50914] hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
+                      className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-[#404040]/20 border border-white/15 text-[#E50914] hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
                       title="Remove backdrop media"
                     >
                       <X className="w-3.5 h-3.5" />
@@ -381,7 +381,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                       <button
                         type="button"
                         onClick={() => handleChange('hero_backdrop_url', '')}
-                        className="absolute top-2 right-2 p-1.5 rounded-full bg-black/75 hover:bg-[#E50914] text-white text-xs border border-white/20 shadow transition-colors cursor-pointer"
+                        className="absolute top-2 right-2 p-1.5 rounded-full bg-black/75 hover:bg-[#404040] text-white text-xs border border-white/20 shadow transition-colors cursor-pointer"
                         title="Clear media"
                       >
                         <X className="w-3.5 h-3.5" />
