@@ -113,10 +113,10 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
         onClick={onClose}
       >
         <div
-          className="relative w-full max-w-md bg-[#181818] rounded-xl overflow-hidden shadow-2xl border border-[#E50914]/50 my-auto text-white p-6 sm:p-8 text-center space-y-4"
+          className="relative w-full max-w-md bg-[#181818] rounded-xl overflow-hidden shadow-2xl border border-neutral-500/50 my-auto text-white p-6 sm:p-8 text-center space-y-4"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="w-12 h-12 rounded-full bg-[#E50914]/20 border border-[#E50914] text-[#E50914] flex items-center justify-center mx-auto">
+          <div className="w-12 h-12 rounded-full bg-neutral-700/20 border border-neutral-500 text-neutral-300 flex items-center justify-center mx-auto">
             <Shield className="w-6 h-6" />
           </div>
           <h3 className="font-bebas text-2xl sm:text-3xl tracking-wide text-white font-bold leading-tight">
@@ -128,7 +128,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
           <div className="pt-2 flex flex-col sm:flex-row gap-2">
             <button
               onClick={onClose}
-              className="flex-1 py-2 px-4 rounded bg-[#141414] hover:bg-white/10 border border-[#808080]/30 text-xs font-semibold text-white transition-colors cursor-pointer"
+              className="flex-1 py-2 px-4 rounded bg-[#141414] hover:bg-white/10 border border-neutral-500/30 text-xs font-semibold text-white transition-colors cursor-pointer"
             >
               Close
             </button>
@@ -317,7 +317,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
     >
       <div className="p-5 sm:p-6 text-white">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#E50914] flex items-center justify-center shadow-lg shadow-[#E50914]/30">
+            <div className="w-9 h-9 rounded-lg bg-neutral-700 flex items-center justify-center shadow-lg shadow-black/30">
               <Plus className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -337,7 +337,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             <button
               type="button"
               onClick={handleDelete}
-              className="p-2 text-[#E50914] hover:text-white hover:bg-[#E50914]/20 rounded transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
+              className="p-2 text-neutral-300 hover:text-white hover:bg-neutral-700/20 rounded transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
               title="Delete this memory"
             >
               <Trash2 className="w-4 h-4" />
@@ -348,8 +348,8 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
 
         {/* Admin notice if Supabase is connected but user is guest */}
         {isSupabaseReady && !currentUser && (
-          <div className="p-3 mb-4 rounded bg-[#181818] border border-[#808080]/30 text-[#B3B3B3] text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0" />
+          <div className="p-3 mb-4 rounded bg-[#181818] border border-neutral-500/30 text-[#B3B3B3] text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-neutral-300 shrink-0" />
             <span>
               Tip: Sign in via Admin Access to save permanently to Supabase with Row Level Security.
             </span>
@@ -369,7 +369,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Midnight Ice Cream in the Rain"
-                className="w-full bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
+                className="w-full bg-black/50 border border-white/15 focus:border-neutral-500 rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
               />
             </div>
             <div>
@@ -381,7 +381,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                 value={subtitle}
                 onChange={(e) => setSubtitle(e.target.value)}
                 placeholder="e.g. Season 3 · Episode 9"
-                className="w-full bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
+                className="w-full bg-black/50 border border-white/15 focus:border-neutral-500 rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
               />
             </div>
           </div>
@@ -395,7 +395,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as MemoryCategory)}
-                className="w-full bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white focus:outline-none"
+                className="w-full bg-black/50 border border-white/15 focus:border-neutral-500 rounded-lg p-2.5 text-white focus:outline-none"
               >
                 <option value="memories">Continue Watching: Our Memories</option>
                 <option value="our-story">Original Series: Our Story</option>
@@ -413,7 +413,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 placeholder="e.g. October 14, 2024"
-                className="w-full bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
+                className="w-full bg-black/50 border border-white/15 focus:border-neutral-500 rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
               />
             </div>
           </div>
@@ -429,7 +429,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="e.g. Downtown Coffee Shop"
-                className="w-full bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
+                className="w-full bg-black/50 border border-white/15 focus:border-neutral-500 rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
               />
             </div>
             <div>
@@ -441,7 +441,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                 value={tagsString}
                 onChange={(e) => setTagsString(e.target.value)}
                 placeholder="e.g. First Date, Cozy, Late Night"
-                className="w-full bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
+                className="w-full bg-black/50 border border-white/15 focus:border-neutral-500 rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
               />
             </div>
           </div>
@@ -457,7 +457,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
               value={synopsis}
               onChange={(e) => setSynopsis(e.target.value)}
               placeholder="What happened in this memory in 1-2 sentences..."
-              className="w-full bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
+              className="w-full bg-black/50 border border-white/15 focus:border-neutral-500 rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
             />
           </div>
 
@@ -471,7 +471,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
               value={fullStory}
               onChange={(e) => setFullStory(e.target.value)}
               placeholder="Write the full memory story for when she clicks More Info..."
-              className="w-full bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
+              className="w-full bg-black/50 border border-white/15 focus:border-neutral-500 rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
             />
           </div>
 
@@ -487,15 +487,15 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-2.5">
-              <label className="w-full flex-1 py-3 px-4 bg-[#181818] hover:bg-[#202020] text-white rounded-lg cursor-pointer flex items-center justify-center gap-2.5 border border-[#808080]/30 hover:border-[#E50914] transition-all min-h-[44px] shadow-sm group">
+              <label className="w-full flex-1 py-3 px-4 bg-[#181818] hover:bg-[#202020] text-white rounded-lg cursor-pointer flex items-center justify-center gap-2.5 border border-neutral-500/30 hover:border-neutral-500 transition-all min-h-[44px] shadow-sm group">
                 {isUploading ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin text-[#E50914]" />
+                    <Loader2 className="w-4 h-4 animate-spin text-neutral-300" />
                     <span className="font-semibold text-xs text-neutral-200">Uploading to Storage...</span>
                   </>
                 ) : (
                   <>
-                    <UploadCloud className="w-4 h-4 text-[#E50914] group-hover:scale-110 transition-transform" />
+                    <UploadCloud className="w-4 h-4 text-neutral-300 group-hover:scale-110 transition-transform" />
                     <span className="font-semibold text-xs text-white">Upload from Device</span>
                   </>
                 )}
@@ -515,7 +515,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                     setImageUrl('');
                     setImageMeta(null);
                   }}
-                  className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-[#E50914]/20 border border-white/15 text-[#E50914] hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
+                  className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-neutral-700/20 border border-white/15 text-neutral-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
                   title="Remove selected image"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -525,7 +525,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             </div>
 
             {uploadError && (
-              <p className="text-xs text-[#E50914] flex items-center gap-1.5 mt-1">
+              <p className="text-xs text-neutral-300 flex items-center gap-1.5 mt-1">
                 <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                 <span>{uploadError}</span>
               </p>
@@ -533,7 +533,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
 
             {uploadSuccess && (
               <p className="text-xs text-white flex items-center gap-1.5 mt-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#E50914] shrink-0" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-neutral-300 shrink-0" />
                 <span>{uploadSuccess}</span>
               </p>
             )}
@@ -689,7 +689,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
           <div className="space-y-2 p-3 bg-white/5 rounded-lg border border-white/10">
             <div className="flex items-center justify-between">
               <label className="block text-neutral-300 font-semibold flex items-center gap-1.5">
-                <Video className="w-4 h-4 text-[#E50914]" />
+                <Video className="w-4 h-4 text-neutral-300" />
                 <span>Video Clip (optional)</span>
               </label>
               <span className="text-[10px] text-neutral-400">
@@ -698,15 +698,15 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-2.5">
-              <label className="w-full flex-1 py-3 px-4 bg-[#181818] hover:bg-[#202020] text-white rounded-lg cursor-pointer flex items-center justify-center gap-2.5 border border-[#808080]/30 hover:border-[#E50914] transition-all min-h-[44px] shadow-sm group">
+              <label className="w-full flex-1 py-3 px-4 bg-[#181818] hover:bg-[#202020] text-white rounded-lg cursor-pointer flex items-center justify-center gap-2.5 border border-neutral-500/30 hover:border-neutral-500 transition-all min-h-[44px] shadow-sm group">
                 {isUploadingVideo ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin text-[#E50914]" />
+                    <Loader2 className="w-4 h-4 animate-spin text-neutral-300" />
                     <span className="font-semibold text-xs text-neutral-200">Uploading Video to Storage...</span>
                   </>
                 ) : (
                   <>
-                    <UploadCloud className="w-4 h-4 text-[#E50914] group-hover:scale-110 transition-transform" />
+                    <UploadCloud className="w-4 h-4 text-neutral-300 group-hover:scale-110 transition-transform" />
                     <span className="font-semibold text-xs text-white">Upload Video from Device</span>
                   </>
                 )}
@@ -726,7 +726,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                     setVideoUrl('');
                     setVideoUploadSuccess('');
                   }}
-                  className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-[#E50914]/20 border border-white/15 text-[#E50914] hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
+                  className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-neutral-700/20 border border-white/15 text-neutral-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
                   title="Remove uploaded video"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -736,7 +736,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             </div>
 
             {videoUploadError && (
-              <p className="text-xs text-[#E50914] flex items-center gap-1.5 mt-1">
+              <p className="text-xs text-neutral-300 flex items-center gap-1.5 mt-1">
                 <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                 <span>{videoUploadError}</span>
               </p>
@@ -754,7 +754,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
               <div className="mt-3 space-y-2">
                 <div className="flex items-center justify-between text-[11px] text-neutral-300">
                   <span className="font-semibold text-white flex items-center gap-1.5">
-                    <Film className="w-3.5 h-3.5 text-[#E50914]" />
+                    <Film className="w-3.5 h-3.5 text-neutral-300" />
                     <span>Uploaded Video Preview</span>
                   </span>
                   <span className="text-[10px] text-neutral-400">16:9 Playback</span>
@@ -779,10 +779,10 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                 type="checkbox"
                 checked={isSecret}
                 onChange={(e) => setIsSecret(e.target.checked)}
-                className="w-4 h-4 accent-[#E50914] rounded"
+                className="w-4 h-4 accent-white rounded"
               />
               <span className="font-semibold text-neutral-200 flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5 text-[#E50914]" />
+                <Lock className="w-3.5 h-3.5 text-neutral-300" />
                 Password-Protect in Secret Vault
               </span>
             </label>
@@ -797,7 +797,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                   value={letterContent}
                   onChange={(e) => setLetterContent(e.target.value)}
                   placeholder="Write your private message or letter here..."
-                  className="w-full bg-black/50 border border-white/15 focus:border-[#E50914] rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
+                  className="w-full bg-black/50 border border-white/15 focus:border-neutral-500 rounded-lg p-2.5 text-white placeholder-neutral-500 focus:outline-none"
                 />
               </div>
             )}
