@@ -64,7 +64,7 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
           {isAdmin && onOpenAddModal && (
             <button
               onClick={onOpenAddModal}
-              className="flex items-center gap-1.5 px-4 py-2 rounded bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] text-xs font-bold shadow transition-all cursor-pointer uppercase tracking-wider"
+              className="flex items-center gap-1.5 px-4 py-2 rounded bg-white hover:bg-white/80 text-black text-xs font-semibold shadow transition-all cursor-pointer uppercase tracking-wider"
             >
               <UploadCloud className="w-4 h-4" />
               <span>Upload Photo / Memory</span>
@@ -173,7 +173,7 @@ export const ScrapbookView: React.FC<ScrapbookViewProps> = ({
                         e.stopPropagation();
                         onPlayMemory(mem);
                       }}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs rounded transition-colors cursor-pointer uppercase tracking-wider"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-white/80 text-black font-semibold text-xs rounded transition-colors cursor-pointer uppercase tracking-wider"
                     >
                       <Play className="w-3 h-3 fill-white" />
                       <span>Play Video</span>
