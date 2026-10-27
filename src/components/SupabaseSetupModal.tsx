@@ -342,7 +342,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGci...`}
         <div className="pt-2 flex justify-end">
           <button
             onClick={onClose}
-            className="px-5 py-2 bg-[#E50914] hover:bg-[#b80710] text-white font-bold text-xs rounded-md shadow transition-colors"
+            className="px-5 py-2 bg-white hover:bg-white/80 text-black font-semibold text-xs rounded-md shadow transition-colors"
           >
             Got It
           </button>
