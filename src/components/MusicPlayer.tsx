@@ -335,7 +335,7 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
               e.stopPropagation();
               togglePlay();
             }}
-            className="w-8 h-8 rounded-full bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] flex items-center justify-center shadow-md transition-transform active:scale-90 cursor-pointer shrink-0"
+            className="w-8 h-8 rounded-full bg-white hover:bg-white/80 text-black flex items-center justify-center shadow-md transition-transform active:scale-90 cursor-pointer shrink-0"
             aria-label={isPlaying ? 'Pause music' : 'Play music'}
           >
             {isPlaying ? (
@@ -511,7 +511,7 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
                   {/* Main Play / Pause Button */}
                   <button
                     onClick={togglePlay}
-                    className="w-14 h-14 rounded-full bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] flex items-center justify-center shadow-xl transition-transform active:scale-95 cursor-pointer"
+                    className="w-14 h-14 rounded-full bg-white hover:bg-white/80 text-black flex items-center justify-center shadow-xl transition-transform active:scale-95 cursor-pointer"
                     title={isPlaying ? 'Pause' : 'Play'}
                   >
                     {isPlaying ? (
