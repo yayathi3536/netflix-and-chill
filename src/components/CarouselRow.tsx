@@ -102,18 +102,31 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
           className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth py-3 px-1 -mx-1"
         >
           {items.map((item, index) => (
-            <MovieCard
+            <div
               key={item.id}
-              memory={item}
-              rankNumber={isPortrait ? index + 1 : undefined}
-              isPortrait={isPortrait}
-              onPlay={onPlay}
-              onOpenInfo={onOpenInfo}
-              onToggleWatchlist={onToggleWatchlist}
-              onToggleFavorite={onToggleFavorite}
-              onUnlockVault={onUnlockVault}
-              onEditMemory={onEditMemory}
-            />
+              className={isPortrait ? 'relative flex items-center shrink-0 group/top-ten' : 'contents'}
+            >
+              {isPortrait && (
+                <span
+                  className="font-bebas text-[120px] leading-none font-black text-transparent select-none -mr-6 transition-colors duration-200 group-hover/top-ten:[-webkit-text-stroke:3px_#fff]"
+                  style={{ WebkitTextStroke: '3px #595959' }}
+                  aria-hidden="true"
+                >
+                  {index + 1}
+                </span>
+              )}
+              <MovieCard
+                memory={item}
+                rankNumber={undefined}
+                isPortrait={isPortrait}
+                onPlay={onPlay}
+                onOpenInfo={onOpenInfo}
+                onToggleWatchlist={onToggleWatchlist}
+                onToggleFavorite={onToggleFavorite}
+                onUnlockVault={onUnlockVault}
+                onEditMemory={onEditMemory}
+              />
+            </div>
           ))}
         </div>
 
