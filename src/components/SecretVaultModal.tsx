@@ -147,7 +147,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 bg-[#E50914] hover:bg-[#f6121d] text-white font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
+                className="w-full py-3 bg-white hover:bg-white/80 text-black font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
               >
                 <KeyRound className="w-4 h-4" />
                 <span>Unlock Confidential Vault</span>
@@ -243,7 +243,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
                         className={`w-full py-2 px-3 rounded text-xs font-bold transition-all flex items-center justify-center gap-1.5 uppercase tracking-wider ${
                           coupon.redeemed
                             ? 'bg-[#141414] text-[#808080] cursor-not-allowed border border-[#808080]/20'
-                            : 'bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] active:scale-95 cursor-pointer shadow'
+                             : 'bg-white hover:bg-white/80 text-black active:scale-95 cursor-pointer shadow'
                         }`}
                       >
                         {coupon.redeemed ? (
