@@ -24,7 +24,7 @@ export const SoundtrackRow: React.FC<SoundtrackRowProps> = ({
       {/* Netflix Row Header */}
       <div className="flex items-baseline justify-between mb-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-0.5">
+          <div className="inline-flex items-center gap-1.5 text-xs text-[#808080] font-bold tracking-widest uppercase mb-0.5">
             <Music className="w-3.5 h-3.5" />
             <span>ORIGINAL SOUNDTRACK</span>
           </div>
@@ -63,7 +63,7 @@ export const SoundtrackRow: React.FC<SoundtrackRowProps> = ({
               }}
               className={`group relative shrink-0 w-64 sm:w-72 rounded-xl p-4 bg-[#141414] border netflix-card-shadow transition-all duration-300 cursor-pointer flex flex-col justify-between select-none ${
                 isCurrent
-                  ? 'border-[#E50914] shadow-[0_8px_30px_rgba(229,9,20,0.3)] bg-[#181818]'
+                  ? 'border-[#808080] shadow-[0_8px_30px_rgba(229,9,20,0.3)] bg-[#181818]'
                   : 'border-white/10 hover:border-white/30 hover:scale-[1.02]'
               }`}
             >
@@ -81,7 +81,7 @@ export const SoundtrackRow: React.FC<SoundtrackRowProps> = ({
                     />
                   ) : (
                     <div className="w-full h-full bg-[#181818] flex items-center justify-center">
-                      <Music className="w-6 h-6 text-[#E50914]" />
+                      <Music className="w-6 h-6 text-[#808080]" />
                     </div>
                   )}
 
@@ -100,7 +100,7 @@ export const SoundtrackRow: React.FC<SoundtrackRowProps> = ({
                 </div>
 
                 <div className="overflow-hidden flex-1">
-                  <span className="text-[10px] font-bold text-[#E50914] uppercase tracking-wider block truncate">
+                  <span className="text-[10px] font-bold text-[#808080] uppercase tracking-wider block truncate">
                     {track.artist}
                   </span>
                   <h3 className="font-bebas text-lg text-[#FFFFFF] font-bold leading-snug truncate uppercase tracking-wide group-hover:text-[#FFFFFF] transition-colors">
@@ -120,9 +120,9 @@ export const SoundtrackRow: React.FC<SoundtrackRowProps> = ({
 
                 {isCurrentPlaying ? (
                   <div className="flex items-end gap-0.5 h-3.5">
-                    <span className="w-1 bg-[#E50914] rounded-full animate-pulse h-2.5" />
-                    <span className="w-1 bg-[#E50914] rounded-full animate-pulse [animation-delay:0.2s] h-3.5" />
-                    <span className="w-1 bg-[#E50914] rounded-full animate-pulse [animation-delay:0.4s] h-1.5" />
+                    <span className="w-1 bg-[#808080] rounded-full animate-pulse h-2.5" />
+                    <span className="w-1 bg-[#808080] rounded-full animate-pulse [animation-delay:0.2s] h-3.5" />
+                    <span className="w-1 bg-[#808080] rounded-full animate-pulse [animation-delay:0.4s] h-1.5" />
                   </div>
                 ) : (
                   <span className="text-[10px] text-[#808080] font-medium">Click to Play</span>
