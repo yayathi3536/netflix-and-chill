@@ -232,7 +232,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={toggleAudio}
             className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded transition-all relative text-xs font-medium cursor-pointer min-h-[40px] ${
               isAudioPlaying
-                ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                ? 'bg-white text-black font-semibold shadow-md'
                 : 'bg-[#181818] text-[#FFFFFF] hover:bg-white/10 border border-[#808080]/30'
             }`}
             title={isAudioPlaying ? 'Mute soundtrack' : 'Play soundtrack'}
