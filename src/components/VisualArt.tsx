@@ -214,7 +214,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
               <stop offset="85%" stopColor="#000000" />
             </linearGradient>
             <radialGradient id="netflixGlow" cx="0.5" cy="0.65" r="0.4">
-              <stop offset="0%" stopColor="#E50914" stopOpacity="0.35" />
+              <stop offset="0%" stopColor="#808080" stopOpacity="0.35" />
               <stop offset="70%" stopColor="#141414" stopOpacity="0.1" />
               <stop offset="100%" stopColor="transparent" />
             </radialGradient>
@@ -230,7 +230,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
             <path d="M28 34 C28 30, 48 30, 48 34 L45 68 L30 68 Z" />
             <circle cx="58" cy="25" r="8.5" />
             <path d="M50 36 C50 32, 68 32, 68 36 L66 68 L52 68 Z" />
-            <path d="M43 45 Q49 52 55 45" stroke="#E50914" strokeWidth="3" fill="none" />
+            <path d="M43 45 Q49 52 55 45" stroke="#808080" strokeWidth="3" fill="none" />
           </g>
           {/* Stars in white */}
           <circle cx="80" cy="60" r="1.5" fill="#FFFFFF" opacity="0.8" />
@@ -247,7 +247,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
           <g transform="translate(240, 110) scale(1.1)" opacity="0.9">
             <rect x="0" y="0" width="120" height="85" rx="4" fill="#181818" stroke="#808080" strokeWidth="1.5" />
             <path d="M0 0 L60 48 L120 0" stroke="#808080" strokeWidth="1.5" fill="none" />
-            <circle cx="60" cy="48" r="16" fill="#E50914" />
+            <circle cx="60" cy="48" r="16" fill="#808080" />
             <text x="60" y="53" textAnchor="middle" fill="#FFFFFF" fontSize="14" fontWeight="bold" fontFamily="sans-serif">N</text>
           </g>
         </svg>
@@ -261,9 +261,9 @@ export const VisualArt: React.FC<VisualArtProps> = ({
           <circle cx="150" cy="90" r="2.2" fill="#FFFFFF" opacity="0.9" />
           <circle cx="280" cy="70" r="1.8" fill="#FFFFFF" opacity="0.8" />
           <circle cx="450" cy="110" r="2.2" fill="#FFFFFF" opacity="0.8" />
-          <circle cx="340" cy="180" r="2.8" fill="#E50914" opacity="0.9" />
+          <circle cx="340" cy="180" r="2.8" fill="#808080" opacity="0.9" />
           <line x1="150" y1="90" x2="280" y2="70" stroke="#808080" strokeWidth="0.8" opacity="0.3" />
-          <line x1="280" y1="70" x2="340" y2="180" stroke="#E50914" strokeWidth="0.8" opacity="0.4" />
+          <line x1="280" y1="70" x2="340" y2="180" stroke="#808080" strokeWidth="0.8" opacity="0.4" />
           <line x1="340" y1="180" x2="450" y2="110" stroke="#808080" strokeWidth="0.8" opacity="0.3" />
         </svg>
       )}
