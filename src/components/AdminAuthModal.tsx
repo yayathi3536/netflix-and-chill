@@ -218,7 +218,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
 
         {/* Modal Header */}
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-10 h-10 rounded-lg bg-[#E50914] flex items-center justify-center shadow-lg shadow-[#E50914]/30">
+          <div className="w-10 h-10 rounded-lg bg-neutral-700 flex items-center justify-center shadow-lg shadow-black/30">
             <ShieldCheck className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -233,9 +233,9 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
 
         {/* Supabase Status Check */}
         {!supabaseReady && (
-          <div className="p-3 mb-4 rounded bg-[#181818] border border-[#808080]/30 text-[#B3B3B3] text-xs space-y-1">
+          <div className="p-3 mb-4 rounded bg-[#181818] border border-neutral-500/30 text-[#B3B3B3] text-xs space-y-1">
             <div className="flex items-center gap-1.5 font-semibold text-[#FFFFFF]">
-              <AlertCircle className="w-4 h-4 text-[#E50914]" />
+              <AlertCircle className="w-4 h-4 text-neutral-300" />
               <span>Supabase Environment Not Configured</span>
             </div>
             <p className="text-[11px] text-[#B3B3B3] leading-relaxed">
@@ -252,12 +252,12 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
             <div
               className={`p-4 rounded border space-y-2 ${
                 isAdminUser
-                  ? 'bg-[#181818] border-[#E50914] text-[#FFFFFF]'
-                  : 'bg-[#181818] border-[#808080]/40 text-[#B3B3B3]'
+                  ? 'bg-[#181818] border-neutral-500 text-[#FFFFFF]'
+                  : 'bg-[#181818] border-neutral-500/40 text-[#B3B3B3]'
               }`}
             >
               <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-[#FFFFFF]">
-                <CheckCircle2 className="w-4 h-4 text-[#E50914]" />
+                <CheckCircle2 className="w-4 h-4 text-neutral-300" />
                 <span>
                   {isAdminUser ? 'Verified Administrator' : 'Viewer Account (Read-Only)'}
                 </span>
@@ -276,7 +276,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
             {isAdminUser && (
               <div className="space-y-2 pt-2 border-t border-white/10">
                 <h4 className="text-xs font-semibold text-neutral-300 flex items-center gap-1.5">
-                  <Database className="w-3.5 h-3.5 text-[#E50914]" />
+                  <Database className="w-3.5 h-3.5 text-neutral-300" />
                   <span>Cloud Synchronization</span>
                 </h4>
                 <p className="text-[11px] text-neutral-400">
@@ -304,11 +304,11 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                 <span className="font-semibold text-neutral-300">RLS SQL Migration Script</span>
                 <button
                   onClick={handleCopySql}
-                  className="flex items-center gap-1 text-[#E50914] hover:text-[#b80710] cursor-pointer font-semibold"
+                  className="flex items-center gap-1 text-neutral-300 hover:text-[#404040] cursor-pointer font-semibold"
                 >
                   {copiedSql ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-[#E50914]" />
+                      <Check className="w-3.5 h-3.5 text-neutral-300" />
                       <span className="text-[#FFFFFF]">Copied!</span>
                     </>
                   ) : (
@@ -377,15 +377,15 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
             </div>
 
             {errorMsg && (
-              <div className="p-3 rounded bg-[#181818] border border-[#E50914] text-[#FFFFFF] text-xs flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5" />
+              <div className="p-3 rounded bg-[#181818] border border-neutral-500 text-[#FFFFFF] text-xs flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 text-neutral-300 shrink-0 mt-0.5" />
                 <span>{errorMsg}</span>
               </div>
             )}
 
             {successMsg && (
-              <div className="p-3 rounded bg-[#181818] border border-[#E50914] text-[#FFFFFF] text-xs flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5" />
+              <div className="p-3 rounded bg-[#181818] border border-neutral-500 text-[#FFFFFF] text-xs flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-neutral-300 shrink-0 mt-0.5" />
                 <span>{successMsg}</span>
               </div>
             )}
@@ -405,7 +405,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="admin@example.com"
-                      className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2.5 pl-9 pr-3 text-white placeholder-neutral-500 focus:outline-none"
+                      className="w-full bg-black/60 border border-white/15 focus:border-neutral-500 rounded-lg py-2.5 pl-9 pr-3 text-white placeholder-neutral-500 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -422,7 +422,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Enter administrator password"
-                      className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2.5 pl-9 pr-3 text-white placeholder-neutral-500 focus:outline-none"
+                      className="w-full bg-black/60 border border-white/15 focus:border-neutral-500 rounded-lg py-2.5 pl-9 pr-3 text-white placeholder-neutral-500 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -453,7 +453,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="admin@example.com"
-                      className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2.5 pl-9 pr-3 text-white placeholder-neutral-500 focus:outline-none"
+                      className="w-full bg-black/60 border border-white/15 focus:border-neutral-500 rounded-lg py-2.5 pl-9 pr-3 text-white placeholder-neutral-500 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -477,7 +477,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
             {authMethod === 'sql' && (
               <div className="space-y-3 text-xs">
                 <p className="text-neutral-300 leading-relaxed">
-                  Run the SQL migration in your <strong>Supabase Dashboard &gt; SQL Editor</strong> to create <code className="text-[#E50914]">site_content</code>, <code className="text-[#E50914]">memories</code>, and enforce Row-Level Security.
+                  Run the SQL migration in your <strong>Supabase Dashboard &gt; SQL Editor</strong> to create <code className="text-neutral-300">site_content</code>, <code className="text-neutral-300">memories</code>, and enforce Row-Level Security.
                 </p>
 
                 <button
@@ -486,12 +486,12 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                 >
                   {copiedSql ? (
                     <>
-                      <Check className="w-4 h-4 text-[#E50914]" />
+                      <Check className="w-4 h-4 text-neutral-300" />
                       <span className="text-[#FFFFFF] font-bold">SQL Script Copied to Clipboard!</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-4 h-4 text-[#E50914]" />
+                      <Copy className="w-4 h-4 text-neutral-300" />
                       <span>Copy Full Database & RLS Script</span>
                     </>
                   )}
