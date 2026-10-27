@@ -36,7 +36,7 @@ export default function ProfileSelect({
   const [draftAvatarUrl, setDraftAvatarUrl] = useState<string | undefined>(undefined);
   const [draftAvatarId, setDraftAvatarId] = useState<string | undefined>(undefined);
   const [draftEmoji, setDraftEmoji] = useState('❤️');
-  const [draftBg, setDraftBg] = useState('bg-[#E50914]');
+  const [draftBg, setDraftBg] = useState('bg-[#808080]');
   const [activeCategory, setActiveCategory] = useState<'all' | BuiltInAvatarCategory>('all');
   const [formError, setFormError] = useState('');
 
@@ -48,7 +48,7 @@ export default function ProfileSelect({
     setDraftAvatarUrl(profile.avatarUrl || getProfileAvatarUrl(profile));
     setDraftAvatarId(profile.avatarId);
     setDraftEmoji(profile.avatarEmoji || '❤️');
-    setDraftBg(profile.avatarBg || 'bg-[#E50914]');
+    setDraftBg(profile.avatarBg || 'bg-[#808080]');
     setActiveCategory('all');
     setFormError('');
   };
@@ -60,7 +60,7 @@ export default function ProfileSelect({
       name: '',
       role: 'together',
       avatarEmoji: '❤️',
-      avatarBg: 'bg-[#E50914]',
+      avatarBg: 'bg-[#808080]',
       avatarUrl: defaultAvatar.url,
       avatarId: defaultAvatar.id,
       favoriteSeason: 'Season Forever',
@@ -72,7 +72,7 @@ export default function ProfileSelect({
     setDraftAvatarUrl(defaultAvatar.url);
     setDraftAvatarId(defaultAvatar.id);
     setDraftEmoji('❤️');
-    setDraftBg('bg-[#E50914]');
+    setDraftBg('bg-[#808080]');
     setActiveCategory('all');
     setFormError('');
   };
@@ -119,7 +119,7 @@ export default function ProfileSelect({
       : BUILT_IN_AVATARS.filter((a) => a.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-[#050507] text-[#FFFFFF] flex flex-col items-center justify-between relative overflow-hidden select-none selection:bg-[#E50914] selection:text-[#FFFFFF]">
+    <div className="min-h-screen bg-[#050507] text-[#FFFFFF] flex flex-col items-center justify-between relative overflow-hidden select-none selection:bg-[#808080] selection:text-[#FFFFFF]">
       {/* 1. Deep-black cinematic background with delicate starlight dust */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
         <div className="absolute inset-0 bg-[#000000]" />
@@ -131,14 +131,14 @@ export default function ProfileSelect({
 
       {/* Top Header Bar */}
       <header className="relative z-10 w-full max-w-7xl px-4 sm:px-12 pt-5 sm:pt-8 flex flex-wrap justify-between items-center gap-3">
-        <div className="font-bebas text-2xl sm:text-5xl tracking-[0.18em] sm:tracking-[0.25em] text-[#E50914] font-black uppercase drop-shadow-[0_2px_14px_rgba(229,9,20,0.4)] transition-transform duration-300 hover:scale-[1.02]">
+        <div className="font-bebas text-2xl sm:text-5xl tracking-[0.18em] sm:tracking-[0.25em] text-[#808080] font-black uppercase drop-shadow-[0_2px_14px_rgba(229,9,20,0.4)] transition-transform duration-300 hover:scale-[1.02]">
           OUR UNIVERSE
         </div>
 
         <div className="flex items-center gap-2.5 sm:gap-4">
           {userEmail && (
             <div className="hidden sm:flex items-center gap-2 text-xs text-[#a3a3a3] bg-white/[0.03] px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-sm">
-              {isAdmin && <ShieldCheck className="w-3.5 h-3.5 text-[#E50914] shrink-0" />}
+              {isAdmin && <ShieldCheck className="w-3.5 h-3.5 text-[#808080] shrink-0" />}
               <span className="truncate max-w-[220px] font-medium">{userEmail}</span>
             </div>
           )}
@@ -149,7 +149,7 @@ export default function ProfileSelect({
               onClick={onSignOut}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/10 border border-white/15 text-xs text-[#a3a3a3] hover:text-[#FFFFFF] transition-all cursor-pointer backdrop-blur-sm min-h-[40px]"
             >
-              <LogOut className="w-3.5 h-3.5 text-[#E50914]" />
+              <LogOut className="w-3.5 h-3.5 text-[#808080]" />
               <span className="font-medium">Sign Out</span>
             </button>
           )}
@@ -229,7 +229,7 @@ export default function ProfileSelect({
                       }}
                       title={`Customize avatar for ${profile.name}`}
                       aria-label={`Customize avatar for ${profile.name}`}
-                      className="opacity-0 group-hover:opacity-100 focus:opacity-100 absolute top-2 right-2 z-20 w-8 h-8 rounded-full bg-black/85 hover:bg-[#E50914] text-white border border-white/30 flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg hover:scale-110"
+                      className="opacity-0 group-hover:opacity-100 focus:opacity-100 absolute top-2 right-2 z-20 w-8 h-8 rounded-full bg-black/85 hover:bg-[#808080] text-white border border-white/30 flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg hover:scale-110"
                     >
                       <Pencil className="w-3.5 h-3.5" />
                     </button>
@@ -254,8 +254,8 @@ export default function ProfileSelect({
               className="group w-32 xs:w-36 sm:w-44 md:w-48 lg:w-52 flex flex-col items-center text-center cursor-pointer focus:outline-none transition-transform duration-300 hover:scale-105 hover:-translate-y-2"
               aria-label="Add Profile"
             >
-              <div className="w-32 h-32 xs:w-36 xs:h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border-2 border-dashed border-white/20 group-hover:border-[#E50914] flex items-center justify-center transition-all duration-300 shadow-[0_14px_45px_rgba(0,0,0,0.6)] group-hover:shadow-[0_20px_50px_rgba(229,9,20,0.3)]">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black/70 group-hover:bg-[#E50914] text-[#a3a3a3] group-hover:text-white flex items-center justify-center transition-all duration-200 border border-white/10 group-hover:border-transparent shadow">
+              <div className="w-32 h-32 xs:w-36 xs:h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border-2 border-dashed border-white/20 group-hover:border-[#808080] flex items-center justify-center transition-all duration-300 shadow-[0_14px_45px_rgba(0,0,0,0.6)] group-hover:shadow-[0_20px_50px_rgba(229,9,20,0.3)]">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black/70 group-hover:bg-[#808080] text-[#a3a3a3] group-hover:text-white flex items-center justify-center transition-all duration-200 border border-white/10 group-hover:border-transparent shadow">
                   <Plus className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
               </div>
@@ -278,7 +278,7 @@ export default function ProfileSelect({
             }}
             className={`px-8 sm:px-10 py-2.5 sm:py-3 text-xs sm:text-sm uppercase tracking-[0.25em] font-semibold transition-all duration-200 cursor-pointer rounded-[3px] border ${
               isManageMode
-                ? 'bg-white text-black border-white hover:bg-[#E50914] hover:text-white hover:border-[#E50914] shadow-[0_0_25px_rgba(255,255,255,0.4)]'
+                ? 'bg-white text-black border-white hover:bg-[#808080] hover:text-white hover:border-[#808080] shadow-[0_0_25px_rgba(255,255,255,0.4)]'
                 : 'border-[#737373] text-[#8c8c8c] hover:border-white hover:text-white hover:bg-white/[0.05]'
             } active:scale-95`}
           >
@@ -306,7 +306,7 @@ export default function ProfileSelect({
             <button
               type="button"
               onClick={closeEditor}
-              className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 w-10 h-10 rounded-full bg-white/5 hover:bg-[#E50914] text-[#a3a3a3] hover:text-white flex items-center justify-center transition-colors cursor-pointer border border-white/10 min-h-[44px] min-w-[44px]"
+              className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 w-10 h-10 rounded-full bg-white/5 hover:bg-[#808080] text-[#a3a3a3] hover:text-white flex items-center justify-center transition-colors cursor-pointer border border-white/10 min-h-[44px] min-w-[44px]"
               aria-label="Cancel and close avatar picker"
             >
               <X className="w-5 h-5" />
@@ -327,7 +327,7 @@ export default function ProfileSelect({
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 border-b border-white/10">
                 <div className="shrink-0 flex flex-col items-center gap-2">
                   <div
-                    className="w-28 h-28 sm:w-32 sm:h-32 aspect-square rounded-2xl overflow-hidden flex items-center justify-center ring-2 ring-[#E50914] shadow-[0_0_30px_rgba(229,9,20,0.35)] relative bg-[#18181c]"
+                    className="w-28 h-28 sm:w-32 sm:h-32 aspect-square rounded-2xl overflow-hidden flex items-center justify-center ring-2 ring-[#808080] shadow-[0_0_30px_rgba(229,9,20,0.35)] relative bg-[#18181c]"
                   >
                     <img
                       src={draftAvatarUrl || getProfileAvatarUrl(editingProfile)}
@@ -342,7 +342,7 @@ export default function ProfileSelect({
 
                 <div className="flex-1 w-full space-y-4">
                   {formError && (
-                    <div className="p-3 rounded-lg bg-[#E50914]/20 border border-[#E50914] text-xs text-white">
+                    <div className="p-3 rounded-lg bg-[#808080]/20 border border-[#808080] text-xs text-white">
                       {formError}
                     </div>
                   )}
@@ -362,7 +362,7 @@ export default function ProfileSelect({
                         setFormError('');
                       }}
                       placeholder="e.g. My Girl 👑, Our Universe, Your Guy 🌙"
-                      className="w-full bg-[#18181c] border border-white/20 focus:border-[#E50914] focus:ring-1 focus:ring-[#E50914] rounded-lg py-3 px-4 text-sm sm:text-base text-white placeholder-[#737373] focus:outline-none transition-all"
+                      className="w-full bg-[#18181c] border border-white/20 focus:border-[#808080] focus:ring-1 focus:ring-[#808080] rounded-lg py-3 px-4 text-sm sm:text-base text-white placeholder-[#737373] focus:outline-none transition-all"
                     />
                   </div>
 
@@ -377,7 +377,7 @@ export default function ProfileSelect({
                       value={draftSeason}
                       onChange={(e) => setDraftSeason(e.target.value)}
                       placeholder="e.g. Season 1: How We Met"
-                      className="w-full bg-[#18181c] border border-white/20 focus:border-[#E50914] focus:ring-1 focus:ring-[#E50914] rounded-lg py-2.5 px-4 text-xs sm:text-sm text-white placeholder-[#737373] focus:outline-none transition-all"
+                      className="w-full bg-[#18181c] border border-white/20 focus:border-[#808080] focus:ring-1 focus:ring-[#808080] rounded-lg py-2.5 px-4 text-xs sm:text-sm text-white placeholder-[#737373] focus:outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -404,7 +404,7 @@ export default function ProfileSelect({
                         onClick={() => setActiveCategory(cat.id)}
                         className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap min-h-[36px] ${
                           activeCategory === cat.id
-                            ? 'bg-[#E50914] text-white shadow-[0_0_15px_rgba(229,9,20,0.5)]'
+                            ? 'bg-[#808080] text-white shadow-[0_0_15px_rgba(229,9,20,0.5)]'
                             : 'bg-white/5 text-[#a3a3a3] hover:text-white hover:bg-white/10'
                         }`}
                       >
@@ -431,7 +431,7 @@ export default function ProfileSelect({
                         <div
                           className={`relative w-full aspect-square rounded-xl overflow-hidden transition-all duration-300 group-hover/tile:scale-105 bg-[#18181c] ${
                             isSelected
-                              ? 'ring-3 ring-[#E50914] shadow-[0_0_25px_rgba(229,9,20,0.55)] scale-102'
+                              ? 'ring-3 ring-[#808080] shadow-[0_0_25px_rgba(229,9,20,0.55)] scale-102'
                               : 'ring-1 ring-white/10 group-hover/tile:ring-white/40'
                           }`}
                         >
@@ -442,7 +442,7 @@ export default function ProfileSelect({
                             className="w-full h-full object-cover select-none"
                           />
                           {isSelected && (
-                            <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#E50914] text-white flex items-center justify-center shadow-lg">
+                            <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#808080] text-white flex items-center justify-center shadow-lg">
                               <Check className="w-3.5 h-3.5 stroke-[3]" />
                             </div>
                           )}
