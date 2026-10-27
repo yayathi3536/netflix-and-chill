@@ -479,11 +479,11 @@ export default function App() {
     // 1. INITIAL SESSION CHECK LOADING SCREEN
     if (isAuthChecking) {
     return (
-      <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex flex-col items-center justify-center gap-4 selection:bg-[#E50914] selection:text-[#FFFFFF]">
-        <div className="font-bebas text-4xl sm:text-5xl tracking-widest text-[#E50914] font-black uppercase animate-pulse">
+      <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex flex-col items-center justify-center gap-4 selection:bg-neutral-700 selection:text-[#FFFFFF]">
+        <div className="font-bebas text-4xl sm:text-5xl tracking-widest text-neutral-300 font-black uppercase animate-pulse">
           OUR UNIVERSE
         </div>
-        <Loader2 className="w-7 h-7 text-[#E50914] animate-spin" />
+        <Loader2 className="w-7 h-7 text-neutral-300 animate-spin" />
       </div>
     );
   }
@@ -516,11 +516,11 @@ export default function App() {
     return (
       <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex items-center justify-center px-6">
         <div className="w-full max-w-lg rounded-xl border border-[#333333] bg-[#141414] p-8 text-center">
-          <div className="font-bebas text-4xl tracking-widest text-[#E50914] font-black uppercase mb-5">
+          <div className="font-bebas text-4xl tracking-widest text-neutral-300 font-black uppercase mb-5">
             OUR UNIVERSE
           </div>
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#E50914]/10">
-            <Shield className="h-7 w-7 text-[#E50914]" />
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-neutral-700/10">
+            <Shield className="h-7 w-7 text-neutral-300" />
           </div>
           <h1 className="text-2xl font-semibold mb-3">Waiting for approval</h1>
           <p className="text-sm leading-6 text-[#B3B3B3] mb-6">
@@ -529,7 +529,7 @@ export default function App() {
           <button
             type="button"
             onClick={handleSignOut}
-            className="rounded bg-[#E50914] px-5 py-2.5 text-sm font-semibold hover:bg-[#b80710] transition-colors"
+            className="rounded bg-neutral-700 px-5 py-2.5 text-sm font-semibold hover:bg-[#404040] transition-colors"
           >
             Sign out
           </button>
@@ -554,7 +554,7 @@ export default function App() {
 
   // 4. SELECTED AUTHORIZED PROFILE -> OUR UNIVERSE HOME
   return (
-    <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex flex-col selection:bg-[#E50914] selection:text-[#FFFFFF]">
+    <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex flex-col selection:bg-neutral-700 selection:text-[#FFFFFF]">
       {/* NETFLIX-STYLE TOP NAVIGATION */}
       <Navbar
         activeTab={activeTab}
@@ -583,16 +583,16 @@ export default function App() {
       {/* TOP SYSTEM STATUS NOTIFICATION (Admin Only) */}
       {isAdmin && (!isSupabaseReady ? (
         <div className="pt-28 sm:pt-24 px-4 sm:px-8 max-w-7xl mx-auto w-full">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-[#808080]/30 text-xs text-[#B3B3B3]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-neutral-500/30 text-xs text-[#B3B3B3]">
             <div className="flex items-center gap-2">
-              <Database className="w-4 h-4 text-[#E50914] shrink-0" />
+              <Database className="w-4 h-4 text-neutral-300 shrink-0" />
               <span>
                 <strong className="text-[#FFFFFF]">Local Mode:</strong> Supabase credentials not detected in environment. Using persistent browser storage.
               </span>
             </div>
             <button
               onClick={() => setIsSetupModalOpen(true)}
-              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-3 py-1.5 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer self-start sm:self-auto min-h-[36px]"
+              className="text-[#FFFFFF] bg-neutral-700 hover:bg-[#404040] px-3 py-1.5 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer self-start sm:self-auto min-h-[36px]"
             >
               Setup Supabase &rarr;
             </button>
@@ -600,9 +600,9 @@ export default function App() {
         </div>
       ) : isSchemaMissing ? (
         <div className="pt-28 sm:pt-24 px-4 sm:px-8 max-w-7xl mx-auto w-full">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded bg-[#181818] border border-[#E50914]/50 text-xs text-[#B3B3B3] shadow-xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded bg-[#181818] border border-neutral-500/50 text-xs text-[#B3B3B3] shadow-xl">
             <div className="flex items-start sm:items-center gap-2.5">
-              <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5 sm:mt-0" />
+              <AlertCircle className="w-4 h-4 text-neutral-300 shrink-0 mt-0.5 sm:mt-0" />
               <div>
                 <span className="font-semibold text-[#FFFFFF]">Database Tables Need Setup:</span>{' '}
                 <span className="text-[#B3B3B3]">
@@ -612,7 +612,7 @@ export default function App() {
             </div>
             <button
               onClick={() => setIsSetupModalOpen(true)}
-              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-3.5 py-1.5 rounded-md text-xs font-bold whitespace-nowrap transition-colors cursor-pointer shadow active:scale-95 shrink-0 min-h-[36px]"
+              className="text-[#FFFFFF] bg-neutral-700 hover:bg-[#404040] px-3.5 py-1.5 rounded-md text-xs font-bold whitespace-nowrap transition-colors cursor-pointer shadow active:scale-95 shrink-0 min-h-[36px]"
             >
               Copy SQL Migration &rarr;
             </button>
@@ -620,14 +620,14 @@ export default function App() {
         </div>
       ) : statusNotification ? (
         <div className="pt-28 sm:pt-24 px-4 sm:px-8 max-w-7xl mx-auto w-full">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-[#808080]/30 text-xs text-[#B3B3B3]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-neutral-500/30 text-xs text-[#B3B3B3]">
             <div className="flex items-center gap-2">
-              <Info className="w-4 h-4 text-[#E50914] shrink-0" />
+              <Info className="w-4 h-4 text-neutral-300 shrink-0" />
               <span className="text-[#FFFFFF]">{statusNotification}</span>
             </div>
             <button
               onClick={() => setIsAdminModalOpen(true)}
-              className="text-[#FFFFFF] bg-[#E50914] hover:bg-[#b80710] px-2.5 py-1.5 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer self-start sm:self-auto min-h-[36px]"
+              className="text-[#FFFFFF] bg-neutral-700 hover:bg-[#404040] px-2.5 py-1.5 rounded text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer self-start sm:self-auto min-h-[36px]"
             >
               Sync Database
             </button>
@@ -651,7 +651,7 @@ export default function App() {
               </div>
               <button
                 onClick={() => setSearchQuery('')}
-                className="text-xs text-[#E50914] hover:underline cursor-pointer"
+                className="text-xs text-neutral-300 hover:underline cursor-pointer"
               >
                 Clear Search
               </button>
@@ -721,9 +721,9 @@ export default function App() {
                     className="group relative overflow-hidden rounded-xl bg-[#141414] border border-white/10 hover:border-white/30 p-4 sm:p-5 netflix-card-shadow transition-all duration-300 cursor-pointer hover:scale-[1.01] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 select-none"
                   >
                     {/* Subtle red ambient glow behind the card */}
-                    <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-1.5 bg-[#E50914]" />
+                    <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-1.5 bg-neutral-700" />
                     <div className="flex items-center gap-3.5 pl-2 sm:pl-1">
-                      <div className="w-11 h-11 rounded-lg bg-[#181818] border border-white/10 flex items-center justify-center text-xl shadow text-[#E50914] group-hover:scale-110 group-hover:border-[#E50914] transition-all duration-300 shrink-0">
+                      <div className="w-11 h-11 rounded-lg bg-[#181818] border border-white/10 flex items-center justify-center text-xl shadow text-neutral-300 group-hover:scale-110 group-hover:border-neutral-500 transition-all duration-300 shrink-0">
                         💌
                       </div>
                       <div className="min-w-0">
@@ -731,7 +731,7 @@ export default function App() {
                           <span className="font-bebas text-lg sm:text-xl text-[#FFFFFF] font-bold tracking-wider uppercase">
                             Open Your Surprise
                           </span>
-                          <span className="text-[10px] bg-[#E50914] text-[#FFFFFF] font-bold px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
+                          <span className="text-[10px] bg-neutral-700 text-[#FFFFFF] font-bold px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
                             Special
                           </span>
                         </div>
@@ -741,7 +741,7 @@ export default function App() {
                       </div>
                     </div>
 
-                    <button className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shadow-md cursor-pointer text-center min-h-[44px] flex items-center justify-center hover:scale-[1.02]">
+                    <button className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-neutral-700 hover:bg-[#404040] text-[#FFFFFF] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shadow-md cursor-pointer text-center min-h-[44px] flex items-center justify-center hover:scale-[1.02]">
                       Reveal Letter &rarr;
                     </button>
                   </div>
@@ -836,7 +836,7 @@ export default function App() {
             {activeTab === 'memories' && (
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
+                  <div className="inline-flex items-center gap-1.5 text-xs text-neutral-300 font-bold tracking-widest uppercase mb-1">
                     <Film className="w-3.5 h-3.5" />
                     <span>FEATURE FILMS & MEMORIES</span>
                   </div>
@@ -886,7 +886,7 @@ export default function App() {
             {activeTab === 'little-things' && (
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
+                  <div className="inline-flex items-center gap-1.5 text-xs text-neutral-300 font-bold tracking-widest uppercase mb-1">
                     <Heart className="w-3.5 h-3.5 fill-[#E50914]" />
                     <span>ORIGINAL COLLECTION</span>
                   </div>
@@ -923,7 +923,7 @@ export default function App() {
                       )}
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] text-[#E50914] font-bold tracking-wider uppercase">
+                          <span className="text-[11px] text-neutral-300 font-bold tracking-wider uppercase">
                             {item.duration || 'Quirk'}
                           </span>
                           <Heart className="w-4 h-4 text-[#E50914] fill-[#E50914]/40 group-hover:fill-[#E50914] transition-colors" />
@@ -941,7 +941,7 @@ export default function App() {
                         </p>
                       </div>
 
-                      <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-[#808080]">
+                      <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-neutral-300">
                         <span className="uppercase tracking-wider font-semibold group-hover:text-[#FFFFFF] transition-colors flex items-center gap-1">
                           <span>More Info</span>
                           <span>&rarr;</span>
@@ -959,7 +959,7 @@ export default function App() {
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                   <div>
-                    <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
+                    <div className="inline-flex items-center gap-1.5 text-xs text-neutral-300 font-bold tracking-widest uppercase mb-1">
                       <Compass className="w-3.5 h-3.5" />
                       <span>MY LIST & EXPEDITIONS</span>
                     </div>
@@ -977,7 +977,7 @@ export default function App() {
                       onClick={() => setPlacesFilter('all')}
                       className={`px-3.5 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                         placesFilter === 'all'
-                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                          ? 'bg-neutral-700 text-[#FFFFFF] font-bold shadow-md'
                           : 'text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-white/5'
                       }`}
                     >
@@ -987,7 +987,7 @@ export default function App() {
                       onClick={() => setPlacesFilter('visited')}
                       className={`px-3.5 py-1.5 text-xs font-semibold rounded-md transition-all flex items-center gap-1.5 cursor-pointer ${
                         placesFilter === 'visited'
-                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                          ? 'bg-neutral-700 text-[#FFFFFF] font-bold shadow-md'
                           : 'text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-white/5'
                       }`}
                     >
@@ -998,7 +998,7 @@ export default function App() {
                       onClick={() => setPlacesFilter('bucket-list')}
                       className={`px-3.5 py-1.5 text-xs font-semibold rounded-md transition-all flex items-center gap-1.5 cursor-pointer ${
                         placesFilter === 'bucket-list'
-                          ? 'bg-[#E50914] text-[#FFFFFF] font-bold shadow-md'
+                          ? 'bg-neutral-700 text-[#FFFFFF] font-bold shadow-md'
                           : 'text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-white/5'
                       }`}
                     >
@@ -1029,7 +1029,7 @@ export default function App() {
             {activeTab === 'secret-vault' && (
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
+                  <div className="inline-flex items-center gap-1.5 text-xs text-neutral-300 font-bold tracking-widest uppercase mb-1">
                     <Lock className="w-3.5 h-3.5" />
                     <span>CONFIDENTIAL & PROTECTED</span>
                   </div>
@@ -1046,14 +1046,14 @@ export default function App() {
                     <div
                       key={vault.id}
                       onClick={() => setSecretVaultMemory(vault)}
-                      className="p-6 rounded bg-[#141414] border border-[#181818] hover:border-[#808080]/60 transition-all cursor-pointer shadow-xl hover:scale-[1.02] flex flex-col justify-between group"
+                      className="p-6 rounded bg-[#141414] border border-[#181818] hover:border-neutral-500/60 transition-all cursor-pointer shadow-xl hover:scale-[1.02] flex flex-col justify-between group"
                     >
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] uppercase tracking-wider font-bold text-[#FFFFFF] bg-[#E50914] px-2.5 py-0.5 rounded shadow">
+                          <span className="text-[10px] uppercase tracking-wider font-bold text-[#FFFFFF] bg-neutral-700 px-2.5 py-0.5 rounded shadow">
                             CONFIDENTIAL
                           </span>
-                          <Lock className="w-4 h-4 text-[#E50914] group-hover:scale-110 transition-transform" />
+                          <Lock className="w-4 h-4 text-neutral-300 group-hover:scale-110 transition-transform" />
                         </div>
                         <h3 className="font-bebas text-2xl sm:text-3xl text-[#FFFFFF] font-bold uppercase tracking-wide">
                           {vault.title}
@@ -1064,8 +1064,8 @@ export default function App() {
                       </div>
 
                       <div className="pt-4 mt-4 border-t border-[#181818] flex items-center justify-between text-xs">
-                        <span className="text-[#808080]">Unlock with anniversary code</span>
-                        <span className="font-bold text-[#E50914] group-hover:underline uppercase tracking-wider">
+                        <span className="text-neutral-300">Unlock with anniversary code</span>
+                        <span className="font-bold text-neutral-300 group-hover:underline uppercase tracking-wider">
                           Tap to Unlock &rarr;
                         </span>
                       </div>
@@ -1079,14 +1079,14 @@ export default function App() {
       </main>
 
       {/* FOOTER - STRICT NETFLIX DARK THEME */}
-      <footer className="border-t border-[#181818] bg-[#000000] py-12 px-4 sm:px-6 lg:px-8 text-[#808080] text-xs">
+      <footer className="border-t border-[#181818] bg-[#000000] py-12 px-4 sm:px-6 lg:px-8 text-neutral-300 text-xs">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center sm:text-left">
             <div className="flex items-center justify-center sm:justify-start gap-2">
-              <span className="font-bebas text-2xl text-[#E50914] font-black tracking-widest uppercase">
+              <span className="font-bebas text-2xl text-neutral-300 font-black tracking-widest uppercase">
                 OUR UNIVERSE
               </span>
-              <span className="text-[#808080]">·</span>
+              <span className="text-neutral-300">·</span>
               <span className="text-[#FFFFFF] font-bold text-xs uppercase tracking-wider">Season Forever</span>
             </div>
             <p className="text-[11px] text-[#B3B3B3] max-w-md">
@@ -1098,11 +1098,11 @@ export default function App() {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button
               onClick={() => setIsAdminModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#141414] hover:bg-[#181818] border border-[#808080]/30 text-[11px] transition-colors cursor-pointer text-[#B3B3B3] hover:text-[#FFFFFF]"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#141414] hover:bg-[#181818] border border-neutral-500/30 text-[11px] transition-colors cursor-pointer text-[#B3B3B3] hover:text-[#FFFFFF]"
             >
               <Shield
                 className={`w-3.5 h-3.5 ${
-                  isAdmin ? 'text-[#E50914]' : 'text-[#808080]'
+                  isAdmin ? 'text-neutral-300' : 'text-neutral-300'
                 }`}
               />
               <span>{isAdmin ? 'Admin Verified' : 'Admin Sign In'}</span>
@@ -1112,11 +1112,11 @@ export default function App() {
               <>
                 <button
                   onClick={() => setIsSetupModalOpen(true)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#141414] hover:bg-[#181818] border border-[#808080]/30 text-[11px] transition-colors cursor-pointer text-[#B3B3B3] hover:text-[#FFFFFF]"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#141414] hover:bg-[#181818] border border-neutral-500/30 text-[11px] transition-colors cursor-pointer text-[#B3B3B3] hover:text-[#FFFFFF]"
                 >
                   <Database
                     className={`w-3.5 h-3.5 ${
-                      storageSource === 'supabase' ? 'text-[#E50914]' : 'text-[#808080]'
+                      storageSource === 'supabase' ? 'text-neutral-300' : 'text-neutral-300'
                     }`}
                   />
                   <span>
@@ -1128,7 +1128,7 @@ export default function App() {
 
                 <button
                   onClick={handleExportData}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded bg-[#181818] hover:bg-white/10 border border-[#808080]/30 text-[#FFFFFF] transition-colors cursor-pointer text-[11px]"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded bg-[#181818] hover:bg-white/10 border border-neutral-500/30 text-[#FFFFFF] transition-colors cursor-pointer text-[11px]"
                   title="Download memory backup JSON"
                 >
                   <Download className="w-3 h-3" />
@@ -1137,7 +1137,7 @@ export default function App() {
 
                 <button
                   onClick={handleResetDefaults}
-                  className="p-1.5 rounded hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer"
+                  className="p-1.5 rounded hover:bg-[#181818] text-neutral-300 hover:text-[#FFFFFF] transition-colors cursor-pointer"
                   title="Reset default relationship story"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
