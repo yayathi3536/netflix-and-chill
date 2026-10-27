@@ -473,7 +473,7 @@ export default function ProfileSelect({
                 </button>
                 <button
                   type="submit"
-                  className="px-8 py-2.5 bg-[#E50914] hover:bg-[#c11119] text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-md shadow-lg shadow-red-900/40 transition-all cursor-pointer hover:scale-102 active:scale-98"
+                  className="px-8 py-2.5 bg-white hover:bg-white/80 text-black text-xs sm:text-sm font-semibold uppercase tracking-wider rounded-md shadow-lg shadow-red-900/40 transition-all cursor-pointer hover:scale-102 active:scale-98"
                 >
                   Save Profile
                 </button>
