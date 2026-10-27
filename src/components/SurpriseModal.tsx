@@ -137,7 +137,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
 
         {/* Header */}
         <div className="text-center space-y-1.5 pt-1 pr-6 pl-6">
-          <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold uppercase tracking-widest">
+          <div className="inline-flex items-center gap-1.5 text-xs text-[#808080] font-bold uppercase tracking-widest">
             <Gift className="w-3.5 h-3.5" />
             <span>ORIGINAL SPECIAL FEATURE</span>
           </div>
@@ -221,7 +221,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
         {/* TAB 3: DAYS TOGETHER COUNTER */}
         {activeTab === 'counter' && (
           <div className="space-y-6 text-center py-2">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E50914]/15 border border-[#E50914]/40 text-[#E50914] text-xs font-semibold uppercase tracking-wider shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#808080]/15 border border-[#808080]/40 text-[#808080] text-xs font-semibold uppercase tracking-wider shadow-sm">
               <Clock className="w-3.5 h-3.5" />
               <span>Timeline Tracker · Since 15th June 2025</span>
             </div>
