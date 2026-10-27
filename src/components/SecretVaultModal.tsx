@@ -111,12 +111,12 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
         {!isUnlocked ? (
           /* LOCKED STATE */
           <div className="text-center py-6 sm:py-10 space-y-6 max-w-md mx-auto">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-[#181818] border border-[#E50914] flex items-center justify-center mx-auto text-[#E50914] shadow-lg">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-[#181818] border border-[#808080] flex items-center justify-center mx-auto text-[#808080] shadow-lg">
               <Lock className="w-7 h-7 sm:w-8 sm:h-8" />
             </div>
 
             <div>
-              <span className="text-xs uppercase tracking-widest text-[#E50914] font-bold">
+              <span className="text-xs uppercase tracking-widest text-[#808080] font-bold">
                 CONFIDENTIAL VAULT EPISODE
               </span>
               <h2 className="font-bebas text-3xl sm:text-5xl text-[#FFFFFF] font-black tracking-wide mt-1 uppercase">
@@ -143,7 +143,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
                 />
               </div>
 
-              {errorMsg && <p className="text-xs text-[#E50914]">{errorMsg}</p>}
+              {errorMsg && <p className="text-xs text-[#808080]">{errorMsg}</p>}
 
               <button
                 type="submit"
@@ -160,7 +160,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
             {/* Header Badge */}
             <div className="flex items-center justify-between pb-4 border-b border-[#181818] gap-2 flex-wrap">
               <div className="flex items-center gap-2">
-                <Unlock className="w-5 h-5 text-[#E50914]" />
+                <Unlock className="w-5 h-5 text-[#808080]" />
                 <span className="text-xs uppercase tracking-widest text-[#FFFFFF] font-bold">
                   {effectiveSubtitle}
                 </span>
@@ -173,7 +173,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-[#181818] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold rounded border border-[#808080]/30 transition-colors cursor-pointer min-h-[36px]"
                     title="Edit letter"
                   >
-                    <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
+                    <Edit3 className="w-3.5 h-3.5 text-[#808080]" />
                     <span>Edit Letter</span>
                   </button>
                 )}
@@ -199,7 +199,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
             {coupons && coupons.length > 0 && (
               <div className="space-y-4 pt-4 border-t border-[#181818]">
                 <div className="flex items-center gap-2">
-                  <Gift className="w-5 h-5 text-[#E50914]" />
+                  <Gift className="w-5 h-5 text-[#808080]" />
                   <h4 className="font-bebas text-2xl tracking-wide text-[#FFFFFF] font-black uppercase">
                     Redeemable Coupons
                   </h4>
