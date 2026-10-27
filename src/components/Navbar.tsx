@@ -112,7 +112,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-2 group text-left cursor-pointer transition-transform duration-200 active:scale-95 min-h-[44px]"
             aria-label="Our Universe Home"
           >
-            <span className="font-bebas text-xl sm:text-2xl lg:text-3xl tracking-wider text-[#E50914] font-black uppercase">
+            <span className="font-bebas text-xl sm:text-2xl lg:text-3xl tracking-wider text-[#808080] font-black uppercase">
               OUR UNIVERSE
             </span>
           </button>
@@ -260,7 +260,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
-                <span className="absolute top-2 right-2 w-2 h-2 bg-[#E50914] rounded-full ring-2 ring-[#000000]" />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-[#808080] rounded-full ring-2 ring-[#000000]" />
               )}
             </button>
 
@@ -269,7 +269,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <div className="px-4 pb-2 border-b border-white/10 flex items-center justify-between">
                   <span className="font-semibold text-[#FFFFFF]">Notifications</span>
                   {unreadCount > 0 && (
-                    <span className="text-[10px] bg-[#E50914] text-[#FFFFFF] px-2 py-0.5 rounded font-bold shadow-sm">
+                    <span className="text-[10px] bg-[#808080] text-[#FFFFFF] px-2 py-0.5 rounded font-bold shadow-sm">
                       {unreadCount} new
                     </span>
                   )}
@@ -306,7 +306,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               aria-label="User Profile"
             >
               <div
-                className="w-8 h-8 rounded-lg bg-[#E50914] overflow-hidden flex items-center justify-center text-sm font-bold text-[#FFFFFF] shadow ring-1 ring-white/20"
+                className="w-8 h-8 rounded-lg bg-[#808080] overflow-hidden flex items-center justify-center text-sm font-bold text-[#FFFFFF] shadow ring-1 ring-white/20"
               >
                 <img
                   src={getProfileAvatarUrl(activeProfile)}
@@ -336,7 +336,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     >
                       <div className="flex items-center gap-2.5">
                         <div
-                          className="w-7 h-7 rounded-md bg-[#E50914] overflow-hidden flex items-center justify-center text-xs text-[#FFFFFF] shrink-0 ring-1 ring-white/10"
+                          className="w-7 h-7 rounded-md bg-[#808080] overflow-hidden flex items-center justify-center text-xs text-[#FFFFFF] shrink-0 ring-1 ring-white/10"
                         >
                           <img
                             src={getProfileAvatarUrl(p)}
@@ -347,7 +347,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         <span className="truncate">{p.name}</span>
                       </div>
                       {p.id === activeProfile.id && (
-                        <span className="w-2 h-2 rounded-full bg-[#E50914]" />
+                        <span className="w-2 h-2 rounded-full bg-[#808080]" />
                       )}
                     </button>
                   ))}
@@ -362,7 +362,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className="w-full flex items-center gap-2 px-3 py-2 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer min-h-[40px]"
                     >
-                      <Users className="w-4 h-4 text-[#E50914]" />
+                      <Users className="w-4 h-4 text-[#808080]" />
                       <span>Switch Profiles</span>
                     </button>
                   )}
@@ -374,7 +374,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer min-h-[40px]"
                   >
-                    <Shield className="w-4 h-4 text-[#E50914]" />
+                    <Shield className="w-4 h-4 text-[#808080]" />
                     <span>{currentUser ? 'Admin Panel (Active)' : 'Account & Admin'}</span>
                   </button>
 
@@ -399,7 +399,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className="w-full flex items-center gap-2 px-3 py-2 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer border-t border-[#181818] pt-2 mt-1 min-h-[40px]"
                     >
-                      <LogOut className="w-4 h-4 text-[#E50914]" />
+                      <LogOut className="w-4 h-4 text-[#808080]" />
                       <span>Sign Out of OUR UNIVERSE</span>
                     </button>
                   )}
