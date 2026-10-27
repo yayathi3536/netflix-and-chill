@@ -86,9 +86,9 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
     >
       <div className="min-h-0 text-white">
         <header className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#241014] via-[#111111] to-[#090909] px-5 py-6 sm:px-6 sm:py-7">
-          <div className="pointer-events-none absolute -right-10 -top-24 h-64 w-64 rounded-full bg-[#E50914]/20 blur-3xl" />
+          <div className="pointer-events-none absolute -right-10 -top-24 h-64 w-64 rounded-full bg-neutral-700/20 blur-3xl" />
           <div className="relative">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#E50914]/40 bg-[#E50914]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-red-200">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-neutral-500/40 bg-neutral-700/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-neutral-300">
               <ShieldCheck className="h-3.5 w-3.5" />
               Private admin workspace
             </div>
@@ -133,13 +133,13 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Search titles, tags, places..."
-                  className="w-full rounded-lg border border-white/10 bg-white/[0.04] py-2.5 pl-9 pr-3 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-[#E50914]/60"
+                  className="w-full rounded-lg border border-white/10 bg-white/[0.04] py-2.5 pl-9 pr-3 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-neutral-500/60"
                 />
               </label>
               <select
                 value={category}
                 onChange={(event) => setCategory(event.target.value as 'all' | MemoryCategory)}
-                className="rounded-lg border border-white/10 bg-[#141414] px-3 py-2.5 text-sm text-white outline-none focus:border-[#E50914]/60"
+                className="rounded-lg border border-white/10 bg-[#141414] px-3 py-2.5 text-sm text-white outline-none focus:border-neutral-500/60"
                 aria-label="Filter by category"
               >
                 {categoryOptions.map((option) => (
@@ -163,7 +163,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
               {filteredMemories.map((memory) => (
                 <article
                   key={memory.id}
-                  className="group flex min-w-0 gap-3 rounded-xl border border-white/[0.08] bg-white/[0.025] p-3 transition hover:border-[#E50914]/35 hover:bg-white/[0.045]"
+                  className="group flex min-w-0 gap-3 rounded-xl border border-white/[0.08] bg-white/[0.025] p-3 transition hover:border-neutral-500/35 hover:bg-white/[0.045]"
                 >
                   <div className="relative aspect-[3/4] w-20 sm:w-24 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-[#421116] to-[#111111]">
                     {memory.posterUrl || memory.backdropUrl ? (
@@ -179,7 +179,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                       </div>
                     )}
                     {memory.isTop10 ? (
-                      <span className="absolute left-1.5 top-1.5 rounded bg-[#E50914] px-1.5 py-0.5 text-[9px] font-black">
+                      <span className="absolute left-1.5 top-1.5 rounded bg-neutral-700 px-1.5 py-0.5 text-[9px] font-black">
                         TOP {memory.isTop10}
                       </span>
                     ) : null}
@@ -194,7 +194,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
                       </div>
                       <button
                         onClick={() => openEdit(memory)}
-                        className="shrink-0 rounded-lg border border-white/10 p-2 text-white/50 transition hover:border-[#E50914]/50 hover:bg-[#E50914]/10 hover:text-white"
+                        className="shrink-0 rounded-lg border border-white/10 p-2 text-white/50 transition hover:border-neutral-500/50 hover:bg-neutral-600/10 hover:text-white"
                         title={`Edit ${memory.title}`}
                         aria-label={`Edit ${memory.title}`}
                       >
@@ -230,7 +230,7 @@ const StatCard: React.FC<{ label: string; value: number; icon: React.ReactNode }
   <div className="rounded-xl border border-white/[0.08] bg-gradient-to-br from-white/[0.045] to-transparent p-4">
     <div className="flex items-center justify-between gap-2 text-white/45">
       <span className="text-xs">{label}</span>
-      <span className="text-[#E50914]">{icon}</span>
+      <span className="text-neutral-300">{icon}</span>
     </div>
     <div className="mt-3 text-2xl font-black tracking-tight">{value}</div>
   </div>
