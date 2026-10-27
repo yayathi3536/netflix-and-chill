@@ -125,7 +125,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
           {primaryImageUrl && (
             <button
               onClick={() => setLightboxIndex(0)}
-              className="absolute top-3 left-3 sm:top-4 sm:left-4 z-40 px-3 py-1.5 rounded-full bg-[#000000]/75 hover:bg-[#E50914] text-white flex items-center gap-1.5 transition-colors cursor-pointer border border-[#808080]/40 min-h-[38px] text-xs font-semibold shadow-lg backdrop-blur-sm"
+              className="absolute top-3 left-3 sm:top-4 sm:left-4 z-40 px-3 py-1.5 rounded-full bg-[#000000]/75 hover:bg-[#808080] text-white flex items-center gap-1.5 transition-colors cursor-pointer border border-[#808080]/40 min-h-[38px] text-xs font-semibold shadow-lg backdrop-blur-sm"
               title="View full-size photo in original proportions"
             >
               <Maximize2 className="w-3.5 h-3.5" />
@@ -175,7 +175,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
               aria-label={memory.isFavorite ? 'Unlike' : 'Like'}
               title={memory.isFavorite ? 'Unlike' : 'Like'}
             >
-              <Heart className={`w-5 h-5 ${memory.isFavorite ? 'fill-current text-[#E50914]' : ''}`} />
+              <Heart className={`w-5 h-5 ${memory.isFavorite ? 'fill-current text-[#808080]' : ''}`} />
             </button>
           </div>
         </div>
@@ -204,7 +204,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
 
               <div className="pt-2 border-t border-[#141414]">
                 <h4 className="text-xs uppercase tracking-wider font-semibold text-[#808080] mb-1.5 flex items-center gap-1.5">
-                  <BookOpen className="w-3.5 h-3.5 text-[#E50914]" />
+                  <BookOpen className="w-3.5 h-3.5 text-[#808080]" />
                   <span>Full Story & Memory Details</span>
                 </h4>
                 <p className="text-xs sm:text-sm text-[#B3B3B3] leading-relaxed whitespace-pre-line font-light break-words">
@@ -215,7 +215,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
               {/* Readable Letter View if unlocked / non-secret letter content exists */}
               {!memory.isSecret && memory.letterContent && (
                 <div className="mt-4 p-4 sm:p-6 rounded bg-[#141414] border border-[#808080]/30 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E50914]">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#808080]">
                     <Mail className="w-4 h-4" />
                     <span>Personal Love Note</span>
                   </div>
@@ -238,7 +238,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
               </div>
               {memory.location && (
                 <div className="flex items-center gap-1.5 text-[#B3B3B3]">
-                  <MapPin className="w-3.5 h-3.5 text-[#E50914] shrink-0" />
+                  <MapPin className="w-3.5 h-3.5 text-[#808080] shrink-0" />
                   <span>{memory.location}</span>
                 </div>
               )}
@@ -271,7 +271,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                     }}
                     className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-[#181818] hover:bg-white/10 text-[#FFFFFF] text-xs font-semibold rounded border border-[#808080]/40 transition-colors cursor-pointer"
                   >
-                    <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
+                    <Edit3 className="w-3.5 h-3.5 text-[#808080]" />
                     <span>Edit Memory & Media</span>
                   </button>
                 </div>
@@ -309,7 +309,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                         />
                         <div className="absolute inset-0 bg-[#000000]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                           <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#000000]/80 text-[#FFFFFF] text-xs font-semibold border border-white/20 shadow-lg">
-                            <Maximize2 className="w-3.5 h-3.5 text-[#E50914]" />
+                            <Maximize2 className="w-3.5 h-3.5 text-[#808080]" />
                             <span>View Full Size</span>
                           </span>
                         </div>
@@ -379,9 +379,9 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                           ) : (
                             <div className="w-full h-full bg-[#141414] flex items-center justify-center">
                               {epIsVideo ? (
-                                <Play className="w-5 h-5 text-[#FFFFFF] group-hover:text-[#E50914] group-hover:scale-125 transition-all" />
+                                <Play className="w-5 h-5 text-[#FFFFFF] group-hover:text-[#808080] group-hover:scale-125 transition-all" />
                               ) : (
-                                <BookOpen className="w-5 h-5 text-[#B3B3B3] group-hover:text-[#E50914] group-hover:scale-110 transition-all" />
+                                <BookOpen className="w-5 h-5 text-[#B3B3B3] group-hover:text-[#808080] group-hover:scale-110 transition-all" />
                               )}
                             </div>
                           )}
@@ -390,7 +390,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                         {/* Details */}
                         <div className="flex-1 space-y-1">
                           <div className="flex items-center justify-between gap-2">
-                            <h4 className="text-sm font-semibold text-[#FFFFFF] group-hover:text-[#E50914] transition-colors">
+                            <h4 className="text-sm font-semibold text-[#FFFFFF] group-hover:text-[#808080] transition-colors">
                               {ep.title}
                             </h4>
                             <span className="text-xs text-[#808080] shrink-0">
@@ -401,8 +401,8 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                             {ep.description}
                           </p>
                           {epIsVideo && (
-                            <div className="pt-1 flex items-center gap-1.5 text-[11px] text-[#E50914] font-semibold">
-                              <Play className="w-3 h-3 fill-[#E50914]" />
+                            <div className="pt-1 flex items-center gap-1.5 text-[11px] text-[#808080] font-semibold">
+                              <Play className="w-3 h-3 fill-[#808080]" />
                               <span>Play Episode Video</span>
                             </div>
                           )}
@@ -499,7 +499,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
               <button
                 type="button"
                 onClick={() => setLightboxIndex(null)}
-                className="w-11 h-11 rounded-full bg-[#141414] hover:bg-[#E50914] text-white flex items-center justify-center transition-colors border border-white/20 min-h-[44px] min-w-[44px] cursor-pointer shadow-lg"
+                className="w-11 h-11 rounded-full bg-[#141414] hover:bg-[#808080] text-white flex items-center justify-center transition-colors border border-white/20 min-h-[44px] min-w-[44px] cursor-pointer shadow-lg"
                 aria-label="Close photo viewer"
               >
                 <X className="w-5 h-5" />
@@ -531,7 +531,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                   e.stopPropagation();
                   setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : allPhotos.length - 1));
                 }}
-                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#000000]/75 hover:bg-[#E50914] text-white flex items-center justify-center border border-white/25 transition-all cursor-pointer min-h-[44px] min-w-[44px] shadow-xl"
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#000000]/75 hover:bg-[#808080] text-white flex items-center justify-center border border-white/25 transition-all cursor-pointer min-h-[44px] min-w-[44px] shadow-xl"
                 aria-label="Previous photo"
               >
                 <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
@@ -546,7 +546,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                   e.stopPropagation();
                   setLightboxIndex((prev) => (prev !== null && prev < allPhotos.length - 1 ? prev + 1 : 0));
                 }}
-                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#000000]/75 hover:bg-[#E50914] text-white flex items-center justify-center border border-white/25 transition-all cursor-pointer min-h-[44px] min-w-[44px] shadow-xl"
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#000000]/75 hover:bg-[#808080] text-white flex items-center justify-center border border-white/25 transition-all cursor-pointer min-h-[44px] min-w-[44px] shadow-xl"
                 aria-label="Next photo"
               >
                 <ChevronRight className="w-6 h-6 stroke-[2.5]" />
