@@ -214,7 +214,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
       {/* Top Netflix Brand Header */}
       <header className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 pt-6 sm:pt-7 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className="font-bebas text-3xl sm:text-5xl tracking-widest text-[#808080] font-black uppercase drop-shadow-[0_2px_10px_rgba(229,9,20,0.35)] select-none">
+          <span className="font-bebas text-3xl sm:text-5xl tracking-widest text-[var(--nf-red)] font-black uppercase drop-shadow-[0_2px_10px_rgba(229,9,20,0.35)] select-none">
             OUR UNIVERSE
           </span>
         </div>
