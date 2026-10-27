@@ -242,7 +242,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
               type="button"
               disabled={isSaving}
               onClick={handleSaveOrder}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#E50914] hover:bg-[#b80710] text-white text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 min-h-[44px] shadow-lg shadow-[#E50914]/30"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white hover:bg-white/80 text-black text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 min-h-[44px] shadow-lg shadow-[#E50914]/30"
             >
               {isSaving ? (
                 <>
@@ -295,7 +295,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
             <button
               type="button"
               onClick={handleSaveOrder}
-              className="px-3 py-1 bg-[#E50914] hover:bg-[#b80710] text-white rounded text-xs font-bold uppercase tracking-wider shrink-0 transition-colors"
+              className="px-3 py-1 bg-white hover:bg-white/80 text-black rounded text-xs font-semibold uppercase tracking-wider shrink-0 transition-colors"
             >
               Retry Save
             </button>
@@ -471,7 +471,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                             e.stopPropagation();
                             onUnlockVault(ch);
                           }}
-                          className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#E50914] text-white font-bold text-[11px] hover:bg-[#b80710] transition-colors cursor-pointer"
+                          className="flex items-center gap-1 px-2.5 py-1 rounded bg-white text-black font-semibold text-[11px] hover:bg-white/80 transition-colors cursor-pointer"
                         >
                           <Mail className="w-2.5 h-2.5" />
                           <span>Letter</span>
@@ -662,7 +662,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                             e.stopPropagation();
                             onUnlockVault(ch);
                           }}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#E50914] text-white font-bold text-xs hover:bg-[#b80710] transition-colors cursor-pointer min-h-[36px]"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white text-black font-semibold text-xs hover:bg-white/80 transition-colors cursor-pointer min-h-[36px]"
                         >
                           <Mail className="w-3 h-3" />
                           <span>Read</span>
