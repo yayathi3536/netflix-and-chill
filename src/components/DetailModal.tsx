@@ -153,7 +153,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                 {isVideo && (
                   <button
                     onClick={() => onPlay(memory)}
-                    className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs sm:text-sm rounded shadow transition-transform active:scale-95 cursor-pointer min-h-[44px]"
+                    className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-white hover:bg-white/80 text-black font-semibold text-xs sm:text-sm rounded shadow transition-transform active:scale-95 cursor-pointer min-h-[44px]"
                   >
                     <Play className="w-4 h-4 fill-white" />
                     <span>Play Video</span>
@@ -164,7 +164,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                 {isLetter && onUnlockVault && (
                   <button
                     onClick={() => onUnlockVault(memory)}
-                    className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] text-xs sm:text-sm font-bold rounded shadow transition-colors active:scale-95 cursor-pointer min-h-[44px]"
+                    className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-white hover:bg-white/80 text-black text-xs sm:text-sm font-semibold rounded shadow transition-colors active:scale-95 cursor-pointer min-h-[44px]"
                   >
                     <Mail className="w-4 h-4" />
                     <span>{memory.isSecret ? 'Read Confidential Letter' : 'Read Letter'}</span>
