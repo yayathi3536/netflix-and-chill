@@ -208,7 +208,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
                   className={`px-3 py-1.5 rounded-md text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap uppercase tracking-wider ${
                     c.isRedeemed
                       ? 'bg-[#141414] text-[#808080] border border-white/10'
-                      : 'bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] shadow-sm active:scale-95'
+                       : 'bg-white hover:bg-white/80 text-black shadow-sm active:scale-95'
                   }`}
                 >
                   {c.isRedeemed ? 'Claimed ✓' : 'Redeem'}
