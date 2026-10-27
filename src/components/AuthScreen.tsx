@@ -197,7 +197,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
   const supabaseReady = isSupabaseConfigured();
 
   return (
-    <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex flex-col justify-between relative overflow-hidden selection:bg-[#E50914] selection:text-[#FFFFFF]">
+    <div className="min-h-screen bg-[#000000] text-[#FFFFFF] flex flex-col justify-between relative overflow-hidden selection:bg-[#808080] selection:text-[#FFFFFF]">
       {/* Netflix-style atmospheric background canvas & multi-stop dark vignette */}
       <div className="pointer-events-none fixed inset-0 z-0" aria-hidden="true">
         <div
@@ -269,7 +269,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
 
           {/* Environment notice if Supabase is not configured */}
           {!supabaseReady && (
-            <div className="p-3.5 rounded-[4px] bg-[#181818] border border-[#E50914]/60 text-xs text-[#B3B3B3] space-y-1">
+            <div className="p-3.5 rounded-[4px] bg-[#181818] border border-[#808080]/60 text-xs text-[#B3B3B3] space-y-1">
               <div className="flex items-center gap-1.5 font-bold text-[#FFFFFF]">
                 <AlertCircle className="w-4 h-4 text-[#808080] shrink-0" />
                 <span>Supabase Auth Configuration Required</span>
@@ -286,7 +286,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
           {errorMsg && (
             <div
               role="alert"
-              className="p-3.5 rounded-[4px] bg-[#e87c03]/15 border border-[#E50914] text-[#FFFFFF] text-xs sm:text-[13px] flex items-start gap-2.5 animate-in fade-in duration-150"
+              className="p-3.5 rounded-[4px] bg-[#e87c03]/15 border border-[#808080] text-[#FFFFFF] text-xs sm:text-[13px] flex items-start gap-2.5 animate-in fade-in duration-150"
             >
               <AlertCircle className="w-4 h-4 text-[#808080] shrink-0 mt-0.5" />
               <span className="leading-relaxed">{errorMsg}</span>
@@ -356,7 +356,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[#E50914] hover:bg-[#404040] disabled:opacity-50 text-white font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
+                className="w-full py-3 bg-[#808080] hover:bg-[#404040] disabled:opacity-50 text-white font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
               >
                 {isLoading ? (
                   <>
@@ -373,7 +373,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                   <input
                     type="checkbox"
                     defaultChecked
-                    className="rounded-[2px] accent-[#E50914] w-3.5 h-3.5 cursor-pointer"
+                    className="rounded-[2px] accent-[#808080] w-3.5 h-3.5 cursor-pointer"
                   />
                   <span>Remember me</span>
                 </label>
@@ -624,7 +624,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
       <footer className="relative z-10 w-full bg-[#000000]/80 border-t border-[#FFFFFF]/10 py-6 px-6 sm:px-12 text-xs text-[#808080]">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Heart className="w-3.5 h-3.5 text-[#808080] fill-[#E50914]" />
+            <Heart className="w-3.5 h-3.5 text-[#808080] fill-[#808080]" />
             <span>OUR UNIVERSE · Personal Streaming Archive</span>
           </div>
           <div className="flex items-center gap-4 text-[11px]">
