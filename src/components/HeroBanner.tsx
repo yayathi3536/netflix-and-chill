@@ -117,7 +117,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             {hasHeroVideo ? (
               <button
                 onClick={() => onPlay(heroMemoryToPlay)}
-                className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs sm:text-sm md:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
+                className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 bg-white hover:bg-white/80 text-black font-semibold text-xs sm:text-sm md:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
               >
                 <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-white text-white" />
                 <span>Play Video</span>
@@ -125,7 +125,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             ) : (
               <button
                 onClick={() => onOpenInfo(memory)}
-                className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs sm:text-sm md:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
+                className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 bg-white hover:bg-white/80 text-black font-semibold text-xs sm:text-sm md:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
               >
                 <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 <span>Read Our Story</span>
