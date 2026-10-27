@@ -73,7 +73,7 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
             className="absolute left-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-gradient-to-r from-[#000000]/95 via-[#000000]/70 to-transparent text-[#FFFFFF] hidden sm:flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all duration-200 cursor-pointer hover:scale-105"
             aria-label="Scroll left"
           >
-            <div className="w-9 h-9 rounded-full bg-[#141414]/80 border border-white/10 flex items-center justify-center text-white shadow-lg hover:bg-[#E50914] hover:border-transparent transition-colors">
+            <div className="w-9 h-9 rounded-full bg-[#141414]/80 border border-white/10 flex items-center justify-center text-white shadow-lg hover:bg-[#404040] hover:border-transparent transition-colors">
               <div className="w-9 h-9 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-colors">
                 <ChevronLeft className="w-5 h-5" />
               </div>
@@ -123,7 +123,7 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
             className="absolute right-0 top-0 bottom-0 z-40 w-10 sm:w-12 bg-gradient-to-l from-[#000000]/95 via-[#000000]/70 to-transparent text-[#FFFFFF] hidden sm:flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all duration-200 cursor-pointer hover:scale-105"
             aria-label="Scroll right"
           >
-            <div className="w-9 h-9 rounded-full bg-[#141414]/80 border border-white/10 flex items-center justify-center text-white shadow-lg hover:bg-[#E50914] hover:border-transparent transition-colors">
+            <div className="w-9 h-9 rounded-full bg-[#141414]/80 border border-white/10 flex items-center justify-center text-white shadow-lg hover:bg-[#404040] hover:border-transparent transition-colors">
               <div className="w-9 h-9 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-colors">
                 <ChevronRight className="w-5 h-5" />
               </div>
