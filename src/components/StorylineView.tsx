@@ -179,7 +179,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
       {/* Header Bar */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#181818] pb-6">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-xs text-[#E50914] font-bold tracking-widest uppercase mb-1">
+          <div className="inline-flex items-center gap-1.5 text-xs text-[#808080] font-bold tracking-widest uppercase mb-1">
             <Sparkles className="w-3.5 h-3.5" />
             <span>ORIGINAL SERIES · CUSTOM STORYLINE</span>
           </div>
@@ -242,7 +242,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
               type="button"
               disabled={isSaving}
               onClick={handleSaveOrder}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white hover:bg-white/80 text-black text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 min-h-[44px] shadow-lg shadow-[#E50914]/30"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white hover:bg-white/80 text-black text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 min-h-[44px] shadow-lg shadow-[#808080]/30"
             >
               {isSaving ? (
                 <>
@@ -278,15 +278,15 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
         <div
           className={`p-3.5 rounded-lg text-xs flex items-center justify-between gap-3 animate-in fade-in duration-200 ${
             saveStatus.type === 'success'
-              ? 'bg-[#141414] border border-[#E50914] text-white'
-              : 'bg-[#181818] border border-[#E50914] text-red-200'
+              ? 'bg-[#141414] border border-[#808080] text-white'
+              : 'bg-[#181818] border border-[#808080] text-red-200'
           }`}
         >
           <div className="flex items-center gap-2.5">
             {saveStatus.type === 'success' ? (
-              <CheckCircle2 className="w-4 h-4 text-[#E50914] shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-[#808080] shrink-0" />
             ) : (
-              <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0" />
+              <AlertCircle className="w-4 h-4 text-[#808080] shrink-0" />
             )}
             <span>{saveStatus.message}</span>
           </div>
@@ -305,15 +305,15 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
 
       {/* Active Reordering Mode Notice Banner */}
       {isReorderMode && (
-        <div className="p-3.5 rounded-xl bg-[#141414] border border-[#E50914]/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-neutral-300">
+        <div className="p-3.5 rounded-xl bg-[#141414] border border-[#808080]/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-neutral-300">
           <div className="flex items-center gap-2.5">
-            <GripVertical className="w-4 h-4 text-[#E50914] shrink-0" />
+            <GripVertical className="w-4 h-4 text-[#808080] shrink-0" />
             <span>
               <strong>Reorder Mode Active:</strong> Drag cards using the handle icon or tap the &uarr; / &darr; arrows to move chapters earlier or later. Click <strong>Save Order</strong> when finished.
             </span>
           </div>
           {hasChanges && (
-            <span className="text-[11px] font-semibold text-[#E50914] uppercase tracking-wider shrink-0">
+            <span className="text-[11px] font-semibold text-[#808080] uppercase tracking-wider shrink-0">
               Unsaved changes pending
             </span>
           )}
@@ -346,9 +346,9 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                 }}
                 className={`group relative rounded-lg overflow-hidden bg-[#141414] border transition-all duration-300 shadow-xl flex flex-col justify-between ${
                   isDragging
-                    ? 'opacity-40 scale-[0.97] border-2 border-[#E50914] shadow-[0_0_30px_rgba(229,9,20,0.5)] cursor-grabbing z-30'
+                    ? 'opacity-40 scale-[0.97] border-2 border-[#808080] shadow-[0_0_30px_rgba(229,9,20,0.5)] cursor-grabbing z-30'
                     : isOver
-                    ? 'border-2 border-[#E50914] scale-[1.03] shadow-[0_0_25px_rgba(229,9,20,0.4)] z-20'
+                    ? 'border-2 border-[#808080] scale-[1.03] shadow-[0_0_25px_rgba(229,9,20,0.4)] z-20'
                     : 'border-[#181818] hover:border-[#808080]/60 hover:scale-[1.03] hover:shadow-2xl'
                 } ${isReorderMode ? 'cursor-grab select-none' : 'cursor-pointer'}`}
               >
@@ -367,7 +367,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
 
                   {/* Top Badge: Netflix N & Episode number */}
                   <div className="absolute top-2.5 left-2.5 z-20 flex items-center gap-1.5">
-                    <span className="w-5 h-5 rounded bg-[#E50914] flex items-center justify-center font-bebas text-xs font-black text-[#FFFFFF] shadow">
+                    <span className="w-5 h-5 rounded bg-[#808080] flex items-center justify-center font-bebas text-xs font-black text-[#FFFFFF] shadow">
                       N
                     </span>
                     <span className="font-bebas text-xs px-2 py-0.5 rounded bg-black/80 text-white font-bold uppercase tracking-wider border border-white/20 shadow">
@@ -375,7 +375,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                     </span>
                     {ch.isSecret && (
                       <span className="p-1 rounded bg-black/80 text-white border border-white/20 shadow">
-                        <Lock className="w-3 h-3 text-[#E50914]" />
+                        <Lock className="w-3 h-3 text-[#808080]" />
                       </span>
                     )}
                   </div>
@@ -418,7 +418,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                         e.stopPropagation();
                         onEditStory(ch);
                       }}
-                      className="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-black/80 hover:bg-[#E50914] text-white border border-white/30 flex items-center justify-center transition-colors shadow cursor-pointer"
+                      className="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-black/80 hover:bg-[#808080] text-white border border-white/30 flex items-center justify-center transition-colors shadow cursor-pointer"
                       title="Edit chapter content & artwork"
                     >
                       <Edit3 className="w-3 h-3" />
@@ -428,7 +428,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                   {/* Drop Target Top Indicator */}
                   {isOver && (
                     <div
-                      className="absolute inset-x-0 top-0 h-1.5 bg-[#E50914] z-40 rounded-t shadow-[0_0_12px_#E50914] animate-pulse"
+                      className="absolute inset-x-0 top-0 h-1.5 bg-[#808080] z-40 rounded-t shadow-[0_0_12px_#808080] animate-pulse"
                       aria-hidden="true"
                     />
                   )}
@@ -519,16 +519,16 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                 }}
                 className={`relative bg-[#141414] rounded-lg overflow-hidden border transition-all duration-200 flex flex-col justify-between shadow-xl ${
                   isDragging
-                    ? 'opacity-40 scale-[0.98] border-2 border-[#E50914] shadow-[0_0_30px_rgba(229,9,20,0.5)] cursor-grabbing z-30'
+                    ? 'opacity-40 scale-[0.98] border-2 border-[#808080] shadow-[0_0_30px_rgba(229,9,20,0.5)] cursor-grabbing z-30'
                     : isOver
-                    ? 'border-2 border-[#E50914] scale-[1.02] shadow-[0_0_25px_rgba(229,9,20,0.4)] z-20'
+                    ? 'border-2 border-[#808080] scale-[1.02] shadow-[0_0_25px_rgba(229,9,20,0.4)] z-20'
                     : 'border-[#181818] hover:border-[#808080]/60'
                 } ${isReorderMode ? 'cursor-grab select-none' : 'cursor-pointer hover:scale-[1.02]'}`}
               >
                 {/* Drop Target Top Indicator */}
                 {isOver && (
                   <div
-                    className="absolute inset-x-0 top-0 h-1.5 bg-[#E50914] z-40 rounded-t shadow-[0_0_12px_#E50914] animate-pulse"
+                    className="absolute inset-x-0 top-0 h-1.5 bg-[#808080] z-40 rounded-t shadow-[0_0_12px_#808080] animate-pulse"
                     aria-hidden="true"
                   />
                 )}
@@ -537,12 +537,12 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                 <div className="relative aspect-video w-full overflow-hidden bg-[#000000]">
                   {/* Episode Badge (Reflects live reordered index!) */}
                   <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5">
-                    <span className="font-bebas text-xs px-2.5 py-1 rounded bg-[#E50914] text-[#FFFFFF] font-black uppercase tracking-wider shadow">
+                    <span className="font-bebas text-xs px-2.5 py-1 rounded bg-[#808080] text-[#FFFFFF] font-black uppercase tracking-wider shadow">
                       Episode {idx + 1}
                     </span>
                     {ch.isSecret && (
                       <span className="p-1 rounded bg-black/70 text-white border border-white/20 shadow">
-                        <Lock className="w-3 h-3 text-[#E50914]" />
+                        <Lock className="w-3 h-3 text-[#808080]" />
                       </span>
                     )}
                   </div>
@@ -592,7 +592,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                         e.stopPropagation();
                         onEditStory(ch);
                       }}
-                      className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-[#E50914] text-white border border-white/30 flex items-center justify-center transition-colors shadow cursor-pointer"
+                      className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-[#808080] text-white border border-white/30 flex items-center justify-center transition-colors shadow cursor-pointer"
                       title="Edit chapter content & artwork"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
