@@ -1,0 +1,55 @@
+name: Recover latest cancelled or failed deployment
+
+on:
+  workflow_run:
+    workflows:
+      - Deploy Our Universe to GitHub Pages
+    types:
+      - completed
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  recover-latest-deployment:
+    if: >-
+      github.event.workflow_run.head_branch == 'main' &&
+      (github.event.workflow_run.conclusion == 'cancelled' ||
+       github.event.workflow_run.conclusion == 'failure') &&
+      github.event.workflow_run.run_attempt < 2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retry only if this is still the latest main commit
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const run = context.payload.workflow_run;
+            const { owner, repo } = context.repo;
+
+            const branch = await github.rest.repos.getBranch({
+              owner,
+              repo,
+              branch: "main",
+            });
+            const latestSha = branch.data.commit.sha;
+
+            if (run.head_sha !== latestSha) {
+              core.info(
+                `Skipping run #${run.run_number}: its commit ${run.head_sha} is not the latest main commit (${latestSha}). A newer push superseded it.`
+              );
+              return;
+            }
+
+            if (run.run_attempt >= 2) {
+              core.info(`Run #${run.run_number} already had an automatic retry; stopping to avoid a retry loop.`);
+              return;
+            }
+
+            core.info(`Requesting one automatic retry for latest-main run #${run.run_number} (${run.conclusion}).`);
+            await github.rest.actions.reRunWorkflow({
+              owner,
+              repo,
+              run_id: run.id,
+            });
+            core.info("GitHub accepted the rerun request.");
