@@ -21,7 +21,7 @@ export const ConstellationSection: React.FC<ConstellationSectionProps> = ({
     <div className="relative my-8 sm:my-16 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
       {/* Section Header */}
       <div className="text-center space-y-1.5 sm:space-y-2 mb-6 sm:mb-8">
-        <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs text-[#E50914] font-bold uppercase tracking-widest">
+        <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs text-[#808080] font-bold uppercase tracking-widest">
           <Film className="w-3.5 h-3.5" />
           <span>ORIGINAL INTERACTIVE TIMELINE</span>
         </div>
@@ -53,7 +53,7 @@ export const ConstellationSection: React.FC<ConstellationSectionProps> = ({
               y1={activeStar === 1 || activeStar === 3 ? 65 : activeStar === 2 ? 160 : 135}
               x2={80 + Math.min(4, activeStar + 1) * 160}
               y2={activeStar === 0 || activeStar === 2 ? 65 : 130}
-              stroke="#E50914"
+              stroke="#808080"
               strokeWidth="3"
               strokeLinecap="round"
             />
@@ -75,8 +75,8 @@ export const ConstellationSection: React.FC<ConstellationSectionProps> = ({
                   <div
                     className={`w-9 h-9 sm:w-12 sm:h-12 rounded flex items-center justify-center transition-all ${
                       isActive
-                        ? 'bg-[#E50914] text-[#FFFFFF] shadow-lg scale-110'
-                        : 'bg-[#181818] border border-[#808080]/30 group-hover:border-[#E50914] text-[#B3B3B3] group-hover:text-[#FFFFFF]'
+                        ? 'bg-[#808080] text-[#FFFFFF] shadow-lg scale-110'
+                        : 'bg-[#181818] border border-[#808080]/30 group-hover:border-[#808080] text-[#B3B3B3] group-hover:text-[#FFFFFF]'
                     }`}
                   >
                     <Star
@@ -104,7 +104,7 @@ export const ConstellationSection: React.FC<ConstellationSectionProps> = ({
         {current && (
           <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-[#181818] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-in fade-in duration-200">
             <div className="space-y-1 text-left w-full sm:w-auto">
-              <div className="flex items-center gap-2 text-xs text-[#E50914] font-bold uppercase tracking-wider">
+              <div className="flex items-center gap-2 text-xs text-[#808080] font-bold uppercase tracking-wider">
                 <span>Chapter #{activeStar + 1}</span>
                 <span className="text-[#808080]">·</span>
                 <span className="text-[#B3B3B3]">{current.date || current.year}</span>
