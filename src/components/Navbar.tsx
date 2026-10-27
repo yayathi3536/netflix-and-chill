@@ -112,7 +112,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-2 group text-left cursor-pointer transition-transform duration-200 active:scale-95 min-h-[44px]"
             aria-label="Our Universe Home"
           >
-            <span className="font-bebas text-xl sm:text-2xl lg:text-3xl tracking-wider text-[#808080] font-black uppercase">
+            <span className="font-bebas text-xl sm:text-2xl lg:text-3xl tracking-wider text-[#E50914] font-black uppercase">
               OUR UNIVERSE
             </span>
           </button>
