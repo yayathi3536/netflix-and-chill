@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Edit3 } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { MovieCard } from './MovieCard';
 
@@ -19,7 +19,6 @@ interface CarouselRowProps {
 
 export const CarouselRow: React.FC<CarouselRowProps> = ({
   title,
-  subtitle,
   items,
   isPortrait = false,
   onPlay,
@@ -28,7 +27,6 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
   onToggleFavorite,
   onUnlockVault,
   onEditMemory,
-  onEditSection,
 }) => {
   const rowRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -55,26 +53,14 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="relative group/row my-5 sm:my-7 lg:my-8 px-4 sm:px-6 lg:px-[4%]">
+    <div className="relative group/row my-5 sm:my-7 lg:my-8">
       {/* Netflix Row Header */}
-      <div className="flex items-baseline justify-between mb-2 sm:mb-3">
-        <div className="flex items-baseline gap-2.5 sm:gap-3 flex-wrap">
-          <h2 className="text-lg sm:text-xl font-semibold text-white tracking-tight hover:text-neutral-300 transition-colors">
-            {title}
-          </h2>
-          {onEditSection && (
-            <button
-              onClick={onEditSection}
-              className="p-1 rounded hover:bg-[#181818] text-[#808080] hover:text-[#FFFFFF] transition-colors cursor-pointer"
-              title="Edit row title & subtitle"
-              aria-label="Edit row section"
-            >
-              <Edit3 className="w-3.5 h-3.5 text-[#E50914]" />
-            </button>
-          )}
-        </div>
-        <span className="text-[11px] sm:text-xs text-[#808080] font-semibold tracking-wider uppercase">
-          {items.length} {items.length === 1 ? 'Title' : 'Titles'}
+      <div className="flex items-baseline justify-between mb-3 px-4 sm:px-6 lg:px-[4%]">
+        <h2 className="text-lg sm:text-xl font-semibold text-white tracking-tight">
+          {title}
+        </h2>
+        <span className="text-xs text-neutral-400 font-medium">
+          Explore All ›
         </span>
       </div>
 
@@ -99,7 +85,7 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
         <div
           ref={rowRef}
           onScroll={handleScroll}
-          className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth py-3 px-1 -mx-1"
+          className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth py-3 px-4 sm:px-6 lg:px-[4%]"
         >
           {items.map((item, index) => (
             <div
