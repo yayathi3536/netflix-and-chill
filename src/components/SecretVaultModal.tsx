@@ -112,7 +112,7 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
           /* LOCKED STATE */
           <div className="text-center py-6 sm:py-10 space-y-6 max-w-md mx-auto">
             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-[#181818] border border-[#808080] flex items-center justify-center mx-auto text-[#808080] shadow-lg">
-              <Lock className="w-7 h-7 sm:w-8 sm:h-8" />
+              <Lock className="w-7 h-7 sm:w-8 sm:h-8 text-[var(--nf-red)]" />
             </div>
 
             <div>
