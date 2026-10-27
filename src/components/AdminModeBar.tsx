@@ -70,7 +70,7 @@ export const AdminModeBar: React.FC<AdminModeBarProps> = ({
           {/* Add New Memory */}
           <button
             onClick={onOpenAddMemory}
-            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 sm:py-1.5 rounded bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] text-xs font-bold shadow transition-all cursor-pointer min-h-[38px]"
+            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 sm:py-1.5 rounded bg-white hover:bg-white/80 text-black text-xs font-semibold shadow transition-all cursor-pointer min-h-[38px]"
             title="Create new title"
           >
             <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
