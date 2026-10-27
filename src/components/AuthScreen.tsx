@@ -223,7 +223,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
           <button
             type="button"
             onClick={() => switchMode('signup')}
-            className="px-4 py-1.5 rounded-[4px] bg-[#E50914] hover:bg-[#c11119] text-[#FFFFFF] text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow"
+            className="px-4 py-1.5 rounded-[4px] bg-white hover:bg-white/80 text-black text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow"
           >
             Sign Up
           </button>
@@ -231,7 +231,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
           <button
             type="button"
             onClick={() => switchMode('signin')}
-            className="px-4 py-1.5 rounded-[4px] bg-[#E50914] hover:bg-[#c11119] text-[#FFFFFF] text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow"
+            className="px-4 py-1.5 rounded-[4px] bg-white hover:bg-white/80 text-black text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow"
           >
             Sign In
           </button>
@@ -356,7 +356,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[#E50914] hover:bg-[#f6121d] disabled:opacity-50 text-white font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
+                className="w-full py-3 bg-white hover:bg-white/80 disabled:opacity-50 text-black font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
               >
                 {isLoading ? (
                   <>
@@ -488,7 +488,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[#E50914] hover:bg-[#f6121d] disabled:opacity-50 text-white font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
+                className="w-full py-3 bg-white hover:bg-white/80 disabled:opacity-50 text-black font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
               >
                 {isLoading ? (
                   <>
@@ -538,7 +538,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[#E50914] hover:bg-[#c11119] disabled:opacity-60 text-[#FFFFFF] font-semibold text-base rounded-[4px] shadow-lg transition-all duration-150 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3 bg-white hover:bg-white/80 disabled:opacity-60 text-black font-semibold text-base rounded-[4px] shadow-lg transition-all duration-150 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isLoading ? (
                   <>
@@ -604,7 +604,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[#E50914] hover:bg-[#c11119] disabled:opacity-60 text-[#FFFFFF] font-semibold text-base rounded-[4px] shadow-lg transition-all duration-150 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3 bg-white hover:bg-white/80 disabled:opacity-60 text-black font-semibold text-base rounded-[4px] shadow-lg transition-all duration-150 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isLoading ? (
                   <>
