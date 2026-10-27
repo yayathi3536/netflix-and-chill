@@ -138,7 +138,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                   onClose();
                   onOpenAdminModal();
                 }}
-                className="flex-1 py-2 px-4 rounded bg-[#E50914] hover:bg-[#b80710] text-xs font-bold text-white transition-colors cursor-pointer"
+                className="flex-1 py-2 px-4 rounded bg-white hover:bg-white/80 text-xs font-semibold text-black transition-colors cursor-pointer"
               >
                 Admin Sign In
               </button>
@@ -557,7 +557,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                       onClick={() => setPreviewPreset('16/9')}
                       className={`px-2 py-1 rounded transition-colors ${
                         previewPreset === '16/9'
-                          ? 'bg-[#E50914] text-white font-bold'
+                          ? 'bg-white text-black font-semibold'
                           : 'text-neutral-400 hover:text-white'
                       }`}
                       title="16:9 Landscape (Hero & Carousel)"
@@ -569,7 +569,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                       onClick={() => setPreviewPreset('3/4')}
                       className={`px-2 py-1 rounded transition-colors ${
                         previewPreset === '3/4'
-                          ? 'bg-[#E50914] text-white font-bold'
+                          ? 'bg-white text-black font-semibold'
                           : 'text-neutral-400 hover:text-white'
                       }`}
                       title="3:4 Portrait (Top 10 Series & Posters)"
@@ -581,7 +581,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                       onClick={() => setPreviewPreset('1/1')}
                       className={`px-2 py-1 rounded transition-colors ${
                         previewPreset === '1/1'
-                          ? 'bg-[#E50914] text-white font-bold'
+                          ? 'bg-white text-black font-semibold'
                           : 'text-neutral-400 hover:text-white'
                       }`}
                       title="1:1 Square (Avatar & Thumbnails)"
@@ -596,7 +596,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                       }}
                       className={`px-2 py-1 rounded transition-colors ${
                         previewPreset === 'natural'
-                          ? 'bg-[#E50914] text-white font-bold'
+                          ? 'bg-white text-black font-semibold'
                           : 'text-neutral-400 hover:text-white'
                       }`}
                       title="Natural Uncropped Ratio"
@@ -819,7 +819,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                   onClose();
                   if (onOpenAdminModal) onOpenAdminModal();
                 }}
-                className="px-6 py-2 bg-[#E50914] hover:bg-[#b80710] text-white font-bold rounded-md shadow-lg transition-transform active:scale-95 flex items-center gap-2 cursor-pointer"
+                className="px-6 py-2 bg-white hover:bg-white/80 text-black font-semibold rounded-md shadow-lg transition-transform active:scale-95 flex items-center gap-2 cursor-pointer"
               >
                 <Shield className="w-4 h-4" />
                 <span>Admin Sign-In to Save</span>
@@ -828,7 +828,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
               <button
                 type="submit"
                 disabled={isUploading}
-                className="px-6 py-2 bg-[#E50914] hover:bg-[#b80710] disabled:opacity-50 text-white font-bold rounded-md shadow-lg transition-transform active:scale-95 cursor-pointer"
+                className="px-6 py-2 bg-white hover:bg-white/80 disabled:opacity-50 text-black font-semibold rounded-md shadow-lg transition-transform active:scale-95 cursor-pointer"
               >
                 {memoryToEdit ? 'Save Changes' : 'Save Memory'}
               </button>
