@@ -200,7 +200,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
               onClick={() => setViewMode('posters')}
               className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all cursor-pointer min-h-[34px] ${
                 viewMode === 'posters'
-                  ? 'bg-[#E50914] text-white shadow-md'
+                  ? 'bg-white text-black shadow-md'
                   : 'text-[#B3B3B3] hover:text-white hover:bg-white/5'
               }`}
               title="View as Netflix Poster Cards (Homepage Storyline reference)"
@@ -213,7 +213,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
               onClick={() => setViewMode('episodes')}
               className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all cursor-pointer min-h-[34px] ${
                 viewMode === 'episodes'
-                  ? 'bg-[#E50914] text-white shadow-md'
+                  ? 'bg-white text-black shadow-md'
                   : 'text-[#B3B3B3] hover:text-white hover:bg-white/5'
               }`}
               title="View as Episode Cards with full synopsis"
@@ -228,7 +228,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
             onClick={() => setIsReorderMode(!isReorderMode)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer min-h-[44px] ${
               isReorderMode
-                ? 'bg-[#E50914] text-white shadow-lg shadow-red-950/40'
+                ? 'bg-white text-black shadow-lg shadow-black/40'
                 : 'bg-[#181818] text-[#FFFFFF] hover:bg-white/10 border border-white/10 hover:border-white/20'
             }`}
             title="Toggle drag-and-drop reordering controls"
