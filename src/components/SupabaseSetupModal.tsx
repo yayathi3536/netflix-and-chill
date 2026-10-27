@@ -204,7 +204,7 @@ create policy "Authenticated upload photos" on storage.objects for insert to aut
             onClick={() => setActiveTab('guide')}
             className={`flex-1 py-1.5 rounded-md font-semibold transition-colors ${
               activeTab === 'guide'
-                ? 'bg-[#E50914] text-white shadow'
+                ? 'bg-white text-black shadow'
                 : 'text-neutral-400 hover:text-white'
             }`}
           >
@@ -214,7 +214,7 @@ create policy "Authenticated upload photos" on storage.objects for insert to aut
             onClick={() => setActiveTab('sql')}
             className={`flex-1 py-1.5 rounded-md font-semibold transition-colors ${
               activeTab === 'sql'
-                ? 'bg-[#E50914] text-white shadow'
+                ? 'bg-white text-black shadow'
                 : 'text-neutral-400 hover:text-white'
             }`}
           >
@@ -224,7 +224,7 @@ create policy "Authenticated upload photos" on storage.objects for insert to aut
             onClick={() => setActiveTab('github')}
             className={`flex-1 py-1.5 rounded-md font-semibold transition-colors ${
               activeTab === 'github'
-                ? 'bg-[#E50914] text-white shadow'
+                ? 'bg-white text-black shadow'
                 : 'text-neutral-400 hover:text-white'
             }`}
           >
