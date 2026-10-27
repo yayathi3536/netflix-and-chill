@@ -492,7 +492,7 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
                   <button
                     onClick={() => setIsShuffle((prev) => !prev)}
                     className={`p-2 rounded transition-colors cursor-pointer ${
-                      isShuffle ? 'text-[#E50914] bg-[#E50914]/15' : 'text-[#808080] hover:text-[#FFFFFF]'
+                      isShuffle ? 'text-white bg-white/15' : 'text-[#808080] hover:text-[#FFFFFF]'
                     }`}
                     title={isShuffle ? 'Shuffle Enabled' : 'Shuffle Disabled'}
                   >
@@ -515,9 +515,9 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
                     title={isPlaying ? 'Pause' : 'Play'}
                   >
                     {isPlaying ? (
-                      <Pause className="w-6 h-6 fill-white" />
+                      <Pause className="w-6 h-6 fill-black" />
                     ) : (
-                      <Play className="w-6 h-6 fill-white ml-1" />
+                      <Play className="w-6 h-6 fill-black ml-1" />
                     )}
                   </button>
 
@@ -536,7 +536,7 @@ export function MusicPlayer({ isAdmin = false }: { isAdmin?: boolean }) {
                       setIsRepeat((prev) => (prev === 'all' ? 'one' : prev === 'one' ? 'off' : 'all'));
                     }}
                     className={`p-2 rounded transition-colors cursor-pointer ${
-                      isRepeat !== 'off' ? 'text-[#E50914] bg-[#E50914]/15' : 'text-[#808080] hover:text-[#FFFFFF]'
+                      isRepeat !== 'off' ? 'text-white bg-white/15' : 'text-[#808080] hover:text-[#FFFFFF]'
                     }`}
                     title={`Repeat: ${isRepeat}`}
                   >
