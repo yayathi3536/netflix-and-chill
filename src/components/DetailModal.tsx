@@ -175,7 +175,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
               aria-label={memory.isFavorite ? 'Unlike' : 'Like'}
               title={memory.isFavorite ? 'Unlike' : 'Like'}
             >
-              <Heart className={`w-5 h-5 ${memory.isFavorite ? 'fill-current text-[#808080]' : ''}`} />
+              <Heart className={`w-5 h-5 ${memory.isFavorite ? 'fill-current text-[#E50914]' : ''}`} />
             </button>
           </div>
         </div>
