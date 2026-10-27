@@ -99,7 +99,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
           <div className="relative mt-6 flex flex-wrap items-center gap-3">
             <button
               onClick={openAdd}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#E50914] px-4 py-2.5 text-sm font-bold shadow-lg shadow-red-950/30 transition hover:bg-[#f6121d] min-h-[44px]"
+              className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-black shadow-lg shadow-red-950/30 transition hover:bg-white/80 min-h-[44px]"
             >
               <Plus className="h-4 w-4" />
               Add a title
@@ -154,7 +154,7 @@ export const AdminStudioModal: React.FC<AdminStudioModalProps> = ({
               <Clapperboard className="mx-auto h-8 w-8 text-white/25" />
               <p className="mt-3 font-semibold">{memories.length ? 'No matching titles' : 'Your library is ready for its first title'}</p>
               <p className="mt-1 text-sm text-white/45">Try another search or add a new memory to your collection.</p>
-              <button onClick={openAdd} className="mt-4 rounded-lg bg-[#E50914] px-4 py-2 text-sm font-bold hover:bg-[#f6121d]">
+              <button onClick={openAdd} className="mt-4 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/80">
                 Add a title
               </button>
             </div>
