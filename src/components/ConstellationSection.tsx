@@ -119,7 +119,7 @@ export const ConstellationSection: React.FC<ConstellationSectionProps> = ({
 
             <button
               onClick={() => onSelectMilestone(current)}
-              className="w-full sm:w-auto justify-center px-6 py-3 rounded bg-[#E50914] hover:bg-[#b80710] text-[#FFFFFF] font-bold text-xs shadow transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0 uppercase tracking-wider flex items-center gap-1.5 min-h-[44px]"
+              className="w-full sm:w-auto justify-center px-6 py-3 rounded bg-white hover:bg-white/80 text-black font-semibold text-xs shadow transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0 uppercase tracking-wider flex items-center gap-1.5 min-h-[44px]"
             >
               <span>View Chapter Details</span>
               <ChevronRight className="w-4 h-4" />
