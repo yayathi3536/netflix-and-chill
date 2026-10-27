@@ -430,7 +430,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                 <button
                   type="submit"
                   disabled={isLoading || !supabaseReady}
-                  className="w-full py-2.5 bg-[#E50914] hover:bg-[#b80710] disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold rounded-lg shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer mt-2"
+                  className="w-full py-2.5 bg-white hover:bg-white/80 disabled:bg-neutral-800 disabled:text-neutral-500 text-black font-semibold rounded-lg shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer mt-2"
                 >
                   <Lock className="w-4 h-4" />
                   <span>{isLoading ? 'Verifying...' : 'Sign In as Administrator'}</span>
@@ -465,7 +465,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                 <button
                   type="submit"
                   disabled={isLoading || !supabaseReady}
-                  className="w-full py-2.5 bg-[#E50914] hover:bg-[#b80710] disabled:bg-neutral-800 disabled:text-neutral-500 text-white font-bold rounded-lg shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer mt-2"
+                  className="w-full py-2.5 bg-white hover:bg-white/80 disabled:bg-neutral-800 disabled:text-neutral-500 text-black font-semibold rounded-lg shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer mt-2"
                 >
                   <Send className="w-4 h-4" />
                   <span>{isLoading ? 'Sending Link...' : 'Send Magic Link'}</span>
