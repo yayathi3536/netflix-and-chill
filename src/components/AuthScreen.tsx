@@ -214,7 +214,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
       {/* Top Netflix Brand Header */}
       <header className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 pt-6 sm:pt-7 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className="font-bebas text-3xl sm:text-5xl tracking-widest text-[#E50914] font-black uppercase drop-shadow-[0_2px_10px_rgba(229,9,20,0.35)] select-none">
+          <span className="font-bebas text-3xl sm:text-5xl tracking-widest text-[#808080] font-black uppercase drop-shadow-[0_2px_10px_rgba(229,9,20,0.35)] select-none">
             OUR UNIVERSE
           </span>
         </div>
@@ -249,7 +249,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                 onClick={() => switchMode('signin')}
                 className="inline-flex items-center gap-1.5 text-xs text-[#B3B3B3] hover:text-[#FFFFFF] mb-1 transition-colors cursor-pointer"
               >
-                <ArrowLeft className="w-3.5 h-3.5 text-[#E50914]" />
+                <ArrowLeft className="w-3.5 h-3.5 text-[#808080]" />
                 <span>Back to Sign In</span>
               </button>
             )}
@@ -271,7 +271,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
           {!supabaseReady && (
             <div className="p-3.5 rounded-[4px] bg-[#181818] border border-[#E50914]/60 text-xs text-[#B3B3B3] space-y-1">
               <div className="flex items-center gap-1.5 font-bold text-[#FFFFFF]">
-                <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0" />
+                <AlertCircle className="w-4 h-4 text-[#808080] shrink-0" />
                 <span>Supabase Auth Configuration Required</span>
               </div>
               <p className="text-[11px] leading-relaxed">
@@ -288,7 +288,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               role="alert"
               className="p-3.5 rounded-[4px] bg-[#e87c03]/15 border border-[#E50914] text-[#FFFFFF] text-xs sm:text-[13px] flex items-start gap-2.5 animate-in fade-in duration-150"
             >
-              <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 text-[#808080] shrink-0 mt-0.5" />
               <span className="leading-relaxed">{errorMsg}</span>
             </div>
           )}
@@ -299,7 +299,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               role="status"
               className="p-3.5 rounded-[4px] bg-[#181818] border border-[#FFFFFF]/40 text-[#FFFFFF] text-xs sm:text-[13px] flex items-start gap-2.5 animate-in fade-in duration-150"
             >
-              <CheckCircle2 className="w-4 h-4 text-[#E50914] shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-[#808080] shrink-0 mt-0.5" />
               <span className="leading-relaxed">{successMsg}</span>
             </div>
           )}
@@ -624,7 +624,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
       <footer className="relative z-10 w-full bg-[#000000]/80 border-t border-[#FFFFFF]/10 py-6 px-6 sm:px-12 text-xs text-[#808080]">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Heart className="w-3.5 h-3.5 text-[#E50914] fill-[#E50914]" />
+            <Heart className="w-3.5 h-3.5 text-[#808080] fill-[#E50914]" />
             <span>OUR UNIVERSE · Personal Streaming Archive</span>
           </div>
           <div className="flex items-center gap-4 text-[11px]">
