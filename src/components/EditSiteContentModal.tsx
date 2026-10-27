@@ -710,7 +710,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
             <button
               type="submit"
               disabled={isSaving || isUploadingPhoto}
-              className="px-6 py-2.5 rounded-lg bg-[#E50914] hover:bg-[#b80710] text-white text-xs font-bold shadow-lg transition-all active:scale-95 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              className="px-6 py-2.5 rounded-lg bg-white hover:bg-white/80 text-black text-xs font-semibold shadow-lg transition-all active:scale-95 flex items-center gap-2 cursor-pointer disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
               <span>{isSaving ? 'Saving to Supabase...' : 'Save All Changes to Cloud'}</span>
