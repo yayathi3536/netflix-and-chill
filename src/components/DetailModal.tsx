@@ -94,7 +94,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
     >
       {/* Netflix Modal Card */}
       <div
-        className="relative w-full max-w-4xl bg-[#181818] rounded-none sm:rounded-xl overflow-hidden netflix-modal-shadow border border-white/10 my-auto text-[#FFFFFF]"
+        className="relative w-full max-w-[900px] bg-[#181818] sm:rounded-md overflow-hidden shadow-2xl border border-white/5 my-auto text-[#FFFFFF]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -107,7 +107,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
         </button>
 
         {/* Direct, Full-Clarity Image Display at Top */}
-        <div className="relative aspect-[21/9] w-full overflow-hidden bg-black">
+        <div className="relative aspect-video w-full overflow-hidden bg-black">
           <VisualArt
             id={memory.id}
             category={memory.category}
@@ -136,9 +136,9 @@ export const DetailModal: React.FC<DetailModalProps> = ({
           {/* Gradient covering lower half on desktop, 70% on mobile */}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-4/5 sm:h-1/2 bg-gradient-to-t from-[#181818] via-[#181818]/60 to-transparent z-10" />
 
-          {/* Floating Title & Actions on Bottom Edge */}
-          <div className="absolute bottom-3 sm:bottom-5 left-3 sm:left-6 right-3 sm:right-6 z-20 flex items-end justify-between gap-4">
-            <div className="space-y-1.5 sm:space-y-2.5 max-w-2xl w-full">
+          {/* Title overlay at the bottom-left */}
+          <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-8 right-4 sm:right-8 z-20 pointer-events-none">
+            <div className="max-w-2xl space-y-1.5 sm:space-y-2">
               <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight leading-tight drop-shadow-lg">
                 {memory.title}
               </h2>
@@ -147,34 +147,36 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                   {memory.subtitle}
                 </p>
               )}
-
-              <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-1">
-                {/* Show Play Video ONLY when a genuine video source exists */}
-                {isVideo && (
-                  <button
-                    onClick={() => onPlay(memory)}
-                    className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-white hover:bg-white/80 text-black font-semibold text-xs sm:text-sm rounded shadow transition-transform active:scale-95 cursor-pointer min-h-[44px]"
-                  >
-                    <Play className="w-4 h-4 fill-black" />
-                    <span>Play Video</span>
-                  </button>
-                )}
-
-                {/* Read Letter Action for Letters & Secret Vault items */}
-                {isLetter && onUnlockVault && (
-                  <button
-                    onClick={() => onUnlockVault(memory)}
-                    className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-white hover:bg-white/80 text-black text-xs sm:text-sm font-semibold rounded shadow transition-colors active:scale-95 cursor-pointer min-h-[44px]"
-                  >
-                    <Mail className="w-4 h-4" />
-                    <span>{memory.isSecret ? 'Read Confidential Letter' : 'Read Letter'}</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                )}
-
-                {/* Admin edit controls remain in the metadata panel below. */}
-              </div>
             </div>
+          </div>
+
+          {/* Netflix actions at the top-right */}
+          <div className="absolute top-16 sm:top-5 right-3 sm:right-5 z-30 flex items-center gap-2">
+            {isVideo && (
+              <button
+                onClick={() => onPlay(memory)}
+                className="btn-nf-primary flex items-center gap-2 px-4 sm:px-5 min-h-[40px] text-xs sm:text-sm"
+              >
+                <Play className="w-4 h-4 fill-current" />
+                <span>Play</span>
+              </button>
+            )}
+            <button
+              onClick={() => onToggleWatchlist(memory.id)}
+              className="btn-nf-icon w-10 h-10 sm:w-11 sm:h-11"
+              aria-label={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
+              title={memory.isInWatchlist ? 'Remove from My List' : 'Add to My List'}
+            >
+              {memory.isInWatchlist ? <Check className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+            </button>
+            <button
+              onClick={() => onToggleFavorite?.(memory.id)}
+              className="btn-nf-icon w-10 h-10 sm:w-11 sm:h-11"
+              aria-label={memory.isFavorite ? 'Unlike' : 'Like'}
+              title={memory.isFavorite ? 'Unlike' : 'Like'}
+            >
+              <Heart className={`w-5 h-5 ${memory.isFavorite ? 'fill-current text-[#E50914]' : ''}`} />
+            </button>
           </div>
         </div>
 
