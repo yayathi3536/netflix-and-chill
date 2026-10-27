@@ -128,7 +128,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
     >
       <div className="flex min-h-0 flex-1 flex-col text-white">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-[#E50914] flex items-center justify-center shadow-lg shadow-[#E50914]/30">
+            <div className="w-10 h-10 rounded-lg bg-[#808080] flex items-center justify-center shadow-lg shadow-[#808080]/30">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -157,11 +157,11 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
             onClick={() => setActiveTab('hero')}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
               activeTab === 'hero'
-                ? 'border-[#E50914] text-white bg-white/5'
+                ? 'border-[#808080] text-white bg-white/5'
                 : 'border-transparent text-neutral-400 hover:text-white'
             }`}
           >
-            <Type className="w-4 h-4 text-[#E50914]" />
+            <Type className="w-4 h-4 text-[#808080]" />
             <span>Hero Billboard & Media</span>
           </button>
 
@@ -170,11 +170,11 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
             onClick={() => setActiveTab('letter')}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
               activeTab === 'letter'
-                ? 'border-[#E50914] text-white bg-white/5'
+                ? 'border-[#808080] text-white bg-white/5'
                 : 'border-transparent text-neutral-400 hover:text-white'
             }`}
           >
-            <Heart className="w-4 h-4 text-[#E50914]" />
+            <Heart className="w-4 h-4 text-[#808080]" />
             <span>Personal Love Letter</span>
           </button>
 
@@ -183,7 +183,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
             onClick={() => setActiveTab('couple')}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
               activeTab === 'couple'
-                ? 'border-[#E50914] text-white bg-white/5'
+                ? 'border-[#808080] text-white bg-white/5'
                 : 'border-transparent text-neutral-400 hover:text-white'
             }`}
           >
@@ -196,7 +196,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
             onClick={() => setActiveTab('sections')}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
               activeTab === 'sections'
-                ? 'border-[#E50914] text-white bg-white/5'
+                ? 'border-[#808080] text-white bg-white/5'
                 : 'border-transparent text-neutral-400 hover:text-white'
             }`}
           >
@@ -212,14 +212,14 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
             <div
               className={`p-3.5 rounded-lg text-xs flex items-center gap-2 animate-in fade-in duration-200 ${
                 statusMsg.type === 'success'
-                  ? 'bg-[#181818] border border-[#E50914] text-white'
-                  : 'bg-[#181818] border border-[#E50914] text-white'
+                  ? 'bg-[#181818] border border-[#808080] text-white'
+                  : 'bg-[#181818] border border-[#808080] text-white'
               }`}
             >
               {statusMsg.type === 'success' ? (
-                <CheckCircle2 className="w-4 h-4 text-[#E50914] shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-[#808080] shrink-0" />
               ) : (
-                <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0" />
+                <AlertCircle className="w-4 h-4 text-[#808080] shrink-0" />
               )}
               <span>{statusMsg.text}</span>
             </div>
@@ -242,7 +242,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                   value={formData.hero_title || ''}
                   onChange={(e) => handleChange('hero_title', e.target.value)}
                   placeholder="The Story of Us"
-                  className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2.5 px-3.5 text-white placeholder-neutral-500 text-sm focus:outline-none"
+                  className="w-full bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-2.5 px-3.5 text-white placeholder-neutral-500 text-sm focus:outline-none"
                 />
               </div>
 
@@ -256,7 +256,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                     value={formData.hero_subtitle || ''}
                     onChange={(e) => handleChange('hero_subtitle', e.target.value)}
                     placeholder="Chapter Infinity: Our Forever Run"
-                    className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
+                    className="w-full bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
                   />
                 </div>
 
@@ -269,7 +269,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                     value={formData.hero_badge || ''}
                     onChange={(e) => handleChange('hero_badge', e.target.value)}
                     placeholder="#1 in Our Hearts Today"
-                    className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
+                    className="w-full bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
                   />
                 </div>
               </div>
@@ -284,7 +284,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                   value={formData.hero_synopsis || ''}
                   onChange={(e) => handleChange('hero_synopsis', e.target.value)}
                   placeholder="From an unexpected first conversation to building our whole universe together..."
-                  className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2.5 px-3.5 text-white placeholder-neutral-500 text-xs leading-relaxed focus:outline-none"
+                  className="w-full bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-2.5 px-3.5 text-white placeholder-neutral-500 text-xs leading-relaxed focus:outline-none"
                 />
               </div>
 
@@ -293,9 +293,9 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                 <label className="block text-xs font-semibold text-white flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
                     {isVideoUrl(formData.hero_backdrop_url) ? (
-                      <Video className="w-4 h-4 text-[#E50914]" />
+                      <Video className="w-4 h-4 text-[#808080]" />
                     ) : (
-                      <ImageIcon className="w-4 h-4 text-[#E50914]" />
+                      <ImageIcon className="w-4 h-4 text-[#808080]" />
                     )}
                     <span>Hero Backdrop Media (Custom Photo or Video from Device)</span>
                   </span>
@@ -308,7 +308,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
 
                 <div className="flex flex-col sm:flex-row items-center gap-2.5">
                   <label className="w-full flex-1 py-3 px-4 bg-white/10 hover:bg-white/15 text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-2.5 transition-colors cursor-pointer border border-white/10 shrink-0 min-h-[44px]">
-                    <Upload className="w-4 h-4 text-[#E50914]" />
+                    <Upload className="w-4 h-4 text-[#808080]" />
                     <span>Upload Media from Device</span>
                     <input
                       type="file"
@@ -323,7 +323,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                     <button
                       type="button"
                       onClick={() => handleChange('hero_backdrop_url', '')}
-                      className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-[#404040]/20 border border-white/15 text-[#E50914] hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
+                      className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-[#404040]/20 border border-white/15 text-[#808080] hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
                       title="Remove backdrop media"
                     >
                       <X className="w-3.5 h-3.5" />
@@ -411,7 +411,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                     value={formData.letter_title || ''}
                     onChange={(e) => handleChange('letter_title', e.target.value)}
                     placeholder="To My One and Only Sanctuary"
-                    className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
+                    className="w-full bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
                   />
                 </div>
 
@@ -424,7 +424,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                     value={formData.letter_subtitle || ''}
                     onChange={(e) => handleChange('letter_subtitle', e.target.value)}
                     placeholder="Vault Unlocked · For Your Eyes Only"
-                    className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
+                    className="w-full bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
                   />
                 </div>
               </div>
@@ -439,7 +439,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                   value={formData.letter_content || ''}
                   onChange={(e) => handleChange('letter_content', e.target.value)}
                   placeholder="Write your heart out..."
-                  className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-3 px-3.5 text-white placeholder-neutral-500 text-xs leading-relaxed focus:outline-none font-serif"
+                  className="w-full bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-3 px-3.5 text-white placeholder-neutral-500 text-xs leading-relaxed focus:outline-none font-serif"
                 />
               </div>
 
@@ -452,14 +452,14 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                   value={formData.letter_signoff || ''}
                   onChange={(e) => handleChange('letter_signoff', e.target.value)}
                   placeholder="Yours always & forever ❤️"
-                  className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
+                  className="w-full bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
                 />
               </div>
 
               {/* Live Preview Box */}
               <div className="pt-2">
                 <label className="block text-xs font-semibold text-[#FFFFFF] mb-2 flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5 text-[#E50914]" />
+                  <FileText className="w-3.5 h-3.5 text-[#808080]" />
                   <span>Live Letter Preview (As seen by your partner)</span>
                 </label>
                 <div className="bg-[#181818] p-5 sm:p-6 rounded border border-[#808080]/30 text-[#B3B3B3] text-xs sm:text-sm leading-relaxed whitespace-pre-line font-light shadow-inner">
@@ -494,7 +494,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                     value={formData.partner1_name || ''}
                     onChange={(e) => handleChange('partner1_name', e.target.value)}
                     placeholder="My Girl 👑"
-                    className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
+                    className="w-full bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
                   />
                 </div>
 
@@ -507,7 +507,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                     value={formData.partner2_name || ''}
                     onChange={(e) => handleChange('partner2_name', e.target.value)}
                     placeholder="Your Guy 🌙"
-                    className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
+                    className="w-full bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none"
                   />
                 </div>
               </div>
@@ -519,7 +519,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                       <Calendar className="w-3.5 h-3.5 text-neutral-400" />
                       <span>Timeline Tracker Date</span>
                     </span>
-                    <span className="text-[10px] text-[#E50914] font-medium">From 15 June 2025</span>
+                    <span className="text-[10px] text-[#808080] font-medium">From 15 June 2025</span>
                   </label>
                   <input
                     type="date"
@@ -533,7 +533,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                         handleChange('anniversary_date', val);
                       }
                     }}
-                    className="w-full bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2 px-3 text-white text-xs focus:outline-none"
+                    className="w-full bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-2 px-3 text-white text-xs focus:outline-none"
                   />
                   <p className="text-[10px] text-[#808080] mt-1">
                     Earliest selectable date is 15 June 2025 (2025-06-15).
@@ -542,7 +542,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
 
                 <div>
                   <label className="block text-xs font-semibold text-neutral-300 mb-1 flex items-center gap-1.5">
-                    <Lock className="w-3.5 h-3.5 text-[#E50914]" />
+                    <Lock className="w-3.5 h-3.5 text-[#808080]" />
                     <span>Secret Vault Passcode (PIN)</span>
                   </label>
                   <input
@@ -551,7 +551,7 @@ export const EditSiteContentModal: React.FC<EditSiteContentModalProps> = ({
                     value={formData.secret_passcode || '1402'}
                     onChange={(e) => handleChange('secret_passcode', e.target.value)}
                     placeholder="1402"
-                    className="w-full font-mono bg-black/60 border border-white/15 focus:border-[#E50914] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none tracking-widest"
+                    className="w-full font-mono bg-black/60 border border-white/15 focus:border-[#808080] rounded-lg py-2 px-3 text-white placeholder-neutral-500 text-xs focus:outline-none tracking-widest"
                   />
                 </div>
               </div>
