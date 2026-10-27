@@ -346,7 +346,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                 onClick={() => setAuthMethod('password')}
                 className={`flex-1 py-1.5 rounded-md font-semibold transition-colors ${
                   authMethod === 'password'
-                    ? 'bg-[#E50914] text-white shadow'
+                    ? 'bg-white text-black shadow'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -357,7 +357,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                 onClick={() => setAuthMethod('otp')}
                 className={`flex-1 py-1.5 rounded-md font-semibold transition-colors ${
                   authMethod === 'otp'
-                    ? 'bg-[#E50914] text-white shadow'
+                    ? 'bg-white text-black shadow'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -368,7 +368,7 @@ create policy "Admin can delete memory photos" on storage.objects for delete to 
                 onClick={() => setAuthMethod('sql')}
                 className={`flex-1 py-1.5 rounded-md font-semibold transition-colors ${
                   authMethod === 'sql'
-                    ? 'bg-[#E50914] text-white shadow'
+                    ? 'bg-white text-black shadow'
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
