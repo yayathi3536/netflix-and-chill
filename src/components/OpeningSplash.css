@@ -101,14 +101,14 @@
 /* Staggered widths, heights, colors, and timings for authentic streaming motion */
 .splash-panel-1 {
   width: clamp(3px, 0.6vw, 7px);
-  background: linear-gradient(180deg, #500307 0%, #8A050B 50%, #500307 100%);
+  background: linear-gradient(180deg, #500307 0%, #303030 50%, #500307 100%);
   animation-delay: 0.12s;
   opacity: 0.75;
 }
 
 .splash-panel-2 {
   width: clamp(6px, 1.2vw, 14px);
-  background: linear-gradient(180deg, #8A050B 0%, #E50914 45%, #8A050B 100%);
+  background: linear-gradient(180deg, #303030 0%, #808080 45%, #303030 100%);
   animation-delay: 0.22s;
   opacity: 0.9;
 }
@@ -168,14 +168,14 @@
 
 .splash-panel-10 {
   width: clamp(6px, 1.2vw, 14px);
-  background: linear-gradient(180deg, #8A050B 0%, #E50914 45%, #8A050B 100%);
+  background: linear-gradient(180deg, #303030 0%, #808080 45%, #303030 100%);
   animation-delay: 0.26s;
   opacity: 0.9;
 }
 
 .splash-panel-11 {
   width: clamp(3px, 0.6vw, 7px);
-  background: linear-gradient(180deg, #500307 0%, #8A050B 50%, #500307 100%);
+  background: linear-gradient(180deg, #500307 0%, #303030 50%, #500307 100%);
   animation-delay: 0.14s;
   opacity: 0.75;
 }
@@ -243,7 +243,7 @@
 }
 
 .splash-kicker-dot {
-  color: #E50914;
+  color: #808080;
   display: inline-block;
   margin: 0 0.5em;
 }
