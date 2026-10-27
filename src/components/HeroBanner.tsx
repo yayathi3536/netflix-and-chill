@@ -119,7 +119,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                 onClick={() => onPlay(heroMemoryToPlay)}
                 className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 bg-white hover:bg-white/80 text-black font-semibold text-xs sm:text-sm md:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
               >
-                <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-white text-white" />
+                <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-black text-black" />
                 <span>Play Video</span>
               </button>
             ) : (
@@ -127,7 +127,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                 onClick={() => onOpenInfo(memory)}
                 className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 bg-white hover:bg-white/80 text-black font-semibold text-xs sm:text-sm md:text-base rounded shadow-lg transition-all active:scale-95 cursor-pointer whitespace-nowrap min-h-[44px]"
               >
-                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
                 <span>Read Our Story</span>
               </button>
             )}
