@@ -246,7 +246,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
             >
               {isSaving ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  <Loader2 className="w-4 h-4 animate-spin text-black" />
                   <span>Saving...</span>
                 </>
               ) : (
