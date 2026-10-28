@@ -6,6 +6,12 @@ on:
       - main
   workflow_dispatch:
 
+# Keep one Pages deployment active at a time. Do not cancel a deployment
+# that is already running just because a newer commit arrives.
+concurrency:
+  group: our-universe-pages-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: read
   pages: write
@@ -14,37 +20,12 @@ permissions:
 
 jobs:
   build-and-deploy:
+    timeout-minutes: 30
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for earlier deployments
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const currentRunNumber = context.runNumber;
-            const workflowId = "deploy.yml";
-            while (true) {
-              const response = await github.rest.actions.listWorkflowRuns({
-                owner,
-                repo,
-                workflow_id: workflowId,
-                per_page: 100,
-              });
-              const earlierRuns = response.data.workflow_runs.filter(run =>
-                run.run_number < currentRunNumber &&
-                ["queued", "in_progress", "waiting", "requested"].includes(run.status)
-              );
-              if (earlierRuns.length === 0) {
-                core.info("No earlier deployment runs are pending. Continuing.");
-                break;
-              }
-              core.info(`Waiting for earlier run(s): ${earlierRuns.map(run => "#" + run.run_number + " (" + run.status + ")").join(", ")}`);
-              await new Promise(resolve => setTimeout(resolve, 15000));
-            }
       - name: Checkout Repository
         uses: actions/checkout@v4
 
