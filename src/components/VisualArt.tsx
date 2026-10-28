@@ -12,6 +12,7 @@ export interface VisualArtProps {
   aspectRatio?: '16/9' | '3/4' | '2/3' | '1/1' | 'auto';
   variant?: 'poster' | 'landscape' | 'episode' | 'full-image';
   focalPosition?: 'center' | 'top' | 'bottom' | string;
+  focal?: 'center' | 'top' | 'bottom' | 'center 20%' | 'center 25%' | 'center 30%';
   loading?: 'lazy' | 'eager';
   fetchPriority?: 'high' | 'low' | 'auto';
   onClick?: () => void;
@@ -31,6 +32,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
   aspectRatio,
   variant,
   focalPosition,
+  focal,
   loading = 'lazy',
   fetchPriority,
   onClick,
@@ -88,6 +90,9 @@ export const VisualArt: React.FC<VisualArtProps> = ({
       : 'object-cover';
 
   const isContained = fitClass === 'object-contain';
+
+  // Preserve legacy focalPosition classes while supporting the simpler focal prop.
+  const focalStyle = focal ? { objectPosition: focal } : undefined;
 
   // Compute focal position class
   const positionClass = isContained
@@ -147,6 +152,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
           onError={() => setImageFailed(true)}
           onClick={onClick}
           className={`${fitClass} ${positionClass} ${ratioClass} ${cleanClassName}`.trim()}
+          style={focalStyle}
         />
       );
     }
@@ -182,6 +188,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
           fetchPriority={fetchPriority}
           onError={() => setImageFailed(true)}
           onLoad={handleImageLoad}
+          style={focalStyle}
           className={`${fitClass} ${positionClass} ${
             isContained
               ? 'relative z-10 max-h-full max-w-full w-auto h-auto drop-shadow-[0_8px_24px_rgba(0,0,0,0.85)]'
