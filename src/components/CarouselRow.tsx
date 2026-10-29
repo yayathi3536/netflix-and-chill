@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useInView } from '../hooks/useInView';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { MovieCard } from './MovieCard';
@@ -29,6 +30,7 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
   onEditMemory,
 }) => {
   const rowRef = useRef<HTMLDivElement>(null);
+  const { ref: rowRevealRef, inView } = useInView<HTMLDivElement>();
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
 
@@ -53,7 +55,10 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="relative group/row my-5 sm:my-7 lg:my-8">
+    <div
+      ref={rowRevealRef}
+      className={`relative group/row my-5 sm:my-7 lg:my-8 transition-all duration-700 motion-reduce:transition-none ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+
       {/* Netflix Row Header */}
       <div className="flex items-baseline justify-between mb-3 px-4 sm:px-6 lg:px-[4%]">
         <h2 className="text-lg sm:text-xl font-semibold text-white tracking-tight">
