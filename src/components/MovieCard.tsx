@@ -82,8 +82,8 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         />
 
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent transition-opacity duration-200 ${
-            isHovered ? 'opacity-100' : 'opacity-0'
+          className={`absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent transition-opacity duration-200 opacity-100 sm:opacity-0 ${
+            isHovered ? 'sm:opacity-100' : ''
           }`}
         >
           <div className="absolute inset-x-0 bottom-0 p-2 sm:p-3">
