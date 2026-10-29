@@ -4,7 +4,6 @@ import {
   Menu,
   Bell,
   Plus,
-  Music,
   X,
   ChevronDown,
   Shield,
@@ -103,9 +102,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         isScrolled ? 'bg-[#141414] py-2 sm:py-3' : 'bg-gradient-to-b from-black/80 to-transparent py-3 sm:py-4'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
         {/* ZONE 1: NETFLIX-STYLE BRAND LOGO */}
-        <div className="flex items-center gap-4 lg:gap-8 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0 min-w-0">
           <button
             onClick={() => setIsMenuOpen(true)}
             className="w-10 h-10 flex items-center justify-center text-white hover:bg-white/10 rounded-md shrink-0"
@@ -119,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-2 group text-left cursor-pointer transition-transform duration-200 active:scale-95 min-h-[44px]"
             aria-label="Our Universe Home"
           >
-            <span className="font-bebas text-xl sm:text-2xl lg:text-3xl tracking-wider text-[#E50914] font-black uppercase">
+            <span className="font-bebas text-lg sm:text-2xl lg:text-3xl tracking-wider text-[#E50914] font-black uppercase whitespace-nowrap">
               OUR UNIVERSE
             </span>
           </button>
@@ -159,30 +158,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             )}
           </div>
-
-          {/* Music Soundtrack Toggle Button */}
-          <button
-            onClick={toggleAudio}
-            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded transition-all relative text-xs font-medium cursor-pointer min-h-[40px] ${
-              isAudioPlaying
-                ? 'bg-white text-black font-semibold shadow-md'
-                : 'bg-[#181818] text-[#FFFFFF] hover:bg-white/10 border border-[#808080]/30'
-            }`}
-            title={isAudioPlaying ? 'Mute soundtrack' : 'Play soundtrack'}
-            aria-label="Toggle music soundtrack"
-          >
-            <Music className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">
-              {isAudioPlaying ? 'Playing' : 'Music'}
-            </span>
-            {isAudioPlaying && (
-              <span className="flex items-center gap-0.5 ml-0.5">
-                <span className="w-1 h-2.5 bg-[#FFFFFF] rounded-full animate-pulse" />
-                <span className="w-1 h-3.5 bg-[#FFFFFF] rounded-full animate-pulse [animation-delay:0.2s]" />
-                <span className="w-1 h-2 bg-[#FFFFFF] rounded-full animate-pulse [animation-delay:0.4s]" />
-              </span>
-            )}
-          </button>
 
           {/* Notifications Flyout */}
           <div className="relative">
