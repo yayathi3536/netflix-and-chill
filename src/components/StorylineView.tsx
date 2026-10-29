@@ -320,13 +320,10 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
                 {/* Poster Media Container: aspect-[2/3] matching Netflix standard poster frame */}
                 <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#000000]">
                   <VisualArt
-                    id={ch.id}
-                    category={ch.category}
                     title={ch.title}
                     imageUrl={getMemoryImageUrl(ch, 'poster')}
-                    focalPosition="top"
-                    fit="auto"
-                    fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
+                    focal="center 20%"
+                    fit="cover"
                     className="w-full h-full"
                   />
 
