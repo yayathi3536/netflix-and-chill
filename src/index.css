@@ -128,7 +128,7 @@
 }
 
 @media (hover: hover) {
-  .nf-card:hover {
+  .nf-card.is-expanded {
     transform: scale(1.08);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9);
     z-index: 20;
