@@ -74,6 +74,15 @@ export const DetailModal: React.FC<DetailModalProps> = ({
   }, [primaryImageUrl, additionalPhotos, memory?.title, memory?.subtitle]);
 
   useEffect(() => {
+    if (lightboxIndex !== null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose, lightboxIndex]);
+
+  useEffect(() => {
     if (lightboxIndex === null) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setLightboxIndex(null);
