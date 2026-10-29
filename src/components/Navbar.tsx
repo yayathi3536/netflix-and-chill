@@ -99,9 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-        isScrolled
-          ? 'bg-[#141414]'
-          : 'bg-gradient-to-b from-black/80 to-transparent'
+        isScrolled ? 'bg-[#141414] py-2 sm:py-3' : 'bg-gradient-to-b from-black/80 to-transparent py-3 sm:py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
@@ -406,17 +404,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           { id: 'home', label: 'Home' },
           { id: 'our-story', label: 'Series' },
           { id: 'memories', label: 'Movies' },
-          { id: 'little-things', label: 'Quirks' },
-          { id: 'places-list', label: 'My List' },
+          { id: 'scrapbook', label: 'Scrapbook' },
           { id: 'secret-vault', label: 'Vault' },
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`whitespace-nowrap text-sm transition-colors px-3 py-2 shrink-0 ${
-              activeTab === tab.id
-                ? 'text-white font-medium'
-                : 'text-neutral-300 hover:text-white'
+            className={`py-2 px-3 rounded whitespace-nowrap shrink-0 transition-colors ${
+              activeTab === tab.id ? 'text-white bg-white/10' : 'text-neutral-400 hover:text-white'
             }`}
           >
             {tab.label}
