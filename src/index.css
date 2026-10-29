@@ -124,16 +124,12 @@
 
 /* Netflix card */
 .nf-card {
-  transition: transform 300ms ease, box-shadow 300ms ease;
+  transition: transform var(--nf-transition), box-shadow var(--nf-transition);
 }
-
-@media (hover: hover) {
-  .nf-card.is-expanded {
-    transform: scale(1.08);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9);
-    z-index: 20;
-    transition-delay: 0ms;
-  }
+.nf-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+  z-index: 10;
 }
 
 /* Ken Burns */

@@ -36,12 +36,10 @@ import { AdminModeBar } from './components/AdminModeBar';
 import { AdminStudioModal } from './components/AdminStudioModal';
 import { MovieCard } from './components/MovieCard';
 import { MusicPlayer } from './components/MusicPlayer';
-import { SoundtrackRow } from './components/SoundtrackRow';
 import { SurpriseModal } from './components/SurpriseModal';
 import { ConstellationSection } from './components/ConstellationSection';
 import { AuthScreen } from './components/AuthScreen';
 import ProfileSelect from './components/ProfileSelect';
-import { TRACKS } from './data/tracks';
 import { romanticAudio } from './utils/romanticAudio';
 import { hasValidVideo, isLetterItem, getMemoryImageUrl } from './utils/mediaHelpers';
 import { User } from '@supabase/supabase-js';
@@ -381,9 +379,7 @@ export default function App() {
   }, [memories]);
 
   const continueWatchingItems = useMemo(() => {
-    return memories
-      .filter((m) => m.category === 'memories' && m.progress !== undefined)
-      .sort((a, b) => (b.progress ?? 0) - (a.progress ?? 0));
+    return memories.filter((m) => m.category === 'memories' && m.progress !== undefined);
   }, [memories]);
 
   const ourStorySeries = useMemo(() => {
@@ -715,46 +711,12 @@ export default function App() {
                   />
                 )}
 
-                {/* INTERACTIVE "OPEN YOUR SURPRISE" CAPSULE */}
-                <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 sm:-mt-8 mb-6">
-                  <div
-                    onClick={() => setIsSurpriseModalOpen(true)}
-                    className="group relative overflow-hidden rounded-xl bg-[#141414] border border-white/10 hover:border-white/30 p-4 sm:p-5 netflix-card-shadow transition-all duration-300 cursor-pointer hover:scale-[1.01] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 select-none"
-                  >
-                    {/* Subtle red ambient glow behind the card */}
-                    <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-1.5 bg-neutral-700" />
-                    <div className="flex items-center gap-3.5 pl-2 sm:pl-1">
-                      <div className="w-11 h-11 rounded-lg bg-[#181818] border border-white/10 flex items-center justify-center text-xl shadow text-neutral-300 group-hover:scale-110 group-hover:border-neutral-500 transition-all duration-300 shrink-0">
-                        💌
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bebas text-lg sm:text-xl text-[#FFFFFF] font-bold tracking-wider uppercase">
-                            Open Your Surprise
-                          </span>
-                          <span className="text-[10px] bg-neutral-700 text-[#FFFFFF] font-bold px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
-                            Special
-                          </span>
-                        </div>
-                        <p className="text-xs text-[#B3B3B3] line-clamp-1">
-                          A private love letter, anniversary counter & redeemable romantic coupons.
-                        </p>
-                      </div>
-                    </div>
-
-                    <button className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-neutral-700 hover:bg-[#404040] text-[#FFFFFF] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shadow-md cursor-pointer text-center min-h-[44px] flex items-center justify-center hover:scale-[1.02]">
-                      Reveal Letter &rarr;
-                    </button>
-                  </div>
-                </div>
-
-                {/* CONTENT ROWS SECTION */}
-                <div className="relative z-20 space-y-2">
-                  {/* ROW 1: CONTINUE WATCHING: OUR MEMORIES */}
-                  {(isLoadingData || continueWatchingItems.length > 0) && (
+                {/* CONTENT ROWS SECTION: Our Story, Timeline of Our Universe, Continue Watching, Memories */}
+                <div className="relative z-20 space-y-2 mt-4 sm:mt-6">
+                  {/* ROW 1: CONTINUE WATCHING */}
+                  {continueWatchingItems.length > 0 && (
                     <CarouselRow
-                      isLoading={isLoadingData}
-                      title={siteContent.section_continue_title || "Our Favorite Moments"}
+                      title={siteContent.section_continue_title || "Continue Watching: Our Memories"}
                       subtitle={siteContent.section_continue_sub || "Pick up right where we left off"}
                       items={continueWatchingItems}
                       onPlay={(m) => handlePlayMemory(m)}
@@ -771,10 +733,9 @@ export default function App() {
                   )}
 
                   {/* ROW 2: ORIGINAL SERIES: OUR STORY (TOP 10 PORTRAITS) */}
-                  {(isLoadingData || ourStorySeries.length > 0) && (
+                  {ourStorySeries.length > 0 && (
                     <CarouselRow
-                      isLoading={isLoadingData}
-                      title={siteContent.section_our_story_title || "Episodes of Us"}
+                      title={siteContent.section_our_story_title || "Original Series: Our Story"}
                       subtitle={siteContent.section_our_story_sub || "Top 10 Relationship Chapters of All Time"}
                       items={ourStorySeries}
                       isPortrait={true}
@@ -791,88 +752,7 @@ export default function App() {
                     />
                   )}
 
-                  {/* ROW 3: OUR SOUNDTRACK (INTERACTIVE STREAMING MUSIC ROW) */}
-                  <SoundtrackRow
-                    tracks={TRACKS}
-                    currentTrackIndex={soundtrackTrackIndex}
-                    isPlaying={isAudioPlaying}
-                    onSelectTrack={(idx) => {
-                      setSoundtrackTrackIndex(idx);
-                      window.dispatchEvent(
-                        new CustomEvent('ouruniverse:playtrack', {
-                          detail: { index: idx, autoOpen: true },
-                        })
-                      );
-                    }}
-                    onTogglePlay={() => {
-                      window.dispatchEvent(new CustomEvent('ouruniverse:toggleplay'));
-                    }}
-                    onOpenPlayer={() => {
-                      window.dispatchEvent(new CustomEvent('ouruniverse:openplayer'));
-                    }}
-                  />
-
-                  {/* ROW 4: COLLECTION: LITTLE THINGS I LOVE ABOUT YOU */}
-                  {(isLoadingData || littleThingsCollection.length > 0) && (
-                    <CarouselRow
-                      isLoading={isLoadingData}
-                      title={siteContent.section_little_things_title || "Little Things I Love About You"}
-                      subtitle={siteContent.section_little_things_sub || "Micro-moments that steal my heart every single day"}
-                      items={littleThingsCollection}
-                      onPlay={(m) => handlePlayMemory(m)}
-                      onOpenInfo={(m) => handleOpenItem(m)}
-                      onToggleWatchlist={handleToggleWatchlist}
-                      onToggleFavorite={handleToggleFavorite}
-                      onUnlockVault={(m) => setSecretVaultMemory(m)}
-                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
-                      onEditSection={isAdmin ? () => {
-                        setEditSiteContentInitialTab('sections');
-                        setIsEditSiteContentOpen(true);
-                      } : undefined}
-                    />
-                  )}
-
-                  {/* ROW 5: MY LIST: PLACES & EXPERIENCES TOGETHER */}
-                  {(isLoadingData || placesListItems.length > 0) && (
-                    <CarouselRow
-                      isLoading={isLoadingData}
-                      title={siteContent.section_places_title || "Memories Worth Rewatching: Places & Adventures"}
-                      subtitle={siteContent.section_places_sub || "Our travel passport & dream bucket list"}
-                      items={placesListItems}
-                      onPlay={(m) => handlePlayMemory(m)}
-                      onOpenInfo={(m) => handleOpenItem(m)}
-                      onToggleWatchlist={handleToggleWatchlist}
-                      onToggleFavorite={handleToggleFavorite}
-                      onUnlockVault={(m) => setSecretVaultMemory(m)}
-                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
-                      onEditSection={isAdmin ? () => {
-                        setEditSiteContentInitialTab('sections');
-                        setIsEditSiteContentOpen(true);
-                      } : undefined}
-                    />
-                  )}
-
-                  {/* ROW 6: HIDDEN EPISODES: PERSONAL SURPRISES & LETTERS */}
-                  {(isLoadingData || secretVaultItems.length > 0) && (
-                    <CarouselRow
-                      isLoading={isLoadingData}
-                      title={siteContent.section_vault_title || "Hidden Episodes: Secret Vault & Letters"}
-                      subtitle={siteContent.section_vault_sub || "Locked confidential notes for your eyes only"}
-                      items={secretVaultItems}
-                      onPlay={(m) => handlePlayMemory(m)}
-                      onOpenInfo={(m) => handleOpenItem(m)}
-                      onToggleWatchlist={handleToggleWatchlist}
-                      onToggleFavorite={handleToggleFavorite}
-                      onUnlockVault={(m) => setSecretVaultMemory(m)}
-                      onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
-                      onEditSection={isAdmin ? () => {
-                        setEditSiteContentInitialTab('sections');
-                        setIsEditSiteContentOpen(true);
-                      } : undefined}
-                    />
-                  )}
-
-                  {/* CELESTIAL CONSTELLATION MAP SECTION */}
+                  {/* TIMELINE OF OUR UNIVERSE */}
                   <ConstellationSection
                     milestones={ourStorySeries}
                     onSelectMilestone={(m) => handleOpenItem(m)}

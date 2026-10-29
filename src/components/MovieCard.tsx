@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Play, Plus, Check, BookOpen, ChevronDown } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
@@ -28,30 +28,6 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   className,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const hoverTimer = useRef<number | null>(null);
-
-  const handleMouseEnter = () => {
-    if (hoverTimer.current !== null) window.clearTimeout(hoverTimer.current);
-    hoverTimer.current = window.setTimeout(() => {
-      setIsHovered(true);
-      hoverTimer.current = null;
-    }, 400);
-  };
-
-  const handleMouseLeave = () => {
-    if (hoverTimer.current !== null) {
-      window.clearTimeout(hoverTimer.current);
-      hoverTimer.current = null;
-    }
-    setIsHovered(false);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (hoverTimer.current !== null) window.clearTimeout(hoverTimer.current);
-    };
-  }, []);
-
   const isVideo = hasValidVideo(memory);
   const isLetter = isLetterItem(memory);
 
@@ -65,14 +41,14 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 
   return (
     <div
-      className={`group relative nf-card snap-start ${isHovered ? 'is-expanded' : ''} rounded-[4px] bg-[#141414] overflow-hidden cursor-pointer select-none shrink-0 ${
+      className={`group relative nf-card rounded-[4px] bg-[#141414] overflow-hidden cursor-pointer select-none shrink-0 ${
         className ||
         (isPortrait
           ? 'w-[30vw] sm:w-40 md:w-44 lg:w-48 aspect-[2/3]'
           : 'w-[44vw] sm:w-60 md:w-72 lg:w-80 aspect-video')
       }`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       onClick={handleCardClick}
     >
       {isPortrait && rankNumber !== undefined && (
@@ -106,13 +82,11 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         />
 
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent transition-all duration-300 ${
+          className={`absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent transition-opacity duration-200 ${
             isHovered ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <div className={`absolute inset-x-0 bottom-0 p-2 sm:p-3 transition-all duration-300 ${
-            isHovered ? 'translate-y-0' : 'translate-y-2'
-          }`}>
+          <div className="absolute inset-x-0 bottom-0 p-2 sm:p-3">
             <h4 className="text-xs sm:text-sm font-semibold text-white line-clamp-1 mb-1.5 sm:mb-2">
               {memory.title}
             </h4>
