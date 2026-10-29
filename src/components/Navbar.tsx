@@ -173,7 +173,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* ZONE 3: ACTIONS & UTILITIES */}
-        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-3 shrink-0">
           {/* Expanding Search Bar */}
           <div className="relative flex items-center">
             {isSearchOpen ? (
