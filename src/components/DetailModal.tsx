@@ -140,23 +140,6 @@ export const DetailModal: React.FC<DetailModalProps> = ({
             </button>
           )}
 
-          {/* Gradient covering lower half on desktop, 70% on mobile */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-4/5 sm:h-1/2 bg-gradient-to-t from-[#181818] via-[#181818]/60 to-transparent z-10" />
-
-          {/* Title overlay at the bottom-left */}
-          <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-8 right-4 sm:right-8 z-20 pointer-events-none">
-            <div className="max-w-2xl space-y-1.5 sm:space-y-2">
-              <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight leading-tight drop-shadow-lg">
-                {memory.title}
-              </h2>
-              {memory.subtitle && (
-                <p className="text-xs sm:text-sm text-[#B3B3B3] font-medium drop-shadow line-clamp-1 sm:line-clamp-2">
-                  {memory.subtitle}
-                </p>
-              )}
-            </div>
-          </div>
-
           {/* Netflix actions at the top-right */}
           <div className="absolute top-16 sm:top-5 right-3 sm:right-5 z-30 flex items-center gap-2">
             {isVideo && (
@@ -189,6 +172,17 @@ export const DetailModal: React.FC<DetailModalProps> = ({
 
         {/* Modal Body */}
         <div className="p-4 sm:p-6 space-y-6 sm:space-y-8 bg-[#181818]">
+          <header className="space-y-1">
+            <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight leading-tight break-words">
+              {memory.title}
+            </h2>
+            {memory.subtitle && (
+              <p className="text-sm text-[#B3B3B3] font-medium break-words">
+                {memory.subtitle}
+              </p>
+            )}
+          </header>
+
           {/* Main Info Split */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Left 2 Cols: Story & Synopsis */}
