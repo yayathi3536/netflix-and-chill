@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Plus, Check, ChevronDown, BookOpen } from 'lucide-react';
+import { Play, Plus, Check, BookOpen, ChevronDown } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
 import { hasValidVideo, isLetterItem } from '../utils/mediaHelpers';
@@ -19,6 +19,8 @@ interface MovieCardProps {
 
 export const MovieCard: React.FC<MovieCardProps> = ({
   memory,
+  rankNumber,
+  isPortrait = false,
   onPlay,
   onOpenInfo,
   onToggleWatchlist,
@@ -26,7 +28,6 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   className,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-
   const isVideo = hasValidVideo(memory);
   const isLetter = isLetterItem(memory);
 
@@ -40,42 +41,62 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 
   return (
     <div
-      className={`group relative nf-card rounded-[4px] bg-[#141414] overflow-hidden cursor-pointer select-none ${
-        className || 'shrink-0 w-60 sm:w-72 md:w-80'
+      className={`group relative nf-card rounded-[4px] bg-[#141414] overflow-hidden cursor-pointer select-none shrink-0 ${
+        className ||
+        (isPortrait
+          ? 'w-[30vw] sm:w-40 md:w-44 lg:w-48 aspect-[2/3]'
+          : 'w-[44vw] sm:w-60 md:w-72 lg:w-80 aspect-video')
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleCardClick}
     >
-      <div className="relative aspect-video w-full overflow-hidden bg-[#141414]">
+      {isPortrait && rankNumber !== undefined && (
+        <span
+          className="absolute -left-1 bottom-0 font-bebas leading-none font-black text-transparent select-none z-0"
+          style={{
+            WebkitTextStroke: '3px #595959',
+            fontSize: 'clamp(80px, 20vw, 140px)',
+          }}
+          aria-hidden="true"
+        >
+          {rankNumber}
+        </span>
+      )}
+
+      <div
+        className={`relative w-full h-full overflow-hidden bg-[#141414] ${
+          isPortrait && rankNumber !== undefined ? 'ml-6' : ''
+        }`}
+      >
         <VisualArt
           id={memory.id}
           category={memory.category}
           title={memory.title}
           imageUrl={memory.posterUrl || memory.backdropUrl}
+          focal={isPortrait ? 'center 20%' : 'center 25%'}
           focalPosition="top"
-          fit="auto"
+          fit="cover"
           fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
           className="w-full h-full"
         />
 
-        {/* Hover overlay only */}
         <div
           className={`absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent transition-opacity duration-200 ${
             isHovered ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <div className="absolute inset-x-0 bottom-0 p-3">
-            <h4 className="text-sm font-semibold text-white line-clamp-1 mb-2">
+          <div className="absolute inset-x-0 bottom-0 p-2 sm:p-3">
+            <h4 className="text-xs sm:text-sm font-semibold text-white line-clamp-1 mb-1.5 sm:mb-2">
               {memory.title}
             </h4>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   isVideo ? onPlay(memory) : onOpenInfo(memory);
                 }}
-                className="btn-nf-icon bg-white text-black border-white hover:bg-white/80"
+                className="btn-nf-icon bg-white text-black border-white hover:bg-white/80 !w-9 !h-9 sm:!w-10 sm:!h-10"
                 aria-label={isVideo ? 'Play' : 'Read'}
               >
                 {isVideo ? (
@@ -89,7 +110,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                   e.stopPropagation();
                   onToggleWatchlist(memory.id);
                 }}
-                className="btn-nf-icon"
+                className="btn-nf-icon !w-9 !h-9 sm:!w-10 sm:!h-10"
                 aria-label="Add to My List"
               >
                 {memory.isInWatchlist ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -99,7 +120,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                   e.stopPropagation();
                   onOpenInfo(memory);
                 }}
-                className="btn-nf-icon"
+                className="btn-nf-icon !w-9 !h-9 sm:!w-10 sm:!h-10"
                 aria-label="More info"
               >
                 <ChevronDown className="w-4 h-4" />
@@ -108,7 +129,6 @@ export const MovieCard: React.FC<MovieCardProps> = ({
           </div>
         </div>
 
-        {/* Progress bar — 2px, red */}
         {memory.progress !== undefined && (
           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-neutral-700">
             <div className="h-full bg-[#E50914]" style={{ width: `${memory.progress}%` }} />
