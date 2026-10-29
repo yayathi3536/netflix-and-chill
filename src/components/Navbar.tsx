@@ -131,9 +131,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => setActiveTab('home')}
               className={`whitespace-nowrap text-sm transition-colors ${
-                activeTab === 'home'
-                  ? 'text-white font-medium'
-                  : 'text-neutral-300 hover:text-white'
+                activeTab === 'home' ? 'text-white font-medium' : 'text-neutral-300 hover:text-white'
               }`}
             >
               Home
@@ -141,9 +139,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => setActiveTab('our-story')}
               className={`whitespace-nowrap text-sm transition-colors ${
-                activeTab === 'our-story'
-                  ? 'text-white font-medium'
-                  : 'text-neutral-300 hover:text-white'
+                activeTab === 'our-story' ? 'text-white font-medium' : 'text-neutral-300 hover:text-white'
               }`}
             >
               Series
@@ -151,42 +147,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => setActiveTab('memories')}
               className={`whitespace-nowrap text-sm transition-colors ${
-                activeTab === 'memories'
-                  ? 'text-white font-medium'
-                  : 'text-neutral-300 hover:text-white'
+                activeTab === 'memories' ? 'text-white font-medium' : 'text-neutral-300 hover:text-white'
               }`}
             >
               Movies
             </button>
             <button
-              onClick={() => setActiveTab('little-things')}
+              onClick={() => setActiveTab('scrapbook')}
               className={`whitespace-nowrap text-sm transition-colors ${
-                activeTab === 'little-things'
-                  ? 'text-white font-medium'
-                  : 'text-neutral-300 hover:text-white'
+                activeTab === 'scrapbook' ? 'text-white font-medium' : 'text-neutral-300 hover:text-white'
               }`}
             >
-              Quirks
-            </button>
-            <button
-              onClick={() => setActiveTab('places-list')}
-              className={`whitespace-nowrap text-sm transition-colors ${
-                activeTab === 'places-list'
-                  ? 'text-white font-medium'
-                  : 'text-neutral-300 hover:text-white'
-              }`}
-            >
-              My List
+              Scrapbook
             </button>
             <button
               onClick={() => setActiveTab('secret-vault')}
               className={`whitespace-nowrap text-sm transition-colors flex items-center gap-1.5 ${
-                activeTab === 'secret-vault'
-                  ? 'text-white font-medium'
-                  : 'text-neutral-300 hover:text-white'
+                activeTab === 'secret-vault' ? 'text-white font-medium' : 'text-neutral-300 hover:text-white'
               }`}
             >
-              <Lock className="w-3.5 h-3.5 text-neutral-300" />
+              <Lock className="w-3.5 h-3.5" />
               <span>Vault</span>
             </button>
           </nav>
