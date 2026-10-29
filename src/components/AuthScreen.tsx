@@ -240,7 +240,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
 
       {/* Main Centered Netflix Auth Card */}
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-8 sm:py-12">
-        <div className="w-full max-w-[420px] bg-black/70 border border-white/10 rounded-lg shadow-2xl px-6 sm:px-10 py-8 sm:py-10 space-y-5 backdrop-blur-xl">
+        <div className="w-full max-w-[420px] bg-black/70 border border-white/10 rounded-md shadow-2xl px-6 sm:px-10 py-8 sm:py-10 space-y-5 backdrop-blur-xl">
           {/* Card Header */}
           <div className="space-y-2">
             {mode === 'reset' && (
@@ -340,7 +340,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
-                    className="w-full bg-[#161616]/90 border border-[#808080]/60 focus:border-[#FFFFFF] focus:ring-1 focus:ring-[#FFFFFF] rounded-[4px] py-3.5 pl-11 pr-11 text-sm text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-all"
+                    className="w-full bg-neutral-900 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/20 rounded-md py-3 pl-11 pr-11 text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors"
                   />
                   <button
                     type="button"
@@ -356,7 +356,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[var(--nf-red)] hover:bg-[#404040] disabled:opacity-50 text-white font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
+                className="w-full py-3 bg-[#E50914] hover:bg-[#f6121d] disabled:opacity-50 text-white font-semibold text-sm rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer mt-2"
               >
                 {isLoading ? (
                   <>
@@ -453,7 +453,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Create password (6+ characters)"
-                    className="w-full bg-[#161616]/90 border border-[#808080]/60 focus:border-[#FFFFFF] focus:ring-1 focus:ring-[#FFFFFF] rounded-[4px] py-3.5 pl-11 pr-11 text-sm text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-all"
+                    className="w-full bg-neutral-900 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/20 rounded-md py-3 pl-11 pr-11 text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors"
                   />
                   <button
                     type="button"
@@ -569,7 +569,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="New password (6+ characters)"
-                    className="w-full bg-[#161616]/90 border border-[#808080]/60 focus:border-[#FFFFFF] focus:ring-1 focus:ring-[#FFFFFF] rounded-[4px] py-3.5 pl-11 pr-11 text-sm text-[#FFFFFF] placeholder-[#808080] focus:outline-none transition-all"
+                    className="w-full bg-neutral-900 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/20 rounded-md py-3 pl-11 pr-11 text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors"
                   />
                   <button
                     type="button"
