@@ -52,7 +52,6 @@ export const DetailModal: React.FC<DetailModalProps> = ({
 }) => {
   const [expandedEpisodeId, setExpandedEpisodeId] = useState<string | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const [lightboxFit, setLightboxFit] = useState<'contain' | 'cover'>('contain');
 
   const isVideo = memory ? hasValidVideo(memory) : false;
   const isLetter = memory ? isLetterItem(memory) : false;
@@ -94,7 +93,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
     >
       {/* Netflix Modal Card */}
       <div
-        className="relative w-full max-w-[900px] bg-[#181818] sm:rounded-md overflow-hidden shadow-2xl border border-white/5 my-auto text-[#FFFFFF]"
+        className="relative w-full sm:max-w-[900px] bg-[#181818] sm:rounded-md overflow-hidden shadow-2xl border border-white/5 sm:my-8"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -107,15 +106,14 @@ export const DetailModal: React.FC<DetailModalProps> = ({
         </button>
 
         {/* Direct, Full-Clarity Image Display at Top */}
-        <div className="relative aspect-video w-full overflow-hidden bg-black">
+        <div className="relative aspect-[4/5] sm:aspect-video w-full overflow-hidden bg-black">
           <VisualArt
             id={memory.id}
             category={memory.category}
             title={memory.title}
             imageUrl={primaryImageUrl}
-            variant="landscape"
-            focalPosition="top"
-            fit="auto"
+            focal="center 25%"
+            fit="cover"
             fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
             className="w-full h-full cursor-pointer"
             onClick={() => primaryImageUrl && setLightboxIndex(0)}
@@ -155,7 +153,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
             {isVideo && (
               <button
                 onClick={() => onPlay(memory)}
-                className="btn-nf-primary flex items-center gap-2 px-4 sm:px-5 min-h-[40px] text-xs sm:text-sm"
+                className="btn-nf-primary text-sm"
               >
                 <Play className="w-4 h-4 fill-current" />
                 <span>Play</span>
@@ -299,11 +297,10 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                         <VisualArt
                           id={`${memory.id}-photo-${idx}`}
                           category={memory.category}
-                          title={photo.caption || 'Memory Photo'}
+                          title={photo.caption || memory.title}
                           imageUrl={photo.url}
-                          variant="episode"
-                          focalPosition="top"
-                          fit="auto"
+                          focal="center"
+                          fit="cover"
                           fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
                           className="w-full h-full"
                         />
@@ -466,7 +463,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
         >
           {/* Lightbox Header Bar */}
           <div
-            className="flex items-center justify-between gap-3 text-white z-10 w-full"
+            className="flex items-center justify-between gap-3 text-white z-10 w-full pt-[env(safe-area-inset-top)]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="min-w-0 pr-2">
@@ -484,16 +481,6 @@ export const DetailModal: React.FC<DetailModalProps> = ({
               <span className="text-xs text-[#808080] font-mono px-2.5 py-1 bg-white/5 rounded border border-white/10">
                 {lightboxIndex + 1} / {allPhotos.length}
               </span>
-
-              {/* Fit mode toggle: Contain (fit whole image without crop) vs Cover (fill viewport) */}
-              <button
-                type="button"
-                onClick={() => setLightboxFit((f) => (f === 'contain' ? 'cover' : 'contain'))}
-                className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-semibold text-white border border-white/20 transition-colors flex items-center gap-1.5 min-h-[40px] cursor-pointer"
-                title={lightboxFit === 'contain' ? 'Switch to Fill View' : 'Switch to Fit View (Uncropped)'}
-              >
-                <span>{lightboxFit === 'contain' ? 'Fit Screen (100% visible)' : 'Fill Screen'}</span>
-              </button>
 
               {/* Close Lightbox */}
               <button
@@ -515,11 +502,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
             <img
               src={allPhotos[lightboxIndex].url}
               alt={allPhotos[lightboxIndex].caption || memory.title}
-              className={`max-h-[82vh] max-w-[94vw] rounded-md transition-all duration-300 ${
-                lightboxFit === 'contain'
-                  ? 'object-contain max-h-[82vh] max-w-[94vw]'
-                  : 'object-cover w-full h-full'
-              }`}
+              className="max-h-[88vh] max-w-[94vw] object-contain rounded-md"
               style={{ margin: 'auto' }}
             />
 
