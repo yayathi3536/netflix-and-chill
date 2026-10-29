@@ -22,13 +22,9 @@ interface NavMenuProps {
   activeTab: string;
   onSelectTab: (tab: string) => void;
   activeProfile: UserProfile;
-  profiles: UserProfile[];
-  onSelectProfile: (profile: UserProfile) => void;
-  onSwitchProfileScreen?: () => void;
   onSignOut?: () => void;
   currentUser: User | null;
   onOpenAdminModal: () => void;
-  onOpenSetupModal: () => void;
   onToggleAudio: () => void;
   isAudioPlaying: boolean;
 }
