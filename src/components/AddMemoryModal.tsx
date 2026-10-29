@@ -31,6 +31,30 @@ interface AddMemoryModalProps {
   onOpenAdminModal?: () => void;
 }
 
+const resizeImage = async (file: File, maxWidth = 1920): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const ratio = img.height / img.width;
+      const width = Math.min(img.width, maxWidth);
+      const height = Math.round(width * ratio);
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return reject(new Error('No canvas context'));
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        (blob) => (blob ? resolve(blob) : reject(new Error('toBlob failed'))),
+        'image/jpeg',
+        0.85
+      );
+    };
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
+};
+
 export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
   isOpen,
   onClose,
@@ -58,9 +82,6 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
   const [videoUploadError, setVideoUploadError] = useState('');
   const [videoUploadSuccess, setVideoUploadSuccess] = useState('');
-  const [previewPreset, setPreviewPreset] = useState<'16/9' | '3/4' | '1/1' | 'natural'>('16/9');
-  const [previewFit, setPreviewFit] = useState<'cover' | 'contain'>('cover');
-  const [imageMeta, setImageMeta] = useState<{ width: number; height: number; ratioStr: string } | null>(null);
 
   useEffect(() => {
     if (memoryToEdit) {
@@ -153,6 +174,16 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    let uploadFile = file;
+    if (file.type.startsWith('image/') && file.size > 500_000) {
+      try {
+        const resized = await resizeImage(file, 1920);
+        uploadFile = new File([resized], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
+      } catch {
+        uploadFile = file;
+      }
+    }
+
     if (!isAdmin) {
       setUploadError('Unauthorized: Only the verified administrator can upload media.');
       return;
@@ -165,7 +196,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
     // If Supabase is configured, upload directly to Supabase Storage bucket 'memory-photos'
     if (isSupabaseConfigured()) {
       try {
-        const { url, error } = await supabaseService.uploadPhoto(file);
+        const { url, error } = await supabaseService.uploadPhoto(uploadFile);
         if (error) {
           setUploadError(`Upload failed: ${error.message}`);
         } else if (url) {
@@ -189,7 +220,7 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
         setUploadError('Failed to read local file.');
         setIsUploading(false);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(uploadFile);
     }
   };
 
@@ -513,7 +544,6 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
                   type="button"
                   onClick={() => {
                     setImageUrl('');
-                    setImageMeta(null);
                   }}
                   className="w-full sm:w-auto px-3.5 py-3 rounded-lg bg-black/60 hover:bg-neutral-700/20 border border-white/15 text-neutral-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5 shrink-0"
                   title="Remove selected image"
@@ -539,147 +569,18 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
             )}
 
             {imageUrl && (
-              <div className="space-y-2 mt-2 pt-2 border-t border-white/10">
-                <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                  <div className="flex items-center gap-1.5 text-neutral-300">
-                    <span className="font-semibold">Preset Frame:</span>
-                    {imageMeta && (
-                      <span className="text-[10px] text-[#B3B3B3] bg-white/5 px-2 py-0.5 rounded border border-white/10">
-                        {imageMeta.width} &times; {imageMeta.height} ({imageMeta.ratioStr})
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Preset Buttons */}
-                  <div className="flex items-center gap-1 bg-black/60 p-0.5 rounded border border-white/10 text-[11px]">
-                    <button
-                      type="button"
-                      onClick={() => setPreviewPreset('16/9')}
-                      className={`px-2 py-1 rounded transition-colors ${
-                        previewPreset === '16/9'
-                          ? 'bg-white text-black font-semibold'
-                          : 'text-neutral-400 hover:text-white'
-                      }`}
-                      title="16:9 Landscape (Hero & Carousel)"
-                    >
-                      16:9
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPreviewPreset('3/4')}
-                      className={`px-2 py-1 rounded transition-colors ${
-                        previewPreset === '3/4'
-                          ? 'bg-white text-black font-semibold'
-                          : 'text-neutral-400 hover:text-white'
-                      }`}
-                      title="3:4 Portrait (Top 10 Series & Posters)"
-                    >
-                      3:4
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPreviewPreset('1/1')}
-                      className={`px-2 py-1 rounded transition-colors ${
-                        previewPreset === '1/1'
-                          ? 'bg-white text-black font-semibold'
-                          : 'text-neutral-400 hover:text-white'
-                      }`}
-                      title="1:1 Square (Avatar & Thumbnails)"
-                    >
-                      1:1
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPreviewPreset('natural');
-                        setPreviewFit('contain');
-                      }}
-                      className={`px-2 py-1 rounded transition-colors ${
-                        previewPreset === 'natural'
-                          ? 'bg-white text-black font-semibold'
-                          : 'text-neutral-400 hover:text-white'
-                      }`}
-                      title="Natural Uncropped Ratio"
-                    >
-                      Original
-                    </button>
-                  </div>
-                </div>
-
-                {/* Fit Mode Toggle */}
-                <div className="flex items-center justify-between text-[11px] text-neutral-400">
-                  <span>Display Framing:</span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setPreviewFit('cover')}
-                      className={`cursor-pointer ${
-                        previewFit === 'cover' ? 'text-white font-bold underline' : 'hover:text-white'
-                      }`}
-                    >
-                      Fill Frame (Cover)
-                    </button>
-                    <span>&middot;</span>
-                    <button
-                      type="button"
-                      onClick={() => setPreviewFit('contain')}
-                      className={`cursor-pointer ${
-                        previewFit === 'contain' ? 'text-white font-bold underline' : 'hover:text-white'
-                      }`}
-                    >
-                      Fit Whole Photo (Contain)
-                    </button>
-                  </div>
-                </div>
-
-                {/* Preview Frame Box */}
-                <div
-                  className={`relative overflow-hidden rounded-lg border border-white/20 bg-black flex items-center justify-center transition-all duration-200 ${
-                    previewPreset === '16/9'
-                      ? 'aspect-video w-full max-h-52'
-                      : previewPreset === '3/4'
-                      ? 'aspect-[3/4] max-w-[240px] max-h-60 mx-auto'
-                      : previewPreset === '1/1'
-                      ? 'aspect-square max-w-[220px] max-h-56 mx-auto'
-                      : 'max-h-60 w-full'
-                  }`}
-                >
+              <div className="mt-2 pt-2 border-t border-white/10">
+                <div className="relative aspect-video w-full max-h-52 rounded-md overflow-hidden border border-white/10 bg-black">
                   <img
                     src={imageUrl}
                     alt="Preview"
                     referrerPolicy="no-referrer"
-                    onLoad={(e) => {
-                      const img = e.currentTarget;
-                      const w = img.naturalWidth;
-                      const h = img.naturalHeight;
-                      let ratioStr = 'Custom';
-                      const ratio = w / h;
-                      if (Math.abs(ratio - 16 / 9) < 0.08) ratioStr = '16:9 Landscape';
-                      else if (Math.abs(ratio - 4 / 3) < 0.08) ratioStr = '4:3 Standard';
-                      else if (Math.abs(ratio - 3 / 4) < 0.08) ratioStr = '3:4 Portrait';
-                      else if (Math.abs(ratio - 9 / 16) < 0.08) ratioStr = '9:16 Vertical';
-                      else if (Math.abs(ratio - 1) < 0.08) ratioStr = '1:1 Square';
-                      else if (ratio > 1) ratioStr = `${ratio.toFixed(2)}:1 Landscape`;
-                      else ratioStr = `1:${(1 / ratio).toFixed(2)} Portrait`;
-                      setImageMeta({ width: w, height: h, ratioStr });
-                    }}
-                    className={`max-h-full max-w-full ${
-                      previewFit === 'contain' ? 'object-contain' : 'w-full h-full object-cover'
-                    }`}
+                    className="w-full h-full object-cover"
+                    style={{ objectPosition: 'center 25%' }}
                   />
-                  <div className="pointer-events-none absolute bottom-1 right-1 bg-black/75 px-1.5 py-0.5 rounded text-[9px] text-white/70">
-                    {previewPreset === '16/9'
-                      ? '16:9 Landscape Card'
-                      : previewPreset === '3/4'
-                      ? '3:4 Portrait Poster'
-                      : previewPreset === '1/1'
-                      ? '1:1 Square Card'
-                      : 'Full Uncropped'}
-                  </div>
                 </div>
-
-                <p className="text-[10px] text-neutral-400 text-center">
-                  Original image file is uploaded and preserved intact without downscaling or loss.
+                <p className="text-[10px] text-neutral-500 text-center mt-1.5">
+                  Cropped to 16:9 · Netflix card format
                 </p>
               </div>
             )}
