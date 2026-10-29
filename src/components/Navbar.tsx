@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Search,
+  Menu,
   Bell,
   Plus,
   Music,
@@ -17,6 +18,7 @@ import {
 import { UserProfile, NotificationItem } from '../types';
 import { User } from '@supabase/supabase-js';
 import { getProfileAvatarUrl } from '../data/builtInAvatars';
+import { MobileMenu } from './MobileMenu';
 
 interface NavbarProps {
   activeTab: string;
@@ -54,6 +56,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSetupModal,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -105,6 +108,14 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
         {/* ZONE 1: NETFLIX-STYLE BRAND LOGO */}
         <div className="flex items-center gap-4 lg:gap-8 shrink-0">
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="md:hidden w-10 h-10 flex items-center justify-center text-white hover:bg-white/10 rounded-md"
+            aria-label="Open menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            <Menu className="w-5 h-5" />
+          </button>
           <button
             onClick={() => setActiveTab('home')}
             className="flex items-center gap-2 group text-left cursor-pointer transition-transform duration-200 active:scale-95 min-h-[44px]"
@@ -398,26 +409,23 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Navigation Strip */}
-      <div className="md:hidden flex items-center gap-1 px-3 py-2 border-t border-white/10 text-xs font-medium overflow-x-auto no-scrollbar bg-black">
-        {[
-          { id: 'home', label: 'Home' },
-          { id: 'our-story', label: 'Series' },
-          { id: 'memories', label: 'Movies' },
-          { id: 'scrapbook', label: 'Scrapbook' },
-          { id: 'secret-vault', label: 'Vault' },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`py-2 px-3 rounded whitespace-nowrap shrink-0 transition-colors ${
-              activeTab === tab.id ? 'text-white bg-white/10' : 'text-neutral-400 hover:text-white'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        activeProfile={activeProfile}
+        profiles={profiles}
+        onSelectProfile={onSelectProfile}
+        onSwitchProfileScreen={onSwitchProfileScreen}
+        onSignOut={onSignOut}
+        currentUser={currentUser}
+        onOpenAdminModal={onOpenAdminModal}
+        onOpenSetupModal={onOpenSetupModal}
+        onToggleAudio={toggleAudio}
+        isAudioPlaying={isAudioPlaying}
+      />
+
     </header>
   );
 };
