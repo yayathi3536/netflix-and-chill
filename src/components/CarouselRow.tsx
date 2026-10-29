@@ -90,12 +90,12 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
         <div
           ref={rowRef}
           onScroll={handleScroll}
-          className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth py-3 px-4 sm:px-6 lg:px-[4%]"
+          className="flex items-center gap-1.5 sm:gap-2 md:gap-3 overflow-x-auto no-scrollbar scroll-smooth py-3 px-4 sm:px-6 lg:px-[4%] snap-x snap-mandatory"
         >
           {items.map((item, index) => (
             <div
               key={item.id}
-              className={isPortrait ? 'relative flex items-center shrink-0 group/top-ten' : 'contents'}
+              className={isPortrait ? 'relative flex items-center shrink-0 snap-start group/top-ten' : 'contents'}
             >
               {isPortrait && (
                 <span
