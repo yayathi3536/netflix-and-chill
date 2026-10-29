@@ -2,6 +2,7 @@ import React from 'react';
 import { Play } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
+import { useDominantColor } from '../hooks/useDominantColor';
 import { hasValidVideo, isVideoUrl } from '../utils/mediaHelpers';
 
 interface HeroBannerProps {
@@ -40,6 +41,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
     memory.synopsis ||
     "From an unexpected first conversation to building our whole universe together. A cinematic journey of late-night laughter, spontaneous road trips, and finding home in each other's arms.";
   const displayBackdrop = customBackdropUrl || memory.backdropUrl;
+  const dominantColor = useDominantColor(displayBackdrop);
   const displayBadge = customBadge || '#1 in Our Hearts Today';
   const displaySeriesTag = customSeriesTag || 'SERIES';
   const hasHeroVideo = hasValidVideo(memory) || isVideoUrl(customBackdropUrl);
@@ -62,6 +64,17 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           fetchPriority="high"
         />
       </div>
+
+      {/* Subtle ambient glow sampled from the hero artwork */}
+      {dominantColor && (
+        <div
+          className="absolute inset-0 pointer-events-none opacity-20 mix-blend-screen"
+          style={{
+            background: `radial-gradient(ellipse at 30% 60%, ${dominantColor}, transparent 70%)`,
+          }}
+          aria-hidden="true"
+        />
+      )}
 
       {/* Strict Netflix Black Gradient Overlays */}
       <div className="absolute inset-0 hero-netflix-overlay" />
