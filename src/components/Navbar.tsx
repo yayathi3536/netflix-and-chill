@@ -18,7 +18,7 @@ import {
 import { UserProfile, NotificationItem } from '../types';
 import { User } from '@supabase/supabase-js';
 import { getProfileAvatarUrl } from '../data/builtInAvatars';
-import { MobileMenu } from './MobileMenu';
+import { NavMenu } from './NavMenu';
 
 interface NavbarProps {
   activeTab: string;
@@ -389,7 +389,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      <MobileMenu
+      <NavMenu
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
         activeTab={activeTab}
