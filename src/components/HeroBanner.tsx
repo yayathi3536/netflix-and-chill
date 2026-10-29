@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Play, Info, Volume2, VolumeX } from 'lucide-react';
+import React from 'react';
+import { Play } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
 import { hasValidVideo, isVideoUrl } from '../utils/mediaHelpers';
@@ -26,8 +26,6 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   memory,
   onPlay,
   onOpenInfo,
-  isAudioPlaying,
-  onToggleAudio,
   customTitle,
   customSubtitle,
   customSynopsis,
@@ -35,119 +33,87 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   customBadge,
   customSeriesTag,
 }) => {
-  const displayTitle = customTitle || 'OUR UNIVERSE';
-  const displaySubtitle = customSubtitle || memory.subtitle || 'Season 1 · Chapter Infinity';
+  const displayTitle = customTitle || "OUR UNIVERSE";
+  const displaySubtitle = customSubtitle || memory.subtitle || "Season 1 · Chapter Infinity";
   const displaySynopsis =
     customSynopsis ||
     memory.synopsis ||
-    'A cinematic journey through our favorite memories, little moments, and the story we keep creating together.';
+    "From an unexpected first conversation to building our whole universe together. A cinematic journey of late-night laughter, spontaneous road trips, and finding home in each other's arms.";
   const displayBackdrop = customBackdropUrl || memory.backdropUrl;
-  const displayBadge = customBadge || 'A STORY MADE FOR US';
+  const displayBadge = customBadge || '#1 in Our Hearts Today';
   const displaySeriesTag = customSeriesTag || 'SERIES';
   const hasHeroVideo = hasValidVideo(memory) || isVideoUrl(customBackdropUrl);
-  const heroMemoryToPlay =
-    customBackdropUrl && isVideoUrl(customBackdropUrl)
-      ? { ...memory, videoUrl: customBackdropUrl }
-      : memory;
-
-  useEffect(() => {
-    if (!displayBackdrop || isVideoUrl(displayBackdrop)) return;
-
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = displayBackdrop;
-    document.head.appendChild(link);
-
-    return () => {
-      if (link.parentNode) link.parentNode.removeChild(link);
-    };
-  }, [displayBackdrop]);
+  const heroMemoryToPlay = customBackdropUrl && isVideoUrl(customBackdropUrl)
+    ? { ...memory, videoUrl: customBackdropUrl }
+    : memory;
 
   return (
-    <div className="relative w-full h-[55vh] sm:h-[70vh] min-h-[380px] sm:min-h-[500px] max-h-[800px] overflow-hidden select-none bg-black">
-      <div className="absolute inset-0 w-full h-full overflow-hidden animate-ken-burns">
+    <div className="relative w-full h-[70vh] min-h-[500px] max-h-[800px] overflow-hidden select-none bg-[#000000]">
+      {/* Background Media with subtle Ken Burns cinematic movement */}
+      <div className="absolute inset-0 w-full h-full animate-ken-burns">
         <VisualArt
           id={memory.id}
           category={memory.category}
           title={displayTitle}
           imageUrl={displayBackdrop}
-          focal="center 30%"
-          focalPosition="center"
-          fit="cover"
           fallbackGradient="from-[#141414] via-[#000000] to-[#000000]"
-          className="w-full h-full"
+          className="w-full h-full object-cover scale-105"
           loading="eager"
           fetchPriority="high"
         />
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+      {/* Strict Netflix Black Gradient Overlays */}
+      <div className="absolute inset-0 hero-netflix-overlay" />
+      <div className="absolute inset-0 hero-netflix-scrim" />
 
-      <div className="relative z-10 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-8 sm:pb-16 lg:pb-24">
-        <div className="max-w-2xl space-y-2 sm:space-y-4">
-          <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-bold text-white flex-wrap">
-            <span className="bg-[#E50914] px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wider">
+      {/* Hero Content Container */}
+      <div className="relative z-10 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-8 sm:pb-12 lg:pb-16">
+        <div className="max-w-2xl space-y-3 sm:space-y-4">
+          {/* Top Series & Milestone Badge */}
+          <div className="inline-flex items-center gap-2 text-xs font-bold tracking-wider text-[#FFFFFF] flex-wrap">
+            <span className="bg-[#E50914] text-[#FFFFFF] font-black px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] uppercase tracking-widest">
               {displaySeriesTag}
             </span>
-            <span className="text-neutral-400">·</span>
-            <span className="text-neutral-300 uppercase text-[10px]">
+            <span className="text-[#808080]">·</span>
+            <span className="uppercase text-[10px] sm:text-[11px] text-[#B3B3B3] font-semibold">
               {displayBadge}
             </span>
-            <span className="text-neutral-400 hidden sm:inline">·</span>
-            <span className="text-neutral-300 text-[10px] hidden sm:inline">
+            <span className="text-[#808080] hidden sm:inline">·</span>
+            <span className="text-[#B3B3B3] font-normal text-xs hidden sm:inline">
               {displaySubtitle}
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl">
+          {/* Cinematic Title */}
+          <h1 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#FFFFFF] font-bold leading-tight drop-shadow-2xl break-words line-clamp-2">
             {displayTitle}
           </h1>
 
-          <div className="flex items-center gap-2 text-xs text-neutral-300">
-            <span className="font-semibold text-white">{memory.matchScore || 99}% Match</span>
-            {memory.year != null && (
-              <>
-                <span>·</span>
-                <span>{memory.year}</span>
-              </>
-            )}
+          {/* Clean Netflix Metadata */}
+          <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-300">
+            <span className="font-semibold text-white">{memory.matchScore}% Match</span>
+            <span>·</span>
+            <span>{memory.year}</span>
           </div>
 
-          <p className="text-sm sm:text-base text-neutral-300 leading-relaxed line-clamp-2 sm:line-clamp-3 max-w-xl">
+          {/* Readable Description */}
+          <p className="text-xs sm:text-sm md:text-base text-[#B3B3B3] leading-relaxed font-normal line-clamp-2 max-w-xl text-balance drop-shadow-md">
             {displaySynopsis}
           </p>
 
-          <div className="flex items-center gap-2 pt-2">
+          {/* Netflix hero action */}
+          <div className="flex flex-wrap items-center gap-3 pt-2">
             <button
-              type="button"
-              onClick={() => (hasHeroVideo ? onPlay(heroMemoryToPlay) : onOpenInfo(memory))}
-              className="btn-nf-primary flex-1 sm:flex-none text-sm sm:text-base"
+              onClick={() => hasHeroVideo ? onPlay(heroMemoryToPlay) : onOpenInfo(memory)}
+              className="btn-nf-primary text-base"
             >
               <Play className="w-5 h-5 fill-black" />
               <span>{hasHeroVideo ? 'Play' : 'Read Story'}</span>
             </button>
-            <button
-              type="button"
-              onClick={() => onOpenInfo(memory)}
-              className="btn-nf-secondary flex-1 sm:flex-none text-sm sm:text-base"
-            >
-              <Info className="w-5 h-5" />
-              <span>More Info</span>
-            </button>
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={onToggleAudio}
-          className="hidden sm:flex absolute right-4 sm:right-8 bottom-16 sm:bottom-24 w-10 h-10 rounded-full border border-white/40 bg-black/60 text-white items-center justify-center hover:bg-black/80 transition-colors"
-          aria-label="Toggle soundtrack"
-          aria-pressed={isAudioPlaying}
-        >
-          {isAudioPlaying ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-        </button>
       </div>
     </div>
   );

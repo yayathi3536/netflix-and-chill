@@ -10,13 +10,10 @@ import {
   AlertCircle,
   Loader2,
   Play,
-  Calendar,
   Lock,
   Mail,
   Edit3,
   SlidersHorizontal,
-  LayoutGrid,
-  List,
 } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
@@ -46,7 +43,6 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
   // Local working copy of stories
   const [items, setItems] = useState<MemoryItem[]>(stories);
   const [isReorderMode, setIsReorderMode] = useState(false);
-  const [viewMode, setViewMode] = useState<'posters' | 'episodes'>('posters');
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
@@ -193,35 +189,6 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
 
         {/* Storyline Controls */}
         <div className="flex flex-wrap items-center gap-2.5">
-          {/* View Mode Switcher: Netflix Posters (Homepage Style) vs Episode Details */}
-          <div className="flex items-center bg-[#141414] p-1 rounded-lg border border-white/10 min-h-[44px]">
-            <button
-              type="button"
-              onClick={() => setViewMode('posters')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all cursor-pointer min-h-[34px] ${
-                viewMode === 'posters'
-                  ? 'bg-white text-black shadow-md'
-                  : 'text-[#B3B3B3] hover:text-white hover:bg-white/5'
-              }`}
-              title="View as Netflix Poster Cards (Homepage Storyline reference)"
-            >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              <span>Posters</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('episodes')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all cursor-pointer min-h-[34px] ${
-                viewMode === 'episodes'
-                  ? 'bg-white text-black shadow-md'
-                  : 'text-[#B3B3B3] hover:text-white hover:bg-white/5'
-              }`}
-              title="View as Episode Cards with full synopsis"
-            >
-              <List className="w-3.5 h-3.5" />
-              <span>Episodes</span>
-            </button>
-          </div>
 
           <button
             type="button"
@@ -320,10 +287,8 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
         </div>
       )}
 
-      {/* Chapters Grid / List with Drag & Drop */}
-      {viewMode === 'posters' ? (
-        /* POSTER CARDS VIEW (Homepage Storyline reference style with complete portrait visibility) */
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+      {/* Chapters Grid: Netflix Posters View (Homepage Storyline reference style with complete portrait visibility) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
           {items.map((ch, idx) => {
             const isDragging = draggedIndex === idx;
             const isOver = dragOverIndex === idx && draggedIndex !== idx;
@@ -494,198 +459,6 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
             );
           })}
         </div>
-      ) : (
-        /* EPISODE DETAILS VIEW (Wide Cards with full synopsis and ambient photo backdrop) */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((ch, idx) => {
-            const isDragging = draggedIndex === idx;
-            const isOver = dragOverIndex === idx && draggedIndex !== idx;
-            const isVideo = hasValidVideo(ch);
-            const isLetter = isLetterItem(ch);
-
-            return (
-              <div
-                key={ch.id}
-                draggable={isReorderMode}
-                onDragStart={(e) => handleDragStart(e, idx)}
-                onDragOver={(e) => handleDragOver(e, idx)}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, idx)}
-                onDragEnd={handleDragEnd}
-                onClick={() => {
-                  if (!isReorderMode) {
-                    onSelectStory(ch);
-                  }
-                }}
-                className={`relative bg-[#141414] rounded-lg overflow-hidden border transition-all duration-200 flex flex-col justify-between shadow-xl ${
-                  isDragging
-                    ? 'opacity-40 scale-[0.98] border-2 border-[#808080] shadow-[0_0_30px_rgba(229,9,20,0.5)] cursor-grabbing z-30'
-                    : isOver
-                    ? 'border-2 border-[#808080] scale-[1.02] shadow-[0_0_25px_rgba(229,9,20,0.4)] z-20'
-                    : 'border-[#181818] hover:border-[#808080]/60'
-                } ${isReorderMode ? 'cursor-grab select-none' : 'cursor-pointer hover:scale-[1.02]'}`}
-              >
-                {/* Drop Target Top Indicator */}
-                {isOver && (
-                  <div
-                    className="absolute inset-x-0 top-0 h-1.5 bg-[#808080] z-40 rounded-t shadow-[0_0_12px_#808080] animate-pulse"
-                    aria-hidden="true"
-                  />
-                )}
-
-                {/* Media Area — Preserves Complete Original Photo in 16:9 Cinematic Video Frame with ambient backdrop */}
-                <div className="relative aspect-video w-full overflow-hidden bg-[#000000]">
-                  {/* Episode Badge (Reflects live reordered index!) */}
-                  <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5">
-                    <span className="font-bebas text-xs px-2.5 py-1 rounded bg-[#808080] text-[#FFFFFF] font-black uppercase tracking-wider shadow">
-                      Episode {idx + 1}
-                    </span>
-                    {ch.isSecret && (
-                      <span className="p-1 rounded bg-black/70 text-white border border-white/20 shadow">
-                        <Lock className="w-3 h-3 text-[#808080]" />
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Drag Handle & Reorder Arrow Controls (Top Right) */}
-                  {isReorderMode && (
-                    <div
-                      className="absolute top-2.5 right-2.5 z-30 flex items-center gap-1 bg-[#000000]/90 backdrop-blur-sm p-1 rounded-lg border border-[#808080]/40 shadow-xl"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <button
-                        type="button"
-                        disabled={idx === 0}
-                        onClick={(e) => handleMoveUp(e, idx)}
-                        className="w-8 h-8 rounded flex items-center justify-center text-white hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-transparent transition-colors cursor-pointer min-h-[32px] min-w-[32px]"
-                        title="Move this chapter earlier in the storyline"
-                        aria-label="Move episode earlier"
-                      >
-                        <ChevronUp className="w-4 h-4 stroke-[2.5]" />
-                      </button>
-
-                      <button
-                        type="button"
-                        disabled={idx === items.length - 1}
-                        onClick={(e) => handleMoveDown(e, idx)}
-                        className="w-8 h-8 rounded flex items-center justify-center text-white hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-transparent transition-colors cursor-pointer min-h-[32px] min-w-[32px]"
-                        title="Move this chapter later in the storyline"
-                        aria-label="Move episode later"
-                      >
-                        <ChevronDown className="w-4 h-4 stroke-[2.5]" />
-                      </button>
-
-                      <div
-                        className="w-8 h-8 flex items-center justify-center text-red-500 hover:text-white cursor-grab active:cursor-grabbing border-l border-white/10 pl-1"
-                        title="Drag to reorder"
-                      >
-                        <GripVertical className="w-4 h-4" />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Admin Quick Edit Button when not reordering */}
-                  {!isReorderMode && isAdmin && onEditStory && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onEditStory(ch);
-                      }}
-                      className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-[#808080] text-white border border-white/30 flex items-center justify-center transition-colors shadow cursor-pointer"
-                      title="Edit chapter content & artwork"
-                    >
-                      <Edit3 className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-
-                  {/* Cover Image using variant="episode" and focalPosition="center" */}
-                  <VisualArt
-                    id={ch.id}
-                    category={ch.category}
-                    title={ch.title}
-                    imageUrl={getMemoryImageUrl(ch, 'landscape')}
-                    focalPosition="center"
-                    fit="auto"
-                    fallbackGradient="from-[#141414] via-[#181818] to-[#000000]"
-                    className="w-full h-full"
-                  />
-                </div>
-
-                {/* Story Details Card Body */}
-                <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between text-xs text-[#808080] font-medium">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3 text-[#808080]" />
-                        <span>{ch.date}</span>
-                      </span>
-                      <span className="text-[#FFFFFF] font-bold">{ch.matchScore}% Match</span>
-                    </div>
-
-                    <h3 className="font-bebas text-xl text-[#FFFFFF] font-bold leading-tight uppercase tracking-wide">
-                      {ch.title}
-                    </h3>
-
-                    {ch.subtitle && (
-                      <p className="text-[11px] text-[#B3B3B3] font-medium line-clamp-1">
-                        {ch.subtitle}
-                      </p>
-                    )}
-
-                    <p className="text-xs text-[#B3B3B3] line-clamp-3 leading-relaxed pt-1">
-                      {ch.synopsis}
-                    </p>
-                  </div>
-
-                  {/* Quick Action Footers */}
-                  <div className="pt-3 border-t border-[#181818] flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      {isVideo && (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onPlayStory(ch);
-                          }}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white text-black font-bold text-xs hover:bg-[#B3B3B3] transition-colors cursor-pointer min-h-[36px]"
-                        >
-                          <Play className="w-3 h-3 fill-black" />
-                          <span>Play</span>
-                        </button>
-                      )}
-
-                      {isLetter && onUnlockVault && (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onUnlockVault(ch);
-                          }}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white text-black font-semibold text-xs hover:bg-white/80 transition-colors cursor-pointer min-h-[36px]"
-                        >
-                          <Mail className="w-3 h-3" />
-                          <span>Read</span>
-                        </button>
-                      )}
-
-                      <span className="text-[10px] text-[#808080] uppercase tracking-wider font-semibold">
-                        {ch.duration}
-                      </span>
-                    </div>
-
-                    {isReorderMode && (
-                      <span className="text-[10px] text-neutral-400 font-mono">
-                        #{idx + 1} of {items.length}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
     </div>
   );
 };
