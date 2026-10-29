@@ -79,7 +79,8 @@ export const VisualArt: React.FC<VisualArtProps> = ({
       effectiveFit = detectedRatio !== null && detectedRatio < 1.55 ? 'contain' : 'cover';
     }
   } else if (fit === 'auto') {
-    effectiveFit = detectedRatio !== null && detectedRatio < 1.2 ? 'contain' : 'cover';
+    // Fill card frames edge-to-edge; never letterbox photos with blurred side bars.
+    effectiveFit = 'cover';
   }
 
   const fitClass =
@@ -162,23 +163,6 @@ export const VisualArt: React.FC<VisualArtProps> = ({
         className={`absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center ${ratioClass}`}
         onClick={onClick}
       >
-        {/* Ambient blurred backdrop when photo is contained to eliminate narrow empty side voids */}
-        {isContained && (
-          <div className="absolute inset-0 overflow-hidden pointer-events-none select-none z-0">
-            <img
-              src={imageUrl}
-              alt=""
-              aria-hidden="true"
-              referrerPolicy="no-referrer"
-              loading="lazy"
-              className="w-full h-full object-cover blur-2xl scale-125 opacity-40 brightness-75 select-none"
-            />
-            {/* Soft Netflix subtle vignette */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-[#000000]/60" />
-            <div className="absolute inset-0 bg-[#000000]/30" />
-          </div>
-        )}
-
         <img
           ref={imgRef}
           src={imageUrl}
@@ -189,11 +173,7 @@ export const VisualArt: React.FC<VisualArtProps> = ({
           onError={() => setImageFailed(true)}
           onLoad={handleImageLoad}
           style={focalStyle}
-          className={`${fitClass} ${positionClass} ${
-            isContained
-              ? 'relative z-10 max-h-full max-w-full w-auto h-auto drop-shadow-[0_8px_24px_rgba(0,0,0,0.85)]'
-              : cleanClassName
-          }`.trim()}
+          className={`${fitClass} ${positionClass} ${cleanClassName}`.trim()}
         />
       </div>
     );
