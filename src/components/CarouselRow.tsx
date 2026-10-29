@@ -8,6 +8,7 @@ interface CarouselRowProps {
   title: string;
   subtitle?: string;
   items: MemoryItem[];
+  isLoading?: boolean;
   isPortrait?: boolean;
   onPlay: (memory: MemoryItem) => void;
   onOpenInfo: (memory: MemoryItem) => void;
@@ -21,6 +22,7 @@ interface CarouselRowProps {
 export const CarouselRow: React.FC<CarouselRowProps> = ({
   title,
   items,
+  isLoading = false,
   isPortrait = false,
   onPlay,
   onOpenInfo,
@@ -51,6 +53,24 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
       });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="relative group/row my-6 sm:my-8 lg:my-10" aria-busy="true" aria-label={`Loading ${title}`}>
+        <div className="px-4 sm:px-6 lg:px-[4%] mb-2 sm:mb-3">
+          <div className="h-5 w-40 bg-neutral-800 rounded skeleton-shimmer" />
+        </div>
+        <div className="flex gap-1.5 sm:gap-2 md:gap-3 overflow-x-auto no-scrollbar py-3 px-4 sm:px-6 lg:px-[4%]">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div
+              key={i}
+              className="shrink-0 w-[44vw] sm:w-60 md:w-72 lg:w-80 aspect-video rounded-[4px] skeleton-shimmer"
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   if (!items || items.length === 0) return null;
 
