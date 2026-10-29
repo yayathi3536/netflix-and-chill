@@ -50,7 +50,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
     : memory;
 
   return (
-    <div className="relative w-full h-[70vh] min-h-[500px] max-h-[800px] overflow-hidden select-none bg-[#000000]">
+    <div className="relative w-full h-[55vh] min-h-[380px] max-h-[800px] overflow-hidden select-none bg-[#000000] sm:h-[70vh] sm:min-h-[500px]">
       {/* Background Media with subtle Ken Burns cinematic movement */}
       <div className="absolute inset-0 w-full h-full animate-ken-burns">
         <VisualArt
@@ -115,14 +115,20 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             {displaySynopsis}
           </p>
 
-          {/* Netflix hero action */}
-          <div className="flex flex-wrap items-center gap-3 pt-2">
+          {/* Equal-width mobile actions; compact auto-width buttons on desktop */}
+          <div className="flex w-full flex-row items-center gap-3 pt-2 sm:w-auto">
             <button
               onClick={() => hasHeroVideo ? onPlay(heroMemoryToPlay) : onOpenInfo(memory)}
-              className="btn-nf-primary text-base"
+              className="btn-nf-primary text-base w-1/2 flex-1 sm:w-auto sm:flex-none"
             >
               <Play className="w-5 h-5 fill-black" />
               <span>{hasHeroVideo ? 'Play' : 'Read Story'}</span>
+            </button>
+            <button
+              onClick={() => onOpenInfo(memory)}
+              className="btn-nf-secondary text-base w-1/2 flex-1 sm:w-auto sm:flex-none"
+            >
+              <span>More Info</span>
             </button>
           </div>
         </div>
