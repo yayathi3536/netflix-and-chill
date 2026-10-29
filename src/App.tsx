@@ -751,8 +751,9 @@ export default function App() {
                 {/* CONTENT ROWS SECTION */}
                 <div className="relative z-20 space-y-2">
                   {/* ROW 1: CONTINUE WATCHING: OUR MEMORIES */}
-                  {continueWatchingItems.length > 0 && (
+                  {(isLoadingData || continueWatchingItems.length > 0) && (
                     <CarouselRow
+                      isLoading={isLoadingData}
                       title={siteContent.section_continue_title || "Our Favorite Moments"}
                       subtitle={siteContent.section_continue_sub || "Pick up right where we left off"}
                       items={continueWatchingItems}
@@ -770,8 +771,9 @@ export default function App() {
                   )}
 
                   {/* ROW 2: ORIGINAL SERIES: OUR STORY (TOP 10 PORTRAITS) */}
-                  {ourStorySeries.length > 0 && (
+                  {(isLoadingData || ourStorySeries.length > 0) && (
                     <CarouselRow
+                      isLoading={isLoadingData}
                       title={siteContent.section_our_story_title || "Episodes of Us"}
                       subtitle={siteContent.section_our_story_sub || "Top 10 Relationship Chapters of All Time"}
                       items={ourStorySeries}
@@ -811,8 +813,9 @@ export default function App() {
                   />
 
                   {/* ROW 4: COLLECTION: LITTLE THINGS I LOVE ABOUT YOU */}
-                  {littleThingsCollection.length > 0 && (
+                  {(isLoadingData || littleThingsCollection.length > 0) && (
                     <CarouselRow
+                      isLoading={isLoadingData}
                       title={siteContent.section_little_things_title || "Little Things I Love About You"}
                       subtitle={siteContent.section_little_things_sub || "Micro-moments that steal my heart every single day"}
                       items={littleThingsCollection}
@@ -830,8 +833,9 @@ export default function App() {
                   )}
 
                   {/* ROW 5: MY LIST: PLACES & EXPERIENCES TOGETHER */}
-                  {placesListItems.length > 0 && (
+                  {(isLoadingData || placesListItems.length > 0) && (
                     <CarouselRow
+                      isLoading={isLoadingData}
                       title={siteContent.section_places_title || "Memories Worth Rewatching: Places & Adventures"}
                       subtitle={siteContent.section_places_sub || "Our travel passport & dream bucket list"}
                       items={placesListItems}
@@ -849,8 +853,9 @@ export default function App() {
                   )}
 
                   {/* ROW 6: HIDDEN EPISODES: PERSONAL SURPRISES & LETTERS */}
-                  {secretVaultItems.length > 0 && (
+                  {(isLoadingData || secretVaultItems.length > 0) && (
                     <CarouselRow
+                      isLoading={isLoadingData}
                       title={siteContent.section_vault_title || "Hidden Episodes: Secret Vault & Letters"}
                       subtitle={siteContent.section_vault_sub || "Locked confidential notes for your eyes only"}
                       items={secretVaultItems}
