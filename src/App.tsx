@@ -36,7 +36,6 @@ import { AdminModeBar } from './components/AdminModeBar';
 import { AdminStudioModal } from './components/AdminStudioModal';
 import { MovieCard } from './components/MovieCard';
 import { MusicPlayer } from './components/MusicPlayer';
-import { ScrapbookView } from './components/ScrapbookView';
 import { SoundtrackRow } from './components/SoundtrackRow';
 import { SurpriseModal } from './components/SurpriseModal';
 import { ConstellationSection } from './components/ConstellationSection';
@@ -173,7 +172,7 @@ export default function App() {
         setIsAdminModalOpen(true);
         return;
       }
-      const validTabs = ['home', 'our-story', 'memories', 'scrapbook', 'little-things', 'places-list', 'secret-vault'];
+      const validTabs = ['home', 'our-story', 'memories', 'little-things', 'places-list', 'secret-vault'];
       if (validTabs.includes(hash)) {
         setActiveTab(hash);
       }
@@ -697,7 +696,7 @@ export default function App() {
                     onPlay={(m) => handlePlayMemory(m)}
                     onOpenInfo={(m) => handleOpenItem(m)}
                     onToggleWatchlist={handleToggleWatchlist}
-                    onExploreMemories={() => handleTabChange('scrapbook')}
+                    onExploreMemories={() => handleTabChange('memories')}
                     isAudioPlaying={isAudioPlaying}
                     onToggleAudio={toggleAudio}
                     isAdmin={isAdmin}
@@ -866,20 +865,6 @@ export default function App() {
                     ))}
                 </div>
               </div>
-            )}
-
-            {/* TAB: SCRAPBOOK (Digital Memory Book) */}
-            {activeTab === 'scrapbook' && (
-              <ScrapbookView
-                memories={memories}
-                onPlayMemory={(m) => handlePlayMemory(m)}
-                onOpenInfo={(m) => handleOpenItem(m)}
-                onToggleWatchlist={handleToggleWatchlist}
-                onToggleFavorite={handleToggleFavorite}
-                onOpenAddModal={isAdmin ? () => setIsAddModalOpen(true) : undefined}
-                isAdmin={isAdmin}
-                onEditMemory={isAdmin ? handleOpenEditMemoryModal : undefined}
-              />
             )}
 
             {/* TAB: LITTLE THINGS I LOVE ABOUT YOU */}

@@ -150,16 +150,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               Movies
             </button>
             <button
-              onClick={() => setActiveTab('scrapbook')}
-              className={`whitespace-nowrap text-sm transition-colors ${
-                activeTab === 'scrapbook'
-                  ? 'text-white font-medium'
-                  : 'text-neutral-300 hover:text-white'
-              }`}
-            >
-              Scrapbook
-            </button>
-            <button
               onClick={() => setActiveTab('little-things')}
               className={`whitespace-nowrap text-sm transition-colors ${
                 activeTab === 'little-things'
@@ -416,7 +406,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           { id: 'home', label: 'Home' },
           { id: 'our-story', label: 'Series' },
           { id: 'memories', label: 'Movies' },
-          { id: 'scrapbook', label: 'Scrapbook' },
+          { id: 'little-things', label: 'Quirks' },
+          { id: 'places-list', label: 'My List' },
           { id: 'secret-vault', label: 'Vault' },
         ].map((tab) => (
           <button

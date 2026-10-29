@@ -14,6 +14,7 @@ import {
   Calendar,
   Users,
   Video,
+  X,
 } from 'lucide-react';
 import { SiteContentMap, SiteContentSection } from '../types';
 import { storageService } from '../services/storage';
