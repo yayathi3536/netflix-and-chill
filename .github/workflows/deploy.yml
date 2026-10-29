@@ -1,9 +1,6 @@
 name: Deploy Our Universe to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 # Keep one Pages deployment active at a time. Do not cancel a deployment
