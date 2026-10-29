@@ -7,10 +7,8 @@ import {
   Music,
   X,
   ChevronDown,
-  Lock,
   Shield,
   Database,
-  Film,
   Users,
   LogOut,
   Sparkles,
@@ -56,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSetupModal,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -109,10 +107,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* ZONE 1: NETFLIX-STYLE BRAND LOGO */}
         <div className="flex items-center gap-4 lg:gap-8 shrink-0">
           <button
-            onClick={() => setIsMobileMenuOpen(true)}
-            className="md:hidden w-10 h-10 flex items-center justify-center text-white hover:bg-white/10 rounded-md"
+            onClick={() => setIsMenuOpen(true)}
+            className="w-10 h-10 flex items-center justify-center text-white hover:bg-white/10 rounded-md shrink-0"
             aria-label="Open menu"
-            aria-expanded={isMobileMenuOpen}
+            aria-expanded={isMenuOpen}
           >
             <Menu className="w-5 h-5" />
           </button>
@@ -126,50 +124,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
           </button>
 
-          {/* ZONE 2: NETFLIX SINGLE-LINE NAV LINKS */}
-          <nav className="hidden md:flex items-center gap-4 lg:gap-6 text-sm font-medium">
-            <button
-              onClick={() => setActiveTab('home')}
-              className={`whitespace-nowrap text-sm transition-colors ${
-                activeTab === 'home' ? 'text-white font-medium' : 'text-neutral-300 hover:text-white'
-              }`}
-            >
-              Home
-            </button>
-            <button
-              onClick={() => setActiveTab('our-story')}
-              className={`whitespace-nowrap text-sm transition-colors ${
-                activeTab === 'our-story' ? 'text-white font-medium' : 'text-neutral-300 hover:text-white'
-              }`}
-            >
-              Series
-            </button>
-            <button
-              onClick={() => setActiveTab('memories')}
-              className={`whitespace-nowrap text-sm transition-colors ${
-                activeTab === 'memories' ? 'text-white font-medium' : 'text-neutral-300 hover:text-white'
-              }`}
-            >
-              Movies
-            </button>
-            <button
-              onClick={() => setActiveTab('scrapbook')}
-              className={`whitespace-nowrap text-sm transition-colors ${
-                activeTab === 'scrapbook' ? 'text-white font-medium' : 'text-neutral-300 hover:text-white'
-              }`}
-            >
-              Scrapbook
-            </button>
-            <button
-              onClick={() => setActiveTab('secret-vault')}
-              className={`whitespace-nowrap text-sm transition-colors flex items-center gap-1.5 ${
-                activeTab === 'secret-vault' ? 'text-white font-medium' : 'text-neutral-300 hover:text-white'
-              }`}
-            >
-              <Lock className="w-3.5 h-3.5" />
-              <span>Vault</span>
-            </button>
-          </nav>
         </div>
 
         {/* ZONE 3: ACTIONS & UTILITIES */}
@@ -390,18 +344,17 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       <NavMenu
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
         activeTab={activeTab}
-        onSelectTab={setActiveTab}
+        onSelectTab={(tab) => {
+          setActiveTab(tab);
+          setIsMenuOpen(false);
+        }}
         activeProfile={activeProfile}
-        profiles={profiles}
-        onSelectProfile={onSelectProfile}
-        onSwitchProfileScreen={onSwitchProfileScreen}
-        onSignOut={onSignOut}
         currentUser={currentUser}
         onOpenAdminModal={onOpenAdminModal}
-        onOpenSetupModal={onOpenSetupModal}
+        onSignOut={onSignOut}
         onToggleAudio={toggleAudio}
         isAudioPlaying={isAudioPlaying}
       />
