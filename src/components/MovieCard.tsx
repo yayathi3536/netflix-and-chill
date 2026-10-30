@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Play, Plus, Check, BookOpen, ChevronDown } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
@@ -28,6 +28,23 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   className,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const hoverTimer = useRef<number | null>(null);
+
+  const handleMouseEnter = () => {
+    if (hoverTimer.current !== null) window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => {
+      setIsHovered(true);
+      hoverTimer.current = null;
+    }, 400);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimer.current !== null) {
+      window.clearTimeout(hoverTimer.current);
+      hoverTimer.current = null;
+    }
+    setIsHovered(false);
+  };
   const isVideo = hasValidVideo(memory);
   const isLetter = isLetterItem(memory);
 
@@ -47,8 +64,8 @@ export const MovieCard: React.FC<MovieCardProps> = ({
           ? 'w-[30vw] sm:w-40 md:w-44 lg:w-48 aspect-[2/3]'
           : 'w-[44vw] sm:w-60 md:w-72 lg:w-80 aspect-video')
       }`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onClick={handleCardClick}
     >
       {isPortrait && rankNumber !== undefined && (
