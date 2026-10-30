@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Play } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
@@ -34,6 +34,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   customBadge,
   customSeriesTag,
 }) => {
+  const [isHovering, setIsHovering] = useState(false);
   const displayTitle = customTitle || "OUR UNIVERSE";
   const displaySubtitle = customSubtitle || memory.subtitle || "Season 1 · Chapter Infinity";
   const displaySynopsis =
@@ -52,7 +53,11 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   return (
     <div className="relative w-full h-[55vh] min-h-[380px] max-h-[800px] overflow-hidden select-none bg-[#000000] sm:h-[70vh] sm:min-h-[500px]">
       {/* Background Media with subtle Ken Burns cinematic movement */}
-      <div className="absolute inset-0 w-full h-full animate-ken-burns">
+      <div
+        className={`absolute inset-0 w-full h-full overflow-hidden ${isHovering ? '' : 'animate-ken-burns'}`}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
         <VisualArt
           id={memory.id}
           category={memory.category}
