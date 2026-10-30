@@ -54,17 +54,21 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
     }
   };
 
-  if (isLoading) {
+  if (isLoading && (!items || items.length === 0)) {
     return (
       <div className="relative group/row my-6 sm:my-8 lg:my-10" aria-busy="true" aria-label={`Loading ${title}`}>
         <div className="px-4 sm:px-6 lg:px-[4%] mb-2 sm:mb-3">
           <div className="h-5 w-40 bg-neutral-800 rounded skeleton-shimmer" />
         </div>
         <div className="flex gap-1.5 sm:gap-2 md:gap-3 overflow-x-auto no-scrollbar py-3 px-4 sm:px-6 lg:px-[4%]">
-          {[1, 2, 3, 4, 5].map((i) => (
+          {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="shrink-0 w-[44vw] sm:w-60 md:w-72 lg:w-80 aspect-video rounded-[4px] skeleton-shimmer"
+              className={`shrink-0 rounded-[4px] skeleton-shimmer ${
+                isPortrait
+                  ? 'w-[30vw] sm:w-40 md:w-44 lg:w-48 aspect-[2/3]'
+                  : 'w-[44vw] sm:w-60 md:w-72 lg:w-80 aspect-video'
+              }`}
             />
           ))}
         </div>
