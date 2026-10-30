@@ -593,7 +593,7 @@ export default function App() {
 
       {/* TOP SYSTEM STATUS NOTIFICATION (Admin Only) */}
       {isAdmin && (!isSupabaseReady ? (
-        <div className="pt-28 sm:pt-24 px-4 sm:px-8 max-w-7xl mx-auto w-full">
+        <div className="pt-28 sm:pt-24 px-4 sm:px-6 lg:px-[4%] w-full">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-neutral-500/30 text-xs text-[#B3B3B3]">
             <div className="flex items-center gap-2">
               <Database className="w-4 h-4 text-neutral-300 shrink-0" />
@@ -610,7 +610,7 @@ export default function App() {
           </div>
         </div>
       ) : isSchemaMissing ? (
-        <div className="pt-28 sm:pt-24 px-4 sm:px-8 max-w-7xl mx-auto w-full">
+        <div className="pt-28 sm:pt-24 px-4 sm:px-6 lg:px-[4%] w-full">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded bg-[#181818] border border-neutral-500/50 text-xs text-[#B3B3B3] shadow-xl">
             <div className="flex items-start sm:items-center gap-2.5">
               <AlertCircle className="w-4 h-4 text-neutral-300 shrink-0 mt-0.5 sm:mt-0" />
@@ -630,7 +630,7 @@ export default function App() {
           </div>
         </div>
       ) : statusNotification ? (
-        <div className="pt-28 sm:pt-24 px-4 sm:px-8 max-w-7xl mx-auto w-full">
+        <div className="pt-28 sm:pt-24 px-4 sm:px-6 lg:px-[4%] w-full">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2.5 rounded bg-[#181818] border border-neutral-500/30 text-xs text-[#B3B3B3]">
             <div className="flex items-center gap-2">
               <Info className="w-4 h-4 text-neutral-300 shrink-0" />
@@ -650,7 +650,7 @@ export default function App() {
       <main className="flex-1 pb-16">
         {/* SEARCH RESULTS VIEW (When search is active) */}
         {filteredMemories !== null ? (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12">
+          <div className="w-full px-4 sm:px-6 lg:px-[4%] pt-24 sm:pt-28 pb-12">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h1 className="font-bebas text-3xl sm:text-4xl text-white font-bold tracking-wide">
@@ -793,7 +793,7 @@ export default function App() {
 
             {/* TAB: MEMORIES (Continue Watching & All Memories) */}
             {activeTab === 'memories' && (
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
+              <div className="w-full px-4 sm:px-6 lg:px-[4%] pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div>
                   <div className="inline-flex items-center gap-1.5 text-xs text-neutral-300 font-bold tracking-widest uppercase mb-1">
                     <Film className="w-3.5 h-3.5" />
@@ -829,7 +829,7 @@ export default function App() {
 
             {/* TAB: LITTLE THINGS I LOVE ABOUT YOU */}
             {activeTab === 'little-things' && (
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
+              <div className="w-full px-4 sm:px-6 lg:px-[4%] pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div>
                   <div className="inline-flex items-center gap-1.5 text-xs text-neutral-300 font-bold tracking-widest uppercase mb-1">
                     <Heart className="w-3.5 h-3.5 fill-[#E50914]" />
@@ -901,7 +901,7 @@ export default function App() {
 
             {/* TAB: PLACES & LIST (Interactive Travel Board) */}
             {activeTab === 'places-list' && (
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
+              <div className="w-full px-4 sm:px-6 lg:px-[4%] pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                   <div>
                     <div className="inline-flex items-center gap-1.5 text-xs text-neutral-300 font-bold tracking-widest uppercase mb-1">
@@ -972,7 +972,7 @@ export default function App() {
 
             {/* TAB: SECRET VAULT */}
             {activeTab === 'secret-vault' && (
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
+              <div className="w-full px-4 sm:px-6 lg:px-[4%] pt-24 sm:pt-28 pb-12 space-y-8 bg-[#000000]">
                 <div>
                   <div className="inline-flex items-center gap-1.5 text-xs text-neutral-300 font-bold tracking-widest uppercase mb-1">
                     <Lock className="w-3.5 h-3.5" />

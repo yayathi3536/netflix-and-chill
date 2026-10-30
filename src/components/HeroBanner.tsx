@@ -86,7 +86,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
       )}
 
       {/* Hero Content Container */}
-      <div className="relative z-10 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-8 sm:pb-12 lg:pb-16">
+      <div className="relative z-10 w-full h-full px-4 sm:px-6 lg:px-[4%] flex flex-col justify-end pb-10 sm:pb-0 sm:justify-center sm:pt-16">
         <div className="max-w-2xl space-y-3 sm:space-y-4">
           {/* Top Series & Milestone Badge */}
           <div className="inline-flex items-center gap-2 text-xs font-bold tracking-wider text-[#FFFFFF] flex-wrap">
@@ -104,16 +104,18 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           </div>
 
           {/* Cinematic Title */}
-          <h1 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#FFFFFF] font-bold leading-tight drop-shadow-2xl break-words line-clamp-2">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-[#FFFFFF] font-bold leading-tight drop-shadow-2xl break-words line-clamp-2">
             {displayTitle}
           </h1>
 
           {/* Clean Netflix Metadata */}
-          <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-300">
-            <span className="font-semibold text-white">{memory.matchScore}% Match</span>
-            <span>·</span>
-            <span>{memory.year}</span>
-          </div>
+          {(memory.matchScore || memory.year) && (
+            <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-300">
+              {memory.matchScore ? <span className="font-semibold text-[#46D369]">{memory.matchScore}% Match</span> : null}
+              {memory.matchScore && memory.year ? <span>·</span> : null}
+              {memory.year ? <span>{memory.year}</span> : null}
+            </div>
+          )}
 
           {/* Readable Description */}
           <p className="text-xs sm:text-sm md:text-base text-[#B3B3B3] leading-relaxed font-normal line-clamp-2 max-w-xl text-balance drop-shadow-md">

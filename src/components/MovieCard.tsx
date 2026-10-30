@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Play, Plus, Check, BookOpen, ChevronDown } from 'lucide-react';
+import { Play, Plus, Check, BookOpen, ChevronDown, ThumbsUp } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
 import { hasValidVideo, isLetterItem } from '../utils/mediaHelpers';
@@ -24,6 +24,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   onPlay,
   onOpenInfo,
   onToggleWatchlist,
+  onToggleFavorite,
   onUnlockVault,
   className,
 }) => {
@@ -136,12 +137,25 @@ export const MovieCard: React.FC<MovieCardProps> = ({
               >
                 {memory.isInWatchlist ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
               </button>
+              {onToggleFavorite && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleFavorite(memory.id);
+                  }}
+                  className="btn-nf-icon !w-9 !h-9 sm:!w-10 sm:!h-10"
+                  aria-label={memory.isFavorite ? 'Unlike' : 'Like'}
+                  aria-pressed={Boolean(memory.isFavorite)}
+                >
+                  <ThumbsUp className={`w-4 h-4 ${memory.isFavorite ? 'fill-white' : ''}`} />
+                </button>
+              )}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onOpenInfo(memory);
                 }}
-                className="btn-nf-icon !w-9 !h-9 sm:!w-10 sm:!h-10"
+                className="btn-nf-icon !w-9 !h-9 sm:!w-10 sm:!h-10 ml-auto"
                 aria-label="More info"
               >
                 <ChevronDown className="w-4 h-4" />

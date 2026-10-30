@@ -13,6 +13,14 @@ import { User } from '@supabase/supabase-js';
 import { getProfileAvatarUrl } from '../data/builtInAvatars';
 import { NavMenu } from './NavMenu';
 
+const NAV_LINKS = [
+  { id: 'home', label: 'Home' },
+  { id: 'our-story', label: 'Series' },
+  { id: 'memories', label: 'Movies' },
+  { id: 'little-things', label: 'Quirks' },
+  { id: 'places-list', label: 'My List' },
+];
+
 interface NavbarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
@@ -105,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         isScrolled ? 'bg-[#141414] py-2 sm:py-3' : 'bg-gradient-to-b from-black/90 via-black/50 to-transparent py-3 sm:py-4'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
+      <div className="w-full px-4 sm:px-6 lg:px-[4%] flex items-center justify-between gap-2 sm:gap-4">
         {/* ZONE 1: NETFLIX-STYLE BRAND LOGO */}
         <div className="flex items-center gap-2 sm:gap-4 shrink-0 min-w-0">
           <button
@@ -126,6 +134,21 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
           </button>
 
+          {/* Desktop inline navigation (Netflix-style) */}
+          <nav className="hidden lg:flex items-center gap-5 ml-6" aria-label="Primary">
+            {NAV_LINKS.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => setActiveTab(link.id)}
+                aria-current={activeTab === link.id ? 'page' : undefined}
+                className={`text-sm transition-colors ${
+                  activeTab === link.id ? 'text-white font-bold' : 'text-[#E5E5E5] hover:text-[#B3B3B3]'
+                }`}
+              >
+                {link.label}
+              </button>
+            ))}
+          </nav>
         </div>
 
         {/* ZONE 3: ACTIONS & UTILITIES */}

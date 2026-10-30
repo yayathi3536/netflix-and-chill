@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import {
   X,
   Play,
@@ -40,7 +40,7 @@ interface DetailModalProps {
 
 export const DetailModal: React.FC<DetailModalProps> = ({
   memory,
-  onClose,
+  onClose: onCloseProp,
   onPlay,
   onToggleWatchlist,
   onToggleFavorite,
@@ -52,6 +52,21 @@ export const DetailModal: React.FC<DetailModalProps> = ({
 }) => {
   const [expandedEpisodeId, setExpandedEpisodeId] = useState<string | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [isClosing, setIsClosing] = useState(false);
+  const closeTimer = useRef<number | null>(null);
+
+  const onClose = useCallback(() => {
+    if (closeTimer.current !== null) return;
+    setIsClosing(true);
+    closeTimer.current = window.setTimeout(() => {
+      closeTimer.current = null;
+      onCloseProp();
+    }, 180);
+  }, [onCloseProp]);
+
+  useEffect(() => () => {
+    if (closeTimer.current !== null) window.clearTimeout(closeTimer.current);
+  }, []);
 
   const isVideo = memory ? hasValidVideo(memory) : false;
   const isLetter = memory ? isLetterItem(memory) : false;
@@ -97,12 +112,12 @@ export const DetailModal: React.FC<DetailModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto dark-scrollbar bg-[#000000]/90 backdrop-blur-md flex justify-center p-0 sm:p-4 md:p-6 animate-in fade-in duration-200"
+      className={`fixed inset-0 z-50 overflow-y-auto dark-scrollbar bg-[#000000]/90 backdrop-blur-md flex justify-center p-0 sm:p-4 md:p-6 ${isClosing ? "nf-backdrop-out" : "nf-backdrop-in"}`}
       onClick={onClose}
     >
       {/* Netflix Modal Card */}
       <div
-        className="relative w-full sm:max-w-[900px] bg-[#181818] sm:rounded-md overflow-hidden shadow-2xl border border-white/5 sm:my-8"
+        className={`relative w-full sm:max-w-[900px] bg-[#181818] sm:rounded-md overflow-hidden shadow-2xl border border-white/5 sm:my-8 ${isClosing ? "nf-modal-out" : "nf-modal-in"}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -188,12 +203,12 @@ export const DetailModal: React.FC<DetailModalProps> = ({
             {/* Left 2 Cols: Story & Synopsis */}
             <div className="md:col-span-2 space-y-4">
               <div className="flex flex-wrap items-center gap-2.5 text-xs text-[#B3B3B3] font-medium">
-                <span className="text-[#FFFFFF] font-bold">{memory.matchScore || 98}% Match</span>
-                <span aria-hidden="true" className="text-[#808080]">·</span>
-                <span>{memory.year || '2024'}</span>
-                <span aria-hidden="true" className="text-[#808080]">·</span>
-                <span>{memory.duration || 'Memory'}</span>
-                <span aria-hidden="true" className="text-[#808080]">·</span>
+                {memory.matchScore ? <span className="text-[#46D369] font-bold">{memory.matchScore}% Match</span> : null}
+                {memory.matchScore && memory.year ? <span aria-hidden="true" className="text-[#808080]">·</span> : null}
+                {memory.year ? <span>{memory.year}</span> : null}
+                {memory.year && memory.duration ? <span aria-hidden="true" className="text-[#808080]">·</span> : null}
+                {memory.duration ? <span>{memory.duration}</span> : null}
+                {(memory.matchScore || memory.year || memory.duration) ? <span aria-hidden="true" className="text-[#808080]">·</span> : null}
                 <span className="border border-[#808080]/50 px-1.5 py-0.5 rounded text-[10px] text-[#FFFFFF] uppercase">
                   {isVideo ? 'Video' : isLetter ? 'Letter' : 'Memory'}
                 </span>
@@ -444,7 +459,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                         {item.title}
                       </h5>
                       <span className="text-[10px] text-[#B3B3B3] font-bold block mt-0.5">
-                        {item.matchScore || 98}% Match
+                        {item.matchScore ? `${item.matchScore}% Match` : item.category.replace('-', ' ')}
                       </span>
                     </div>
                   </div>

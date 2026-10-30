@@ -168,3 +168,35 @@
     scroll-behavior: auto !important;
   }
 }
+
+
+/* ---- Hero gradients (were referenced but undefined) ---- */
+.hero-netflix-overlay {
+  background: linear-gradient(77deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 35%, rgba(0,0,0,0) 70%);
+}
+.hero-netflix-scrim {
+  background: linear-gradient(to top, #000000 0%, rgba(0,0,0,0.6) 18%, rgba(0,0,0,0) 45%);
+}
+
+/* ---- Modal shadow + enter/exit animations ---- */
+.netflix-modal-shadow { box-shadow: 0 16px 48px rgba(0,0,0,0.85); }
+
+@keyframes nf-fade-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes nf-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes nf-modal-in  { from { opacity: 0; transform: scale(0.94) translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes nf-modal-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: scale(0.96) translateY(8px); } }
+@keyframes nf-slide-right { from { transform: translateX(100%); } to { transform: none; } }
+
+.animate-in { animation: nf-fade-in 200ms ease both; }
+.fade-in { animation-name: nf-fade-in; }
+.slide-in-from-right { animation-name: nf-slide-right; }
+.duration-200 { animation-duration: 200ms; }
+.duration-300 { animation-duration: 300ms; }
+.nf-backdrop-in  { animation: nf-fade-in 220ms ease both; }
+.nf-backdrop-out { animation: nf-fade-out 180ms ease both; }
+.nf-modal-in  { animation: nf-modal-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.nf-modal-out { animation: nf-modal-out 180ms ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in, .nf-backdrop-in, .nf-backdrop-out, .nf-modal-in, .nf-modal-out, .animate-ken-burns { animation: none !important; }
+}

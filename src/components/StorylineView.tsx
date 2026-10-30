@@ -171,7 +171,7 @@ export const StorylineView: React.FC<StorylineViewProps> = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-16 space-y-8 bg-[#000000]">
+    <div className="w-full px-4 sm:px-6 lg:px-[4%] pt-24 sm:pt-28 pb-16 space-y-8 bg-[#000000]">
       {/* Header Bar */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#181818] pb-6">
         <div>
