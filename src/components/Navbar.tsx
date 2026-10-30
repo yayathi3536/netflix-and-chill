@@ -6,10 +6,6 @@ import {
   Plus,
   X,
   ChevronDown,
-  Shield,
-  Database,
-  Users,
-  LogOut,
   Sparkles,
 } from 'lucide-react';
 import { UserProfile, NotificationItem } from '../types';
@@ -216,9 +212,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Profile Switcher Menu */}
           <div className="relative">
             <button
-              onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+              onClick={() => {
+                if (onSwitchProfileScreen) {
+                  onSwitchProfileScreen();
+                } else {
+                  setIsProfileMenuOpen((prev) => !prev);
+                }
+              }}
               className="flex items-center gap-1.5 p-1 rounded hover:bg-[#181818] transition-colors cursor-pointer"
-              aria-label="User Profile"
+              aria-label="Switch profile"
             >
               <div
                 className="w-8 h-8 rounded-lg bg-[#808080] overflow-hidden flex items-center justify-center text-sm font-bold text-[#FFFFFF] shadow ring-1 ring-white/20"
@@ -232,95 +234,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               <ChevronDown className="w-3.5 h-3.5 text-[#B3B3B3]" />
             </button>
 
-            {isProfileMenuOpen && (
-              <div className="fixed sm:absolute right-2 sm:right-0 mt-3 w-64 max-w-[calc(100vw-1rem)] bg-[#141414]/95 border border-white/10 rounded-xl netflix-modal-shadow py-2 z-50 text-xs backdrop-blur-md">
-                <div className="px-3 py-1.5 text-[#B3B3B3] text-[11px] uppercase tracking-wider font-semibold border-b border-[#181818]">
-                  Who's Watching?
-                </div>
-                <div className="py-1">
-                  {profiles.map((p) => (
-                    <button
-                      key={p.id}
-                      onClick={() => {
-                        onSelectProfile(p);
-                        setIsProfileMenuOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 text-left hover:bg-[#181818] transition-colors cursor-pointer min-h-[40px] ${
-                        p.id === activeProfile.id ? 'text-[#FFFFFF] font-bold bg-[#181818]' : 'text-[#B3B3B3]'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <div
-                          className="w-7 h-7 rounded-md bg-[#808080] overflow-hidden flex items-center justify-center text-xs text-[#FFFFFF] shrink-0 ring-1 ring-white/10"
-                        >
-                          <img
-                            src={getProfileAvatarUrl(p)}
-                            alt={p.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <span className="truncate">{p.name}</span>
-                      </div>
-                      {p.id === activeProfile.id && (
-                        <span className="w-2 h-2 rounded-full bg-[#808080]" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="pt-2 mt-2 border-t border-[#181818] space-y-1">
-                  {onSwitchProfileScreen && (
-                    <button
-                      onClick={() => {
-                        onSwitchProfileScreen();
-                        setIsProfileMenuOpen(false);
-                      }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer min-h-[40px]"
-                    >
-                      <Users className="w-4 h-4 text-[#808080]" />
-                      <span>Switch Profiles</span>
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => {
-                      onOpenAdminModal();
-                      setIsProfileMenuOpen(false);
-                    }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer min-h-[40px]"
-                  >
-                    <Shield className="w-4 h-4 text-[#808080]" />
-                    <span>{currentUser ? 'Admin Panel (Active)' : 'Account & Admin'}</span>
-                  </button>
-
-                  {currentUser && (
-                    <button
-                      onClick={() => {
-                        onOpenSetupModal();
-                        setIsProfileMenuOpen(false);
-                      }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer min-h-[40px]"
-                    >
-                      <Database className="w-4 h-4 text-[#808080]" />
-                      <span>Cloud Storage Setup</span>
-                    </button>
-                  )}
-
-                  {onSignOut && (
-                    <button
-                      onClick={() => {
-                        onSignOut();
-                        setIsProfileMenuOpen(false);
-                      }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-left text-[#B3B3B3] hover:text-[#FFFFFF] hover:bg-[#181818] transition-colors cursor-pointer border-t border-[#181818] pt-2 mt-1 min-h-[40px]"
-                    >
-                      <LogOut className="w-4 h-4 text-[#808080]" />
-                      <span>Sign Out of OUR UNIVERSE</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
