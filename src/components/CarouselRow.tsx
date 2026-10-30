@@ -117,7 +117,7 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
           {items.map((item, index) => (
             <div
               key={item.id}
-              className={isPortrait ? 'relative flex items-center shrink-0 snap-start group/top-ten' : 'contents'}
+              className={`relative flex items-center shrink-0 snap-start ${isPortrait ? 'group/top-ten' : ''}`}
             >
               {isPortrait && (
                 <span
