@@ -184,11 +184,23 @@ export default function App() {
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     if (tab === 'home') {
-      history.replaceState(null, '', window.location.pathname + window.location.search);
+      history.pushState(null, '', window.location.pathname + window.location.search);
     } else {
-      window.location.hash = tab;
+      history.pushState(null, '', `#${tab}`);
     }
   };
+
+  // Keep the active tab synchronized with browser back/forward navigation.
+  useEffect(() => {
+    const onPop = () => {
+      const hash = window.location.hash.replace('#', '').trim();
+      const validTabs = ['home', 'our-story', 'memories', 'scrapbook', 'little-things', 'places-list', 'secret-vault'];
+      setActiveTab(validTabs.includes(hash) ? hash : 'home');
+    };
+
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
 
   const fetchRemoteMemories = async () => {
     setIsLoadingData(true);
