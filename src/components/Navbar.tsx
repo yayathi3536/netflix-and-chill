@@ -53,6 +53,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSetupModal,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [hideNav, setHideNav] = useState(false);
+  const lastScrollY = useRef(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -62,7 +64,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const y = window.scrollY;
+      setIsScrolled(y > 50);
+      setHideNav(y > lastScrollY.current && y > 200);
+      lastScrollY.current = y;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -99,6 +104,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        hideNav ? '-translate-y-full' : 'translate-y-0'
+      } ${
         isScrolled ? 'bg-[#141414] py-2 sm:py-3' : 'bg-gradient-to-b from-black/90 via-black/50 to-transparent py-3 sm:py-4'
       }`}
     >
