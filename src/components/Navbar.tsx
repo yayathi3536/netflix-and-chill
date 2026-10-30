@@ -70,12 +70,14 @@ export const Navbar: React.FC<NavbarProps> = ({
     const handleScroll = () => {
       const y = window.scrollY;
       setIsScrolled(y > 50);
-      setHideNav(y > lastScrollY.current && y > 200);
+      if (!isMenuOpen) {
+        setHideNav(y > lastScrollY.current && y > 200);
+      }
       lastScrollY.current = y;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isMenuOpen]);
 
   const toggleSearch = () => {
     setIsSearchOpen((prev) => {
@@ -106,6 +108,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
+    <>
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         hideNav ? '-translate-y-full' : 'translate-y-0'
@@ -261,22 +264,23 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      <NavMenu
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        activeTab={activeTab}
-        onSelectTab={(tab) => {
-          setActiveTab(tab);
-          setIsMenuOpen(false);
-        }}
-        activeProfile={activeProfile}
-        currentUser={currentUser}
-        onOpenAdminModal={onOpenAdminModal}
-        onSignOut={onSignOut}
-        onToggleAudio={toggleAudio}
-        isAudioPlaying={isAudioPlaying}
-      />
-
     </header>
+
+    <NavMenu
+      isOpen={isMenuOpen}
+      onClose={() => setIsMenuOpen(false)}
+      activeTab={activeTab}
+      onSelectTab={(tab) => {
+        setActiveTab(tab);
+        setIsMenuOpen(false);
+      }}
+      activeProfile={activeProfile}
+      currentUser={currentUser}
+      onOpenAdminModal={onOpenAdminModal}
+      onSignOut={onSignOut}
+      onToggleAudio={toggleAudio}
+      isAudioPlaying={isAudioPlaying}
+    />
+    </>
   );
 };
