@@ -58,7 +58,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 
   return (
     <div
-      className={`group relative nf-card rounded-[4px] bg-[#141414] overflow-hidden cursor-pointer select-none shrink-0 ${
+      className={`group relative nf-card rounded-[4px] bg-[#141414] overflow-hidden cursor-pointer select-none shrink-0 snap-start ${
         className ||
         (isPortrait
           ? 'w-[30vw] sm:w-40 md:w-44 lg:w-48 aspect-[2/3]'
