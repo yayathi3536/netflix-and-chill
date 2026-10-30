@@ -194,7 +194,7 @@ export default function App() {
   useEffect(() => {
     const onPop = () => {
       const hash = window.location.hash.replace('#', '').trim();
-      const validTabs = ['home', 'our-story', 'memories', 'scrapbook', 'little-things', 'places-list', 'secret-vault'];
+      const validTabs = ['home', 'our-story', 'memories', 'little-things', 'places-list', 'secret-vault'];
       setActiveTab(validTabs.includes(hash) ? hash : 'home');
     };
 
