@@ -72,14 +72,14 @@ export const NavMenu: React.FC<NavMenuProps> = ({
     <div className="fixed inset-0 z-[60]">
       {/* Scrim */}
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Slide panel */}
       <aside
-        className="relative flex h-full w-[80%] max-w-[340px] flex-col bg-[#141414] shadow-2xl animate-in slide-in-from-left duration-300"
+        className="relative flex h-full w-[80%] max-w-[340px] flex-col bg-[#141414] shadow-2xl"
         role="dialog"
         aria-modal="true"
         aria-label="Navigation menu"
