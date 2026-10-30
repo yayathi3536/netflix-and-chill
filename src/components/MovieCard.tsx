@@ -99,11 +99,15 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         />
 
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent transition-opacity duration-200 opacity-100 sm:opacity-0 ${
+          className={`absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent transition-opacity duration-300 opacity-100 sm:opacity-0 ${
             isHovered ? 'sm:opacity-100' : ''
           }`}
         >
-          <div className="absolute inset-x-0 bottom-0 p-2 sm:p-3">
+          <div
+            className={`absolute inset-x-0 bottom-0 p-2 sm:p-3 transition-all duration-300 sm:translate-y-2 sm:opacity-0 ${
+              isHovered ? 'sm:translate-y-0 sm:opacity-100' : ''
+            }`}
+          >
             <h4 className="text-xs sm:text-sm font-semibold text-white line-clamp-1 mb-1.5 sm:mb-2">
               {memory.title}
             </h4>
