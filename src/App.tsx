@@ -379,7 +379,9 @@ export default function App() {
   }, [memories]);
 
   const continueWatchingItems = useMemo(() => {
-    return memories.filter((m) => m.category === 'memories' && m.progress !== undefined);
+    return memories
+      .filter((m) => m.category === 'memories' && m.progress !== undefined)
+      .sort((a, b) => (b.progress ?? 0) - (a.progress ?? 0));
   }, [memories]);
 
   const ourStorySeries = useMemo(() => {
