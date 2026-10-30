@@ -716,11 +716,12 @@ export default function App() {
                 {/* CONTENT ROWS SECTION: Our Story, Timeline of Our Universe, Continue Watching, Memories */}
                 <div className="relative z-20 space-y-2 mt-4 sm:mt-6">
                   {/* ROW 1: CONTINUE WATCHING */}
-                  {continueWatchingItems.length > 0 && (
+                  {(isLoadingData || continueWatchingItems.length > 0) && (
                     <CarouselRow
                       title={siteContent.section_continue_title || "Continue Watching: Our Memories"}
                       subtitle={siteContent.section_continue_sub || "Pick up right where we left off"}
                       items={continueWatchingItems}
+                      isLoading={isLoadingData}
                       onPlay={(m) => handlePlayMemory(m)}
                       onOpenInfo={(m) => handleOpenItem(m)}
                       onToggleWatchlist={handleToggleWatchlist}
@@ -735,11 +736,12 @@ export default function App() {
                   )}
 
                   {/* ROW 2: ORIGINAL SERIES: OUR STORY (TOP 10 PORTRAITS) */}
-                  {ourStorySeries.length > 0 && (
+                  {(isLoadingData || ourStorySeries.length > 0) && (
                     <CarouselRow
                       title={siteContent.section_our_story_title || "Original Series: Our Story"}
                       subtitle={siteContent.section_our_story_sub || "Top 10 Relationship Chapters of All Time"}
                       items={ourStorySeries}
+                      isLoading={isLoadingData}
                       isPortrait={true}
                       onPlay={(m) => handlePlayMemory(m)}
                       onOpenInfo={(m) => handleOpenItem(m)}
