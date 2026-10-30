@@ -65,20 +65,20 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         />
       </div>
 
+      {/* Strict Netflix Black Gradient Overlays */}
+      <div className="absolute inset-0 hero-netflix-overlay" />
+      <div className="absolute inset-0 hero-netflix-scrim" />
+
       {/* Subtle ambient glow sampled from the hero artwork */}
       {dominantColor && (
         <div
-          className="absolute inset-0 pointer-events-none opacity-20 mix-blend-screen"
+          className="absolute inset-0 pointer-events-none opacity-25 mix-blend-screen"
           style={{
             background: `radial-gradient(ellipse at 30% 60%, ${dominantColor}, transparent 70%)`,
           }}
           aria-hidden="true"
         />
       )}
-
-      {/* Strict Netflix Black Gradient Overlays */}
-      <div className="absolute inset-0 hero-netflix-overlay" />
-      <div className="absolute inset-0 hero-netflix-scrim" />
 
       {/* Hero Content Container */}
       <div className="relative z-10 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-8 sm:pb-12 lg:pb-16">
