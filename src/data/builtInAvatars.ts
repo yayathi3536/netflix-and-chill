@@ -32,7 +32,7 @@ function createSmileySvg(
       <circle cx="40" cy="68" r="6.5" fill="${eyeColor}"/>
       <circle cx="160" cy="68" r="6.5" fill="${eyeColor}"/>
       <path
-        d="M 82 116 Q 100 128 118 116"
+        d="M 42 116 Q 100 150 158 116"
         stroke="${mouthColor}"
         stroke-width="5.5"
         stroke-linecap="round"
