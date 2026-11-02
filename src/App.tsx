@@ -403,12 +403,21 @@ export default function App() {
 
   const continueWatchingItems = useMemo(() => {
     const memoryById = new Map(memories.map((memory) => [memory.id, memory]));
-    return recentlyViewed
+    const recent = recentlyViewed
       .map((item) => memoryById.get(item.id))
       .filter((memory): memory is MemoryItem =>
         memory !== undefined && memory.category === 'memories' && !isLetterItem(memory)
       )
       .slice(0, 10);
+
+    // First-visit fallback: show favorites until the user has viewed a memory.
+    if (recent.length === 0) {
+      return memories
+        .filter((memory) => memory.category === 'memories' && !isLetterItem(memory) && memory.isFavorite)
+        .slice(0, 10);
+    }
+
+    return recent;
   }, [memories, recentlyViewed]);
 
   const ourStorySeries = useMemo(() => {
