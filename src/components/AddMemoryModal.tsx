@@ -20,6 +20,7 @@ import { supabaseService, checkIsAdmin } from '../services/supabaseService';
 import { isSupabaseConfigured } from '../services/supabaseClient';
 import { User } from '@supabase/supabase-js';
 import { Drawer } from './Drawer';
+import { useBodyLock } from '../hooks/useBodyLock';
 
 interface AddMemoryModalProps {
   isOpen: boolean;
@@ -82,6 +83,8 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
   const [videoUploadError, setVideoUploadError] = useState('');
   const [videoUploadSuccess, setVideoUploadSuccess] = useState('');
+  const isAdmin = checkIsAdmin(currentUser || null);
+  useBodyLock(isOpen && !isAdmin);
 
   useEffect(() => {
     if (memoryToEdit) {
@@ -123,8 +126,6 @@ export const AddMemoryModal: React.FC<AddMemoryModalProps> = ({
   };
 
   if (!isOpen) return null;
-
-  const isAdmin = checkIsAdmin(currentUser || null);
 
   // If a visitor or non-admin attempts to access this modal, show strict access-denied gate
   if (!isAdmin) {
