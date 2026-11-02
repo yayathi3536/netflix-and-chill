@@ -136,7 +136,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
     >
       {/* Netflix Modal Card */}
       <div
-        className={`relative w-full sm:max-w-[900px] bg-[#181818] sm:rounded-md overflow-hidden shadow-2xl border border-white/5 sm:my-8 ${isClosing ? "nf-modal-out" : "nf-modal-in"}`}
+        className={`relative w-full sm:max-w-[900px] sm:my-8 bg-[#181818] sm:rounded-md overflow-hidden shadow-2xl border border-white/5 max-h-[90vh] flex flex-col ${isClosing ? "nf-modal-out" : "nf-modal-in"}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -205,7 +205,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-4 sm:p-6 space-y-6 sm:space-y-8 bg-[#181818]">
+        <div className="p-4 sm:p-6 space-y-6 sm:space-y-8 bg-[#181818] overflow-y-auto flex-1">
           <header className="space-y-1">
             <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight leading-tight break-words">
               {memory.title}
