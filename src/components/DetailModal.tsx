@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { MemoryItem, Episode } from '../types';
 import { VisualArt } from './VisualArt';
+import { useBodyLock } from '../hooks/useBodyLock';
 import { User } from '@supabase/supabase-js';
 import {
   hasValidVideo,
@@ -108,24 +109,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightboxIndex, allPhotos.length]);
 
-  useEffect(() => {
-    if (!memory) return;
-
-    const originalOverflow = document.body.style.overflow;
-    const originalPaddingRight = document.body.style.paddingRight;
-
-    // Compensate for scrollbar disappearing (prevents layout shift)
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.overflow = 'hidden';
-    if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    }
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      document.body.style.paddingRight = originalPaddingRight;
-    };
-  }, [memory]);
+  useBodyLock(!!memory);
 
   if (!memory) return null;
 
