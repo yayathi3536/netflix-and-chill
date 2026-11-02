@@ -12,13 +12,13 @@ export interface BuiltInAvatarItem {
 const svgToDataUri = (svg: string): string =>
   `data:image/svg+xml;utf8,${encodeURIComponent(svg.trim())}`;
 
-// Netflix-style smiley face on a gradient tile
+// Minimal Netflix-style smiley: tiny eyes and a thin, gentle curved smile.
 function createSmileySvg(
   id: string,
   colorTop: string,
   colorBottom: string,
-  eyeColor = '#ffffff',
-  mouthColor = '#ffffff'
+  eyeColor = '#fffdfb',
+  mouthColor = '#fffdfb'
 ): string {
   return svgToDataUri(`
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
@@ -29,12 +29,12 @@ function createSmileySvg(
         </linearGradient>
       </defs>
       <rect width="200" height="200" fill="url(#bg_${id})"/>
-      <circle cx="70" cy="90" r="9" fill="${eyeColor}"/>
-      <circle cx="130" cy="90" r="9" fill="${eyeColor}"/>
+      <circle cx="40" cy="68" r="6.5" fill="${eyeColor}"/>
+      <circle cx="160" cy="68" r="6.5" fill="${eyeColor}"/>
       <path
-        d="M 65 125 Q 100 150 135 125"
+        d="M 82 116 Q 100 128 118 116"
         stroke="${mouthColor}"
-        stroke-width="8"
+        stroke-width="5.5"
         stroke-linecap="round"
         fill="none"
       />
@@ -49,7 +49,7 @@ export const BUILT_IN_AVATARS: BuiltInAvatarItem[] = [
     category: 'smileys',
     colorName: 'Pink',
     bgColor: '#e91e8c',
-    url: createSmileySvg('smiley-pink', '#e91e8c', '#b8146f'),
+    url: createSmileySvg('smiley-pink', '#d94eaa', '#b94c98'),
   },
   {
     id: 'smiley-red',
@@ -57,7 +57,7 @@ export const BUILT_IN_AVATARS: BuiltInAvatarItem[] = [
     category: 'smileys',
     colorName: 'Red',
     bgColor: '#e0332e',
-    url: createSmileySvg('smiley-red', '#e0332e', '#b82420'),
+    url: createSmileySvg('smiley-red', '#df4038', '#c85d59'),
   },
   {
     id: 'smiley-yellow',
@@ -65,7 +65,7 @@ export const BUILT_IN_AVATARS: BuiltInAvatarItem[] = [
     category: 'smileys',
     colorName: 'Yellow',
     bgColor: '#e6c840',
-    url: createSmileySvg('smiley-yellow', '#e6c840', '#c7a832'),
+    url: createSmileySvg('smiley-yellow', '#e9cb61', '#d7bd70'),
   },
   {
     id: 'smiley-blue',
@@ -73,7 +73,7 @@ export const BUILT_IN_AVATARS: BuiltInAvatarItem[] = [
     category: 'smileys',
     colorName: 'Blue',
     bgColor: '#3b82f6',
-    url: createSmileySvg('smiley-blue', '#3b82f6', '#2563eb'),
+    url: createSmileySvg('smiley-blue', '#55a9e8', '#397fc4'),
   },
   {
     id: 'smiley-purple',
@@ -81,7 +81,7 @@ export const BUILT_IN_AVATARS: BuiltInAvatarItem[] = [
     category: 'smileys',
     colorName: 'Purple',
     bgColor: '#8b5cf6',
-    url: createSmileySvg('smiley-purple', '#8b5cf6', '#7c3aed'),
+    url: createSmileySvg('smiley-purple', '#a36be0', '#784bb8'),
   },
   {
     id: 'smiley-green',
@@ -89,7 +89,7 @@ export const BUILT_IN_AVATARS: BuiltInAvatarItem[] = [
     category: 'smileys',
     colorName: 'Green',
     bgColor: '#22c55e',
-    url: createSmileySvg('smiley-green', '#22c55e', '#16a34a'),
+    url: createSmileySvg('smiley-green', '#62c96b', '#399d54'),
   },
 ];
 
