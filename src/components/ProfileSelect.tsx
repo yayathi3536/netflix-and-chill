@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { LogOut, ShieldCheck, Pencil, Plus, Check, X } from 'lucide-react';
 import { UserProfile } from '../types';
+import { useBodyLock } from '../hooks/useBodyLock';
 import {
   BUILT_IN_AVATARS,
   BUILT_IN_AVATAR_CATEGORIES,
@@ -26,6 +27,8 @@ export default function ProfileSelect({
   isAdmin?: boolean;
   onSignOut?: () => void;
 }) {
+  useBodyLock(true);
+
   const [isManageMode, setIsManageMode] = useState(false);
   const [editingProfile, setEditingProfile] = useState<UserProfile | null>(null);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
@@ -119,146 +122,75 @@ export default function ProfileSelect({
       : BUILT_IN_AVATARS.filter((a) => a.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-[#141414] text-white flex flex-col items-center justify-between select-none">
+    <div className="fixed inset-0 overflow-y-auto bg-[#141414] text-white flex flex-col items-center justify-center px-4 select-none">
+      {onSignOut && (
+        <button
+          type="button"
+          onClick={onSignOut}
+          className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-500 hover:text-white transition-colors"
+        >
+          <LogOut className="w-3.5 h-3.5" />
+          <span>Sign Out</span>
+        </button>
+      )}
 
-      {/* Top Header Bar */}
-      <header className="relative z-10 w-full px-4 sm:px-12 pt-4 sm:pt-6 flex justify-end items-center gap-3">
-        <div className="flex items-center gap-2.5 sm:gap-4">
-          {userEmail && (
-            <div className="hidden sm:flex items-center gap-2 text-xs text-neutral-500 truncate max-w-[220px]">
-              {isAdmin && <ShieldCheck className="w-3.5 h-3.5 text-[#808080] shrink-0" />}
-              <span className="truncate max-w-[220px] font-medium">{userEmail}</span>
-            </div>
-          )}
+      <main className="w-full flex flex-col items-center justify-center py-12">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-normal text-white mb-8 sm:mb-12 text-center">
+          {isManageMode ? 'Manage Profiles' : "Who's watching?"}
+        </h1>
 
-          {onSignOut && (
-            <button
-              type="button"
-              onClick={onSignOut}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded border border-neutral-600 hover:border-white text-neutral-400 hover:text-white text-xs transition-colors"
-            >
-              <LogOut className="w-3.5 h-3.5 text-[#808080]" />
-              <span className="font-medium">Sign Out</span>
-            </button>
-          )}
-        </div>
-      </header>
-
-      {/* Main Centered "Who's watching?" Gateway */}
-      <main className="relative z-10 flex-1 w-full flex flex-col items-center justify-center px-4 py-8">
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-normal tracking-tight text-white mb-2 sm:mb-3 text-center">
-            {isManageMode ? 'Manage Profiles' : "Who's watching?"}
-          </h1>
-          
-        </div>
-
-        {/* Profile Cards Grid */}
-        <div className="flex flex-wrap justify-center items-start gap-4 sm:gap-6 md:gap-8">
-          {profiles.map((profile) => {
-            const avatarSrc = getProfileAvatarUrl(profile);
-
-            return (
-              <div
-                key={profile.id}
-                className="group flex flex-col items-center w-20 sm:w-28 md:w-32"
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-5">
+          {profiles.map((profile) => (
+            <div key={profile.id} className="group relative w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36">
+              <button
+                type="button"
+                onClick={() => {
+                  if (isManageMode) openEditModal(profile);
+                  else onSelect(profile);
+                }}
+                className="relative w-full h-full overflow-hidden rounded-[4px] bg-neutral-800 focus:outline-none"
+                aria-label={isManageMode ? `Edit profile ${profile.name}` : `Select ${profile.name}`}
               >
-                <div className="relative w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (isManageMode) {
-                        openEditModal(profile);
-                      } else {
-                        onSelect(profile);
-                      }
-                    }}
-                    className="w-full h-full rounded-[4px] overflow-hidden bg-neutral-800 border-[3px] border-transparent group-hover:border-white transition-colors focus:outline-none focus-visible:border-white"
-                    aria-label={
-                      isManageMode
-                        ? `Edit profile and avatar for ${profile.name}`
-                        : `Select profile ${profile.name}`
-                    }
-                  >
-                    {/* Illustrated Artwork */}
-                    <img
-                      src={avatarSrc}
-                      alt={profile.name}
-                      className="w-full h-full object-cover"
-                    />
+                <img src={getProfileAvatarUrl(profile)} alt={profile.name} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors" />
+                {isManageMode && (
+                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-black/90 border border-white flex items-center justify-center">
+                      <Pencil className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                )}
+              </button>
+            </div>
+          ))}
 
-                     {/* Manage Mode Pencil Overlay */}
-                    {isManageMode && (
-                      <div className="pointer-events-none absolute inset-0 rounded-[4px] bg-black/60 flex items-center justify-center">
-                        <div className="w-10 h-10 rounded-full bg-black/90 border border-white flex items-center justify-center">
-                          <Pencil className="w-5 h-5 text-white" />
-                        </div>
-                      </div>
-                    )}
-                  </button>
-
-                  {/* Quick Edit Pencil Shortcut */}
-                  {!isManageMode && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openEditModal(profile);
-                      }}
-                      title={`Customize avatar for ${profile.name}`}
-                      aria-label={`Customize avatar for ${profile.name}`}
-                      className="opacity-0 group-hover:opacity-100 focus:opacity-100 absolute top-2 right-2 z-20 w-8 h-8 rounded-full bg-black/85 hover:bg-[#808080] text-white border border-white/30 flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg hover:scale-110"
-                    >
-                      <Pencil className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-
-                {/* Profile Name & Tagline */}
-                <span className="mt-3 text-xs sm:text-sm md:text-base text-neutral-400 group-hover:text-white transition-colors truncate w-full text-center">{profile.name}</span>
-              </div>
-            );
-          })}
-
-          {/* Add Profile Card when in Manage Mode */}
           {isManageMode && (
             <button
               type="button"
               onClick={openCreateModal}
-              className="group flex flex-col items-center w-20 sm:w-28 md:w-32 focus:outline-none"
+              className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-[4px] border-2 border-dashed border-neutral-600 hover:border-white flex items-center justify-center transition-colors"
               aria-label="Add Profile"
             >
-              <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-[4px] border-2 border-dashed border-neutral-600 group-hover:border-white flex items-center justify-center transition-colors bg-transparent">
-                <div className="text-neutral-500 group-hover:text-white transition-colors">
-                  <Plus className="w-8 h-8 sm:w-10 sm:h-10" />
-                </div>
-              </div>
-              <span className="mt-3 text-xs sm:text-sm md:text-base text-neutral-500 group-hover:text-white transition-colors">Add Profile</span>
+              <Plus className="w-8 h-8 sm:w-10 sm:h-10 text-neutral-500" />
             </button>
           )}
         </div>
 
-        {/* Manage Profiles / Done Action Button */}
-        <div className="mt-10 sm:mt-14 flex items-center justify-center">
-          <button
-            type="button"
-            onClick={() => {
-              setIsManageMode((prev) => !prev);
-              if (onManage && !isManageMode) onManage();
-            }}
-            className={`px-6 sm:px-8 py-2 text-xs sm:text-sm uppercase tracking-[0.2em] font-medium border transition-colors ${
-              isManageMode
-                ? 'bg-white text-black border-white hover:bg-neutral-200'
-                : 'border-neutral-600 text-neutral-400 hover:border-white hover:text-white'
-            }`}
-          >
-            {isManageMode ? 'Done' : 'Manage Profiles'}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setIsManageMode((prev) => !prev);
+            if (onManage && !isManageMode) onManage();
+          }}
+          className={`mt-12 sm:mt-16 px-6 py-2 text-xs sm:text-sm uppercase tracking-[0.2em] transition-colors ${
+            isManageMode
+              ? 'border border-white bg-white text-black hover:bg-neutral-200'
+              : 'border border-neutral-700 text-neutral-500 hover:border-neutral-400 hover:text-neutral-300'
+          }`}
+        >
+          {isManageMode ? 'Done' : 'Manage Profiles'}
+        </button>
       </main>
-
-      {/* Subtle Bottom Ambient Caption */}
-      <footer className="relative z-10 pb-6 text-center text-xs text-neutral-600">OUR UNIVERSE</footer>
 
       {/* BUILT-IN AVATAR PICKER & PROFILE EDITOR MODAL */}
       {editingProfile && (
