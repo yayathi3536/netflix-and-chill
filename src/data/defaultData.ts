@@ -7,7 +7,7 @@ export const DEFAULT_PROFILES: UserProfile[] = [
     role: 'together',
     avatarEmoji: '❤️',
     avatarBg: 'bg-[#E50914]',
-    avatarId: 'tile-crimson-heart',
+    avatarId: 'smiley-pink',
     favoriteSeason: 'Every Single Day',
   },
   {
@@ -16,7 +16,7 @@ export const DEFAULT_PROFILES: UserProfile[] = [
     role: 'partner1',
     avatarEmoji: '🌸',
     avatarBg: 'bg-[#701a75]',
-    avatarId: 'tile-royal-amethyst',
+    avatarId: 'smiley-red',
     favoriteSeason: 'Season 2: Cozy Getaways',
   },
   {
@@ -25,7 +25,7 @@ export const DEFAULT_PROFILES: UserProfile[] = [
     role: 'partner2',
     avatarEmoji: '✨',
     avatarBg: 'bg-[#1e3a8a]',
-    avatarId: 'tile-midnight-sapphire',
+    avatarId: 'smiley-yellow',
     favoriteSeason: 'Season 1: How We Met',
   },
 ];
