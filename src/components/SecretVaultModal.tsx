@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useBodyLock } from '../hooks/useBodyLock';
 import {
   X,
   Lock,
@@ -42,6 +43,8 @@ export const SecretVaultModal: React.FC<SecretVaultModalProps> = ({
   const [isUnlocked, setIsUnlocked] = useState(!memory?.isSecret);
   const [errorMsg, setErrorMsg] = useState('');
   const [coupons, setCoupons] = useState<CouponItem[]>(memory?.coupons || []);
+
+  useBodyLock(!!memory);
 
   React.useEffect(() => {
     if (memory) {
