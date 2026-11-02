@@ -81,7 +81,7 @@ export const CarouselRow: React.FC<CarouselRowProps> = ({
   return (
     <div
       ref={revealRef}
-      className={`relative group/row my-5 sm:my-7 lg:my-8 transition-all duration-700 ${
+      className={`relative group/row my-6 sm:my-8 lg:my-10 transition-all duration-700 ${
         inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
       }`}
     >
