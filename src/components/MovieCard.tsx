@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Play, Plus, Check, BookOpen, ChevronDown, ThumbsUp } from 'lucide-react';
 import { MemoryItem } from '../types';
 import { VisualArt } from './VisualArt';
@@ -46,6 +46,14 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     }
     setIsHovered(false);
   };
+  useEffect(() => {
+    return () => {
+      if (hoverTimer.current !== null) {
+        window.clearTimeout(hoverTimer.current);
+      }
+    };
+  }, []);
+
   const isVideo = hasValidVideo(memory);
   const isLetter = isLetterItem(memory);
 
@@ -59,7 +67,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 
   return (
     <div
-      className={`group relative nf-card rounded-[4px] bg-[#141414] overflow-hidden cursor-pointer select-none shrink-0 snap-start ${
+      className={`group relative nf-card ${isHovered ? 'nf-card-expanded' : ''} rounded-[4px] bg-[#141414] overflow-hidden cursor-pointer select-none shrink-0 snap-start ${
         className ||
         (isPortrait
           ? 'w-[30vw] sm:w-40 md:w-44 lg:w-48 aspect-[2/3]'
