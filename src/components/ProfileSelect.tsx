@@ -39,20 +39,24 @@ export default function ProfileSelect({
 
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-5">
           {profiles.map((profile) => (
-            <button
-              key={profile.id}
-              type="button"
-              onClick={() => onSelect(profile)}
-              className="group relative w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 overflow-hidden rounded-[4px] bg-neutral-800 focus:outline-none"
-              aria-label={`Select ${profile.name}`}
-            >
-              <img
-                src={getProfileAvatarUrl(profile)}
-                alt={profile.name}
-                className="w-full h-full object-cover"
-              />
-              <span className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors" />
-            </button>
+            <div key={profile.id} className="group flex flex-col items-center">
+              <button
+                type="button"
+                onClick={() => onSelect(profile)}
+                className="group relative w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 overflow-hidden rounded-[4px] bg-neutral-800 focus:outline-none"
+                aria-label={`Select ${profile.name}`}
+              >
+                <img
+                  src={getProfileAvatarUrl(profile)}
+                  alt={profile.name}
+                  className="w-full h-full object-cover"
+                />
+                <span className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors" />
+              </button>
+              <span className="mt-3 text-xs sm:text-sm text-neutral-400 group-hover:text-white transition-colors text-center truncate max-w-[100px] sm:max-w-[128px] md:max-w-[144px]">
+                {profile.name}
+              </span>
+            </div>
           ))}
         </div>
 
