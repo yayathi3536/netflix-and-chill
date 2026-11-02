@@ -6,7 +6,7 @@
  * Uses Vite's `import.meta.env.BASE_URL` so assets resolve seamlessly
  * in local development ('/') as well as subpath deployments (e.g. GitHub Pages '/repo-name/').
  *
- * All 7 soundtrack songs provided are mapped to their actual audio files in `public/music/`:
+ * All 8 soundtrack songs provided are mapped to their actual audio files in `public/music/`:
  * 1. girl in red — We Fell in Love in October (we_fell_in_love_in_october.mp3)
  * 2. Justin Bieber — Baby (baby.mp3)
  * 3. JVKE — her (her.mp3)
@@ -14,6 +14,7 @@
  * 5. Gracie Abrams — That's So True (thats_so_true.mp3)
  * 6. Ed Sheeran — Perfect (perfect.mp3)
  * 7. Glass Animals — Heat Waves (heat_waves.mp3)
+ * 8. Yung Kai — Blue (Blue-Yung-Kai.mp3)
  */
 
 export interface Track {
@@ -109,5 +110,13 @@ export const TRACKS: Track[] = [
     coverUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80',
     duration: '3:58',
     vibe: 'Late Nights in the Middle of June',
+  },
+  {
+    id: 'track-blue-yung-kai',
+    title: 'Blue',
+    artist: 'Yung Kai',
+    src: getAssetUrl('music/Blue-Yung-Kai.mp3'),
+    duration: '4:30',
+    vibe: 'Dreamy & Atmospheric',
   },
 ];
