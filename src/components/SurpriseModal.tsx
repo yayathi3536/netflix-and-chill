@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Gift, Check, Clock } from 'lucide-react';
+import { useBodyLock } from '../hooks/useBodyLock';
 
 interface SurpriseModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
   partner2 = 'Partner 2',
 }) => {
   const [activeTab, setActiveTab] = useState<'coupons' | 'counter'>('coupons');
+  useBodyLock(isOpen);
   const [coupons, setCoupons] = useState<Coupon[]>([
     {
       id: 'c1',
@@ -119,7 +121,7 @@ export const SurpriseModal: React.FC<SurpriseModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-[#000000]/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto bg-[#000000]/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div
