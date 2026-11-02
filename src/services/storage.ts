@@ -78,47 +78,6 @@ class UnifiedStorageService {
     };
   }
 
-  // RECENTLY VIEWED: DEVICE-LOCAL HISTORY, SCOPED BY ACCOUNT AND PROFILE
-  private getRecentlyViewedStorageKey(scope: string = 'default'): string {
-    return `our_universe_recently_viewed_${encodeURIComponent(scope)}`;
-  }
-
-  public markAsViewed(memoryId: string, scope: string = 'default'): void {
-    const existing = this.getRecentlyViewed(scope);
-    const updated = [
-      { id: memoryId, viewedAt: new Date().toISOString() },
-      ...existing.filter((item) => item.id !== memoryId),
-    ].slice(0, 50);
-
-    try {
-      localStorage.setItem(this.getRecentlyViewedStorageKey(scope), JSON.stringify(updated));
-    } catch (e) {
-      console.warn('Could not save recently viewed history:', e);
-    }
-  }
-
-  public getRecentlyViewed(scope: string = 'default'): Array<{ id: string; viewedAt: string }> {
-    try {
-      const raw = localStorage.getItem(this.getRecentlyViewedStorageKey(scope));
-      if (!raw) return [];
-      const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed)) return [];
-      return parsed.filter(
-        (item): item is { id: string; viewedAt: string } =>
-          !!item && typeof item.id === 'string' && typeof item.viewedAt === 'string'
-      ).slice(0, 50);
-    } catch {
-      return [];
-    }
-  }
-
-  public clearRecentlyViewed(scope: string = 'default'): void {
-    try {
-      localStorage.removeItem(this.getRecentlyViewedStorageKey(scope));
-    } catch (e) {
-      console.warn('Could not clear recently viewed history:', e);
-    }
-  }
 
   // Synchronous getter for instant render before async completes
   public getInitialMemories(): MemoryItem[] {
@@ -126,6 +85,37 @@ class UnifiedStorageService {
     if (local.length > 0) return local;
     this.saveLocalMemories(DEFAULT_MEMORIES);
     return DEFAULT_MEMORIES;
+  }
+
+  // --- Recently viewed (Continue Watching) tracking ---
+
+  public markAsViewed(memoryId: string): void {
+    try {
+      const key = 'recently-viewed';
+      const raw = localStorage.getItem(key);
+      const existing: Array<{ id: string; viewedAt: string }> = raw ? JSON.parse(raw) : [];
+      const filtered = existing.filter((r) => r.id !== memoryId);
+      const updated = [
+        { id: memoryId, viewedAt: new Date().toISOString() },
+        ...filtered,
+      ].slice(0, 20);
+      localStorage.setItem(key, JSON.stringify(updated));
+    } catch (e) {
+      console.warn('Failed to save viewed state', e);
+    }
+  }
+
+  public getRecentlyViewed(): Array<{ id: string; viewedAt: string }> {
+    try {
+      const raw = localStorage.getItem('recently-viewed');
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  public clearRecentlyViewed(): void {
+    localStorage.removeItem('recently-viewed');
   }
 
   public getLocalMemories(): MemoryItem[] {

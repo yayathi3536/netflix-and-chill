@@ -165,8 +165,8 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    setRecentlyViewed(storageService.getRecentlyViewed(recentlyViewedScope));
-  }, [recentlyViewedScope]);
+    setRecentlyViewed(storageService.getRecentlyViewed());
+  }, []);
 
   // Synchronize client-side routing with URL hash for GitHub Pages deep linking and discreet admin route (#admin, #login)
   useEffect(() => {
@@ -281,10 +281,9 @@ export default function App() {
   };
 
   const handleOpenItem = (memory: MemoryItem) => {
-    if (memory.category === 'memories' && !isLetterItem(memory)) {
-      storageService.markAsViewed(memory.id, recentlyViewedScope);
-      setRecentlyViewed(storageService.getRecentlyViewed(recentlyViewedScope));
-    }
+    // Track as viewed → powers Continue Watching
+    storageService.markAsViewed(memory.id);
+    setRecentlyViewed(storageService.getRecentlyViewed());
 
     if (isLetterItem(memory)) {
       setSecretVaultMemory(memory);
@@ -294,6 +293,9 @@ export default function App() {
   };
 
   const handlePlayMemory = (memory: MemoryItem, episode?: Episode) => {
+    storageService.markAsViewed(memory.id);
+    setRecentlyViewed(storageService.getRecentlyViewed());
+
     if (hasValidVideo(memory, episode)) {
       setPlayingMemory({ memory, episode });
     } else {
