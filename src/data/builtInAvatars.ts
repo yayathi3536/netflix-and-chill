@@ -12,7 +12,7 @@ export interface BuiltInAvatarItem {
 const svgToDataUri = (svg: string): string =>
   `data:image/svg+xml;utf8,${encodeURIComponent(svg.trim())}`;
 
-// Minimal Netflix-style smiley: tiny eyes and a thin, gentle curved smile.
+// Recreate the simple Netflix profile smiley from the supplied reference.
 function createSmileySvg(
   id: string,
   colorTop: string,
@@ -29,12 +29,12 @@ function createSmileySvg(
         </linearGradient>
       </defs>
       <rect width="200" height="200" fill="url(#bg_${id})"/>
-      <circle cx="40" cy="68" r="6.5" fill="${eyeColor}"/>
-      <circle cx="160" cy="68" r="6.5" fill="${eyeColor}"/>
+      <circle cx="42" cy="70" r="10" fill="${eyeColor}"/>
+      <circle cx="158" cy="70" r="10" fill="${eyeColor}"/>
       <path
-        d="M 42 116 Q 100 150 158 116"
+        d="M 78 126 Q 120 151 162 126"
         stroke="${mouthColor}"
-        stroke-width="5.5"
+        stroke-width="6"
         stroke-linecap="round"
         fill="none"
       />
