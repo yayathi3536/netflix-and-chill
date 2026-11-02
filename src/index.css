@@ -127,7 +127,7 @@
   transition: transform 300ms ease, box-shadow 300ms ease;
 }
 @media (hover: hover) {
-  .nf-card:hover {
+  .nf-card.nf-card-expanded {
     transform: scale(1.08);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9);
     z-index: 20;
