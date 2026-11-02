@@ -44,6 +44,8 @@ export interface MemoryItem {
   videoUrl?: string;
   fallbackGradient: string;
   progress?: number; // 0 to 100 (for Continue Watching)
+  lastViewedAt?: string; // ISO timestamp for the most recent detail view
+  viewCount?: number; // number of times the detail view has been opened
   isTop10?: number; // 1 to 10 (for Original Series rank)
   sortOrder?: number; // Custom manual storyline order
   isFavorite?: boolean;

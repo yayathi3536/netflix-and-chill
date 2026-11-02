@@ -52,9 +52,11 @@ export default function App() {
   const [activeProfile, setActiveProfile] = useState<UserProfile>(storageService.getActiveProfile());
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [recentlyViewed, setRecentlyViewed] = useState<Array<{ id: string; viewedAt: string }>>([]);
 
   // Supabase & Auth State
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const recentlyViewedScope = `${currentUser?.id || 'local'}:${activeProfile.id}`;
   const [isAuthChecking, setIsAuthChecking] = useState<boolean>(isSupabaseConfigured());
   const [hasSelectedProfile, setHasSelectedProfile] = useState<boolean>(false);
   const [isPasswordRecovery, setIsPasswordRecovery] = useState<boolean>(false);
@@ -161,6 +163,10 @@ export default function App() {
       setIsAuthChecking(false);
     }
   }, []);
+
+  useEffect(() => {
+    setRecentlyViewed(storageService.getRecentlyViewed(recentlyViewedScope));
+  }, [recentlyViewedScope]);
 
   // Synchronize client-side routing with URL hash for GitHub Pages deep linking and discreet admin route (#admin, #login)
   useEffect(() => {
@@ -275,6 +281,11 @@ export default function App() {
   };
 
   const handleOpenItem = (memory: MemoryItem) => {
+    if (memory.category === 'memories' && !isLetterItem(memory)) {
+      storageService.markAsViewed(memory.id, recentlyViewedScope);
+      setRecentlyViewed(storageService.getRecentlyViewed(recentlyViewedScope));
+    }
+
     if (isLetterItem(memory)) {
       setSecretVaultMemory(memory);
     } else {
@@ -391,10 +402,14 @@ export default function App() {
   }, [memories]);
 
   const continueWatchingItems = useMemo(() => {
-    return memories
-      .filter((m) => m.category === 'memories' && m.progress !== undefined)
-      .sort((a, b) => (b.progress ?? 0) - (a.progress ?? 0));
-  }, [memories]);
+    const memoryById = new Map(memories.map((memory) => [memory.id, memory]));
+    return recentlyViewed
+      .map((item) => memoryById.get(item.id))
+      .filter((memory): memory is MemoryItem =>
+        memory !== undefined && memory.category === 'memories' && !isLetterItem(memory)
+      )
+      .slice(0, 10);
+  }, [memories, recentlyViewed]);
 
   const ourStorySeries = useMemo(() => {
     const rawStories = memories.filter(

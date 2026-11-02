@@ -78,6 +78,48 @@ class UnifiedStorageService {
     };
   }
 
+  // RECENTLY VIEWED: DEVICE-LOCAL HISTORY, SCOPED BY ACCOUNT AND PROFILE
+  private getRecentlyViewedStorageKey(scope: string = 'default'): string {
+    return `our_universe_recently_viewed_${encodeURIComponent(scope)}`;
+  }
+
+  public markAsViewed(memoryId: string, scope: string = 'default'): void {
+    const existing = this.getRecentlyViewed(scope);
+    const updated = [
+      { id: memoryId, viewedAt: new Date().toISOString() },
+      ...existing.filter((item) => item.id !== memoryId),
+    ].slice(0, 50);
+
+    try {
+      localStorage.setItem(this.getRecentlyViewedStorageKey(scope), JSON.stringify(updated));
+    } catch (e) {
+      console.warn('Could not save recently viewed history:', e);
+    }
+  }
+
+  public getRecentlyViewed(scope: string = 'default'): Array<{ id: string; viewedAt: string }> {
+    try {
+      const raw = localStorage.getItem(this.getRecentlyViewedStorageKey(scope));
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed.filter(
+        (item): item is { id: string; viewedAt: string } =>
+          !!item && typeof item.id === 'string' && typeof item.viewedAt === 'string'
+      ).slice(0, 50);
+    } catch {
+      return [];
+    }
+  }
+
+  public clearRecentlyViewed(scope: string = 'default'): void {
+    try {
+      localStorage.removeItem(this.getRecentlyViewedStorageKey(scope));
+    } catch (e) {
+      console.warn('Could not clear recently viewed history:', e);
+    }
+  }
+
   // Synchronous getter for instant render before async completes
   public getInitialMemories(): MemoryItem[] {
     const local = this.getLocalMemories();
